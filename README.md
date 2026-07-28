@@ -61,7 +61,8 @@ Este programa está diseñado por y para desarrolladores de software. Pasa del "
 
 ## 🛠️ Stack Tecnológico SOTA 2026
 
-- **Ecosistema IA & Agentes**: Cursor AI, Windsurf, Copilot Agent Mode, Google Gemini 2.5/3.x, DeepSeek R1/V3, Claude Extended Thinking, OpenAI o3/GPT-5.x.
+- **IDEs & Agentes de IA**: Google Antigravity IDE, VS Code (Copilot Chat & Agent Mode), Cursor AI, Windsurf (Codeium), OpenAI Codex, JetBrains AI Assistant.
+- **Modelos de Razonamiento SOTA**: Google Gemini 2.5 Pro / 3.x Flash Thinking, DeepSeek R1 / V3, Claude 3.7 / 4.x Extended Thinking, OpenAI o3-mini / o3 / GPT-5.x.
 - **Protocolos**: Model Context Protocol (MCP Standard Open Protocol).
 - **Backend Core**: Java 21 LTS, Spring Boot 3.4+, Spring Data JPA, Lombok, MapStruct, Testcontainers.
 - **Frontend Core**: Angular 19+, TypeScript 5.5+, Angular Signals, Tailwind CSS v4.

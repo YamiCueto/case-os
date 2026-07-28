@@ -65,21 +65,54 @@ export class TechStackComponent {
       tags: ['OpenAI', 'Reasoning', 'Algorithms'],
       docUrl: 'https://platform.openai.com/docs'
     },
+    // Editores & Entornos de Desarrollo Asistidos por IA
     {
-      name: 'Cursor AI & Windsurf',
-      icon: '✨',
-      description: 'IDEs nativos de agentes de IA para desarrollo Spec-Driven (AGENTS.md), edición multi-archivo e integración MCP',
+      name: 'Google Antigravity IDE',
+      icon: '🛸',
+      description: 'IDE nativo para agentes autónomos desarrollado por el equipo de Google DeepMind para pair programming inteligente',
       category: 'Editores',
-      tags: ['Agentic IDE', 'Spec-Driven', 'Multi-File'],
+      tags: ['Google DeepMind', 'Agentic IDE', 'Pair Programming'],
+      docUrl: 'https://deepmind.google'
+    },
+    {
+      name: 'VS Code + Copilot Chat & Agent Mode',
+      icon: '🟦',
+      description: 'Editor estelar de desarrollo con integración de GitHub Copilot Chat, Agent Mode, ejecución de terminal y corrección de tests',
+      category: 'Editores',
+      tags: ['VS Code', 'Copilot Chat', 'Agent Mode'],
+      docUrl: 'https://code.visualstudio.com'
+    },
+    {
+      name: 'Cursor AI',
+      icon: '⚡',
+      description: 'IDE nativo agéntico basado en VS Code, optimizado para desarrollo Spec-Driven (AGENTS.md) e integración nativa MCP',
+      category: 'Editores',
+      tags: ['Agentic IDE', 'Spec-Driven', 'MCP Native'],
       docUrl: 'https://docs.cursor.com'
     },
     {
-      name: 'GitHub Copilot Agent Mode',
-      icon: '🤖',
-      description: 'Asistencia autónoma de código integrada en VS Code con capacidades de auto-edición, ejecución de terminal y corrección de tests',
-      category: 'IA & Asistentes',
-      tags: ['GitHub', 'Copilot', 'Agentic Mode'],
-      docUrl: 'https://docs.github.com/en/copilot'
+      name: 'Windsurf (Codeium Cascade)',
+      icon: '🏄‍♂️',
+      description: 'IDE agéntico enfocado en flujos de trabajo (flows) colaborativos con contexto continuo del repositorio completo',
+      category: 'Editores',
+      tags: ['Codeium', 'Flows', 'Cascade Agent'],
+      docUrl: 'https://codeium.com/windsurf'
+    },
+    {
+      name: 'OpenAI Codex & Code Interpreter',
+      icon: '🧠',
+      description: 'Motor de ejecución y razonamiento de código en entornos aislados para refactorización y análisis de scripts',
+      category: 'Editores',
+      tags: ['OpenAI', 'Codex', 'Interpreter'],
+      docUrl: 'https://platform.openai.com'
+    },
+    {
+      name: 'JetBrains AI Assistant (IntelliJ IDEA)',
+      icon: '💎',
+      description: 'Asistente agéntico integrado en IntelliJ IDEA optimizado para arquitecturas Java 21, Spring Boot y microservicios enterprise',
+      category: 'Editores',
+      tags: ['JetBrains', 'Java 21', 'Spring Boot'],
+      docUrl: 'https://www.jetbrains.com/ai/'
     },
 
     // Frontend
