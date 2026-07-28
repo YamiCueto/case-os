@@ -1,0 +1,260 @@
+<div class="presentation-container" (keydown)="onKeydown($event)" tabindex="0">
+  <!-- Back to Study Plan Button -->
+  <div class="back-to-menu">
+    <a routerLink="/study-plan" class="back-btn">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Volver al Plan de Estudio</span>
+    </a>
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="controls">
+    <button (click)="prevSlide()" [disabled]="currentSlide === 0" class="control-btn">
+      ← Anterior
+    </button>
+    <span class="slide-counter">{{ currentSlide + 1 }} / {{ slides.length }}</span>
+    <button (click)="nextSlide()" [disabled]="currentSlide === slides.length - 1" class="control-btn">
+      Siguiente →
+    </button>
+  </div>
+
+  <!-- Slide Container -->
+  <div class="slide-wrapper">
+    <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentSlide">
+
+      <!-- Slide 1: Title -->
+      <div *ngIf="slide.type === 'title'" class="slide-title">
+        <div class="workshop-badge">🛠️ TALLER PRÁCTICO DEV</div>
+        <h1>Generación de Microservicio Spring Boot 3.4+ con Java 21</h1>
+        <h2 class="subtitle">Crea arquitectura hexagonal production-ready con asistencia de razonamiento de IA (DeepSeek R1 / o3-mini)</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="icon">⏱️</span>
+            <span class="label">Duración</span>
+            <span class="value">90 minutos</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">📊</span>
+            <span class="label">Estructura</span>
+            <span class="value">30 min teoría + 60 min práctica</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">🎁</span>
+            <span class="label">Entregable</span>
+            <span class="value">Microservicio con Virtual Threads</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">💪</span>
+            <span class="label">Nivel</span>
+            <span class="value">Intermedio</span>
+          </div>
+        </div>
+        <div class="tech-stack-preview">
+          <span class="tech-badge">☕ Java 21</span>
+          <span class="tech-badge">🍃 Spring Boot 3.4+</span>
+          <span class="tech-badge">🐉 DeepSeek R1</span>
+          <span class="tech-badge">💾 Spring Data JPA</span>
+        </div>
+      </div>
+
+      <!-- Slide 2: Objective -->
+      <div *ngIf="slide.type === 'objective'" class="slide-content">
+        <h2>🎯 Objetivo del Taller</h2>
+
+        <div class="objective-card">
+          <h3>{{ objective.main }}</h3>
+          <div class="goals-grid">
+            <div class="goal-item" *ngFor="let goal of objective.goals">
+              <span class="goal-icon">✅</span>
+              <p>{{ goal }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-section">
+          <h3>Stack Tecnológico</h3>
+          <div class="stack-grid">
+            <div class="stack-item" *ngFor="let tech of objective.stack" [ngClass]="tech.color">
+              <span class="stack-icon">{{ tech.icon }}</span>
+              <span class="stack-name">{{ tech.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Architecture -->
+      <div *ngIf="slide.type === 'architecture'" class="slide-content">
+        <h2>🏗️ Arquitectura Hexagonal</h2>
+
+        <div class="architecture-grid">
+          <div class="layer-card" *ngFor="let layer of architectureLayers" [ngClass]="layer.color">
+            <div class="layer-header">
+              <span class="layer-icon">{{ layer.icon }}</span>
+              <h3>{{ layer.name }}</h3>
+            </div>
+            <p class="layer-description">{{ layer.description }}</p>
+            <div class="components-list">
+              <span class="component-badge" *ngFor="let component of layer.components">
+                {{ component }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box mt-6">
+          <span class="info-icon">💡</span>
+          <p><strong>Beneficio clave:</strong> Separación de responsabilidades, código testeable y mantenible</p>
+        </div>
+      </div>
+
+      <!-- Slide 4: Prompt Structure -->
+      <div *ngIf="slide.type === 'prompt-structure'" class="slide-content">
+        <h2>✍️ Estructura del Prompt Profesional</h2>
+
+        <div class="prompt-structure">
+          <div class="structure-item" *ngFor="let section of promptStructure.sections" [ngClass]="section.color">
+            <div class="structure-header">
+              <span class="structure-icon">{{ section.icon }}</span>
+              <h3>{{ section.name }}</h3>
+            </div>
+            <p class="structure-description">{{ section.description }}</p>
+            <div class="structure-example">
+              <code>{{ section.example }}</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5: Step by Step -->
+      <div *ngIf="slide.type === 'step-by-step'" class="slide-content">
+        <h2>📝 Proceso Paso a Paso</h2>
+
+        <div class="steps-grid">
+          <div class="step-card" *ngFor="let step of steps" [ngClass]="step.color">
+            <div class="step-header">
+              <span class="step-number">{{ step.number }}</span>
+              <span class="step-icon">{{ step.icon }}</span>
+            </div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+            <span class="step-time">⏱️ {{ step.time }}</span>
+          </div>
+        </div>
+
+        <div class="total-time">
+          <span class="time-badge">⏰ Tiempo Total: 30 minutos</span>
+        </div>
+      </div>
+
+      <!-- Slide 6: Challenge -->
+      <div *ngIf="slide.type === 'challenge'" class="slide-content">
+        <h2>🎯 Desafío Práctico</h2>
+
+        <div class="challenge-card">
+          <div class="challenge-header">
+            <h3>{{ challenge.title }}</h3>
+            <span class="badge badge-warning">{{ challenge.difficulty }}</span>
+          </div>
+          <p class="challenge-description">{{ challenge.description }}</p>
+
+          <div class="challenge-section">
+            <h4>📋 Requerimientos</h4>
+            <ul class="requirements-list">
+              <li *ngFor="let req of challenge.requirements">{{ req }}</li>
+            </ul>
+          </div>
+
+          <div class="challenge-section">
+            <h4>🛠️ Stack</h4>
+            <div class="stack-badges">
+              <span class="badge badge-tech" *ngFor="let tech of challenge.stack">{{ tech }}</span>
+            </div>
+          </div>
+
+          <div class="challenge-section">
+            <h4>💡 Pistas</h4>
+            <ul class="hints-list">
+              <li *ngFor="let hint of challenge.hints">{{ hint }}</li>
+            </ul>
+          </div>
+
+          <div class="challenge-footer">
+            <span class="time-badge">⏰ {{ challenge.tiempo }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 7: Best Practices -->
+      <div *ngIf="slide.type === 'best-practices'" class="slide-content">
+        <h2>✅ Mejores Prácticas</h2>
+
+        <div class="practices-grid">
+          <div class="practices-column">
+            <h3 class="practices-header do">✅ SI HACER</h3>
+            <div class="practice-item" *ngFor="let practice of bestPractices.dos">
+              <h4>{{ practice.title }}</h4>
+              <code class="practice-example good">{{ practice.example }}</code>
+              <p class="practice-why">{{ practice.why }}</p>
+            </div>
+          </div>
+
+          <div class="practices-column">
+            <h3 class="practices-header dont">❌ NO HACER</h3>
+            <div class="practice-item" *ngFor="let practice of bestPractices.donts">
+              <h4>{{ practice.title }}</h4>
+              <code class="practice-example bad">{{ practice.example }}</code>
+              <p class="practice-why">{{ practice.why }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 8: Summary -->
+      <div *ngIf="slide.type === 'summary'" class="slide-content">
+        <h2>📚 Resumen y Próximos Pasos</h2>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <h3>🎓 Lo que aprendiste</h3>
+            <ul>
+              <li>Arquitectura hexagonal con Spring Boot</li>
+              <li>Estructura de prompts profesionales (ROL-CONTEXTO-TAREA)</li>
+              <li>Generación de código production-ready</li>
+              <li>Proceso de 6 pasos en 30 minutos</li>
+            </ul>
+          </div>
+
+          <div class="summary-card">
+            <h3>📖 Próxima Clase</h3>
+            <p><strong>Clase 3:</strong> Migración de Módulo Legacy VB6 a Spring Boot</p>
+            <p>Aprenderás a migrar código legacy usando IA como asistente</p>
+          </div>
+
+          <div class="summary-card">
+            <h3>📚 Recursos</h3>
+            <ul>
+              <li>Documentación Spring Boot 3.2</li>
+              <li>Guía de Lombok y MapStruct</li>
+              <li>Ejemplos arquitectura hexagonal</li>
+              <li>Plantilla prompt en repositorio</li>
+            </ul>
+          </div>
+
+          <div class="summary-card">
+            <h3>🏋️ Tarea</h3>
+            <p>Completa el desafío: microservicio de Gestión de Clientes</p>
+            <p>Sube tu código a GitHub y comparte el enlace</p>
+          </div>
+        </div>
+
+        <div class="quote-box">
+          <p class="quote-text">"Un buen prompt es la diferencia entre código que copias y código que entiendes"</p>
+          <p class="quote-author">- Software Architect Wisdom</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

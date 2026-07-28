@@ -1,0 +1,382 @@
+<div class="presentation-container" (keydown)="onKeydown($event)" tabindex="0">
+  <!-- Back to Study Plan Button -->
+  <div class="back-to-menu">
+    <a routerLink="/study-plan" class="back-btn">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Volver al Plan de Estudio</span>
+    </a>
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="controls">
+    <button (click)="prevSlide()" [disabled]="currentSlide === 0" class="control-btn">
+      ← Anterior
+    </button>
+    <span class="slide-counter">{{ currentSlide + 1 }} / {{ slides.length }}</span>
+    <button (click)="nextSlide()" [disabled]="currentSlide === slides.length - 1" class="control-btn">
+      Siguiente →
+    </button>
+  </div>
+
+  <!-- Slide Container -->
+  <div class="slide-wrapper">
+    <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentSlide">
+
+      <!-- Slide 1: Title -->
+      <div *ngIf="slide.type === 'title'" class="slide-title">
+        <div class="workshop-badge">🔄 CLASE 8 DEV</div>
+        <h1>Estado Reactivo Avanzado (Signals + RxJS & Signal Store)</h1>
+        <h2 class="subtitle">Arquitectura de estado global combinando la reactividad de Signals y la asincronía de RxJS</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="icon">⏱️</span>
+            <span class="label">Duración</span>
+            <span class="value">90 minutos</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">📊</span>
+            <span class="label">Estructura</span>
+            <span class="value">30 min teoría + 60 min práctica</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">🎁</span>
+            <span class="label">Entregable</span>
+            <span class="value">Signal Store Service completo</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">💪</span>
+            <span class="label">Nivel</span>
+            <span class="value">Avanzado</span>
+          </div>
+        </div>
+        <div class="tech-stack-preview">
+          <span class="tech-badge">🅰️ Angular 19</span>
+          <span class="tech-badge">⚡ Signals</span>
+          <span class="tech-badge">🔄 RxJS</span>
+          <span class="tech-badge">📦 NgRx Signal Store</span>
+        </div>
+      </div>
+
+      <!-- Slide 2: Context -->
+      <div *ngIf="slide.type === 'context'" class="slide-content">
+        <h2>📋 Contexto del Proyecto</h2>
+
+        <div class="scenario-box">
+          <div class="scenario-icon">🏢</div>
+          <div class="scenario-text">
+            <h3>Escenario</h3>
+            <p>{{ context.scenario }}</p>
+          </div>
+        </div>
+
+        <div class="problems-section">
+          <h3>🔥 Problemas sin State Management</h3>
+          <div class="problems-grid">
+            <div *ngFor="let problem of context.problems" class="problem-card" [attr.data-color]="problem.color">
+              <div class="problem-header">
+                <span class="problem-icon">{{ problem.icon }}</span>
+                <h4>{{ problem.title }}</h4>
+              </div>
+              <p>{{ problem.description }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="comparison-section">
+          <div class="when-rxjs">
+            <h3>✅ Cuándo Usar RxJS State</h3>
+            <ul>
+              <li *ngFor="let item of context.whenUseRxJS">{{ item }}</li>
+            </ul>
+          </div>
+          <div class="when-ngrx">
+            <h3>🏢 Cuándo Usar NgRx</h3>
+            <ul>
+              <li *ngFor="let item of context.whenUseNgRx">{{ item }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: State Patterns -->
+      <div *ngIf="slide.type === 'state-patterns'" class="slide-content">
+        <h2>🎯 Patrones de Estado</h2>
+
+        <div class="pattern-section naive-pattern">
+          <h3>{{ statePatterns.naive.title }}</h3>
+          <p class="pattern-description">{{ statePatterns.naive.description }}</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">cart.service.ts</span>
+            </div>
+            <pre><code>{{ statePatterns.naive.code }}</code></pre>
+          </div>
+          <div class="problems-list">
+            <h4>⚠️ Problemas:</h4>
+            <ul>
+              <li *ngFor="let problem of statePatterns.naive.problems">{{ problem }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pattern-section good-pattern">
+          <h3>{{ statePatterns.behaviorSubject.title }}</h3>
+          <p class="pattern-description">{{ statePatterns.behaviorSubject.description }}</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">cart.service.ts</span>
+            </div>
+            <pre><code>{{ statePatterns.behaviorSubject.code }}</code></pre>
+          </div>
+          <div class="benefits-list">
+            <h4>✅ Beneficios:</h4>
+            <ul>
+              <li *ngFor="let benefit of statePatterns.behaviorSubject.benefits">{{ benefit }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pattern-section derived-pattern">
+          <h3>{{ statePatterns.derived.title }}</h3>
+          <p class="pattern-description">{{ statePatterns.derived.description }}</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">cart.service.ts</span>
+            </div>
+            <pre><code>{{ statePatterns.derived.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4: BehaviorSubject Deep Dive -->
+      <div *ngIf="slide.type === 'behaviorsubject'" class="slide-content">
+        <h2>📊 BehaviorSubject: Deep Dive</h2>
+
+        <div class="concept-section">
+          <h3>{{ behaviorSubjectDetails.concept.title }}</h3>
+          <p class="concept-description">{{ behaviorSubjectDetails.concept.description }}</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">example.ts</span>
+            </div>
+            <pre><code>{{ behaviorSubjectDetails.concept.example }}</code></pre>
+          </div>
+        </div>
+
+        <div class="state-service-section">
+          <h3>{{ behaviorSubjectDetails.stateService.title }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">state.service.ts</span>
+            </div>
+            <pre><code>{{ behaviorSubjectDetails.stateService.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <span class="tip-icon">💡</span>
+          <p><strong>Tip Profesional:</strong> Usar generic State Service como base para todos tus feature states. Evita duplicar lógica de setState() y select() en cada servicio.</p>
+        </div>
+      </div>
+
+      <!-- Slide 5: Operators -->
+      <div *ngIf="slide.type === 'operators'" class="slide-content">
+        <h2>🔧 Operadores RxJS Clave</h2>
+
+        <div class="operator-section">
+          <h3>{{ operators.shareReplay.title }}</h3>
+          <p class="operator-description">{{ operators.shareReplay.description }}</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">users.service.ts</span>
+            </div>
+            <pre><code>{{ operators.shareReplay.code }}</code></pre>
+          </div>
+          <div class="benefits-list">
+            <h4>✅ Beneficios:</h4>
+            <ul>
+              <li *ngFor="let benefit of operators.shareReplay.benefits">{{ benefit }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="operators-row">
+          <div class="operator-mini">
+            <h3>{{ operators.combineLatest.title }}</h3>
+            <p class="operator-description">{{ operators.combineLatest.description }}</p>
+            <div class="code-block">
+              <div class="code-header">
+                <div class="window-buttons">
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                </div>
+                <span class="file-name">dashboard.component.ts</span>
+              </div>
+              <pre><code>{{ operators.combineLatest.code }}</code></pre>
+            </div>
+          </div>
+
+          <div class="operator-mini">
+            <h3>{{ operators.switchMap.title }}</h3>
+            <p class="operator-description">{{ operators.switchMap.description }}</p>
+            <div class="code-block">
+              <div class="code-header">
+                <div class="window-buttons">
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                </div>
+                <span class="file-name">search.component.ts</span>
+              </div>
+              <pre><code>{{ operators.switchMap.code }}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 6: Challenge -->
+      <div *ngIf="slide.type === 'challenge'" class="slide-content">
+        <h2>🎯 Ejercicio Práctico</h2>
+
+        <div class="challenge-container">
+          <div class="challenge-header">
+            <span class="challenge-icon">🛒</span>
+            <h3>{{ challenge.title }}</h3>
+            <span class="badge-difficulty badge-avanzado">{{ challenge.difficulty }}</span>
+          </div>
+
+          <p class="challenge-description">{{ challenge.description }}</p>
+
+          <div class="challenge-section">
+            <h4>✅ Requerimientos</h4>
+            <ul>
+              <li *ngFor="let req of challenge.requirements">{{ req }}</li>
+            </ul>
+          </div>
+
+          <div class="challenge-section">
+            <h4>💡 Pistas</h4>
+            <ul>
+              <li *ngFor="let hint of challenge.hints">{{ hint }}</li>
+            </ul>
+          </div>
+
+          <div class="bonus-section">
+            <h4>🌟 Bonus (Opcional)</h4>
+            <ul>
+              <li *ngFor="let bonus of challenge.bonus">{{ bonus }}</li>
+            </ul>
+          </div>
+
+          <div class="timer-box">
+            <span class="timer-icon">⏱️</span>
+            <span>Tiempo estimado: {{ challenge.time }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 7: Best Practices -->
+      <div *ngIf="slide.type === 'best-practices'" class="slide-content">
+        <h2>✨ Mejores Prácticas</h2>
+
+        <div class="practices-grid">
+          <div *ngFor="let category of bestPractices" class="practice-category">
+            <div class="category-header">
+              <span class="category-icon">{{ category.icon }}</span>
+              <h3>{{ category.category }}</h3>
+            </div>
+            <ul class="practices-list">
+              <li *ngFor="let practice of category.practices">{{ practice }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <span class="tip-icon">💡</span>
+          <p><strong>Recomendación Final:</strong> Empezar con RxJS State para apps medianas. Si creces a 50+ componentes con requisitos de auditoría, migrar incrementalmente a NgRx. Para Angular 16+, considerar Signals como alternativa moderna.</p>
+        </div>
+      </div>
+
+      <!-- Slide 8: Summary -->
+      <div *ngIf="slide.type === 'summary'" class="slide-content">
+        <h2>🎓 Resumen de la Clase</h2>
+
+        <div class="summary-grid">
+          <div class="summary-card achievements-card">
+            <h3>🎯 Logros Alcanzados</h3>
+            <ul>
+              <li *ngFor="let achievement of summary.achievements">{{ achievement }}</li>
+            </ul>
+          </div>
+
+          <div class="summary-card operators-card">
+            <h3>🔧 Operadores RxJS Aprendidos</h3>
+            <div class="operators-list">
+              <div *ngFor="let op of summary.rxjsOperators" class="operator-item">
+                <span class="operator-icon">{{ op.icon }}</span>
+                <div class="operator-info">
+                  <strong>{{ op.name }}</strong>
+                  <p>{{ op.use }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card comparison-card">
+            <h3>⚖️ Comparación Enfoques</h3>
+            <div *ngFor="let comp of summary.comparison" class="comparison-item">
+              <strong>{{ comp.aspect }}</strong>
+              <p>{{ comp.description }}</p>
+            </div>
+          </div>
+
+          <div class="summary-card nextsteps-card">
+            <h3>🚀 Próximos Pasos</h3>
+            <ol class="next-steps">
+              <li *ngFor="let step of summary.nextSteps">{{ step }}</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="completion-badge">
+          <span class="badge-icon">✅</span>
+          <span class="badge-text">Clase 8 Completada - Estado Complejo con RxJS</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

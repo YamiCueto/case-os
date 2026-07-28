@@ -1,10 +1,12 @@
 {
   "name": "curso-ia-generativa",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Curso de IA Generativa para Ingenieros de Software",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:gh-pages": "ng build --configuration production --base-href ./",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

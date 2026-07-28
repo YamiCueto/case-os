@@ -1,0 +1,467 @@
+<div class="presentation-container">
+  <!-- Back to Study Plan Button -->
+  <div class="back-to-menu">
+    <a routerLink="/plan-dev-detallado" class="back-btn">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Volver al Plan de Estudio</span>
+    </a>
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="controls">
+    <button (click)="previousSlide()" [disabled]="currentSlide === 0" class="control-btn">
+      ← Anterior
+    </button>
+    <span class="slide-counter">{{ currentSlide + 1 }} / {{ slides.length }}</span>
+    <button (click)="nextSlide()" [disabled]="currentSlide === slides.length - 1" class="control-btn">
+      Siguiente →
+    </button>
+  </div>
+
+  <!-- Slide Container -->
+  <div class="slide-wrapper">
+    <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentSlide">      <!-- Slide 1: Title -->
+      <div *ngIf="slide.type === 'title'" class="slide-title">
+        <div class="workshop-badge">🛠️ TALLER PRÁCTICO DEV</div>
+        <h1>APIs REST Resilientes & Creación de Servidores MCP</h1>
+        <h2 class="subtitle">Expón endpoints OpenAPI y herramientas locales a Agentes de IA mediante Model Context Protocol</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="icon">⏱️</span>
+            <span class="label">Duración</span>
+            <span class="value">60 minutos</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">📊</span>
+            <span class="label">Estructura</span>
+            <span class="value">10 min teoría + 50 min práctica</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">🎁</span>
+            <span class="label">Entregable</span>
+            <span class="value">Servidor MCP funcional</span>
+          </div>
+          <div class="info-item">
+            <span class="icon">💪</span>
+            <span class="label">Nivel</span>
+            <span class="value">Intermedio</span>
+          </div>
+        </div>
+        <div class="tech-stack-preview">
+          <span class="tech-badge">🔌 MCP SDK</span>
+          <span class="tech-badge">🍃 Spring Boot 3.4+</span>
+          <span class="tech-badge">🌐 WebClient</span>
+          <span class="tech-badge">🛡️ Resilience4j</span>
+          <span class="tech-badge">🗄️ Redis</span>
+        </div>
+      </div>
+
+      <!-- Slide 2: Context -->
+      <div *ngIf="slide.type === 'context'" class="slide-content">
+        <h2>Contexto del Taller</h2>
+
+        <div class="scenario-box">
+          <h3>
+            <span class="material-icons">account_balance</span>
+            Escenario
+          </h3>
+          <p>{{ context.scenario }}</p>
+        </div>
+
+        <div class="requirements-section">
+          <h3>Requisitos de la API Externa</h3>
+          <ul class="requirements-list">
+            <li *ngFor="let req of context.requirements">
+              <span class="material-icons">check_circle</span>
+              {{ req }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="challenges-grid">
+          <div *ngFor="let challenge of context.challenges" class="challenge-card">
+            <div class="challenge-header">
+              <span class="material-icons">{{ challenge.icon }}</span>
+              <h4>{{ challenge.title }}</h4>
+            </div>
+            <p>{{ challenge.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: API Design -->
+      <div *ngIf="slide.type === 'api-design'" class="slide-content">
+        <h2>Diseño del Cliente REST</h2>
+
+        <div class="architecture-diagram">
+          <div class="arch-layer">
+            <span class="material-icons">code</span>
+            <strong>Controller</strong>
+            <small>Endpoint REST</small>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <span class="material-icons">settings</span>
+            <strong>Service</strong>
+            <small>Lógica de negocio</small>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer highlight">
+            <span class="material-icons">cloud</span>
+            <strong>WebClient + Circuit Breaker</strong>
+            <small>Llamada resiliente</small>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <span class="material-icons">storage</span>
+            <strong>Cache (Redis)</strong>
+            <small>Reducir latencia</small>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer external">
+            <span class="material-icons">api</span>
+            <strong>Bureau de Crédito API</strong>
+            <small>Servicio externo</small>
+          </div>
+        </div>
+
+        <div class="components-grid">
+          <div *ngFor="let component of apiDesign.components" class="component-card">
+            <h4>
+              <span class="material-icons">extension</span>
+              {{ component.name }}
+            </h4>
+            <p class="component-purpose">{{ component.purpose }}</p>
+            <ul class="config-list">
+              <li *ngFor="let config of component.config">{{ config }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4: DTO Mapping -->
+      <div *ngIf="slide.type === 'dto-mapping'" class="slide-content">
+        <h2>Mapeo de DTOs</h2>
+
+        <div class="dto-section">
+          <div class="dto-card request">
+            <h3>
+              <span class="material-icons">input</span>
+              Request DTO
+            </h3>
+            <div class="dto-header">
+              <code>{{ dtoMapping.request.name }}</code>
+            </div>
+            <table class="dto-table">
+              <thead>
+                <tr>
+                  <th>Campo</th>
+                  <th>Tipo</th>
+                  <th>Validación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let field of dtoMapping.request.fields">
+                  <td><code>{{ field.name }}</code></td>
+                  <td><code>{{ field.type }}</code></td>
+                  <td class="validation">{{ field.validation }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mapping-arrow">
+            <span class="material-icons">sync_alt</span>
+            <span>API Call</span>
+          </div>
+
+          <div class="dto-card response">
+            <h3>
+              <span class="material-icons">output</span>
+              Response DTO
+            </h3>
+            <div class="dto-header">
+              <code>{{ dtoMapping.response.name }}</code>
+            </div>
+            <table class="dto-table">
+              <thead>
+                <tr>
+                  <th>Campo</th>
+                  <th>Tipo</th>
+                  <th>Descripción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let field of dtoMapping.response.fields">
+                  <td><code>{{ field.name }}</code></td>
+                  <td><code>{{ field.type }}</code></td>
+                  <td>{{ field.description }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Ejemplo de Flujo</h4>
+          <pre><code>// Request
+BureauRequestDTO request = new BureauRequestDTO();
+request.setDocumento("12345678");
+request.setTipoDocumento(TipoDocumentoEnum.CC);
+request.setTipoConsulta("COMPLETA");
+
+// Response
+HistorialCrediticioDTO historial = bureauService.consultarHistorial(request);
+System.out.println("Score: " + historial.getScore()); // 720
+System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pre>
+        </div>
+      </div>
+
+      <!-- Slide 5: Error Handling -->
+      <div *ngIf="slide.type === 'error-handling'" class="slide-content">
+        <h2>Estrategias de Manejo de Errores</h2>
+
+        <div class="strategies-grid">
+          <div *ngFor="let strategy of errorHandling.strategies" class="strategy-card">
+            <div class="strategy-header">
+              <span class="material-icons">error_outline</span>
+              <h4>{{ strategy.name }}</h4>
+            </div>
+            <p class="strategy-desc">{{ strategy.description }}</p>
+            <div class="strategy-implementation">
+              <strong>Implementación:</strong>
+              <p>{{ strategy.implementation }}</p>
+            </div>
+            <div class="strategy-exceptions">
+              <strong>Excepciones:</strong>
+              <div class="exception-tags">
+                <span *ngFor="let exception of strategy.exceptions" class="exception-tag">
+                  {{ exception }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-diagram">
+          <h4>Flujo de Resilencia</h4>
+          <div class="flow-steps">
+            <div class="flow-step">
+              <span class="step-number">1</span>
+              <span class="step-label">Request</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+              <span class="step-number">2</span>
+              <span class="step-label">Circuit Check</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+              <span class="step-number">3</span>
+              <span class="step-label">Cache Check</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+              <span class="step-number">4</span>
+              <span class="step-label">API Call + Retry</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+              <span class="step-number">5</span>
+              <span class="step-label">Fallback si falla</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 6: Challenge -->
+      <div *ngIf="slide.type === 'challenge'" class="slide-content">
+        <h2>
+          <span class="material-icons">emoji_events</span>
+          {{ challenge.title }}
+        </h2>
+
+        <div class="challenge-description">
+          <p>{{ challenge.description }}</p>
+        </div>
+
+        <div class="requirements-section">
+          <h3>Requisitos Técnicos</h3>
+          <ul class="requirements-list">
+            <li *ngFor="let req of challenge.requirements">
+              <span class="material-icons">check_circle</span>
+              {{ req }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="prompt-card">
+          <h4>
+            <span class="material-icons">psychology</span>
+            Estructura del Prompt IA
+          </h4>
+
+          <div class="prompt-section">
+            <strong>ROL:</strong>
+            <p>{{ promptStructure.role }}</p>
+          </div>
+
+          <div class="prompt-section">
+            <strong>CONTEXTO:</strong>
+            <ul>
+              <li *ngFor="let ctx of promptStructure.context">{{ ctx }}</li>
+            </ul>
+          </div>
+
+          <div class="prompt-section">
+            <strong>TAREA:</strong>
+            <ol>
+              <li *ngFor="let task of promptStructure.task">{{ task }}</li>
+            </ol>
+          </div>
+
+          <div class="prompt-section">
+            <strong>RESTRICCIONES:</strong>
+            <ul>
+              <li *ngFor="let restriction of promptStructure.restrictions">{{ restriction }}</li>
+            </ul>
+          </div>
+
+          <div class="prompt-section">
+            <strong>OUTPUT ESPERADO:</strong>
+            <p>{{ promptStructure.expectedOutput }}</p>
+          </div>
+        </div>
+
+        <div class="hints-section">
+          <h4>
+            <span class="material-icons">lightbulb</span>
+            Pistas
+          </h4>
+          <ul class="hints-list">
+            <li *ngFor="let hint of challenge.hints">{{ hint }}</li>
+          </ul>
+        </div>
+
+        <div class="time-estimate">
+          <span class="material-icons">schedule</span>
+          Tiempo estimado: {{ challenge.timeEstimate }}
+        </div>
+      </div>
+
+      <!-- Slide 7: Best Practices -->
+      <div *ngIf="slide.type === 'best-practices'" class="slide-content">
+        <h2>Mejores Prácticas</h2>
+
+        <div class="practices-grid">
+          <div *ngFor="let category of bestPractices" class="practice-category">
+            <h3>
+              <span class="material-icons">star</span>
+              {{ category.category }}
+            </h3>
+            <ul class="practices-list">
+              <li *ngFor="let practice of category.practices">
+                <span class="material-icons">arrow_right</span>
+                {{ practice }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="warning-box">
+          <span class="material-icons">warning</span>
+          <div>
+            <strong>Importante:</strong>
+            <p>La integración con APIs externas es crítica. Un fallo puede afectar toda la operación. Siempre implementa circuit breakers, timeouts, cache y monitoreo robusto.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 8: Summary -->
+      <div *ngIf="slide.type === 'summary'" class="slide-content">
+        <h2>Resumen</h2>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <span class="material-icons">inventory</span>
+            <h3>Stack Tecnológico</h3>
+            <ul>
+              <li>Spring Boot WebClient</li>
+              <li>Resilience4j (Circuit Breaker, Retry)</li>
+              <li>Redis/Caffeine Cache</li>
+              <li>WireMock (Testing)</li>
+              <li>Micrometer (Métricas)</li>
+            </ul>
+          </div>
+
+          <div class="summary-card">
+            <span class="material-icons">build</span>
+            <h3>Componentes Clave</h3>
+            <ul>
+              <li>WebClient configurado con timeout y retry</li>
+              <li>Circuit Breaker para resilencia</li>
+              <li>Cache en dos niveles (L1 + L2)</li>
+              <li>DTOs con validaciones completas</li>
+              <li>Tests con WireMock</li>
+            </ul>
+          </div>
+
+          <div class="summary-card">
+            <span class="material-icons">psychology</span>
+            <h3>Generación con IA</h3>
+            <ul>
+              <li>Cliente REST completo con configuración</li>
+              <li>Manejo de excepciones personalizado</li>
+              <li>Tests de resilencia (timeouts, fallos)</li>
+              <li>Métricas y health checks</li>
+              <li>application.yml con todas las configs</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="next-steps">
+          <h3>Próximos Pasos</h3>
+          <div class="next-step-item">
+            <span class="step-number">1</span>
+            <div>
+              <strong>Implementa el cliente Bureau</strong>
+              <p>Usa el prompt estructurado y genera código completo</p>
+            </div>
+          </div>
+          <div class="next-step-item">
+            <span class="step-number">2</span>
+            <div>
+              <strong>Prueba con WireMock</strong>
+              <p>Simula API externa y valida resilencia</p>
+            </div>
+          </div>
+          <div class="next-step-item">
+            <span class="step-number">3</span>
+            <div>
+              <strong>Monitorea métricas</strong>
+              <p>Revisa latencias, tasas de error, circuit breaker status</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="completion-badge">
+          <span class="material-icons">check_circle</span>
+          <span>Clase 4 completada</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Slide Indicators -->
+  <div class="slide-indicators">
+    <span
+      *ngFor="let slide of slides; let i = index"
+      class="indicator"
+      [class.active]="currentSlide === i"
+      (click)="goToSlide(i)">
+    </span>
+  </div>
+</div>

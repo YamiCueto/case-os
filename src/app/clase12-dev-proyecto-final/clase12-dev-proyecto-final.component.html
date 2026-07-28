@@ -1,0 +1,282 @@
+<div class="presentation-container">
+  <!-- Back to Study Plan Button -->
+  <div class="back-to-menu">
+    <a routerLink="/study-plan" class="back-btn">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Volver al Plan de Estudio</span>
+    </a>
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="controls">
+    <button (click)="prevSlide()" [disabled]="currentSlide === 0" class="control-btn">
+      ← Anterior
+    </button>
+    <span class="slide-counter">{{ currentSlide + 1 }} / {{ slides.length + 1 }}</span>
+    <button (click)="nextSlide()" [disabled]="currentSlide === slides.length" class="control-btn">
+      Siguiente →
+    </button>
+  </div>
+
+  <!-- Slide Container -->
+  <div class="slide-wrapper">
+    <!-- Title Slide -->
+    <div class="slide" [class.active]="currentSlide === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">🚀 CLASE 12 DEV - PROYECTO FINAL (EVALUACIÓN)</div>
+        <div class="title-icon">🏆</div>
+        <h1>Proyecto Final Integrador: Aplicación AI-Native Full-Stack</h1>
+        <p class="subtitle">Integración de Spring Boot 3.4 (Java 21), Angular 19 Signals, Microservicio RAG Python 3.12 y Servidor MCP</p>
+        <p class="description">Construcción y presentación del Sistema de Aprobación Crediticia Inteligente para entorno bancario enterprise.</p>
+        <div class="tech-stack-preview">
+          <span class="tech-badge">☕ Spring Boot 3.4 (Java 21)</span>
+          <span class="tech-badge">🅰️ Angular 19 Signals</span>
+          <span class="tech-badge">🐍 Python RAG FastAPI</span>
+          <span class="tech-badge">🔌 MCP Server</span>
+          <span class="tech-badge">☁️ AWS Bedrock</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Slides -->
+    <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i + 1 === currentSlide">
+
+      <!-- Slide: Arquitectura -->
+      <div *ngIf="slide.type === 'architecture'" class="slide-content">
+        <h2>{{ architecture.title }}</h2>
+        <p class="description">{{ architecture.description }}</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="window-buttons">
+              <span class="window-button"></span>
+              <span class="window-button"></span>
+              <span class="window-button"></span>
+            </div>
+            <span class="file-name">architecture-diagram.txt</span>
+          </div>
+          <pre><code>{{ architecture.diagram }}</code></pre>
+        </div>
+
+        <div class="components-grid">
+          <div class="component-card" *ngFor="let comp of architecture.components">
+            <h3>{{ comp.name }}</h3>
+            <div class="tech-badge">{{ comp.tech }}</div>
+            <p class="port" *ngIf="comp.port"><strong>Puerto:</strong> {{ comp.port }}</p>
+            <p class="port" *ngIf="comp.trigger"><strong>Trigger:</strong> {{ comp.trigger }}</p>
+            <p class="db"><strong>DB:</strong> {{ comp.db }}</p>
+            <p class="purpose">{{ comp.purpose }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide: User Stories -->
+      <div *ngIf="slide.type === 'userStories'" class="slide-content">
+        <h2>{{ userStories.title }}</h2>
+        <p class="description">{{ userStories.description }}</p>
+
+        <div class="user-stories-container">
+          <div class="story-card" *ngFor="let story of userStories.stories">
+            <div class="story-header">
+              <span class="story-id">{{ story.id }}</span>
+              <h3>{{ story.title }}</h3>
+            </div>
+            <div class="story-content">
+              <p class="story-line"><strong>Como</strong> {{ story.as }}</p>
+              <p class="story-line"><strong>Quiero</strong> {{ story.want }}</p>
+              <p class="story-line"><strong>Para</strong> {{ story.so }}</p>
+            </div>
+            <div class="acceptance-criteria">
+              <h4>Criterios de Aceptación:</h4>
+              <ul>
+                <li *ngFor="let criterion of story.acceptance">{{ criterion }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide: Equipo -->
+      <div *ngIf="slide.type === 'teamStructure'" class="slide-content">
+        <h2>{{ teamStructure.title }}</h2>
+        <p class="description">{{ teamStructure.description }}</p>
+
+        <div class="roles-grid">
+          <div class="role-card" *ngFor="let role of teamStructure.roles">
+            <div class="role-header">
+              <span class="role-icon">{{ role.icon }}</span>
+              <h3>{{ role.role }}</h3>
+            </div>
+            <div class="role-section">
+              <h4>Responsabilidades:</h4>
+              <ul>
+                <li *ngFor="let resp of role.responsibilities">{{ resp }}</li>
+              </ul>
+            </div>
+            <div class="role-section">
+              <h4>Entregables:</h4>
+              <ul class="deliverables-list">
+                <li *ngFor="let del of role.deliverables">{{ del }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide: Implementación -->
+      <div *ngIf="slide.type === 'implementationGuide'" class="slide-content">
+        <h2>{{ implementationGuide.title }}</h2>
+        <p class="description">{{ implementationGuide.description }}</p>
+
+        <div class="phases-timeline">
+          <div class="phase-card" *ngFor="let phase of implementationGuide.phases; let i = index">
+            <div class="phase-number">Fase {{ i + 1 }}</div>
+            <div class="phase-content">
+              <h3>{{ phase.phase }}</h3>
+              <span class="duration">⏱️ {{ phase.duration }}</span>
+              <ul class="tasks-list">
+                <li *ngFor="let task of phase.tasks">{{ task }}</li>
+              </ul>
+              <div class="deliverable-box">
+                <strong>✅ Entregable:</strong> {{ phase.deliverable }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide: Entregables -->
+      <div *ngIf="slide.type === 'deliverables'" class="slide-content">
+        <h2>{{ deliverables.title }}</h2>
+        <p class="description">{{ deliverables.description }}</p>
+
+        <div class="deliverables-grid">
+          <div class="deliverable-card" *ngFor="let item of deliverables.items">
+            <div class="deliverable-header">
+              <span class="deliverable-icon">{{ item.icon }}</span>
+              <h3>{{ item.category }}</h3>
+            </div>
+            <ul class="requirements-list">
+              <li *ngFor="let req of item.requirements">{{ req }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide: Evaluación -->
+      <div *ngIf="slide.type === 'evaluationCriteria'" class="slide-content">
+        <h2>{{ evaluationCriteria.title }}</h2>
+        <p class="description">{{ evaluationCriteria.description }}</p>
+
+        <div class="evaluation-container">
+          <div class="criteria-section" *ngFor="let criterion of evaluationCriteria.criteria">
+            <div class="criteria-header">
+              <h3>{{ criterion.category }}</h3>
+              <span class="points-badge">{{ criterion.points }} pts</span>
+            </div>
+            <div class="breakdown-list">
+              <div class="breakdown-item" *ngFor="let item of criterion.breakdown">
+                <span class="item-text">{{ item.item }}</span>
+                <span class="item-points">{{ item.points }} pts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grading-scale">
+          <h3>Escala de Calificación</h3>
+          <div class="scale-items">
+            <div class="scale-item excellent">
+              <span class="scale-range">90-100</span>
+              <span class="scale-label">Excelente</span>
+            </div>
+            <div class="scale-item good">
+              <span class="scale-range">70-89</span>
+              <span class="scale-label">Aprobado</span>
+            </div>
+            <div class="scale-item fail">
+              <span class="scale-range">&lt;70</span>
+              <span class="scale-label">No Aprobado</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide: Desafíos -->
+      <div *ngIf="slide.type === 'challenges'" class="slide-content">
+        <h2>{{ challenges.title }}</h2>
+        <p class="description">{{ challenges.description }}</p>
+
+        <div class="challenges-container">
+          <div class="challenge-card" *ngFor="let item of challenges.items">
+            <div class="challenge-header">
+              <h3>⚠️ {{ item.challenge }}</h3>
+            </div>
+            <div class="problem-box">
+              <strong>Problema:</strong> {{ item.problem }}
+            </div>
+            <div class="solutions-box">
+              <strong>Soluciones:</strong>
+              <ul>
+                <li *ngFor="let solution of item.solutions">{{ solution }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide: Recursos -->
+      <div *ngIf="slide.type === 'resources'" class="slide-content">
+        <h2>{{ resources.title }}</h2>
+        <p class="description">{{ resources.description }}</p>
+
+        <div class="resources-grid">
+          <div class="resource-category" *ngFor="let tool of resources.tools">
+            <h3>{{ tool.category }}</h3>
+            <ul>
+              <li *ngFor="let item of tool.items">{{ item }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tutorials-section">
+          <h3>📚 Tutoriales Recomendados</h3>
+          <ul class="tutorials-list">
+            <li *ngFor="let tutorial of resources.tutorials">{{ tutorial }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide: Summary -->
+      <div *ngIf="slide.type === 'summary'" class="slide-content">
+        <h2>{{ summary.title }}</h2>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <h3>✅ Logros Completados</h3>
+            <ul>
+              <li *ngFor="let achievement of summary.achievements">{{ achievement }}</li>
+            </ul>
+          </div>
+
+          <div class="summary-card">
+            <h3>🌟 Características Clave</h3>
+            <ul>
+              <li *ngFor="let feature of summary.keyFeatures">{{ feature }}</li>
+            </ul>
+          </div>
+
+          <div class="summary-card next-steps">
+            <h3>🚀 Próximos Pasos</h3>
+            <ul>
+              <li *ngFor="let step of summary.nextSteps">{{ step }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

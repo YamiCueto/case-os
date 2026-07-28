@@ -1,0 +1,375 @@
+<div class="presentation-container" (keydown)="onKeydown($event)" tabindex="0">
+  <!-- Back to Study Plan Button -->
+  <div class="back-to-menu">
+    <a routerLink="/study-plan" class="back-btn">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Volver al Plan de Estudio</span>
+    </a>
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="controls">
+    <button (click)="prevSlide()" [disabled]="currentSlide === 0" class="control-btn">
+      ← Anterior
+    </button>
+    <span class="slide-counter">{{ currentSlide + 1 }} / {{ slides.length }}</span>
+    <button (click)="nextSlide()" [disabled]="currentSlide === slides.length - 1" class="control-btn">
+      Siguiente →
+    </button>
+  </div>
+
+  <!-- Slide Container -->
+  <div class="slide-wrapper">
+    <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentSlide">
+
+      <!-- Slide 1: Title -->
+      <div *ngIf="slide.type === 'title'" class="slide-title">
+        <div class="workshop-badge">🧪 CLASE 9 DEV</div>
+        <div class="title-icon">🎭</div>
+        <h1>Testing E2E con Playwright / Cypress & Agentes Self-Healing</h1>
+        <p class="subtitle">Automatización E2E de flujos complejos con scripts autorreparables por IA</p>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">🎯</span>
+            <span class="info-label">Objetivo</span>
+            <span class="info-value">Tests E2E Self-Healing</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">⏱️</span>
+            <span class="info-label">Duración</span>
+            <span class="info-value">90 minutos</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">📊</span>
+            <span class="info-label">Nivel</span>
+            <span class="info-value">Intermedio</span>
+          </div>
+        </div>
+        <div class="tech-stack-preview">
+          <span class="tech-badge">🎭 Playwright</span>
+          <span class="tech-badge">🌲 Cypress</span>
+          <span class="tech-badge">🤖 Self-Healing Selectors</span>
+          <span class="tech-badge">⚙️ CI/CD Automation</span>
+        </div>
+      </div>
+
+      <!-- Slide 2: Context -->
+      <div *ngIf="slide.type === 'context'" class="slide-content">
+        <h2>El Contexto del Problema</h2>
+
+        <div class="scenario-box">
+          <span class="scenario-icon">{{ context.scenario.icon }}</span>
+          <p>{{ context.scenario.text }}</p>
+        </div>
+
+        <div class="problems-grid">
+          <div class="problem-card" *ngFor="let problem of context.problems" [attr.data-color]="problem.color">
+            <div class="problem-icon">{{ problem.icon }}</div>
+            <h3>{{ problem.titulo }}</h3>
+            <p>{{ problem.descripcion }}</p>
+          </div>
+        </div>
+
+        <div class="solution-box">
+          <strong>💡 Solución:</strong> {{ context.solution }}
+        </div>
+      </div>
+
+      <!-- Slide 3: Setup Cypress -->
+      <div *ngIf="slide.type === 'setup'" class="slide-content">
+        <h2>Setup de Cypress en Angular</h2>
+
+        <div class="setup-section">
+          <h3>{{ setup.installation.titulo }}</h3>
+          <div class="command-box">
+            <code>{{ setup.installation.command }}</code>
+          </div>
+          <p class="description-text">{{ setup.installation.description }}</p>
+        </div>
+
+        <div class="structure-section">
+          <h3>{{ setup.projectStructure.titulo }}</h3>
+          <div class="folder-tree">
+            <div class="folder-item" *ngFor="let folder of setup.projectStructure.folders">
+              <span class="folder-name">{{ folder.name }}</span>
+              <span class="folder-description">{{ folder.description }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="config-section">
+          <h3>{{ setup.config.titulo }}</h3>
+          <p class="description-text">{{ setup.config.description }}</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">cypress.config.ts</span>
+            </div>
+            <pre><code>{{ setup.config.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="commands-section">
+          <h3>{{ setup.runCommands.titulo }}</h3>
+          <div class="command-grid">
+            <div class="command-item" *ngFor="let cmd of setup.runCommands.commands">
+              <div class="command-box">
+                <code>{{ cmd.command }}</code>
+              </div>
+              <p>{{ cmd.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4: Page Object Pattern -->
+      <div *ngIf="slide.type === 'page-object'" class="slide-content">
+        <h2>Page Object Pattern</h2>
+
+        <div class="concept-section">
+          <div class="concept-icon">{{ pageObject.concept.icon }}</div>
+          <div>
+            <h3>{{ pageObject.concept.titulo }}</h3>
+            <p>{{ pageObject.concept.description }}</p>
+          </div>
+        </div>
+
+        <div class="pattern-comparison">
+          <div class="pattern-column without-pattern">
+            <h3>{{ pageObject.withoutPattern.titulo }}</h3>
+            <p class="pattern-description">{{ pageObject.withoutPattern.description }}</p>
+            <div class="code-block">
+              <div class="code-header">
+                <div class="window-buttons">
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                </div>
+                <span class="file-name">login.cy.ts</span>
+              </div>
+              <pre><code>{{ pageObject.withoutPattern.code }}</code></pre>
+            </div>
+          </div>
+
+          <div class="pattern-column with-pattern">
+            <h3>{{ pageObject.withPattern.titulo }}</h3>
+            <p class="pattern-description">{{ pageObject.withPattern.description }}</p>
+            <div class="code-block">
+              <div class="code-header">
+                <div class="window-buttons">
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                </div>
+                <span class="file-name">login.page.ts</span>
+              </div>
+              <pre><code>{{ pageObject.withPattern.pageObjectCode }}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <div class="window-buttons">
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                </div>
+                <span class="file-name">login.cy.ts</span>
+              </div>
+              <pre><code>{{ pageObject.withPattern.testCode }}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="benefits-section">
+          <h3>🎯 Beneficios del Patrón</h3>
+          <div class="benefits-grid">
+            <div class="benefit-item" *ngFor="let benefit of pageObject.benefits">
+              <span class="benefit-icon">{{ benefit.icon }}</span>
+              <p>{{ benefit.text }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5: API Mocking -->
+      <div *ngIf="slide.type === 'api-mocking'" class="slide-content">
+        <h2>API Mocking con cy.intercept()</h2>
+
+        <div class="concept-section">
+          <div class="concept-icon">{{ apiMocking.concept.icon }}</div>
+          <div>
+            <h3>{{ apiMocking.concept.titulo }}</h3>
+            <ul class="reasons-list">
+              <li *ngFor="let reason of apiMocking.concept.reasons">{{ reason }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="intercept-section">
+          <h3>{{ apiMocking.basicIntercept.titulo }}</h3>
+          <p class="description-text">{{ apiMocking.basicIntercept.description }}</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">user-list.cy.ts</span>
+            </div>
+            <pre><code>{{ apiMocking.basicIntercept.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="fixtures-section">
+          <h3>{{ apiMocking.fixturesIntercept.titulo }}</h3>
+          <p class="description-text">{{ apiMocking.fixturesIntercept.description }}</p>
+          <div class="code-row">
+            <div class="code-block">
+              <div class="code-header">
+                <div class="window-buttons">
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                </div>
+                <span class="file-name">users.json</span>
+              </div>
+              <pre><code>{{ apiMocking.fixturesIntercept.fixtureFile }}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <div class="window-buttons">
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                  <span class="window-button"></span>
+                </div>
+                <span class="file-name">test.cy.ts</span>
+              </div>
+              <pre><code>{{ apiMocking.fixturesIntercept.testCode }}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="error-section">
+          <h3>{{ apiMocking.errorSimulation.titulo }}</h3>
+          <p class="description-text">{{ apiMocking.errorSimulation.description }}</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">error-handling.cy.ts</span>
+            </div>
+            <pre><code>{{ apiMocking.errorSimulation.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 6: Challenge -->
+      <div *ngIf="slide.type === 'challenge'" class="slide-content">
+        <h2>{{ challenge.title }}</h2>
+        <p class="description">{{ challenge.description }}</p>
+
+        <div class="challenge-container">
+          <div class="challenge-header">
+            <span class="badge-difficulty badge-{{ challenge.difficulty }}">
+              {{ challenge.difficulty | uppercase }}
+            </span>
+            <span class="timer-box">
+              <span class="timer-icon">⏱️</span>
+              {{ challenge.timeEstimate }}
+            </span>
+          </div>
+
+          <div class="challenge-section" *ngFor="let section of challenge.sections">
+            <h3>{{ section.titulo }}</h3>
+            <ul class="challenge-items">
+              <li *ngFor="let item of section.items">{{ item }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 7: Best Practices -->
+      <div *ngIf="slide.type === 'best-practices'" class="slide-content">
+        <h2>Best Practices</h2>
+
+        <div class="practices-grid">
+          <div class="practice-category" *ngFor="let practice of bestPractices">
+            <div class="category-header">
+              <span class="category-icon">{{ practice.icon }}</span>
+              <h3>{{ practice.categoria }}</h3>
+            </div>
+            <div class="practice-content">
+              <div class="good-practices">
+                <h4>✅ Hacer</h4>
+                <ul>
+                  <li *ngFor="let item of practice.good">{{ item }}</li>
+                </ul>
+              </div>
+              <div class="bad-practices">
+                <h4>❌ Evitar</h4>
+                <ul>
+                  <li *ngFor="let item of practice.bad">{{ item }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 8: Summary -->
+      <div *ngIf="slide.type === 'summary'" class="slide-content">
+        <h2>Resumen y Próximos Pasos</h2>
+
+        <div class="summary-grid">
+          <div class="achievements-card">
+            <h3>🎯 Lo que Lograste</h3>
+            <ul class="achievements-list">
+              <li *ngFor="let achievement of summary.achievements">
+                <span class="achievement-icon">{{ achievement.icon }}</span>
+                <span>{{ achievement.text }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="features-card">
+            <h3>{{ summary.cypressFeatures.titulo }}</h3>
+            <div class="features-list">
+              <div class="feature-item" *ngFor="let item of summary.cypressFeatures.items">
+                <strong>{{ item.feature }}:</strong>
+                <p>{{ item.description }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="comparison-card">
+            <h3>{{ summary.comparison.titulo }}</h3>
+            <div class="comparison-list">
+              <div class="comparison-item" *ngFor="let tool of summary.comparison.tools">
+                <strong>{{ tool.tool }}</strong>
+                <p><span class="pros-label">✅</span> {{ tool.pros }}</p>
+                <p><span class="cons-label">❌</span> {{ tool.cons }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="nextsteps-card">
+            <h3>🚀 Próximos Pasos</h3>
+            <ol class="next-steps">
+              <li *ngFor="let step of summary.nextSteps">{{ step }}</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

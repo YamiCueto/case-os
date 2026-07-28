@@ -1,0 +1,277 @@
+<div>
+  <!-- Installation Guides Card (Clickable) -->
+  <div (click)="toggleGuides()"
+       class="block bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-lg shadow-xl p-5 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] cursor-pointer h-full">
+    <div class="flex flex-col h-full">
+      <div class="flex items-start gap-3 mb-3">
+        <div class="text-5xl">📚</div>
+        <div class="flex-1">
+          <h2 class="text-xl font-bold mb-1">Guías de Instalación</h2>
+          <p class="text-emerald-100 text-sm mb-2">Instrucciones paso a paso para instalar lenguajes, herramientas y dependencias del curso</p>
+        </div>
+      </div>
+      <div class="flex gap-2 flex-wrap mb-2">
+        <span class="bg-emerald-700 px-2 py-1 rounded-full text-xs">Python</span>
+        <span class="bg-emerald-700 px-2 py-1 rounded-full text-xs">Java</span>
+        <span class="bg-emerald-700 px-2 py-1 rounded-full text-xs">Node.js</span>
+        <span class="bg-emerald-700 px-2 py-1 rounded-full text-xs">Git</span>
+        <span class="bg-emerald-700 px-2 py-1 rounded-full text-xs">+{{guides.length}} más</span>
+      </div>
+      <div class="text-center mt-auto">
+        <span class="text-emerald-200 text-xs" [class.rotate-90]="showGuides">▼ Click para {{showGuides ? 'ocultar' : 'ver detalles'}}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guides Content (Expandible) -->
+  <div *ngIf="showGuides" class="mt-6 bg-white rounded-lg shadow-xl p-8 animate-fadeIn">
+    <!-- Guide Detail View -->
+    <div *ngIf="selectedGuide" class="animate-fadeIn">
+      <button (click)="closeGuideDetail()"
+              class="mb-4 flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        <span class="font-semibold">Volver a todas las guías</span>
+      </button>
+
+      <!-- Guide Header -->
+      <div class="bg-gradient-to-r {{getCategoryColor(selectedGuide.category)}} text-white rounded-lg p-6 mb-6">
+        <div class="flex items-start gap-4">
+          <div class="text-6xl">{{selectedGuide.icon}}</div>
+          <div class="flex-1">
+            <h3 class="text-3xl font-bold mb-2">{{selectedGuide.name}}</h3>
+            <p class="text-white text-opacity-90 mb-4">{{selectedGuide.description}}</p>
+            <div class="flex gap-3 flex-wrap">
+              <span class="{{getDifficultyColor(selectedGuide.difficulty)}} px-3 py-1 rounded-full text-sm font-semibold">
+                {{selectedGuide.difficulty}}
+              </span>
+              <span class="bg-white bg-opacity-20 backdrop-blur px-3 py-1 rounded-full text-sm font-semibold">
+                ⏱️ {{selectedGuide.estimatedTime}}
+              </span>
+              <span class="bg-white bg-opacity-20 backdrop-blur px-3 py-1 rounded-full text-sm font-semibold">
+                📖 {{selectedGuide.category}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prerequisites -->
+      <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+        <h4 class="font-bold text-blue-800 mb-2">📋 Requisitos Previos</h4>
+        <ul class="list-disc list-inside text-blue-700 space-y-1">
+          <li *ngFor="let prereq of selectedGuide.prerequisites">{{prereq}}</li>
+        </ul>
+      </div>
+
+      <!-- Installation Steps -->
+      <div class="mb-6">
+        <h4 class="text-2xl font-bold text-gray-800 mb-4">🔧 Pasos de Instalación</h4>
+        <div class="space-y-4">
+          <div *ngFor="let step of selectedGuide.steps"
+               class="bg-gradient-to-r from-gray-50 to-white border-2 border-gray-200 rounded-lg p-5 hover:border-gray-300 transition-all">
+            <div class="flex items-start gap-4">
+              <div class="bg-gradient-to-r {{getCategoryColor(selectedGuide.category)}} text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg flex-shrink-0">
+                {{step.stepNumber}}
+              </div>
+              <div class="flex-1">
+                <h5 class="font-bold text-lg text-gray-800 mb-2">{{step.title}}</h5>
+                <p class="text-gray-600 mb-3">{{step.description}}</p>
+
+                <!-- Platform Badge -->
+                <div *ngIf="step.platform" class="mb-3">
+                  <span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs font-semibold">
+                    🖥️ {{step.platform}}
+                  </span>
+                </div>
+
+                <!-- Commands -->
+                <div *ngIf="step.commands && step.commands.length > 0" class="mb-3">
+                  <div class="bg-gray-900 text-green-400 rounded-lg p-4 font-mono text-sm">
+                    <div *ngFor="let cmd of step.commands" class="mb-1">
+                      <span class="text-gray-500">$</span> {{cmd}}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Notes -->
+                <div *ngIf="step.notes && step.notes.length > 0" class="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded">
+                  <ul class="list-disc list-inside text-yellow-800 text-sm space-y-1">
+                    <li *ngFor="let note of step.notes">{{note}}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verification -->
+      <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded">
+        <h4 class="font-bold text-green-800 mb-3 flex items-center gap-2">
+          <span>✅</span>
+          <span>Verificación de Instalación</span>
+        </h4>
+        <ul class="list-disc list-inside text-green-700 space-y-2">
+          <li *ngFor="let check of selectedGuide.verification" class="font-mono text-sm">{{check}}</li>
+        </ul>
+      </div>
+
+      <!-- Troubleshooting -->
+      <div class="mb-6">
+        <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <span>🔧</span>
+          <span>Problemas Comunes y Soluciones</span>
+        </h4>
+        <div class="space-y-3">
+          <div *ngFor="let item of selectedGuide.troubleshooting"
+               class="bg-red-50 border-l-4 border-red-400 p-4 rounded">
+            <p class="font-semibold text-red-800 mb-2">❌ {{item.problem}}</p>
+            <p class="text-red-700 text-sm">💡 <strong>Solución:</strong> {{item.solution}}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Official Docs & Related Classes -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-gradient-to-r from-indigo-50 to-blue-50 border-2 border-indigo-200 rounded-lg p-4">
+          <h5 class="font-bold text-indigo-800 mb-2">📖 Documentación Oficial</h5>
+          <a [href]="selectedGuide.officialDocs"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="text-blue-600 hover:underline text-sm break-all">
+            {{selectedGuide.officialDocs}}
+          </a>
+        </div>
+        <div class="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg p-4">
+          <h5 class="font-bold text-purple-800 mb-2">🎓 Clases Relacionadas</h5>
+          <div class="flex gap-2 flex-wrap">
+            <span *ngFor="let clase of selectedGuide.relatedClasses"
+                  class="bg-purple-200 text-purple-800 px-2 py-1 rounded text-xs font-semibold">
+              {{clase}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guides List View (when no guide selected) -->
+    <div *ngIf="!selectedGuide">
+      <div class="mb-6">
+        <h3 class="text-3xl font-bold text-gray-800 mb-2">📚 Guías de Instalación Completas</h3>
+        <p class="text-gray-600 mb-4">
+          Instrucciones detalladas paso a paso para instalar todas las herramientas necesarias del curso.
+          Cada guía incluye verificaciones, troubleshooting y tips específicos para Windows.
+        </p>
+
+        <!-- Expand/Collapse All Controls -->
+        <div class="flex gap-3 mb-4">
+          <button (click)="expandAllCategories()"
+                  class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+            <span>➕</span>
+            <span>Expandir Todas</span>
+          </button>
+          <button (click)="collapseAllCategories()"
+                  class="bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 py-2 rounded-lg font-semibold hover:from-red-600 hover:to-rose-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+            <span>➖</span>
+            <span>Colapsar Todas</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Categories (Accordion) -->
+      <div *ngFor="let category of categories" class="mb-4">
+        <!-- Category Header (Clickable) -->
+        <button (click)="toggleCategory(category, $event)"
+                class="w-full bg-gradient-to-r {{getCategoryColor(category)}} text-white rounded-lg p-4 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-between cursor-pointer">
+          <div class="flex items-center gap-4">
+            <h4 class="text-xl font-bold">{{category}}</h4>
+            <span class="bg-white bg-opacity-20 backdrop-blur px-3 py-1 rounded-full text-sm font-semibold">
+              {{getGuidesByCategory(category).length}} guías
+            </span>
+          </div>
+          <div class="text-2xl transition-transform duration-300"
+               [class.rotate-90]="isCategoryExpanded(category)">
+            ▶
+          </div>
+        </button>
+
+        <!-- Category Content (Collapsible) -->
+        <div *ngIf="isCategoryExpanded(category)"
+             class="mt-4 mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4 animate-fadeIn">
+          <div *ngFor="let guide of getGuidesByCategory(category)"
+               (click)="selectGuide(guide, $event)"
+               class="bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 rounded-lg p-4 hover:border-gray-400 hover:shadow-xl transition-all cursor-pointer group">
+            <div class="flex items-start gap-3 mb-3">
+              <div class="text-4xl group-hover:scale-110 transition-transform">{{guide.icon}}</div>
+              <div class="flex-1">
+                <h5 class="font-bold text-base text-gray-800 mb-1">{{guide.name}}</h5>
+                <p class="text-xs text-gray-600 leading-relaxed mb-2">{{guide.description}}</p>
+                <div class="flex gap-2 flex-wrap mb-2">
+                  <span class="{{getDifficultyColor(guide.difficulty)}} px-2 py-1 rounded text-xs font-semibold">
+                    {{guide.difficulty}}
+                  </span>
+                  <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-semibold">
+                    ⏱️ {{guide.estimatedTime}}
+                  </span>
+                </div>
+                <div class="text-xs text-gray-500 flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  <span>Click para ver guía completa</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="mt-8 bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-200 rounded-lg p-6">
+        <h4 class="text-xl font-bold text-amber-800 mb-3">⚡ Enlaces Rápidos</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer"
+             class="bg-white rounded-lg p-3 hover:shadow-md transition-all flex items-center gap-3">
+            <span class="text-2xl">💻</span>
+            <span class="text-sm font-semibold text-gray-700">VS Code</span>
+          </a>
+          <a href="https://www.python.org/downloads/" target="_blank" rel="noopener noreferrer"
+             class="bg-white rounded-lg p-3 hover:shadow-md transition-all flex items-center gap-3">
+            <span class="text-2xl">🐍</span>
+            <span class="text-sm font-semibold text-gray-700">Python</span>
+          </a>
+          <a href="https://adoptium.net/" target="_blank" rel="noopener noreferrer"
+             class="bg-white rounded-lg p-3 hover:shadow-md transition-all flex items-center gap-3">
+            <span class="text-2xl">☕</span>
+            <span class="text-sm font-semibold text-gray-700">Java (Adoptium)</span>
+          </a>
+          <a href="https://nodejs.org/" target="_blank" rel="noopener noreferrer"
+             class="bg-white rounded-lg p-3 hover:shadow-md transition-all flex items-center gap-3">
+            <span class="text-2xl">🟢</span>
+            <span class="text-sm font-semibold text-gray-700">Node.js</span>
+          </a>
+          <a href="https://git-scm.com/" target="_blank" rel="noopener noreferrer"
+             class="bg-white rounded-lg p-3 hover:shadow-md transition-all flex items-center gap-3">
+            <span class="text-2xl">🔀</span>
+            <span class="text-sm font-semibold text-gray-700">Git</span>
+          </a>
+          <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer"
+             class="bg-white rounded-lg p-3 hover:shadow-md transition-all flex items-center gap-3">
+            <span class="text-2xl">🤖</span>
+            <span class="text-sm font-semibold text-gray-700">GitHub Copilot</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+        <p class="text-sm text-blue-800">
+          <strong>💡 Tip:</strong> No necesitas instalar todo al mismo tiempo. Instala las herramientas según las necesites para cada clase.
+          Cada guía está optimizada para Windows y incluye soluciones a problemas comunes.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

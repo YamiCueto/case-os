@@ -1,0 +1,320 @@
+<div class="presentation-container">
+  <!-- Back to Study Plan Button -->
+  <div class="back-to-menu">
+    <a routerLink="/study-plan" class="back-btn">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Volver al Plan de Estudio</span>
+    </a>
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="controls">
+    <button (click)="prevSlide()" [disabled]="currentSlide === 0" class="control-btn">
+      ← Anterior
+    </button>
+    <span class="slide-counter">{{ currentSlide + 1 }} / {{ slides.length }}</span>
+    <button (click)="nextSlide()" [disabled]="currentSlide === slides.length - 1" class="control-btn">
+      Siguiente →
+    </button>
+  </div>
+
+  <!-- Slide Container -->
+  <div class="slide-wrapper">
+    <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentSlide">
+
+      <!-- Slide 1: Title -->
+      <div *ngIf="slide.type === 'title'" class="slide-title">
+        <div class="workshop-badge">☁️ CLASE 11 DEV</div>
+        <div class="title-icon">☁️</div>
+        <h1>AWS Lambda Serverless, Amazon Bedrock & AI Guardrails</h1>
+        <p class="subtitle">Orquestación de funciones Lambda, integración con Amazon Bedrock y políticas de seguridad en producción</p>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">🎯</span>
+            <span class="info-label">Objetivo</span>
+            <span class="info-value">Serverless + Bedrock + Guardrails</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">⏱️</span>
+            <span class="info-label">Duración</span>
+            <span class="info-value">90 minutos</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">📊</span>
+            <span class="info-label">Nivel</span>
+            <span class="info-value">Intermedio-Avanzado</span>
+          </div>
+        </div>
+        <div class="tech-stack-preview">
+          <span class="tech-badge">☁️ AWS Lambda</span>
+          <span class="tech-badge">🤖 Amazon Bedrock</span>
+          <span class="tech-badge">🛡️ AI Guardrails</span>
+          <span class="tech-badge">📦 DynamoDB</span>
+        </div>
+      </div>
+
+      <!-- Slide 2: Context -->
+      <div *ngIf="slide.type === 'context'" class="slide-content">
+        <h2>{{ context.title }}</h2>
+
+        <div class="scenario-box">
+          <span class="scenario-icon">{{ context.scenario.icon }}</span>
+          <p>{{ context.scenario.text }}</p>
+        </div>
+
+        <div class="benefits-grid">
+          <div
+            class="benefit-card"
+            *ngFor="let benefit of context.benefits"
+            [attr.data-color]="benefit.color">
+            <div class="benefit-icon">{{ benefit.icon }}</div>
+            <h3>{{ benefit.title }}</h3>
+            <p>{{ benefit.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Setup -->
+      <div *ngIf="slide.type === 'setup'" class="slide-content">
+        <h2>{{ setup.title }}</h2>
+
+        <div class="setup-section">
+          <h3>{{ setup.installation.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">terminal</span>
+            </div>
+            <pre><code>{{ setup.installation.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="setup-section">
+          <h3>{{ setup.projectInit.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">sam init</span>
+            </div>
+            <pre><code>{{ setup.projectInit.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="setup-section">
+          <h3>{{ setup.dependencies.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">package.json / tsconfig.json</span>
+            </div>
+            <pre><code>{{ setup.dependencies.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4: Lambda Handler -->
+      <div *ngIf="slide.type === 'lambda-handler'" class="slide-content">
+        <h2>{{ lambdaHandler.title }}</h2>
+        <p class="description">{{ lambdaHandler.description }}</p>
+
+        <div class="code-section">
+          <h3>{{ lambdaHandler.handler.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">src/handlers/process-transaction.ts</span>
+            </div>
+            <pre><code>{{ lambdaHandler.handler.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="code-section">
+          <h3>{{ lambdaHandler.helpers.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">process-transaction.ts (helpers)</span>
+            </div>
+            <pre><code>{{ lambdaHandler.helpers.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5: SAM Template -->
+      <div *ngIf="slide.type === 'sam-template'" class="slide-content">
+        <h2>{{ samTemplate.title }}</h2>
+        <p class="description">{{ samTemplate.description }}</p>
+
+        <div class="code-section">
+          <h3>{{ samTemplate.template.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">template.yaml</span>
+            </div>
+            <pre><code>{{ samTemplate.template.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 6: Testing -->
+      <div *ngIf="slide.type === 'testing'" class="slide-content">
+        <h2>{{ testing.title }}</h2>
+
+        <div class="code-section">
+          <h3>{{ testing.unitTests.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">tests/unit/process-transaction.test.ts</span>
+            </div>
+            <pre><code>{{ testing.unitTests.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="code-section">
+          <h3>{{ testing.localTesting.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">sam commands</span>
+            </div>
+            <pre><code>{{ testing.localTesting.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 7: Deployment -->
+      <div *ngIf="slide.type === 'deployment'" class="slide-content">
+        <h2>{{ deployment.title }}</h2>
+
+        <div class="code-section">
+          <h3>{{ deployment.deploy.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">deployment</span>
+            </div>
+            <pre><code>{{ deployment.deploy.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="code-section">
+          <h3>{{ deployment.monitoring.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">template.yaml (monitoring)</span>
+            </div>
+            <pre><code>{{ deployment.monitoring.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 8: Best Practices -->
+      <div *ngIf="slide.type === 'best-practices'" class="slide-content">
+        <h2>{{ bestPractices.title }}</h2>
+
+        <div class="practices-grid">
+          <div class="practice-category" *ngFor="let practice of bestPractices.practices">
+            <div class="category-header">
+              <span class="category-icon">{{ practice.icon }}</span>
+              <h3>{{ practice.categoria }}</h3>
+            </div>
+            <div class="practice-content">
+              <div class="good-practices">
+                <h4>✅ Hacer</h4>
+                <ul>
+                  <li *ngFor="let item of practice.good">{{ item }}</li>
+                </ul>
+              </div>
+              <div class="bad-practices">
+                <h4>❌ Evitar</h4>
+                <ul>
+                  <li *ngFor="let item of practice.bad">{{ item }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 9: Summary -->
+      <div *ngIf="slide.type === 'summary'" class="slide-content">
+        <h2>{{ summary.title }}</h2>
+
+        <div class="summary-grid">
+          <div class="summary-card achievements">
+            <h3>✅ Lo que Aprendimos</h3>
+            <ul>
+              <li *ngFor="let achievement of summary.achievements">{{ achievement }}</li>
+            </ul>
+          </div>
+
+          <div class="summary-card features">
+            <h3>🌟 Características Clave</h3>
+            <div class="feature-list">
+              <div class="feature-item" *ngFor="let feature of summary.features">
+                <span class="feature-icon">{{ feature.icon }}</span>
+                <div>
+                  <h4>{{ feature.title }}</h4>
+                  <p>{{ feature.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card next-steps">
+            <h3>🚀 Próximos Pasos</h3>
+            <ul>
+              <li *ngFor="let step of summary.nextSteps">{{ step }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

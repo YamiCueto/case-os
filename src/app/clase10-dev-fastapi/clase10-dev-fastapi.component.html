@@ -1,0 +1,337 @@
+<div class="presentation-container">
+  <!-- Back to Study Plan Button -->
+  <div class="back-to-menu">
+    <a routerLink="/study-plan" class="back-btn">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Volver al Plan de Estudio</span>
+    </a>
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="controls">
+    <button (click)="prevSlide()" [disabled]="currentSlide === 0" class="control-btn">
+      ← Anterior
+    </button>
+    <span class="slide-counter">{{ currentSlide + 1 }} / {{ slides.length }}</span>
+    <button (click)="nextSlide()" [disabled]="currentSlide === slides.length - 1" class="control-btn">
+      Siguiente →
+    </button>
+  </div>
+
+  <!-- Slide Container -->
+  <div class="slide-wrapper">
+    <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentSlide">
+
+      <!-- Slide 1: Title -->
+      <div *ngIf="slide.type === 'title'" class="slide-title">
+        <div class="workshop-badge">⚡ CLASE 10 DEV</div>
+        <div class="title-icon">🐍</div>
+        <h1>Microservicio RAG con Python 3.12, FastAPI & PgVector</h1>
+        <p class="subtitle">Desarrollo de APIs REST para búsqueda semántica, embeddings y arquitectura RAG Enterprise</p>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-icon">🎯</span>
+            <span class="info-label">Objetivo</span>
+            <span class="info-value">Microservicio RAG Vectorial</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">⏱️</span>
+            <span class="info-label">Duración</span>
+            <span class="info-value">60 minutos</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">📊</span>
+            <span class="info-label">Nivel</span>
+            <span class="info-value">Intermedio</span>
+          </div>
+        </div>
+        <div class="tech-stack-preview">
+          <span class="tech-badge">🐍 Python 3.12</span>
+          <span class="tech-badge">⚡ FastAPI</span>
+          <span class="tech-badge">🐘 PgVector / ChromaDB</span>
+          <span class="tech-badge">🧠 LangChain / LlamaIndex</span>
+        </div>
+      </div>
+
+      <!-- Slide 2: Context -->
+      <div *ngIf="slide.type === 'context'" class="slide-content">
+        <h2>{{ context.title }}</h2>
+
+        <div class="scenario-box">
+          <span class="scenario-icon">{{ context.scenario.icon }}</span>
+          <p>{{ context.scenario.text }}</p>
+        </div>
+
+        <div class="reasons-grid">
+          <div
+            class="reason-card"
+            *ngFor="let reason of context.reasons"
+            [attr.data-color]="reason.color">
+            <div class="reason-icon">{{ reason.icon }}</div>
+            <h3>{{ reason.title }}</h3>
+            <p>{{ reason.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Setup -->
+      <div *ngIf="slide.type === 'setup'" class="slide-content">
+        <h2>{{ setup.title }}</h2>
+
+        <div class="setup-section">
+          <h3>{{ setup.installation.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">terminal</span>
+            </div>
+            <pre><code>{{ setup.installation.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="setup-section">
+          <h3>{{ setup.structure.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">project structure</span>
+            </div>
+            <pre><code>{{ setup.structure.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="setup-section">
+          <h3>{{ setup.runCommand.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">run server</span>
+            </div>
+            <pre><code>{{ setup.runCommand.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4: Pydantic Models -->
+      <div *ngIf="slide.type === 'pydantic-models'" class="slide-content">
+        <h2>{{ pydanticModels.title }}</h2>
+        <p class="description">{{ pydanticModels.description }}</p>
+
+        <div class="code-section">
+          <h3>{{ pydanticModels.input.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">app/schemas/solicitud.py</span>
+            </div>
+            <pre><code>{{ pydanticModels.input.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="code-section">
+          <h3>{{ pydanticModels.output.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">app/schemas/scoring.py</span>
+            </div>
+            <pre><code>{{ pydanticModels.output.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5: Service Layer -->
+      <div *ngIf="slide.type === 'service-layer'" class="slide-content">
+        <h2>{{ serviceLayer.title }}</h2>
+        <p class="description">{{ serviceLayer.description }}</p>
+
+        <div class="code-section">
+          <h3>{{ serviceLayer.algorithm.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">app/services/scoring_service.py</span>
+            </div>
+            <pre><code>{{ serviceLayer.algorithm.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="code-section">
+          <h3>{{ serviceLayer.helpers.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">scoring_service.py (continued)</span>
+            </div>
+            <pre><code>{{ serviceLayer.helpers.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 6: API Endpoints -->
+      <div *ngIf="slide.type === 'api-endpoints'" class="slide-content">
+        <h2>{{ apiEndpoints.title }}</h2>
+        <p class="description">{{ apiEndpoints.description }}</p>
+
+        <div class="code-section">
+          <h3>{{ apiEndpoints.mainFile.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">app/main.py</span>
+            </div>
+            <pre><code>{{ apiEndpoints.mainFile.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="code-section">
+          <h3>{{ apiEndpoints.router.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">app/routers/scoring.py</span>
+            </div>
+            <pre><code>{{ apiEndpoints.router.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 7: Testing -->
+      <div *ngIf="slide.type === 'testing'" class="slide-content">
+        <h2>{{ testing.title }}</h2>
+        <p class="description">{{ testing.description }}</p>
+
+        <div class="code-section">
+          <h3>{{ testing.unitTests.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">tests/test_scoring_service.py</span>
+            </div>
+            <pre><code>{{ testing.unitTests.code }}</code></pre>
+          </div>
+        </div>
+
+        <div class="code-section">
+          <h3>{{ testing.integrationTests.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">tests/test_api.py</span>
+            </div>
+            <pre><code>{{ testing.integrationTests.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 8: Best Practices -->
+      <div *ngIf="slide.type === 'best-practices'" class="slide-content">
+        <h2>{{ bestPractices.title }}</h2>
+
+        <div class="practices-grid">
+          <div class="practice-category" *ngFor="let practice of bestPractices.practices">
+            <div class="category-header">
+              <span class="category-icon">{{ practice.icon }}</span>
+              <h3>{{ practice.categoria }}</h3>
+            </div>
+            <div class="practice-content">
+              <div class="good-practices">
+                <h4>✅ Hacer</h4>
+                <ul>
+                  <li *ngFor="let item of practice.good">{{ item }}</li>
+                </ul>
+              </div>
+              <div class="bad-practices">
+                <h4>❌ Evitar</h4>
+                <ul>
+                  <li *ngFor="let item of practice.bad">{{ item }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 9: Summary -->
+      <div *ngIf="slide.type === 'summary'" class="slide-content">
+        <h2>{{ summary.title }}</h2>
+
+        <div class="summary-grid">
+          <div class="summary-card achievements">
+            <h3>✅ Lo que Aprendimos</h3>
+            <ul>
+              <li *ngFor="let achievement of summary.achievements">{{ achievement }}</li>
+            </ul>
+          </div>
+
+          <div class="summary-card features">
+            <h3>🌟 Características Clave</h3>
+            <div class="feature-list">
+              <div class="feature-item" *ngFor="let feature of summary.features">
+                <span class="feature-icon">{{ feature.icon }}</span>
+                <div>
+                  <h4>{{ feature.title }}</h4>
+                  <p>{{ feature.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card next-steps">
+            <h3>🚀 Próximos Pasos</h3>
+            <ul>
+              <li *ngFor="let step of summary.nextSteps">{{ step }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
