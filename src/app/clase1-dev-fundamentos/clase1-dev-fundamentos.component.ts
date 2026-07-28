@@ -50,7 +50,7 @@ export class Clase1DevFundamentosComponent {
     {
       icon: '🐉',
       title: 'Modelos de Razonamiento (Reasoning Models)',
-      description: 'Modelos como DeepSeek R1, Claude 3.7 Sonnet y o3-mini piensan antes de responder, resolviendo problemas de arquitectura y bugs complejos con cadena de pensamiento interna.',
+      description: 'Modelos como Gemini 2.5 Pro / 3.x, DeepSeek R1, Claude 3.7 / 4.x y o3-mini razonan internamente (Chain-of-Thought) resolviendo bugs y arquitectura compleja.',
       color: 'bg-blue-50'
     },
     {
@@ -58,7 +58,7 @@ export class Clase1DevFundamentosComponent {
       title: 'Model Context Protocol (MCP)',
       iconClass: 'text-purple-600',
       titleText: 'MCP: Conexión con Herramientas',
-      description: 'Protocolo estándar abierto para conectar Agentes de IA directamente a bases de datos PostgreSQL, APIs locales, repositorios Git y herramientas del sistema.',
+      description: 'Protocolo estándar abierto para conectar Agentes de IA directamente a bases de datos PostgreSQL, APIs REST y herramientas del sistema.',
       color: 'bg-purple-50'
     },
     {
@@ -77,33 +77,33 @@ export class Clase1DevFundamentosComponent {
 
   tools: Tool[] = [
     {
+      name: 'Google Gemini 2.5 Pro / 3.x',
+      description: 'Modelo de razonamiento multimodal y agentic coding de Google AI con ventana de contexto de 1M-2M+ tokens.',
+      icon: '💎',
+      price: 'Free / Gemini Advanced / API',
+      bestFor: 'Análisis de grandes repositorios, código multimodal y razonamiento',
+      color: 'bg-blue-50'
+    },
+    {
       name: 'DeepSeek R1 / V3',
-      description: 'Modelo de razonamiento de código abierto de ultra-alta eficiencia, ideal para lógica pesada.',
+      description: 'Modelo de razonamiento de código abierto con cadena de pensamiento interna de ultra-alta eficiencia.',
       icon: '🐉',
-      price: 'Open Source / Gratuito',
+      price: 'Open Source / API Gratuita',
       bestFor: 'Razonamiento complejo, algoritmos, refactorización',
       color: 'bg-indigo-50'
     },
     {
-      name: 'Claude 3.7 Sonnet (Anthropic)',
-      description: 'Modelo híbrido con pensamiento profundo, líder en generación de código y arquitectura.',
+      name: 'Claude 3.7 Sonnet & 4.x (Anthropic)',
+      description: 'Modelo híbrido con pensamiento extendido, líder de la industria en generación de código y arquitectura.',
       icon: '🧠',
       price: 'Gratis / Pro $20/mes',
       bestFor: 'Código complejo, refactorización, arquitectura',
       color: 'bg-purple-50'
     },
     {
-      name: 'Cursor AI & Windsurf',
-      description: 'IDEs nativos de agentes de IA con edición multi-archivo e integración MCP.',
-      icon: '⚡',
-      price: 'Freemium / Pro $20/mes',
-      bestFor: 'Desarrollo Spec-Driven, agentic coding',
-      color: 'bg-blue-50'
-    },
-    {
-      name: 'OpenAI o3-mini & Copilot',
-      description: 'Modelos de razonamiento rápido e integración directa en VS Code.',
-      icon: '🤖',
+      name: 'OpenAI o3-mini & GPT-5.x',
+      description: 'Modelos de razonamiento rápido e integración directa en VS Code y ChatGPT.',
+      icon: '⚛️',
       price: 'Plus / Copilot $10/mes',
       bestFor: 'Autocompletado, solución de bugs, tests',
       color: 'bg-green-50'

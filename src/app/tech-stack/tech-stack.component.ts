@@ -28,49 +28,57 @@ export class TechStackComponent {
     {
       name: 'Model Context Protocol (MCP)',
       icon: '🔌',
-      description: 'Estándar abierto para conectar Agentes de IA directamente a bases de datos, APIs y herramientas locales',
+      description: 'Estándar abierto para conectar Agentes de IA directamente a bases de datos PostgreSQL, APIs REST y herramientas del sistema',
       category: 'IA & Asistentes',
-      tags: ['Protocolo', 'Agentes', 'SOTA 2026'],
+      tags: ['Protocolo', 'Agentes', 'MCP Standard'],
       docUrl: 'https://modelcontextprotocol.io'
+    },
+    {
+      name: 'Google Gemini 2.5 Pro / 3.x',
+      icon: '💎',
+      description: 'Modelo de razonamiento multimodal y agentic coding con ventana de contexto ultra-larga (1M-2M+ tokens) de Google AI',
+      category: 'IA & Asistentes',
+      tags: ['Google AI', 'Reasoning', '1M+ Context'],
+      docUrl: 'https://ai.google.dev'
     },
     {
       name: 'DeepSeek R1 / V3',
       icon: '🐉',
-      description: 'Modelo de razonamiento de código abierto enfocado en lógica compleja, matemática y refactorización de código',
+      description: 'Modelo de razonamiento de código abierto con cadena de pensamiento interna (Chain-of-Thought) ultra-eficiente para algoritmos y arquitectura',
       category: 'IA & Asistentes',
-      tags: ['IA', 'Reasoning', 'Open Source'],
+      tags: ['Open Source', 'Chain of Thought', 'Razonamiento'],
       docUrl: 'https://github.com/deepseek-ai'
     },
     {
-      name: 'Claude 3.7 Sonnet',
+      name: 'Claude 3.7 Sonnet & 4.x',
       icon: '🧠',
-      description: 'Modelo híbrido con pensamiento profundo y capacidad avanzada para desarrollo de software y arquitectura',
+      description: 'Modelo híbrido con pensamiento extendido ("extended thinking") líder en generación de código complejo y refactorización multi-archivo',
       category: 'IA & Asistentes',
-      tags: ['IA', 'Reasoning', 'Anthropic'],
+      tags: ['Anthropic', 'Extended Thinking', 'Arquitectura'],
       docUrl: 'https://docs.anthropic.com'
     },
     {
-      name: 'OpenAI o3-mini / o1',
+      name: 'OpenAI o3-mini / o3 / GPT-5.x',
       icon: '⚛️',
-      description: 'Modelos de razonamiento de OpenAI diseñados para la resolución de problemas lógicos y generación de algoritmos',
+      description: 'Modelos de razonamiento avanzado de OpenAI enfocados en resolución de problemas lógicos, math, solución de bugs y generación de tests',
       category: 'IA & Asistentes',
-      tags: ['IA', 'OpenAI', 'Razonamiento'],
+      tags: ['OpenAI', 'Reasoning', 'Algorithms'],
       docUrl: 'https://platform.openai.com/docs'
     },
     {
       name: 'Cursor AI & Windsurf',
       icon: '✨',
-      description: 'IDEs nativos de agentes de IA para desarrollo Spec-Driven, edición multi-archivo y ejecución autónoma',
+      description: 'IDEs nativos de agentes de IA para desarrollo Spec-Driven (AGENTS.md), edición multi-archivo e integración MCP',
       category: 'Editores',
-      tags: ['IDE', 'Agentes', 'SOTA'],
+      tags: ['Agentic IDE', 'Spec-Driven', 'Multi-File'],
       docUrl: 'https://docs.cursor.com'
     },
     {
       name: 'GitHub Copilot Agent Mode',
       icon: '🤖',
-      description: 'Asistencia autónoma de código integrada en VS Code con capacidades de auto-edición y análisis de proyectos',
+      description: 'Asistencia autónoma de código integrada en VS Code con capacidades de auto-edición, ejecución de terminal y corrección de tests',
       category: 'IA & Asistentes',
-      tags: ['IA', 'Copilot', 'Agentic'],
+      tags: ['GitHub', 'Copilot', 'Agentic Mode'],
       docUrl: 'https://docs.github.com/en/copilot'
     },
 
