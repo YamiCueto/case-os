@@ -8,7 +8,7 @@
 [![AWS Bedrock](https://img.shields.io/badge/AWS-Amazon_Bedrock-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/bedrock/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-Bienvenido al **Curso Intensivo de IA Generativa para Desarrolladores de Software**. Un programa trimestral de **3 MESES (12 Semanas)** estructurado para transformar la ingeniería de software tradicional mediante **Agentic Coding**, **Model Context Protocol (MCP)**, **Spec-Driven Development (`AGENTS.md`)** y modelos de razonamiento de vanguardia (**DeepSeek R1 / V3**, **Claude 3.7 Sonnet**, **OpenAI o3-mini**).
+Bienvenido al **Curso Intensivo de IA Generativa para Desarrolladores de Software**. Un programa trimestral de **3 MESES (12 Semanas)** estructurado para transformar la ingeniería de software tradicional mediante **Agentic Coding**, **Model Context Protocol (MCP)**, **Spec-Driven Development (`AGENTS.md`)** y modelos de razonamiento de vanguardia (**Google Gemini 2.5 Pro / 3.x**, **DeepSeek R1 / V3**, **Claude 3.7 / 4.x**, **OpenAI o3 / GPT-5.x**).
 
 ---
 
@@ -61,7 +61,7 @@ Este programa está diseñado por y para desarrolladores de software. Pasa del "
 
 ## 🛠️ Stack Tecnológico SOTA 2026
 
-- **Ecosistema IA & Agentes**: Cursor AI, Windsurf, Copilot Agent Mode, DeepSeek R1/V3, Claude 3.7 Sonnet, OpenAI o3-mini.
+- **Ecosistema IA & Agentes**: Cursor AI, Windsurf, Copilot Agent Mode, Google Gemini 2.5/3.x, DeepSeek R1/V3, Claude Extended Thinking, OpenAI o3/GPT-5.x.
 - **Protocolos**: Model Context Protocol (MCP Standard Open Protocol).
 - **Backend Core**: Java 21 LTS, Spring Boot 3.4+, Spring Data JPA, Lombok, MapStruct, Testcontainers.
 - **Frontend Core**: Angular 19+, TypeScript 5.5+, Angular Signals, Tailwind CSS v4.
