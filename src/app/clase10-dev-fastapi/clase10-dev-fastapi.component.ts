@@ -12,6 +12,18 @@ import { RouterModule } from '@angular/router';
 export class Clase10DevFastapiComponent {
   currentSlide = 0;
 
+  slides = [
+    { type: 'title' },
+    { type: 'context' },
+    { type: 'setup' },
+    { type: 'pydantic-models' },
+    { type: 'service-layer' },
+    { type: 'api-endpoints' },
+    { type: 'testing' },
+    { type: 'best-practices' },
+    { type: 'summary' }
+  ];
+
   // Title Slide
   titleSlide = {
     icon: '⚡',
@@ -25,31 +37,31 @@ export class Clase10DevFastapiComponent {
     title: 'Contexto: ¿Por qué FastAPI?',
     scenario: {
       icon: '🚀',
-      text: 'Necesitamos una API para procesamiento de scoring crediticio con cálculos intensivos y alta concurrencia.'
+      text: 'Necesitamos una API para procesamiento de scoring crediticio con cálculos intensivos y alta concurrencia. Python 3.13 + FastAPI 0.141.1 es la combinación más rápida del ecosistema.'
     },
     reasons: [
       {
         icon: '⚡',
         title: 'Performance',
-        description: 'FastAPI es uno de los frameworks más rápidos de Python, comparable con Node.js y Go',
+        description: 'FastAPI 0.141.1 es uno de los frameworks más rápidos de Python, comparable con Node.js y Go. Python 3.13 incluye JIT experimental y Free-Threaded mode (sin GIL)',
         color: 'blue'
       },
       {
         icon: '📝',
-        title: 'Type Safety',
-        description: 'Pydantic proporciona validación automática y documentación basada en tipos Python',
+        title: 'Type Safety con Pydantic v2',
+        description: 'Pydantic v2 (Rust-powered) proporciona validación automática 5-50x más rápida con syntax moderna de Python 3.13',
         color: 'green'
       },
       {
         icon: '🔄',
-        title: 'Async/Await',
-        description: 'Soporte nativo para operaciones asíncronas, ideal para I/O intensivo',
+        title: 'Async/Await Nativo',
+        description: 'Soporte nativo para operaciones asíncronas con SQLAlchemy 2.0 async, ideal para I/O intensivo',
         color: 'purple'
       },
       {
         icon: '📚',
         title: 'Auto Documentation',
-        description: 'Swagger UI y ReDoc generados automáticamente desde el código',
+        description: 'Swagger UI y ReDoc generados automáticamente desde el código. OpenAPI 3.1 soportado nativamente',
         color: 'orange'
       }
     ]
@@ -57,139 +69,136 @@ export class Clase10DevFastapiComponent {
 
   // Setup
   setup = {
-    title: 'Instalación y Setup',
+    title: 'Instalación y Setup (Python 3.13 + uv)',
     installation: {
-      titulo: 'Instalación de Dependencias',
-      code: `# Crear entorno virtual
-python -m venv venv
+      titulo: 'Instalación con uv (gestor moderno Rust-based)',
+      code: `# Instalar uv (reemplaza pip + venv + poetry)
+# Windows
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+# Linux/Mac
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Activar entorno (Windows)
-venv\\Scripts\\activate
+# Inicializar proyecto
+uv init scoring-api
+cd scoring-api
 
-# Activar entorno (Linux/Mac)
-source venv/bin/activate
+# Verificar Python 3.13
+uv python install 3.13
 
-# Instalar FastAPI y dependencias
-pip install fastapi uvicorn[standard] pydantic sqlalchemy psycopg2-binary python-jose[cryptography] passlib[bcrypt] python-multipart
+# Agregar dependencias (reemplaza pip install)
+uv add "fastapi[standard]>=0.141.1"   # FastAPI con uvicorn + httpx incluidos
+uv add "pydantic>=2.11.0"              # Pydantic v2 (Rust-powered, 50x más rápido)
+uv add "sqlalchemy[asyncio]>=2.0.41"   # SQLAlchemy 2.0 async
+uv add "psycopg[binary]>=3.2.7"        # psycopg3 (reemplaza psycopg2)
+uv add "python-jose[cryptography]"
+uv add "passlib[bcrypt]"
 
-# Crear requirements.txt
-pip freeze > requirements.txt`
+# Ejecutar (reemplaza uvicorn directo)
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
     },
     structure: {
       titulo: 'Estructura del Proyecto',
       code: `scoring-api/
+├── pyproject.toml         # Reemplaza requirements.txt (gestionado por uv)
+├── uv.lock                # Lock file determinista
 ├── app/
 │   ├── __init__.py
-│   ├── main.py              # Entry point FastAPI
+│   ├── main.py              # Entry point FastAPI 0.141.1
 │   ├── models/
 │   │   ├── __init__.py
-│   │   ├── solicitud.py     # SQLAlchemy models
+│   │   ├── solicitud.py     # SQLAlchemy 2.0 models (mapped_column)
 │   │   └── scoring.py
 │   ├── schemas/
 │   │   ├── __init__.py
-│   │   ├── solicitud.py     # Pydantic schemas
+│   │   ├── solicitud.py     # Pydantic v2 schemas (model_validator)
 │   │   └── scoring.py
 │   ├── services/
 │   │   ├── __init__.py
-│   │   └── scoring_service.py  # Business logic
+│   │   └── scoring_service.py  # Business logic async
 │   ├── routers/
 │   │   ├── __init__.py
 │   │   └── scoring.py       # API endpoints
-│   └── database.py          # DB connection
+│   └── database.py          # DB connection async (psycopg3)
 ├── tests/
 │   ├── __init__.py
 │   └── test_scoring.py
-├── requirements.txt
 └── README.md`
     },
     runCommand: {
       titulo: 'Ejecutar el Servidor',
       code: `# Modo desarrollo con auto-reload
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+# O con granian (servidor ASGI Rust-based, más rápido que uvicorn)
+uv add granian
+uv run granian --interface asgi app.main:app --reload
 
 # Acceder a la documentación
 # Swagger UI: http://localhost:8000/docs
-# ReDoc: http://localhost:8000/redoc`
+# ReDoc:       http://localhost:8000/redoc`
     }
   };
 
+
   // Pydantic Models
   pydanticModels = {
-    title: 'Pydantic Schemas para Validación',
-    description: 'Pydantic proporciona validación de datos automática y generación de documentación',
+    title: 'Pydantic v2 Schemas para Validación',
+    description: 'Pydantic v2 (motor Rust) proporciona validación 5-50x más rápida con syntax moderna de Python 3.13',
     input: {
-      titulo: 'Schema de Entrada',
+      titulo: 'Schema de Entrada (Pydantic v2)',
       code: `# app/schemas/solicitud.py
-from pydantic import BaseModel, Field, validator
-from typing import Optional
+from pydantic import BaseModel, Field, model_validator, field_validator
+from typing import Annotated
 from decimal import Decimal
 from datetime import date
+from enum import StrEnum
+
+class HistorialCrediticio(StrEnum):  # Python 3.11+ StrEnum
+    EXCELENTE = "EXCELENTE"
+    BUENO = "BUENO"
+    REGULAR = "REGULAR"
+    MALO = "MALO"
 
 class SolicitudPrestamoInput(BaseModel):
-    """Schema para crear solicitud de préstamo"""
+    """Schema Pydantic v2 para crear solicitud de préstamo"""
 
-    cliente_id: int = Field(..., description="ID del cliente", gt=0)
-    monto_solicitado: Decimal = Field(
-        ...,
-        description="Monto del préstamo solicitado",
-        gt=0,
-        le=1000000
-    )
-    plazo_meses: int = Field(
-        ...,
-        description="Plazo en meses",
-        ge=6,
-        le=60
-    )
-    ingresos_mensuales: Decimal = Field(
-        ...,
-        description="Ingresos mensuales del cliente",
-        gt=0
-    )
-    deudas_actuales: Decimal = Field(
-        default=0,
-        description="Total de deudas actuales",
-        ge=0
-    )
-    antiguedad_laboral_meses: int = Field(
-        ...,
-        description="Meses en empleo actual",
-        ge=0
-    )
-    historial_crediticio: str = Field(
-        ...,
-        description="Historial: EXCELENTE, BUENO, REGULAR, MALO",
-        regex="^(EXCELENTE|BUENO|REGULAR|MALO)$"
-    )
+    cliente_id: Annotated[int, Field(gt=0, description="ID del cliente")]
+    monto_solicitado: Annotated[Decimal, Field(gt=0, le=1_000_000)]
+    plazo_meses: Annotated[int, Field(ge=6, le=60)]
+    ingresos_mensuales: Annotated[Decimal, Field(gt=0)]
+    deudas_actuales: Annotated[Decimal, Field(default=Decimal('0'), ge=0)]
+    antiguedad_laboral_meses: Annotated[int, Field(ge=0)]
+    historial_crediticio: HistorialCrediticio
 
-    @validator('plazo_meses')
-    def validar_plazo(cls, v, values):
-        """Validar que el plazo sea múltiplo de 6"""
+    @field_validator('plazo_meses')  # Pydantic v2: @field_validator
+    @classmethod
+    def validar_plazo(cls, v: int) -> int:
+        """El plazo debe ser múltiplo de 6 meses"""
         if v % 6 != 0:
             raise ValueError('El plazo debe ser múltiplo de 6 meses')
         return v
 
-    @validator('monto_solicitado')
-    def validar_monto_vs_ingresos(cls, v, values):
-        """Validar que la cuota no supere 40% de ingresos"""
-        if 'ingresos_mensuales' in values and 'plazo_meses' in values:
-            cuota_estimada = v / values['plazo_meses']
-            if cuota_estimada > values['ingresos_mensuales'] * Decimal('0.4'):
-                raise ValueError('La cuota estimada supera 40% de ingresos')
-        return v
+    @model_validator(mode='after')  # Pydantic v2: @model_validator
+    def validar_monto_vs_ingresos(self) -> 'SolicitudPrestamoInput':
+        """La cuota no debe superar 40% de ingresos"""
+        cuota = self.monto_solicitado / self.plazo_meses
+        if cuota > self.ingresos_mensuales * Decimal('0.4'):
+            raise ValueError('La cuota estimada supera 40% de ingresos')
+        return self
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "cliente_id": 12345,
-                "monto_solicitado": 50000,
-                "plazo_meses": 24,
-                "ingresos_mensuales": 8000,
-                "deudas_actuales": 15000,
-                "antiguedad_laboral_meses": 36,
-                "historial_crediticio": "BUENO"
+    model_config = {  # Pydantic v2: model_config reemplaza class Config
+        'json_schema_extra': {
+            'example': {
+                'cliente_id': 12345,
+                'monto_solicitado': 50000,
+                'plazo_meses': 24,
+                'ingresos_mensuales': 8000,
+                'deudas_actuales': 15000,
+                'antiguedad_laboral_meses': 36,
+                'historial_crediticio': 'BUENO'
             }
-        }`
+        }
+    }`
     },
     output: {
       titulo: 'Schema de Salida',
@@ -855,17 +864,7 @@ class TestScoringAPI:
     ]
   };
 
-  slides = [
-    { type: 'title' },
-    { type: 'context' },
-    { type: 'setup' },
-    { type: 'pydantic-models' },
-    { type: 'service-layer' },
-    { type: 'api-endpoints' },
-    { type: 'testing' },
-    { type: 'best-practices' },
-    { type: 'summary' }
-  ];
+
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {

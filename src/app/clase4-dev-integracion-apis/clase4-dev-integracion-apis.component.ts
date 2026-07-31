@@ -31,33 +31,37 @@ export class Clase4DevIntegracionApisComponent {
   ];
 
   context = {
-    scenario: 'Integrar microservicio con API externa de Bureau de Crédito para evaluación crediticia',
+    scenario: 'El microservicio de Gestión de Clientes (Clase 2) necesita integrarse con 3 APIs externas: Bureau Crediticio, Servicio de Notificaciones y Sistema Fiscal. Cada API tiene características diferentes: autenticación, timeouts, rate limits y SLAs distintos.',
     requirements: [
-      'API REST JSON con autenticación OAuth2',
-      'Rate limit: 100 peticiones/minuto',
-      'SLA: 95% disponibilidad, timeout 5 segundos',
-      'Criticidad: Alta - decisión crediticia depende de esta consulta'
+      'Bureau Crediticio: API REST con OAuth2, rate limit estricto',
+      'Notificaciones: SLA 99.9%, alta latencia ocasional',
+      'Sistema Fiscal: SOAPs legacy, timeouts impredecibles',
+      'Criticidad: Alta - las decisiones crediticias dependen de estas consultas'
     ],
     challenges: [
       {
-        title: 'Alta Disponibilidad',
-        description: 'API externa puede fallar, necesitamos resilencia',
-        icon: 'shield'
+        icon: '🔗',
+        title: 'Múltiples APIs, Múltiples Protocolos',
+        description: 'REST, SOAP, GraphQL. Cada API tiene sus propias reglas. Spring Boot 4.1 ofrece @HttpExchange para clientes declarativos.',
+        color: 'blue'
       },
       {
-        title: 'Performance',
-        description: 'Reducir latencia con caché inteligente',
-        icon: 'speed'
+        icon: '🛡️',
+        title: 'Resilience Built-in (Spring Boot 4.1)',
+        description: 'Spring Boot 4.1 incluye @Retryable y @ConcurrencyLimit nativos. Resilience4j sigue disponible para casos avanzados.',
+        color: 'orange'
       },
       {
-        title: 'Rate Limiting',
-        description: 'Respetar límites de tasa de la API',
-        icon: 'timeline'
+        icon: '⚡',
+        title: 'Performance con Virtual Threads',
+        description: 'Java 21 Virtual Threads + WebClient async = máxima concurrencia sin bloqueos en llamadas externas.',
+        color: 'green'
       },
       {
-        title: 'Auditoría',
-        description: 'Registrar todas las consultas para compliance',
-        icon: 'description'
+        icon: '🔵',
+        title: 'Observabilidad con Spring Boot Actuator',
+        description: 'Micrometer + Prometheus para métricas de latencia, errores y circuit breaker state en cada API externa.',
+        color: 'purple'
       }
     ]
   };

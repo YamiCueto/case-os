@@ -21,9 +21,9 @@ export class Clase12DevProyectoFinalComponent {
   // Title Slide
   titleSlide = {
     title: 'Proyecto Final Integrado',
-    subtitle: 'Sistema de Préstamos Full-Stack + IA',
+    subtitle: 'Sistema de Préstamos Full-Stack + IA (Stack 2026)',
     icon: '🚀',
-    description: 'Arquitectura de microservicios con 4 backends (Java Spring Boot, Python FastAPI, Lambda Node.js, CRUD REST), frontend Angular, AWS Cloud, y pruebas E2E automatizadas. Proyecto capstone que integra todo el conocimiento del curso.'
+    description: 'Arquitectura de microservicios con 4 backends (Java 21 + Spring Boot 4.1, Python 3.13 + FastAPI 0.141.1, Lambda nodejs22.x, CRUD REST), frontend Angular 22 con Signals, AWS Cloud, y pruebas E2E con Cypress 15. Proyecto capstone que integra todo el conocimiento del curso.'
   };
 
   // Slide 1: Arquitectura del Proyecto
@@ -31,32 +31,31 @@ export class Clase12DevProyectoFinalComponent {
     title: 'Arquitectura del Proyecto',
     description: 'Sistema distribuido con 4 microservicios backend, 1 frontend SPA, y orquestación serverless',
     diagram: `
-┌─────────────────────────────────────────────────────────────────────┐
-│                         FRONTEND (Angular 16+)                      │
+┌───────────────────────────────────────────────────────────────────────┐
+│                 FRONTEND (Angular 22 + Signals)                      │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐           │
-│  │  Login   │  │  Form    │  │ History  │  │  Admin   │           │
-│  │  RxJS    │  │ Reactivo │  │   Table  │  │  Panel   │           │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘           │
-└───────┼─────────────┼─────────────┼─────────────┼─────────────────┘
-        │             │             │             │
-        └─────────────┴─────────────┴─────────────┘
+│  │  Login   │  │  Form     │  │ History  │  │  Admin   │           │
+│  │ Signals  │  │ Signal   │  │httpRes() │  │  Panel   │           │
+│  └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘           │
+└───────┬───────────┬───────────┬───────────┬─────────────────┘
+        └───────────┴───────────┴───────────┘
                       │ HTTP REST
-        ┌─────────────┴─────────────────────────────────┐
-        │      API Gateway / Load Balancer              │
-        └─────────────┬─────────────────────────────────┘
+        ┌───────────┴─────────────────────────────┐
+        │      API Gateway / Load Balancer                │
+        └───────────┬─────────────────────────────┘
                       │
-      ┌───────────────┼───────────────┬──────────────┐
+      ┌─────────────┼───────────────┬──────────────┐
       │               │               │              │
-┌─────▼─────┐  ┌─────▼──────┐  ┌────▼─────┐  ┌────▼─────────┐
-│ MS Clientes│  │ MS Scoring │  │ MS       │  │ Lambda       │
-│ (Java SB)  │  │ (FastAPI)  │  │ Decisión │  │ Orchestrator │
-│            │  │            │  │ (Java)   │  │ (Node.js)    │
-│ Port: 8081 │  │ Port: 8000 │  │ Port:8082│  │ Event-driven │
-└─────┬──────┘  └─────┬──────┘  └────┬─────┘  └────┬─────────┘
+┌─────▼─────┐  ┌─────▼──────┐  ┌────▼─────┐  ┌────▼───────┐
+│ MS Clientes│  │ MS Scoring   │  │ MS       │  │ Lambda        │
+│ Java 21 LTS│  │ Python 3.13  │  │ Decisión │  │ Orchestrator  │
+│ SB 4.1.0   │  │ FastAPI 0.141│  │ Java 21  │  │ nodejs22.x    │
+│ Port: 8081 │  │ Port: 8000   │  │ Port:8082│  │ Event-driven  │
+└─────┬─────┘  └─────┬──────┘  └────┬─────┘  └────┬───────┘
       │               │               │              │
-      └───────────────┴───────────────┴──────────────┘
+      └─────────────┴───────────────┴──────────────┘
                       │
-      ┌───────────────┴────────────────────────┐
+      ┌─────────────┴────────────────────┐
       │                                        │
 ┌─────▼────────┐  ┌────────────┐  ┌─────────▼────────┐
 │ PostgreSQL   │  │ DynamoDB   │  │ S3 Buckets       │

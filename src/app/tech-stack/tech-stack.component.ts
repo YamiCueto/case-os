@@ -133,20 +133,36 @@ export class TechStackComponent {
       docUrl: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript'
     },
     {
-      name: 'Angular 18+',
-      icon: '🅰️',
-      description: 'Framework moderno para aplicaciones enterprise escalables (Clases 8, 9, 12)',
+      name: 'Angular 22',
+      icon: '🈰️',
+      description: 'Framework enterprise para aplicaciones web escalables. Angular 22 introduce Signal Forms estables, httpResource(), Zoneless por defecto, y OnPush como estrategia por defecto (Clases 6, 7, 8, 12)',
       category: 'Frontend',
-      tags: ['Framework', 'TypeScript', 'Enterprise'],
-      docUrl: 'https://angular.dev/overview'
+      tags: ['Framework', 'TypeScript', 'Signals', 'Zoneless'],
+      docUrl: 'https://angular.dev'
     },
     {
-      name: 'TypeScript',
+      name: 'TypeScript 6.0',
       icon: '🔷',
-      description: 'Superset de JavaScript con tipado estático para código más robusto',
+      description: 'Superset de JavaScript con tipado estricto. TypeScript 6.0 aporta inferencia mejorada y compatibilidad con ESM nativo en Node.js 22',
       category: 'Frontend',
       tags: ['JavaScript', 'Tipado', 'Angular'],
       docUrl: 'https://www.typescriptlang.org/docs/'
+    },
+    {
+      name: 'Angular Signals',
+      icon: '🚦',
+      description: 'API reactiva nativa de Angular 22: signal(), computed(), effect(), toSignal(), toObservable(). Reemplaza BehaviorSubject para estado de componentes (Clase 8)',
+      category: 'Frontend',
+      tags: ['Reactive', 'Angular 22', 'State'],
+      docUrl: 'https://angular.dev/guide/signals'
+    },
+    {
+      name: 'httpResource (Angular 22)',
+      icon: '⚡',
+      description: 'Primitive declarativa estable en Angular 22 para HTTP + Signals. Reemplaza HttpClient + switchMap para fetch de datos simple (Clase 6)',
+      category: 'Frontend',
+      tags: ['HTTP', 'Signals', 'Angular 22'],
+      docUrl: 'https://angular.dev/guide/http/making-requests'
     },
     {
       name: 'Tailwind CSS',
@@ -159,51 +175,67 @@ export class TechStackComponent {
 
     // Backend
     {
-      name: 'Java 17+',
+      name: 'Java 21 LTS',
       icon: '☕',
-      description: 'Lenguaje robusto para backend enterprise (Clase 6)',
+      description: 'Versión LTS del lenguaje Java. Incluye Virtual Threads (Project Loom), Records, Sealed Classes, Pattern Matching y mejoras de performance para microservicios enterprise (Clase 2)',
       category: 'Backend',
-      tags: ['Lenguaje', 'Enterprise', 'JVM'],
-      docUrl: 'https://docs.oracle.com/en/java/javase/17/'
+      tags: ['Lenguaje', 'Enterprise', 'Virtual Threads'],
+      docUrl: 'https://docs.oracle.com/en/java/javase/21/'
     },
     {
-      name: 'Spring Boot',
+      name: 'Spring Boot 4.1.0',
       icon: '🍃',
-      description: 'Framework líder para APIs REST y microservicios en Java (Clase 6)',
+      description: 'Framework líder para APIs REST y microservicios. Spring Boot 4.1 (jun 2026) requiere Java 17+ sobre Spring Framework 7 + Jakarta EE 11. Incluye gRPC nativo, Virtual Threads y ProblemDetail RFC 7807 (Clase 2)',
       category: 'Backend',
-      tags: ['Framework', 'REST', 'Java'],
+      tags: ['Framework', 'REST', 'Jakarta EE 11'],
       docUrl: 'https://spring.io/projects/spring-boot'
     },
     {
-      name: 'Python 3.10+',
+      name: 'Python 3.13',
       icon: '🐍',
-      description: 'Lenguaje versátil para scripting, APIs y testing (Clases 3, 4, 5)',
+      description: 'Python 3.13 incluye JIT experimental, Free-Threaded mode (sin GIL) y REPL mejorado. Lenguaje versátil para APIs y IA (Clase 10)',
       category: 'Backend',
-      tags: ['Lenguaje', 'Scripting', 'Testing'],
-      docUrl: 'https://docs.python.org/3/'
+      tags: ['Lenguaje', 'IA', 'Async'],
+      docUrl: 'https://docs.python.org/3.13/'
     },
     {
-      name: 'FastAPI',
-      icon: '⚡',
-      description: 'Framework moderno Python para APIs REST con validación automática',
+      name: 'uv (Python package manager)',
+      icon: '🦄',
+      description: 'Gestor de paquetes y proyectos Python escrito en Rust. 10-100x más rápido que pip. Reemplaza pip + venv + pip-tools + poetry. Usado en Clase 10 con FastAPI',
       category: 'Backend',
-      tags: ['Framework', 'REST', 'Python'],
+      tags: ['Python', 'Herramientas', 'Rust'],
+      docUrl: 'https://docs.astral.sh/uv/'
+    },
+    {
+      name: 'FastAPI 0.141.1',
+      icon: '⚡',
+      description: 'Framework Python moderno para APIs REST. Requiere Pydantic v2 (Rust-powered). Soporta OpenAPI 3.1 y SQLAlchemy 2.0 async (Clase 10)',
+      category: 'Backend',
+      tags: ['Framework', 'REST', 'Pydantic v2'],
       docUrl: 'https://fastapi.tiangolo.com'
     },
 
     // Bases de Datos
     {
+      name: 'PostgreSQL 17',
+      icon: '🐘',
+      description: 'Base de datos relacional production-ready. Estándar para tests de integración con Testcontainers (reemplaza H2 en entornos modernos)',
+      category: 'Bases de Datos',
+      tags: ['SQL', 'Producción', 'Testcontainers'],
+      docUrl: 'https://www.postgresql.org/docs/17/'
+    },
+    {
       name: 'H2 Database',
       icon: '💾',
-      description: 'Base de datos en memoria para desarrollo rápido con Spring Boot (Clase 6)',
+      description: 'Base de datos en memoria para desarrollo rápido con Spring Boot. Nota: en 2026 se prefiere Testcontainers + PostgreSQL real para tests de integración',
       category: 'Bases de Datos',
-      tags: ['SQL', 'In-Memory', 'Java'],
+      tags: ['SQL', 'In-Memory', 'Java', 'Legacy para tests'],
       docUrl: 'https://www.h2database.com/html/main.html'
     },
     {
       name: 'SQLite',
       icon: '📦',
-      description: 'Base de datos embebida ligera para Python y demos (FastAPI)',
+      description: 'Base de datos embebida ligera para Python y demos (FastAPI con SQLAlchemy 2.0)',
       category: 'Bases de Datos',
       tags: ['SQL', 'Embebida', 'Python'],
       docUrl: 'https://www.sqlite.org/docs.html'
@@ -211,44 +243,44 @@ export class TechStackComponent {
 
     // Testing & QA
     {
-      name: 'Selenium WebDriver',
+      name: 'Selenium WebDriver 4',
       icon: '🤖',
-      description: 'Automatización de pruebas E2E en navegadores (Clase 4)',
+      description: 'Automatización de pruebas E2E en navegadores. Selenium 4 incluye CDP nativo y relative locators (Clase 4)',
       category: 'Testing & QA',
       tags: ['Automatización', 'E2E', 'Browser'],
       docUrl: 'https://www.selenium.dev/documentation/'
     },
     {
-      name: 'Cypress',
+      name: 'Cypress 15',
       icon: '🌲',
-      description: 'Framework moderno para testing E2E con experiencia developer-first (Clases 4, 9)',
+      description: 'Framework E2E moderno para Angular con cy.prompt() (tests en lenguaje natural via IA), Cypress Cloud AI assertions y soporte completo Angular 22 standalone (Clase 9)',
       category: 'Testing & QA',
-      tags: ['E2E', 'JavaScript', 'Moderno'],
+      tags: ['E2E', 'JavaScript', 'AI-driven'],
       docUrl: 'https://docs.cypress.io'
     },
     {
-      name: 'JUnit 5',
+      name: 'JUnit 5 + Testcontainers 2.0',
       icon: '✅',
-      description: 'Framework de testing unitario para Java/Spring Boot (Clases 6, 9)',
+      description: 'Testing unitario Java con Testcontainers 2.0.5 y @ServiceConnection para tests de integración contra bases de datos reales (Clases 5, 9)',
       category: 'Testing & QA',
-      tags: ['Unit Testing', 'Java', 'Backend'],
+      tags: ['Unit Testing', 'Java', 'Testcontainers'],
       docUrl: 'https://junit.org/junit5/docs/current/user-guide/'
     },
     {
-      name: 'Mockito',
-      icon: '🎭',
-      description: 'Framework para mocking en tests unitarios Java (Clases 6, 9)',
+      name: 'Mockito 5',
+      icon: '🎡',
+      description: 'Framework para mocking en tests unitarios Java. Mockito 5 con soporte nativo para Java 21 y tipos sellados (Clases 5, 9)',
       category: 'Testing & QA',
       tags: ['Mocking', 'Java', 'Unit Testing'],
       docUrl: 'https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html'
     },
     {
-      name: 'Jasmine + Karma',
+      name: 'Jest / Vitest (Angular)',
       icon: '🧪',
-      description: 'Framework de testing unitario para Angular (Clases 8, 9)',
+      description: 'Runners de testing modernos para Angular 22 que reemplazan Jasmine + Karma (en desuso). Vitest ofrece HMR de tests y es compatible con Vite (Clases 8, 9)',
       category: 'Testing & QA',
-      tags: ['Unit Testing', 'Angular', 'Frontend'],
-      docUrl: 'https://jasmine.github.io/pages/docs_home.html'
+      tags: ['Unit Testing', 'Angular', 'Moderno'],
+      docUrl: 'https://vitest.dev'
     },
     {
       name: 'Postman',

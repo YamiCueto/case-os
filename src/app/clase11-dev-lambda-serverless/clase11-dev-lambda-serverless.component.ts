@@ -72,9 +72,11 @@ aws configure
 # AWS Secret Access Key: [tu-secret-key]
 # Default region: us-east-1
 
-# Instalar dependencias Node.js
-npm install -g typescript ts-node
-npm install --save-dev @types/node @types/aws-lambda`
+# Node.js 22 (LTS) - usar nvm para gestión de versiones
+nvm install 22
+nvm use 22
+node --version  # v22.x.x
+npm install -g typescript@6  # TypeScript 6.0`
     },
     projectInit: {
       titulo: 'Inicializar Proyecto SAM',
@@ -85,13 +87,13 @@ sam init
 # 1 - AWS Quick Start Templates
 # 1 - Hello World Example
 # N - No Python
-# nodejs18.x
+# nodejs22.x     ← ACTUALIZADO: Node.js 22 LTS
 # transaction-processor
 # Y - X-Ray tracing
 
 # Estructura generada:
 transaction-processor/
-├── template.yaml          # CloudFormation template
+├── template.yaml          # CloudFormation template (Runtime: nodejs22.x)
 ├── src/
 │   └── handlers/
 │       └── process-transaction.ts
@@ -102,41 +104,44 @@ transaction-processor/
 └── package.json`
     },
     dependencies: {
-      titulo: 'Dependencias del Proyecto',
+      titulo: 'Dependencias del Proyecto (Node.js 22 + TypeScript 6)',
       code: `// package.json
 {
   "name": "transaction-processor",
   "version": "1.0.0",
+  "type": "module",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.450.0",
-    "@aws-sdk/client-dynamodb": "^3.450.0",
-    "@aws-sdk/lib-dynamodb": "^3.450.0",
-    "@aws-sdk/client-sns": "^3.450.0",
+    "@aws-sdk/client-s3": "^3.806.0",
+    "@aws-sdk/client-dynamodb": "^3.806.0",
+    "@aws-sdk/lib-dynamodb": "^3.806.0",
+    "@aws-sdk/client-sns": "^3.806.0",
     "csv-parser": "^3.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.130",
-    "@types/node": "^20.10.0",
-    "@types/uuid": "^9.0.7",
-    "typescript": "^5.3.0",
+    "@types/aws-lambda": "^8.10.150",
+    "@types/node": "^22.15.0",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^6.0.0",
     "jest": "^29.7.0",
-    "@types/jest": "^29.5.8",
-    "ts-jest": "^29.1.1"
+    "@types/jest": "^29.5.14",
+    "ts-jest": "^29.3.0"
   }
 }
 
 // tsconfig.json
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "commonjs",
-    "lib": ["ES2022"],
+    "target": "ES2024",
+    "module": "NodeNext",     
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2024"],
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "useUnknownInCatchVariables": true
   }
 }`
     }

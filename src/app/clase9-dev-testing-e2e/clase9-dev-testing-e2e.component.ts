@@ -74,37 +74,25 @@ export class Clase9DevTestingE2eComponent {
       description: 'Angular Schematic oficial que configura Cypress automáticamente: instala dependencias, crea cypress.config.ts, y ajusta angular.json.'
     },
     projectStructure: {
-      titulo: 'Estructura del Proyecto',
+      titulo: 'Estructura Generada',
       folders: [
-        { name: 'cypress/', description: 'Carpeta raíz de Cypress' },
-        { name: '  e2e/', description: 'Tests E2E (spec files)' },
-        { name: '  fixtures/', description: 'Mock data JSON' },
-        { name: '  support/', description: 'Commands + helpers' }
+        { name: 'cypress/e2e/', description: 'Tus tests completos' },
+        { name: 'cypress/fixtures/', description: 'Datos estáticos mockeados (JSON)' },
+        { name: 'cypress/support/', description: 'Comandos personalizados y Page Objects' },
+        { name: 'cypress.config.ts', description: 'Configuración global de Cypress' }
       ]
     },
     config: {
-      titulo: 'Configuración Básica',
-      description: 'cypress.config.ts define la URL base, timeouts, viewport, y opciones de video/screenshots.',
-      code: `import { defineConfig } from 'cypress';
-
-export default defineConfig({
-  e2e: {
-    baseUrl: 'http://localhost:4200',
-    viewportWidth: 1280,
-    viewportHeight: 720,
-    video: false,
-    screenshotOnRunFailure: true,
-    setupNodeEvents(on, config) {
-      // Custom plugins
-    }
-  }
-});`
+      titulo: 'cypress.config.ts (Angular 22 Standalone)',
+      description: 'Configuración base generada automáticamente. Se pueden agregar opciones adicionales como baseUrl y viewport.',
+      code: `import { defineConfig } from 'cypress';\n\nexport default defineConfig({\n  e2e: {\n    baseUrl: 'http://localhost:4200',\n    specPattern: 'cypress/e2e/**/*.cy.ts',\n    viewportWidth: 1280,\n    viewportHeight: 720,\n    video: false,\n    setupNodeEvents(on, config) {\n      return config;\n    },\n  },\n  ai: {\n    enabled: true,  // cy.prompt() disponible en Cypress 15\n  }\n});`
     },
     runCommands: {
-      titulo: 'Comandos para Ejecutar',
+      titulo: 'Ejecución de Tests',
       commands: [
-        { command: 'npx cypress open', description: 'Abre el Test Runner interactivo (modo desarrollo)' },
-        { command: 'npx cypress run', description: 'Ejecuta tests en headless mode (CI/CD)' }
+        { command: 'npx cypress open', description: 'Abre GUI para ejecución interactiva' },
+        { command: 'npx cypress run', description: 'Ejecuta todos los tests headless' },
+        { command: 'npx cypress run --browser chrome', description: 'Ejecuta tests en Chrome' }
       ]
     }
   };
@@ -368,36 +356,9 @@ describe('Login Flow', () => {
         'Duplicar código de setup en cada test',
         'Tests interdependientes (orden de ejecución importa)'
       ]
-    },
-    {
-      categoria: 'Datos de Test',
-      icon: '📊',
-      good: [
-        'Usar fixtures para mock data consistente y reutilizable',
-        'Generar datos dinámicos con faker.js para casos edge',
-        'Resetear estado con cy.clearLocalStorage() entre tests'
-      ],
-      bad: [
-        'Hardcodear datos de test en múltiples archivos',
-        'Depender de datos de producción (cambian constantemente)',
-        'No limpiar estado entre tests (localStorage, cookies)'
-      ]
-    },
-    {
-      categoria: 'CI/CD Integration',
-      icon: '🚀',
-      good: [
-        'Ejecutar tests en headless mode (npx cypress run)',
-        'Paralelizar tests con Cypress Cloud o nx para velocidad',
-        'Capturar videos/screenshots solo en failure para debugging'
-      ],
-      bad: [
-        'Ejecutar todos los tests en un solo job (lento)',
-        'No configurar retry strategy para tests flaky',
-        'Ignorar failures en CI ("lo arreglaremos después")'
-      ]
     }
   ];
+
 
   // Slide 8: Summary
   summary = {

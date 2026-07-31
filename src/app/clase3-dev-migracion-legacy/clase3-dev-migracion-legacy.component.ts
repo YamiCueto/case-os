@@ -120,7 +120,7 @@ export class Clase3DevMigracionLegacyComponent {
 [CONTEXTO]
 - Sistema: MyLegacyApp BancoFiel - Módulo Gestión de Clientes
 - Lenguaje origen: Visual Basic 6.0
-- Target: Java 17 + Spring Boot 3.2
+- Target: Java 21 LTS + Spring Boot 4.1.0 + Jakarta EE 11
 - Objetivo: Migración completa preservando lógica de negocio
 
 [TAREA]
@@ -139,6 +139,7 @@ Analiza este código VB6 y genera:
 - No omitir ninguna validación o regla de negocio
 - Documentar código comentado o deshabilitado
 - Identificar posibles bugs en el código legacy
+- Indicar qué usar jakarta.* (no javax.*) en la traducción
 
 [FORMATO]
 Markdown estructurado con secciones claras`,
@@ -149,6 +150,7 @@ Markdown estructurado con secciones claras`,
       'Documentas el sistema automáticamente'
     ]
   };
+
 
   migrationSteps: MigrationStep[] = [
     {

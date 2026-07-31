@@ -48,17 +48,19 @@ export class Clase2DevSpringBootComponent {
   objective = {
     main: 'Crear microservicio completo de Gestión de Clientes desde cero usando IA',
     goals: [
-      'Generar arquitectura hexagonal con Spring Boot 3.2',
+      'Generar arquitectura hexagonal con Spring Boot 4.1.0 sobre Java 21',
       'Implementar todas las capas: Entity, DTO, Repository, Service, Controller',
-      'Agregar validaciones, manejo de excepciones y tests',
+      'Aprovechar Virtual Threads (Project Loom) para máxima concurrencia',
       'Obtener código production-ready en menos de 30 minutos'
     ],
     stack: [
-      { name: 'Java 17', icon: '☕', color: 'bg-red-50' },
-      { name: 'Spring Boot 3.2', icon: '🍃', color: 'bg-green-50' },
-      { name: 'Spring Data JPA', icon: '💾', color: 'bg-blue-50' },
-      { name: 'Lombok', icon: '🔧', color: 'bg-yellow-50' },
-      { name: 'MapStruct', icon: '🗺️', color: 'bg-purple-50' },
+      { name: 'Java 21 LTS', icon: '☕', color: 'bg-red-50' },
+      { name: 'Spring Boot 4.1.0', icon: '🍃', color: 'bg-green-50' },
+      { name: 'Spring Framework 7', icon: '🌱', color: 'bg-emerald-50' },
+      { name: 'Jakarta EE 11', icon: '🏛️', color: 'bg-indigo-50' },
+      { name: 'Spring Data JPA 3.2', icon: '💾', color: 'bg-blue-50' },
+      { name: 'Lombok 1.18.38', icon: '🔧', color: 'bg-yellow-50' },
+      { name: 'MapStruct 1.6.3', icon: '🗺️', color: 'bg-purple-50' },
       { name: 'JUnit 5 + Mockito', icon: '🧪', color: 'bg-pink-50' }
     ]
   };
@@ -107,7 +109,7 @@ export class Clase2DevSpringBootComponent {
         name: 'CONTEXTO',
         icon: '📋',
         description: 'Stack, proyecto, arquitectura, restricciones',
-        example: 'Proyecto: Sistema bancario MyLegacyApp - Stack: Java 17, Spring Boot 3.2.x',
+        example: 'Proyecto: Sistema bancario MyLegacyApp - Stack: Java 21 LTS, Spring Boot 4.1.0, Jakarta EE 11',
         color: 'bg-green-50'
       },
       {
@@ -141,10 +143,11 @@ export class Clase2DevSpringBootComponent {
 
 [CONTEXTO]
 - Proyecto: Sistema bancario MyLegacyApp - BancoFiel
-- Stack: Java 17, Spring Boot 3.2.x, Spring Data JPA, Oracle 19c
-- Arquitectura: Microservicios con arquitectura hexagonal
-- Estándares: Lombok, MapStruct, validaciones JSR-380
-- Seguridad: Spring Security con JWT
+- Stack: Java 21 LTS, Spring Boot 4.1.0, Spring Framework 7, Spring Data JPA 3.2, Oracle 21c
+- Arquitectura: Microservicios con arquitectura hexagonal, Jakarta EE 11
+- Estándares: Lombok 1.18.38, MapStruct 1.6.3, Bean Validation 3.1 (jakarta.validation)
+- Performance: Virtual Threads habilitados (spring.threads.virtual.enabled=true)
+- Seguridad: Spring Security 7 con JWT (OAuth2 Resource Server)
 
 [TAREA]
 Genera microservicio completo de Gestión de Clientes incluyendo:
@@ -162,12 +165,14 @@ Genera microservicio completo de Gestión de Clientes incluyendo:
 
 [RESTRICCIONES]
 - Usar Lombok para reducir boilerplate
-- Documentar con JavaDoc métodos públicos
+- Documentar con JavaDoc métodos públicos y anotaciones JSpecify (@NonNull, @Nullable)
 - Logs con SLF4J en operaciones críticas
-- Respuestas HTTP estandarizadas
+- Respuestas HTTP estandarizadas con ProblemDetail (RFC 7807)
+- Usar jakarta.* en lugar de javax.* (Jakarta EE 11)
 
 [FORMATO]
-Código completo con estructura de paquetes + application.yml + tests`,
+Código completo con estructura de paquetes + application.yml (con virtual threads) + tests`,
+
     output: [
       '✅ Entidad JPA con relaciones y validaciones',
       '✅ DTOs con Bean Validation (@NotNull, @Email, @Pattern)',
@@ -255,14 +260,15 @@ Código completo con estructura de paquetes + application.yml + tests`,
       'application.yml configurado'
     ],
     stack: [
-      'Java 17',
-      'Spring Boot 3.2.x',
-      'Spring Data JPA',
-      'Lombok',
-      'MapStruct',
-      'JUnit 5',
-      'Mockito',
-      'H2/PostgreSQL'
+      'Java 21 LTS',
+      'Spring Boot 4.1.0',
+      'Spring Framework 7',
+      'Jakarta EE 11',
+      'Spring Data JPA 3.2',
+      'Lombok 1.18.38',
+      'MapStruct 1.6.3',
+      'JUnit 5 + Mockito',
+      'Testcontainers 2.0.5 / PostgreSQL'
     ],
     hints: [
       'Usa el prompt estructurado de ejemplo como base',

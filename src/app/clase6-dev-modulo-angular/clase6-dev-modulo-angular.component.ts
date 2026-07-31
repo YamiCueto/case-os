@@ -33,35 +33,35 @@ export class Clase6DevModuloAngularComponent {
   context = {
     scenario: 'El equipo necesita desarrollar rápidamente un módulo CRUD de Gestión de Clientes que consuma la API REST del microservicio (Clase 2)',
     goals: [
-      'Módulo Angular con lazy loading y routing',
-      'CRUD completo con formularios reactivos',
-      'Tabla con paginación, filtros y búsqueda',
-      'Integración con API REST del backend',
-      'UI profesional con Angular Material'
+      'Componentes Standalone con Angular 22 (sin NgModules)',
+      'CRUD completo con Signal Forms (estable en Angular 22)',
+      'Tabla con paginación, filtros y búsqueda con httpResource()',
+      'Integración reactiva con signals + computed()',
+      'UI profesional con Angular Material 22'
     ],
     challenges: [
       {
         icon: 'code',
-        title: 'Boilerplate Repetitivo',
-        description: 'Crear servicios, componentes, formularios y routing manualmente toma horas',
+        title: 'Boilerplate Reducido',
+        description: 'Angular 22 elimina NgModules: los componentes Standalone son el default. Menos archivos, menos configuración',
         color: 'blue'
       },
       {
         icon: 'bug_report',
-        title: 'Manejo de Estado',
-        description: 'Gestionar loading states, errores y datos con RxJS es complejo',
+        title: 'Estado Reactivo con Signals',
+        description: 'signal() + computed() reemplazan BehaviorSubject para estado local. httpResource() para datos HTTP',
         color: 'orange'
       },
       {
         icon: 'sync_problem',
-        title: 'Validaciones Duplicadas',
-        description: 'Mantener validaciones frontend consistentes con backend',
+        title: 'Signal Forms vs Reactive Forms',
+        description: 'Angular 22 introduce Signal Forms estables: formularios reactivos basados en signals, sin FormControl manual',
         color: 'red'
       },
       {
         icon: 'style',
-        title: 'Estilos Inconsistentes',
-        description: 'Lograr UI profesional y responsive sin experiencia en Material',
+        title: 'OnPush por Defecto',
+        description: 'Angular 22 establece OnPush como estrategia por defecto. Change detection preciso y automático con Signals',
         color: 'purple'
       }
     ]
@@ -69,174 +69,172 @@ export class Clase6DevModuloAngularComponent {
 
   architectureLayers = [
     {
-      name: 'Routing Module',
-      description: 'Lazy loading con rutas para lista, crear, editar, detalle',
-      icon: '🗺️',
-      files: ['clientes-routing.module.ts']
+      name: 'Routing (Standalone)',
+      description: 'Lazy loading con rutas standalone para lista, crear, editar, detalle. Sin NgModule',
+      icon: '🗃️',
+      files: ['clientes.routes.ts']
     },
     {
       name: 'Service Layer',
-      description: 'HttpClient con CRUD + interceptores (auth, error, loading)',
+      description: 'httpResource() para CRUD + interceptores funcionales (provideHttpClient + withInterceptors)',
       icon: '🔌',
       files: ['clientes.service.ts', 'interceptors/']
     },
     {
-      name: 'Components',
-      description: 'Lista (tabla), Form (crear/editar), Detalle (solo lectura)',
+      name: 'Components (Standalone)',
+      description: 'Componentes Standalone con Signal Forms y OnPush por defecto en Angular 22',
       icon: '🧩',
       files: ['clientes-lista/', 'clientes-form/', 'clientes-detalle/']
     },
     {
-      name: 'Models & Validators',
-      description: 'Interfaces TypeScript + validadores custom',
+      name: 'Signals & Models',
+      description: 'signal(), computed(), input() como alternativa tipada a @Input (Angular 22)',
       icon: '📋',
       files: ['models/cliente.model.ts', 'validators/']
     }
   ];
 
   servicePrompt = {
-    title: 'Generar Service con HttpClient',
-    role: 'Actúa como desarrollador Angular senior especializado en servicios REST',
+    title: 'Generar Service con httpResource (Angular 22)',
+    role: 'Actúa como desarrollador Angular senior especializado en Angular 22 y Signals',
     context: [
       'Proyecto: Frontend MyLegacyApp (sistema bancario)',
-      'Stack: Angular 16, TypeScript, RxJS, HttpClient',
-      'API Backend: Spring Boot REST en http://localhost:8080/api/clientes',
+      'Stack: Angular 22, TypeScript 6.0, RxJS 7.8, httpResource(), Signals',
+      'API Backend: Spring Boot 4.1 REST en http://localhost:8081/api/clientes',
       'Autenticación: JWT en header Authorization'
     ],
     task: [
-      'Crear ClientesService con métodos CRUD completos',
-      'getClientes(page, size, filtros): Observable<Page<Cliente>> con paginación',
-      'getClienteById(id): Observable<Cliente> con manejo de 404',
-      'createCliente(cliente): Observable<Cliente> con validación respuesta',
+      'Crear ClientesService con métodos CRUD usando httpResource()',
+      'getClientes(): httpResource con params signal para paginación + filtros',
+      'getClienteById(id): httpResource con id param signal',
+      'createCliente(cliente): Observable<Cliente> (mutaciones aún usan RxJS)',
       'updateCliente(id, cliente): Observable<Cliente>',
-      'deleteCliente(id): Observable<void> con confirmación',
-      'buscarPorDocumento(documento): Observable<Cliente>',
-      'Manejo de errores con catchError y throwError',
-      'Loading state con BehaviorSubject'
+      'deleteCliente(id): Observable<void>',
+      'buscarPorDocumento(documento): httpResource con query signal',
+      'Manejo de errores con httpResource.error signal'
     ],
     expectedOutput: [
-      'ClientesService injectable con @Injectable({providedIn: "root"})',
-      'Interface Cliente y PageResponse tipadas',
-      'Métodos con tipado estricto de Observable',
-      'Error handling con operators RxJS (catchError, retry)',
+      'ClientesService injectable con inject(HttpClient) (no constructor DI)',
+      'Interface Cliente y PageResponse con tipos TypeScript 6.0',
+      'httpResource para queries, Observable para mutaciones (POST/PUT/DELETE)',
+      'Error handling con signal: resource.error()',
       'BaseURL desde environment.ts',
-      'Tests unitarios con HttpClientTestingModule'
+      'Tests unitarios con HttpClientTestingModule o Vitest'
     ]
   };
 
   componentPrompt = {
-    title: 'Generar Componentes CRUD',
-    role: 'Actúa como desarrollador Angular senior especializado en formularios reactivos y Material',
+    title: 'Generar Componentes CRUD Standalone (Angular 22)',
+    role: 'Actúa como desarrollador Angular 22 senior especializado en Signals y Angular Material',
     context: [
       'Módulo: Gestión de Clientes bancarios',
-      'Framework: Angular Material para UI',
-      'Forms: Reactive Forms con validaciones',
-      'Estado: BehaviorSubject + async pipe (sin NgRx)'
+      'Framework: Angular Material 22 para UI',
+      'Forms: Signal Forms (estable en Angular 22) para formularios',
+      'Estado: signal() + computed() (reemplaza BehaviorSubject)'
     ],
     task: [
-      'ClientesListaComponent: Tabla MatTable con MatPaginator, MatSort',
-      'Filtros: búsqueda por nombre/documento, estado activo/inactivo',
+      'ClientesListaComponent: Tabla MatTable con httpResource() para datos',
+      'Filtros reactivos: searchSignal con debounce integrado',
       'Acciones: botones ver/editar/eliminar con MatDialog confirmación',
-      'ClientesFormComponent: FormBuilder con validaciones',
+      'ClientesFormComponent: Signal Forms con validaciones declarativas',
       'Validators: documento (solo números), email, teléfono, ingresos > 0',
-      'Modo crear/editar dinámico según route params',
+      'Modo crear/editar dinámico con input() signal en lugar de ActivatedRoute',
       'ClientesDetalleComponent: vista solo lectura con datos cliente',
-      'Loading spinners con MatProgressSpinner',
+      'Loading state automático con resource.isLoading() signal',
       'Snackbar para mensajes éxito/error'
     ],
     expectedOutput: [
-      'Componentes con OnPush change detection',
-      'Smart components (lista) vs Dumb components (form, detalle)',
-      'Unsubscribe automático con takeUntil + Subject',
-      'Template con async pipe para Observables',
-      'Estilos SCSS con variables Material theming',
-      'Tests con ComponentFixture + TestBed'
+      'Componentes Standalone con OnPush (default en v22)',
+      'input() como signal de entrada (reemplaza @Input decorator)',
+      'output() para emisor de eventos (reemplaza @Output EventEmitter)',
+      'Template con @if / @for / @switch (control flow moderno Angular 17+)',
+      'Signal Forms: FormGroup con signalValue(), validate(), touched signals',
+      'Tests con ComponentFixture + Vitest/Jest'
     ]
   };
 
   challenge = {
-    title: '🏆 Challenge: Módulo Angular Completo',
-    description: 'Genera un módulo funcional de Gestión de Clientes que consuma la API REST del microservicio de la Clase 2',
+    title: '🏆 Challenge: Módulo Angular 22 Completo',
+    description: 'Genera un módulo funcional de Gestión de Clientes usando Angular 22 con Signals, Signal Forms y httpResource que consuma la API REST de Spring Boot 4.1 (Clase 2)',
     requirements: [
-      'Módulo con lazy loading y routing independiente',
-      'ClientesService con todos los métodos CRUD + interceptores',
-      'ClientesListaComponent con tabla Material, paginación y filtros',
-      'ClientesFormComponent con validaciones reactivas',
+      'Componentes Standalone con lazy loading y routing sin NgModule',
+      'ClientesService con httpResource() para queries, Observable para mutaciones',
+      'ClientesListaComponent: tabla Material con paginación via signals',
+      'ClientesFormComponent con Signal Forms y validaciones',
       'ClientesDetalleComponent para visualización',
-      'Manejo de errores global con ErrorInterceptor',
-      'Loading states con LoadingInterceptor + MatProgressBar',
-      'Responsive design con breakpoints Material',
-      'Tests unitarios para service y componentes'
+      'Manejo de errores global con interceptores funcionales (provideHttpClient)',
+      'Loading states automáticos con resource.isLoading()',
+      'Responsive design con breakpoints Material 22',
+      'Tests unitarios con Vitest para service y componentes'
     ],
     moduleStructure: {
       routing: ['/', '/nuevo', '/:id/editar', '/:id/detalle'],
       components: [
-        'ClientesListaComponent (smart)',
-        'ClientesFormComponent (dumb)',
-        'ClientesDetalleComponent (dumb)'
+        'ClientesListaComponent (standalone, OnPush default)',
+        'ClientesFormComponent (Signal Forms)',
+        'ClientesDetalleComponent (input() signals)'
       ],
       services: [
-        'ClientesService (CRUD)',
-        'AuthInterceptor (JWT)',
-        'ErrorInterceptor (manejo global)',
-        'LoadingInterceptor (spinner)'
+        'ClientesService (httpResource + Observable)',
+        'AuthInterceptor (funcional, provideHttpClient)',
+        'ErrorInterceptor (funcional, withInterceptors)'
       ]
     },
     hints: [
-      'Usa Angular Material schematics para generar tabla inicial',
-      'FormBuilder.group() con Validators.compose para múltiples validaciones',
-      'Subject + takeUntil en ngOnDestroy para evitar memory leaks',
-      'ActivatedRoute.params para detectar modo crear vs editar',
-      'MatDialog para confirmación de eliminación',
-      'environment.ts para configurar baseURL de API'
+      'Angular 22: ng g c clientes/lista --standalone (ya no necesita --module)',
+      'Signal Forms: formGroup.value() es un signal, no un Observable',
+      'httpResource: const clientes = httpResource("http://api/clientes")',
+      'input() signals: readonly id = input<number>() en lugar de @Input()',
+      'MatDialog funciona igual, solo importar directamente en standalone component',
+      'environment.ts: provideEnvironmentInitializer para configuración'
     ],
     timeEstimate: '50 minutos'
   };
 
   bestPractices = [
     {
-      category: 'Arquitectura de Componentes',
+      category: 'Arquitectura Angular 22',
       practices: [
-        'Smart components: manejan lógica y estado (lista)',
-        'Dumb components: solo presentación, reciben @Input y emiten @Output',
-        'OnPush change detection para mejor performance',
-        'Standalone components para modularidad (opcional Angular 16+)'
+        'Standalone Components como default: no más NgModules para features',
+        'input() + output() como signals de I/O (reemplaza @Input/@Output decorators)',
+        'OnPush es el default en Angular 22: no necesitas especificarlo',
+        'Lazy loading con loadComponent() en lugar de loadChildren()'
       ]
     },
     {
-      category: 'Manejo de Observables',
+      category: 'Signals y Estado',
       practices: [
-        'async pipe en template para auto-unsubscribe',
-        'takeUntil + Subject en ngOnDestroy si subscribe manual',
-        'shareReplay(1) para compartir resultados HTTP entre suscriptores',
-        'catchError + throwError para manejo de errores'
+        'signal() para estado local del componente',
+        'computed() para estado derivado (reemplaza combineLatest + async pipe)',
+        'httpResource() para fetch HTTP declarativo + signal de error/loading',
+        'toSignal() para convertir Observables existentes a Signals'
       ]
     },
     {
-      category: 'Formularios Reactivos',
+      category: 'Signal Forms (Angular 22)',
       practices: [
-        'FormBuilder para crear formularios de forma declarativa',
-        'Custom validators para lógica compleja',
-        'markAllAsTouched() antes de submit para mostrar errores',
-        'patchValue() para editar, setValue() para crear'
+        'formGroup.value() retorna un signal, reactivo automáticamente',
+        'formControl.touched es un signal: usa en templates directamente',
+        'validate() método sincrónico, no necesita statusChanges Observable',
+        'Mantener Reactive Forms para formularios muy complejos (wizards multi-step)'
       ]
     },
     {
-      category: 'Tipado TypeScript',
+      category: 'Tipado TypeScript 6',
       practices: [
-        'Interfaces para modelos (Cliente, PageResponse)',
-        'Enums para valores fijos (EstadoCliente)',
-        'Generics en servicios: Observable<T>',
-        'Strict mode habilitado en tsconfig.json'
+        'Interfaces para modelos (Cliente, PageResponse) con tipos estrictos',
+        'Enums (StrEnum pattern) para valores fijos (EstadoCliente)',
+        'Generics en services: httpResource<T>()',
+        'Strict mode habilitado en tsconfig.json (ya es default)'
       ]
     },
     {
-      category: 'Testing',
+      category: 'Testing con Vitest',
       practices: [
-        'HttpClientTestingModule para mockear HTTP',
-        'ComponentFixture + detectChanges() para tests componentes',
-        'Spy objects para mockear servicios',
-        'async/fakeAsync para operaciones asíncronas'
+        'Vitest reemplaza Karma como test runner en Angular 22',
+        'ComponentFixture + detectChanges() sigue igual con Vitest',
+        'Spy objects para mockear services (compatibles)',
+        'async/fakeAsync sigue funcionando con Vitest'
       ]
     }
   ];

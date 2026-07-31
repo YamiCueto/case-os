@@ -127,25 +127,28 @@ export class Clase1DevFundamentosComponent {
       prompt: `[ROL] Actúa como arquitecto Java senior
 
 [CONTEXTO]
-- Stack: Java 17, Spring Boot 3.2.1
-- Arquitectura: Microservicio hexagonal
-- Base de datos: PostgreSQL 15
+- Stack: Java 21 LTS, Spring Boot 4.1.0, Spring Framework 7
+- Arquitectura: Microservicio hexagonal, Jakarta EE 11
+- Base de datos: PostgreSQL 17
+- Performance: Virtual Threads habilitados (spring.threads.virtual.enabled=true)
 - Proyecto: Sistema bancario de préstamos
 
 [TAREA]
 Genera microservicio de Gestión de Préstamos:
-1. Entidad Prestamo (JPA)
-2. DTO con validaciones JSR-380
+1. Entidad Prestamo (JPA 3.2 / jakarta.persistence)
+2. DTO con validaciones Bean Validation 3.1
 3. Repository con consultas personalizadas
 4. Service con lógica negocio
-5. Controller REST con OpenAPI
-6. Manejo excepciones global
-7. Tests JUnit 5 + Mockito (cobertura >80%)
+5. Controller REST con OpenAPI 3.1
+6. Manejo excepciones global con ProblemDetail (RFC 7807)
+7. Tests JUnit 5 + Mockito + Testcontainers (cobertura >80%)
 
 [RESTRICCIONES]
 - Lombok para reducir boilerplate
 - MapStruct para mapeo DTO
 - Logs con SLF4J
+- JSpecify (@NonNull, @Nullable) para null safety
+- Usar jakarta.* (no javax.*)
 - Documentación JavaDoc`,
       benefits: [
         'Especifica versiones exactas',

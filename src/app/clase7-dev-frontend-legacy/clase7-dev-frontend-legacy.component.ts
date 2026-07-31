@@ -25,7 +25,7 @@ export class Clase7DevFrontendLegacyComponent {
 
   // Slide 2: Context
   context = {
-    scenario: 'Un proyecto Angular 10 heredado tiene componentes con memory leaks, change detection ineficiente y código difícil de mantener. Los componentes suscriben observables sin unsubscribe, usan Default Change Detection y mezclan lógica de negocio con presentación.',
+    scenario: 'Un proyecto Angular legacy tiene componentes con memory leaks, change detection ineficiente y código difícil de mantener. Los componentes suscriben observables sin unsubscribe, usan la estrategia legacy Eager (Default en v21 y anterior) y mezclan lógica de negocio con presentación.',
     problems: [
       {
         icon: '💧',
@@ -35,8 +35,8 @@ export class Clase7DevFrontendLegacyComponent {
       },
       {
         icon: '🔄',
-        title: 'Change Detection Ineficiente',
-        description: 'Default strategy ejecuta CD en toda la app constantemente',
+        title: 'Change Detection Eager (Legado)',
+        description: 'ChangeDetectionStrategy.Eager (renombrado de Default en Angular 22) ejecuta CD en toda la app constantemente',
         color: 'orange'
       },
       {
@@ -53,10 +53,10 @@ export class Clase7DevFrontendLegacyComponent {
       }
     ],
     modernGoals: [
-      'Eliminar memory leaks con takeUntil/takeUntilDestroyed',
-      'Optimizar performance con OnPush Change Detection',
+      'Eliminar memory leaks con takeUntilDestroyed (Angular 16+)',
+      'OnPush es el default en Angular 22: migrar componentes Eager a OnPush o Signals',
       'Separar componentes smart (container) y dumb (presentational)',
-      'Preparar para migración a Signals en Angular 16+',
+      'Migrar estado de BehaviorSubject a signal() + computed() (Signals)',
       'Mejorar testabilidad con componentes desacoplados'
     ]
   };
@@ -70,8 +70,8 @@ export class Clase7DevFrontendLegacyComponent {
         tasks: [
           'Identificar componentes con subscripciones sin unsubscribe',
           'Detectar componentes que mezclan lógica smart/dumb',
-          'Listar componentes con Default Change Detection',
-          'Priorizar por impacto en performance (Chrome DevTools)'
+          'Listar componentes con CD Eager (ChangeDetectionStrategy.Eager)',
+          'Priorizar por impacto en performance (Angular DevTools + Chrome DevTools)'
         ],
         color: 'blue'
       },
@@ -87,12 +87,12 @@ export class Clase7DevFrontendLegacyComponent {
         color: 'green'
       },
       {
-        phase: 'Fase 3: OnPush Strategy',
+        phase: 'Fase 3: OnPush Strategy (Default en Angular 22)',
         icon: '⚡',
         tasks: [
-          'Cambiar a OnPush en componentes presentacionales',
+          'En Angular 22, OnPush es el DEFAULT. Componentes nuevos ya lo usan',
+          'Componentes legacy con Eager: migrar a OnPush o a Signals',
           'Usar Immutability en @Input() (spread operator, Object.assign)',
-          'Emitir eventos con @Output() EventEmitter',
           'Validar performance con Angular DevTools Profiler'
         ],
         color: 'purple'
@@ -102,11 +102,22 @@ export class Clase7DevFrontendLegacyComponent {
         icon: '🏗️',
         tasks: [
           'Extraer lógica de negocio a Smart Components (container)',
-          'Crear Dumb Components (presentational) con @Input/@Output',
+          'Crear Dumb Components (presentational) con input()/output() signals',
           'Inyectar servicios solo en Smart Components',
           'Testear Dumb Components con inputs mockeados'
         ],
         color: 'orange'
+      },
+      {
+        phase: 'Fase 5: Migración a Signals (Angular 22)',
+        icon: '🚦',
+        tasks: [
+          'Reemplazar BehaviorSubject de estado local con signal()',
+          'Usar computed() para estado derivado (reemplaza combineLatest)',
+          'Migrar @Input() a input() signals para mejor type safety',
+          'Usar ng generate @angular/core:signal-input-migration (CLI schematic)'
+        ],
+        color: 'teal'
       }
     ]
   };
@@ -189,12 +200,13 @@ export class UserListComponent implements OnInit, OnDestroy {
   // Slide 5: Change Detection Strategy
   changeDetectionStrategy = {
     default: {
-      title: '⚠️ Default Change Detection',
-      description: 'Angular revisa TODO el árbol de componentes en cada evento (click, http, timer)',
-      code: `// ⚠️ Default: Change detection en TODOS los componentes
+      title: '⚠️ Eager Change Detection (Angular 22: renombrado de Default)',
+      description: 'Angular revisa TODO el árbol de componentes en cada evento. Renombrado a Eager en Angular 22. Los nuevos componentes usan OnPush automáticamente.',
+      code: `// ⚠️ Eager (antes Default): Change detection en TODOS los componentes
 @Component({
   selector: 'app-user-list',
-  // Por defecto: ChangeDetectionStrategy.Default
+  // Angular 22: Eager es el modo antiguo (antes se llamaba Default)
+  changeDetection: ChangeDetectionStrategy.Eager, // ← modo legacy
   template: \`
     <div *ngFor="let user of users">
       {{ user.name }} - {{ heavyCalculation(user) }}
@@ -212,39 +224,43 @@ export class UserListComponent {
       problems: [
         'CD se ejecuta aunque @Input no cambie',
         'Funciones en template se ejecutan constantemente',
-        'Impacto exponencial con muchos componentes'
+        'Impacto exponencial con muchos componentes',
+        'En Angular 22, los componentes nuevos ya NO usan Eager por defecto'
       ]
     },
     onPush: {
-      title: '✅ OnPush Change Detection',
-      description: 'Angular solo revisa el componente cuando @Input cambia (referencia), @Output emite, o se llama markForCheck()',
-      code: `// ✅ OnPush: Change detection optimizada
+      title: '✅ OnPush Change Detection (DEFAULT en Angular 22)',
+      description: 'En Angular 22, OnPush es la estrategia por defecto. Angular solo revisa el componente cuando signal cambia, @Input cambia (referencia), o @Output emite.',
+      code: `// ✅ OnPush: DEFAULT en Angular 22 para nuevos componentes
 @Component({
   selector: 'app-user-list',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // Angular 22: OnPush es el default, no necesitas especificarlo
+  // changeDetection: ChangeDetectionStrategy.OnPush, ← implícito
   template: \`
-    <div *ngFor="let user of users">
-      {{ user.name }}
-    </div>
+    @for (user of users(); track user.id) {  <!-- @for: control flow Angular 17+ -->
+      <div>{{ user.name }}</div>
+    }
   \`
 })
 export class UserListComponent {
-  @Input() users: User[] = [];
-  @Output() userClick = new EventEmitter<User>();
+  // Angular 22: input() signal en lugar de @Input() decorator
+  readonly users = input<User[]>([]);
+  readonly userClick = output<User>();  // output() en lugar de @Output()
 
   onUserClick(user: User) {
     this.userClick.emit(user); // ✅ Trigger CD
   }
 }`,
       benefits: [
-        'CD solo cuando @Input reference cambia',
+        'CD solo cuando signal cambia o @Input reference cambia',
         'Mejor performance en listas grandes',
-        'Fuerza inmutabilidad (buena práctica)'
+        'Fuerza inmutabilidad (buena práctica)',
+        'En Angular 22, es el comportamiento por defecto sin config adicional'
       ],
       requirements: [
-        'Usar inmutabilidad en @Input (spread, Object.assign)',
-        'Emitir eventos con @Output en lugar de modificar state',
-        'Usar async pipe para observables (auto markForCheck)'
+        'Usar inmutabilidad en inputs (spread, Object.assign)',
+        'Preferir signal() y input() para máxima eficiencia',
+        'Usar async pipe o toSignal() para observables (auto markForCheck)'
       ]
     },
     immutability: {
@@ -397,8 +413,8 @@ export class UserDashboardComponent implements OnInit {
   summary = {
     achievements: [
       'Eliminación de memory leaks con takeUntil/takeUntilDestroyed',
-      'Optimización de performance con OnPush Change Detection',
-      'Arquitectura escalable con Smart/Dumb pattern',
+      'OnPush como DEFAULT en Angular 22 (sin configuración adicional)',
+      'Arquitectura escalable con Smart/Dumb pattern + Signals',
       'Código más testeable y mantenible'
     ],
     tools: [
@@ -410,18 +426,18 @@ export class UserDashboardComponent implements OnInit {
       {
         name: 'Angular DevTools',
         icon: '📊',
-        use: 'Profiler para medir Change Detection'
+        use: 'Profiler para medir Change Detection (Signals-aware)'
       },
       {
-        name: 'RxJS Operators',
+        name: 'RxJS + Signals Interop',
         icon: '🔧',
-        use: 'takeUntil, switchMap, shareReplay'
+        use: 'toSignal(), toObservable(), takeUntilDestroyed'
       }
     ],
     nextSteps: [
-      'Clase 8: Estado Complejo con RxJS (BehaviorSubject, State Management)',
-      'Migración a Signals (Angular 16+) para reactive state',
-      'Performance profiling en producción con Lighthouse'
+      'Clase 8: Estado Complejo con RxJS + Signals (signal(), computed(), rxResource)',
+      'Migración a Signal Forms (Angular 22) para formularios reactivos modernos',
+      'Performance profiling en producción con Lighthouse + Angular DevTools'
     ]
   };
 

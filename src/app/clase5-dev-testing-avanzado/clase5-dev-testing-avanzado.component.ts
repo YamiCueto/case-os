@@ -154,32 +154,55 @@ export class Clase5DevTestingAvanzadoComponent {
     ]
   };
 
-  integrationTestsPrompt = {
-    title: 'Tests de Integración con Testcontainers',
-    role: 'Actúa como arquitecto de testing especializado en tests de integración con Spring Boot',
-    context: [
-      'Microservicio: Spring Boot con JPA y PostgreSQL',
-      'Herramienta: Testcontainers para BD real',
-      'Objetivo: Validar interacción completa Controller → Service → Repository → DB'
-    ],
-    task: [
-      '1. Configurar Testcontainers con PostgreSQL container',
-      '2. Generar tests de integración para ClienteController:',
-      '   - POST /api/clientes (crear cliente en BD real)',
-      '   - GET /api/clientes/{id} (recuperar de BD)',
-      '   - PUT /api/clientes/{id} (actualizar en BD)',
-      '   - DELETE /api/clientes/{id} (soft delete)',
-      '3. Usar @SpringBootTest con @AutoConfigureMockMvc',
-      '4. MockMvc para simular requests HTTP',
-      '5. Validar responses: status codes, JSON content, headers'
-    ],
-    expectedOutput: [
-      'Clase con @SpringBootTest y @Testcontainers',
-      'PostgreSQLContainer configurado como @Container',
-      'Tests con MockMvc: perform(post/get/put/delete)',
-      'Assertions de HTTP status, JSON paths con jsonPath()',
-      'Limpieza de BD entre tests (@BeforeEach)'
-    ]
+  integrationTesting = {
+    title: 'Testcontainers 2.0.5 con @ServiceConnection (2026)',
+    description: 'Testcontainers 2.0.5 con Spring Boot 4.1 nativo elimina la configuración manual. @ServiceConnection conecta automáticamente el contenedor con Spring Boot.',
+    setup: {
+      titulo: 'Configuración Moderna (H2 → Testcontainers)',
+      code: `// ✅ MODERNO 2026: @ServiceConnection elimina config manual
+// pom.xml
+<dependencies>
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-testcontainers</artifactId>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>2.0.5</version>
+    <scope>test</scope>
+  </dependency>
+</dependencies>
+
+// Test con Testcontainers - sin configuración manual de URL/credenciales
+@Testcontainers
+@SpringBootTest
+class ClienteRepositoryIntegrationTest {
+
+  @Container
+  @ServiceConnection  // ← ¡automático! spring.datasource.url se configura solo
+  static PostgreSQLContainer<?> postgres =
+      new PostgreSQLContainer<>("postgres:17-alpine");
+
+  @Autowired
+  ClienteRepository repository;
+
+  @Test
+  void debeGuardarYRecuperarCliente() {
+    var cliente = new Cliente(null, "Juan Pérez", "juan@banco.com");
+    var guardado = repository.save(cliente);
+
+    assertThat(guardado.getId()).isNotNull();
+    assertThat(guardado.getNombre()).isEqualTo("Juan Pérez");
+  }
+}`
+    },
+    deprecationNote: {
+      titulo: '⚠️ H2 en Tests de Integración (En Desuso)',
+      description: 'En 2026, H2 en tests de integración se considera mala práctica. Testcontainers + PostgreSQL real evita "dialect drift" (pruebas pasan en H2 pero fallan en producción).',
+      alternative: 'H2 sigue siendo útil para tests UNITARIOS rápidos de repositories con @DataJpaTest'
+    }
   };
 
   challenge = {
@@ -264,37 +287,54 @@ export class Clase5DevTestingAvanzadoComponent {
     }
   ];
 
-  coverageTools = [
-    {
-      name: 'JaCoCo',
-      description: 'Plugin Maven/Gradle para cobertura de código',
-      features: ['Reporte HTML', 'Umbrales configurables', 'Integración CI/CD'],
-      config: `<plugin>
-  <groupId>org.jacoco</groupId>
-  <artifactId>jacoco-maven-plugin</artifactId>
-  <configuration>
-    <rules>
-      <rule>
-        <element>PACKAGE</element>
-        <limits>
-          <limit>
-            <counter>LINE</counter>
-            <value>COVEREDRATIO</value>
-            <minimum>0.80</minimum>
-          </limit>
-        </limits>
-      </rule>
-    </rules>
-  </configuration>
+  coverageConfig = {
+    title: 'Configuración de Cobertura con JaCoCo 0.8.12',
+    description: 'JaCoCo 0.8.12 es compatible con Java 21 y Spring Boot 4.1. Genera informes HTML, XML para CI/CD y LCOV para SonarQube.',
+    pomConfig: {
+      titulo: 'Configuración Maven',
+      code: `<!-- pom.xml: JaCoCo 0.8.12 con Java 21 -->
+<plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.8.12</version>
+    <configuration>
+        <excludes>
+            <exclude>**/config/**</exclude>
+            <exclude>**/*Application.class</exclude>
+            <exclude>**/dto/**</exclude>  <!-- Lombok-generated -->
+            <exclude>**/entity/**</exclude>  <!-- Lombok-generated -->
+        </excludes>
+    </configuration>
+    <executions>
+        <execution>
+            <goals><goal>prepare-agent</goal></goals>
+        </execution>
+        <execution>
+            <id>report</id>
+            <phase>verify</phase>
+            <goals><goal>report</goal></goals>
+        </execution>
+        <execution>
+            <id>coverage-check</id>
+            <goals><goal>check</goal></goals>
+            <configuration>
+                <rules>
+                    <rule>
+                        <limits>
+                            <limit>
+                                <counter>LINE</counter>
+                                <value>COVEREDRATIO</value>
+                                <minimum>0.80</minimum>  <!-- 80% mínimo -->
+                            </limit>
+                        </limits>
+                    </rule>
+                </rules>
+            </configuration>
+        </execution>
+    </executions>
 </plugin>`
-    },
-    {
-      name: 'SonarQube',
-      description: 'Análisis estático + cobertura + code smells',
-      features: ['Dashboard visual', 'Deuda técnica', 'Quality Gates'],
-      config: 'Integración con JaCoCo, reportes centralizados'
     }
-  ];
+  };
 
   nextSlide() {
     if (this.currentSlide < this.slides.length - 1) {

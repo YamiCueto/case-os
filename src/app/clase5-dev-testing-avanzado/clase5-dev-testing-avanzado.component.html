@@ -222,64 +222,28 @@ class ClienteServiceTest {{ '{' }}
 
       <!-- Slide 5: Integration Tests -->
       <div *ngIf="slide.type === 'integration-tests'" class="slide-content">
-        <h2>🔗 Tests de Integración con Testcontainers</h2>
+        <h2>{{ integrationTesting.title }}</h2>
+        <p class="description">{{ integrationTesting.description }}</p>
 
-        <div class="prompt-card">
-          <h4>
-            <span class="material-icons">integration_instructions</span>
-            {{ integrationTestsPrompt.title }}
-          </h4>
-
-          <div class="prompt-section">
-            <strong>ROL:</strong>
-            <p>{{ integrationTestsPrompt.role }}</p>
-          </div>
-
-          <div class="prompt-section">
-            <strong>CONTEXTO:</strong>
-            <ul>
-              <li *ngFor="let ctx of integrationTestsPrompt.context">{{ ctx }}</li>
-            </ul>
-          </div>
-
-          <div class="prompt-section">
-            <strong>TAREA:</strong>
-            <ol>
-              <li *ngFor="let task of integrationTestsPrompt.task">{{ task }}</li>
-            </ol>
-          </div>
-
-          <div class="prompt-section">
-            <strong>OUTPUT ESPERADO:</strong>
-            <ul>
-              <li *ngFor="let output of integrationTestsPrompt.expectedOutput">{{ output }}</li>
-            </ul>
+        <div class="code-section">
+          <h3>{{ integrationTesting.setup.titulo }}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+                <span class="window-button"></span>
+              </div>
+              <span class="file-name">Testcontainers con @ServiceConnection</span>
+            </div>
+            <pre><code>{{ integrationTesting.setup.code }}</code></pre>
           </div>
         </div>
 
-        <div class="example-box">
-          <h4>Ejemplo: Test Integración con Testcontainers</h4>
-          <pre><code>&#64;SpringBootTest
-&#64;AutoConfigureMockMvc
-&#64;Testcontainers
-class ClienteControllerIntegrationTest {{ '{' }}
-    &#64;Container
-    static PostgreSQLContainer&lt;?&gt; postgres = new PostgreSQLContainer&lt;&gt;("postgres:15");
-
-    &#64;Autowired
-    private MockMvc mockMvc;
-
-    &#64;Test
-    void crearCliente_DeberiaRetornar201() throws Exception {{ '{' }}
-        mockMvc.perform(post("/api/clientes")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("""
-                {{ '{' }}"documento": "12345678", "nombres": "Juan Pérez"{{ '}' }}
-                """))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.id").exists());
-    {{ '}' }}
-{{ '}' }}</code></pre>
+        <div class="deprecation-note">
+          <h4>{{ integrationTesting.deprecationNote.titulo }}</h4>
+          <p>{{ integrationTesting.deprecationNote.description }}</p>
+          <p class="alternative">{{ integrationTesting.deprecationNote.alternative }}</p>
         </div>
       </div>
 
@@ -364,17 +328,12 @@ class ClienteControllerIntegrationTest {{ '{' }}
         </div>
 
         <div class="coverage-tools-section">
-          <h3>📊 Herramientas de Cobertura</h3>
-          <div class="tools-grid">
-            <div *ngFor="let tool of coverageTools" class="tool-card">
-              <h4>{{ tool.name }}</h4>
-              <p>{{ tool.description }}</p>
-              <div class="features">
-                <span *ngFor="let feature of tool.features" class="feature-badge">{{ feature }}</span>
-              </div>
-              <div class="config-preview" *ngIf="tool.config">
-                <pre><code [innerHTML]="tool.config"></code></pre>
-              </div>
+          <h3>{{ coverageConfig.title }}</h3>
+          <p class="description">{{ coverageConfig.description }}</p>
+          <div class="code-section">
+            <h4>{{ coverageConfig.pomConfig.titulo }}</h4>
+            <div class="code-block">
+              <pre><code>{{ coverageConfig.pomConfig.code }}</code></pre>
             </div>
           </div>
         </div>

@@ -15,6 +15,7 @@ export class Clase8DevEstadoRxjsComponent {
   slides = [
     { type: 'title' },
     { type: 'context' },
+    { type: 'signals-first' },
     { type: 'state-patterns' },
     { type: 'behaviorsubject' },
     { type: 'operators' },
@@ -25,12 +26,12 @@ export class Clase8DevEstadoRxjsComponent {
 
   // Slide 2: Context
   context = {
-    scenario: 'Una aplicación Angular enterprise necesita gestionar estado complejo compartido entre múltiples componentes: autenticación, carrito de compras, notificaciones en tiempo real y preferencias de usuario. Sin un state management adecuado, el código se vuelve un "spaghetti" de @Input/@Output y servicios acoplados.',
+    scenario: 'Una aplicación Angular 22 enterprise necesita gestionar estado complejo. En 2026, la decisión clave es: ¿Signals, RxJS, o ambos? Signals para estado local/UI, RxJS para streams complejos y eventos en el tiempo.',
     problems: [
       {
         icon: '🔄',
         title: 'Prop Drilling',
-        description: '@Input/@Output anidados en 5+ niveles de componentes',
+        description: 'input()/output() signals anidados en 5+ niveles (antes @Input/@Output)',
         color: 'red'
       },
       {
@@ -42,7 +43,7 @@ export class Clase8DevEstadoRxjsComponent {
       {
         icon: '⚡',
         title: 'Race Conditions',
-        description: 'Requests simultáneos sobrescribiendo datos sin control',
+        description: 'Requests simultáneos sobrescribiendo datos sin control (httpResource los previene)',
         color: 'yellow'
       },
       {
@@ -52,20 +53,100 @@ export class Clase8DevEstadoRxjsComponent {
         color: 'purple'
       }
     ],
+    whenUseSignals: [
+      'Estado local de componentes (reemplaza BehaviorSubject en servicios simples)',
+      'Estado derivado: computed() en lugar de combineLatest + async pipe',
+      'Fetch HTTP con httpResource() para datos declarativos',
+      'Comunicación padre-hijo con input()/output() (reemplaza @Input/@Output)',
+      'Estado de formularios con Signal Forms (Angular 22)'
+    ],
     whenUseRxJS: [
-      'Estado compartido entre 3+ componentes no relacionados',
-      'Datos en tiempo real (WebSockets, Server-Sent Events)',
-      'Aplicaciones medianas sin justificar NgRx/Akita',
-      'Necesitas Observable-based API (async pipe friendly)',
-      'Cache y sincronización de datos con backend'
+      'Streams complejos de eventos en el tiempo (WebSockets, SSE)',
+      'Operadores avanzados: switchMap, debounceTime, retryWhen, groupBy',
+      'Estado compartido entre 3+ componentes no relacionados (BehaviorSubject)',
+      'Aplicaciones medianas sin justificar NgRx/NGRX Signal Store',
+      'Cache y sincronización de datos con backend (shareReplay)'
     ],
     whenUseNgRx: [
       'Aplicaciones enterprise con 50+ componentes',
       'Necesitas time-travel debugging (DevTools)',
-      'Equipo familiarizado con Redux pattern',
+      'Equipo familiarizado con Redux/Signal Store pattern',
       'Auditoría completa de cambios de estado',
       'Testing exhaustivo con predictibilidad total'
     ]
+  };
+
+  // Slide Signals First (NUEVO - Angular 22)
+  signalsFirst = {
+    title: 'Signals-First: El Paradigma 2026',
+    description: 'Angular 22 promueve Signals como primera opción para estado. RxJS sigue siendo esencial para streams complejos.',
+    modern: {
+      title: '✅ Estado Moderno con Signals (Angular 22)',
+      code: `// ✅ MODERNO: Signals para estado local (reemplaza BehaviorSubject local)
+import { signal, computed, effect } from '@angular/core';
+import { httpResource } from '@angular/common/http';
+
+export class CartService {
+  // Estado con signals (privado internamente, expuésto como readonly)
+  private readonly _items = signal<CartItem[]>([]);
+  private readonly _loading = signal(false);
+
+  // Estado público (readonly signals)
+  readonly items = this._items.asReadonly();
+  readonly loading = this._loading.asReadonly();
+
+  // Estado derivado con computed() - sin Observables
+  readonly total = computed(() =>
+    this._items().reduce((sum, item) => sum + item.price * item.qty, 0)
+  );
+  readonly isEmpty = computed(() => this._items().length === 0);
+
+  addItem(item: CartItem): void {
+    this._items.update(items => [...items, item]);  // Inmutabilidad
+  }
+
+  removeItem(id: string): void {
+    this._items.update(items => items.filter(i => i.id !== id));
+  }
+}`,
+      benefits: [
+        'Sin subscribe() / unsubscribe()',
+        'computed() es automáticamente reactivo',
+        'Sin zone.js (Zoneless compatible)',
+        'Templates más simples: items() en lugar de items$ | async'
+      ]
+    },
+    interop: {
+      title: '🔧 Interop Signals ↔ RxJS',
+      code: `// Convertir Observable a Signal (toSignal)
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
+
+export class UserComponent {
+  private userService = inject(UserService);
+
+  // Observable → Signal (auto-unsubscribe)
+  readonly users = toSignal(this.userService.getUsers$(), {
+    initialValue: []
+  });
+
+  // Signal → Observable (cuando necesitas operadores RxJS)
+  readonly searchTerm = signal('');
+  readonly debouncedSearch$ = toObservable(this.searchTerm).pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    switchMap(term => this.userService.search(term))
+  );
+
+  // httpResource: HTTP nativo con Signals (sin subscribe)
+  readonly userData = httpResource<User>(
+    () => ({\n      url: '/api/users/' + this.userId(),
+      method: 'GET'
+    })
+  );
+  // userData.value() - datos
+  // userData.isLoading() - estado carga
+  // userData.error() - error si falla`,
+    }
   };
 
   // Slide 3: State Patterns
