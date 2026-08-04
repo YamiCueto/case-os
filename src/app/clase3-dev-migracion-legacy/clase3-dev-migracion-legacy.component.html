@@ -1,7 +1,7 @@
 <div class="presentation-container" (keydown)="onKeydown($event)" tabindex="0">
   <!-- Back to Study Plan Button -->
   <div class="back-to-menu">
-    <a routerLink="/study-plan" class="back-btn">
+    <a routerLink="/plan-dev-detallado" class="back-btn">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
       </svg>
@@ -27,8 +27,8 @@
       <!-- Slide 1: Title -->
       <div *ngIf="slide.type === 'title'" class="slide-title">
         <div class="workshop-badge">🔄 TALLER MIGRACIÓN DEV</div>
-        <h1>Migración de Código Legacy VB6 / Java 8 a Spring Boot 3.4</h1>
-        <h2 class="subtitle">Refactorización guiada por Agentes de IA y especificaciones de contexto (AGENTS.md)</h2>
+        <h1>Migración de Código Legacy VB6 / .NET / COBIS a Java 21 + Spring Boot 4.1.0</h1>
+        <h2 class="subtitle">Análisis y traducción guiada por IA (Copilot) preservando la lógica de negocio exacta</h2>
         <div class="info-grid">
           <div class="info-item">
             <span class="icon">⏱️</span>
@@ -43,7 +43,7 @@
           <div class="info-item">
             <span class="icon">🎁</span>
             <span class="label">Entregable</span>
-            <span class="value">Módulo migrado + tests</span>
+            <span class="value">Módulo migrado + tests equivalencia</span>
           </div>
           <div class="info-item">
             <span class="icon">💪</span>
@@ -52,10 +52,11 @@
           </div>
         </div>
         <div class="tech-stack-preview">
-          <span class="tech-badge">📜 Visual Basic 6 / Java 8</span>
-          <span class="tech-badge">☕ Java 21</span>
-          <span class="tech-badge">🍃 Spring Boot 3.4+</span>
-          <span class="tech-badge">📋 AGENTS.md</span>
+          <span class="tech-badge">🟡 VB6 / .NET / COBIS (origen)</span>
+          <span class="tech-badge">☕ Java 21 LTS</span>
+          <span class="tech-badge">🐘 Gradle 8</span>
+          <span class="tech-badge">🍃 Spring Boot 4.1.0</span>
+          <span class="tech-badge">🧠 GitHub Copilot</span>
         </div>
       </div>
 
@@ -69,17 +70,19 @@
         </div>
 
         <div class="problems-grid">
-          <div *ngFor="let problem of context.problems" class="problem-card" [ngClass]="problem.color">
+          <div *ngFor="let sys of context.legacySystems" class="problem-card">
             <div class="problem-header">
-              <span class="problem-icon">{{ problem.icon }}</span>
-              <h3>{{ problem.title }}</h3>
+              <span class="problem-icon">{{ sys.icon }}</span>
+              <h3>{{ sys.name }}</h3>
             </div>
-            <p>{{ problem.description }}</p>
+            <ul>
+              <li *ngFor="let char of sys.characteristics">{{ char }}</li>
+            </ul>
           </div>
         </div>
 
         <div class="warning-box">
-          <strong>⚠️ Desafío:</strong> Migrar sin perder funcionalidad ni introducir bugs en un sistema bancario crítico.
+          <strong>⚠️ Desafío:</strong> Migrar sin perder funcionalidad ni introducir bugs — VB6, .NET y COBIS en un solo proyecto Java 21 + Gradle.
         </div>
       </div>
 

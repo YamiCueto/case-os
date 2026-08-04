@@ -1,7 +1,7 @@
 <div class="presentation-container">
   <!-- Back to Study Plan Button -->
   <div class="back-to-menu">
-    <a routerLink="/study-plan" class="back-btn">
+    <a routerLink="/plan-dev-detallado" class="back-btn">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
       </svg>
@@ -11,7 +11,7 @@
 
   <!-- Navigation Controls -->
   <div class="controls">
-    <button (click)="prevSlide()" [disabled]="currentSlide === 0" class="control-btn">
+    <button (click)="previousSlide()" [disabled]="currentSlide === 0" class="control-btn">
       ← Anterior
     </button>
     <span class="slide-counter">{{ currentSlide + 1 }} / {{ slides.length }}</span>
@@ -26,15 +26,15 @@
 
       <!-- Slide 1: Title -->
       <div *ngIf="slide.type === 'title'" class="slide-title">
-        <div class="workshop-badge">⚡ CLASE 10 DEV</div>
-        <div class="title-icon">🐍</div>
-        <h1>Microservicio RAG con Python 3.12, FastAPI & PgVector</h1>
-        <p class="subtitle">Desarrollo de APIs REST para búsqueda semántica, embeddings y arquitectura RAG Enterprise</p>
+        <div class="workshop-badge">🧠 CLASE 10 DEV</div>
+        <div class="title-icon">{{ titleSlide.icon }}</div>
+        <h1>{{ titleSlide.title }}</h1>
+        <p class="subtitle">{{ titleSlide.subtitle }}</p>
         <div class="info-grid">
           <div class="info-item">
             <span class="info-icon">🎯</span>
             <span class="info-label">Objetivo</span>
-            <span class="info-value">Microservicio RAG Vectorial</span>
+            <span class="info-value">RAG sobre documentación legacy en Java</span>
           </div>
           <div class="info-item">
             <span class="info-icon">⏱️</span>
@@ -44,14 +44,21 @@
           <div class="info-item">
             <span class="info-icon">📊</span>
             <span class="info-label">Nivel</span>
-            <span class="info-value">Intermedio</span>
+            <span class="info-value">Avanzado</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">🎁</span>
+            <span class="info-label">Entregable</span>
+            <span class="info-value">Endpoint /api/legacy/consultar funcional</span>
           </div>
         </div>
         <div class="tech-stack-preview">
-          <span class="tech-badge">🐍 Python 3.12</span>
-          <span class="tech-badge">⚡ FastAPI</span>
-          <span class="tech-badge">🐘 PgVector / ChromaDB</span>
-          <span class="tech-badge">🧠 LangChain / LlamaIndex</span>
+          <span class="tech-badge">☕ Java 21 LTS</span>
+          <span class="tech-badge">🐘 Gradle 8</span>
+          <span class="tech-badge">🍃 Spring Boot 4.1.0</span>
+          <span class="tech-badge">🧠 Spring AI 1.0</span>
+          <span class="tech-badge">📦 Embeddings Locales</span>
+          <span class="tech-badge">🔍 VectorStore</span>
         </div>
       </div>
 
@@ -60,278 +67,213 @@
         <h2>{{ context.title }}</h2>
 
         <div class="scenario-box">
-          <span class="scenario-icon">{{ context.scenario.icon }}</span>
+          <h3>
+            <span>{{ context.scenario.icon }}</span>
+            Escenario
+          </h3>
           <p>{{ context.scenario.text }}</p>
         </div>
 
-        <div class="reasons-grid">
-          <div
-            class="reason-card"
-            *ngFor="let reason of context.reasons"
-            [attr.data-color]="reason.color">
-            <div class="reason-icon">{{ reason.icon }}</div>
-            <h3>{{ reason.title }}</h3>
-            <p>{{ reason.description }}</p>
+        <div class="use-cases-grid">
+          <div *ngFor="let uc of context.useCases" class="use-case-card">
+            <div class="use-case-icon">{{ uc.icon }}</div>
+            <h4>{{ uc.title }}</h4>
+            <p>{{ uc.description }}</p>
           </div>
         </div>
       </div>
 
-      <!-- Slide 3: Setup -->
-      <div *ngIf="slide.type === 'setup'" class="slide-content">
-        <h2>{{ setup.title }}</h2>
+      <!-- Slide 3: RAG Architecture -->
+      <div *ngIf="slide.type === 'rag-architecture'" class="slide-content">
+        <h2>{{ ragArchitecture.title }}</h2>
 
-        <div class="setup-section">
-          <h3>{{ setup.installation.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
+        <div class="explanation-box">
+          <p>{{ ragArchitecture.explanation }}</p>
+        </div>
+
+        <div class="rag-flow">
+          <h4>Flujo RAG Paso a Paso</h4>
+          <div class="flow-steps">
+            <div *ngFor="let step of ragArchitecture.flow; let last = last" class="rag-step">
+              <div class="rag-step-inner">
+                <span class="rag-step-icon">{{ step.icon }}</span>
+                <span class="rag-step-number">{{ step.step }}</span>
+                <span class="rag-step-label">{{ step.label }}</span>
+                <small class="rag-step-detail">{{ step.detail }}</small>
               </div>
-              <span class="file-name">terminal</span>
+              <span *ngIf="!last" class="flow-arrow">→</span>
             </div>
-            <pre><code>{{ setup.installation.code }}</code></pre>
           </div>
         </div>
 
-        <div class="setup-section">
-          <h3>{{ setup.structure.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">project structure</span>
-            </div>
-            <pre><code>{{ setup.structure.code }}</code></pre>
-          </div>
-        </div>
-
-        <div class="setup-section">
-          <h3>{{ setup.runCommand.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">run server</span>
-            </div>
-            <pre><code>{{ setup.runCommand.code }}</code></pre>
+        <div class="components-grid">
+          <div *ngFor="let comp of ragArchitecture.components" class="component-card">
+            <h4>
+              <span class="material-icons">extension</span>
+              {{ comp.name }}
+            </h4>
+            <p class="component-purpose">{{ comp.role }}</p>
+            <code class="spring-class">{{ comp.springAiClass }}</code>
           </div>
         </div>
       </div>
 
-      <!-- Slide 4: Pydantic Models -->
-      <div *ngIf="slide.type === 'pydantic-models'" class="slide-content">
-        <h2>{{ pydanticModels.title }}</h2>
-        <p class="description">{{ pydanticModels.description }}</p>
+      <!-- Slide 4: Spring AI Setup -->
+      <div *ngIf="slide.type === 'spring-ai-setup'" class="slide-content">
+        <h2>{{ springAiSetup.title }}</h2>
 
-        <div class="code-section">
-          <h3>{{ pydanticModels.input.titulo }}</h3>
+        <div class="code-split">
           <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">app/schemas/solicitud.py</span>
-            </div>
-            <pre><code>{{ pydanticModels.input.code }}</code></pre>
+            <h4>📦 build.gradle.kts</h4>
+            <pre><code>{{ springAiSetup.gradleSnippet }}</code></pre>
           </div>
-        </div>
-
-        <div class="code-section">
-          <h3>{{ pydanticModels.output.titulo }}</h3>
           <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">app/schemas/scoring.py</span>
-            </div>
-            <pre><code>{{ pydanticModels.output.code }}</code></pre>
+            <h4>⚙️ application.yml</h4>
+            <pre><code>{{ springAiSetup.applicationYml }}</code></pre>
           </div>
         </div>
       </div>
 
-      <!-- Slide 5: Service Layer -->
-      <div *ngIf="slide.type === 'service-layer'" class="slide-content">
-        <h2>{{ serviceLayer.title }}</h2>
-        <p class="description">{{ serviceLayer.description }}</p>
+      <!-- Slide 5: Indexing Service -->
+      <div *ngIf="slide.type === 'indexing-service'" class="slide-content">
+        <h2>{{ indexingService.title }}</h2>
 
-        <div class="code-section">
-          <h3>{{ serviceLayer.algorithm.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">app/services/scoring_service.py</span>
-            </div>
-            <pre><code>{{ serviceLayer.algorithm.code }}</code></pre>
-          </div>
+        <div class="description-box">
+          <p>{{ indexingService.description }}</p>
         </div>
 
-        <div class="code-section">
-          <h3>{{ serviceLayer.helpers.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">scoring_service.py (continued)</span>
-            </div>
-            <pre><code>{{ serviceLayer.helpers.code }}</code></pre>
-          </div>
+        <div class="example-box">
+          <h4>LegacyDocIndexingService.java</h4>
+          <pre><code>{{ indexingService.javaCode }}</code></pre>
         </div>
       </div>
 
-      <!-- Slide 6: API Endpoints -->
-      <div *ngIf="slide.type === 'api-endpoints'" class="slide-content">
-        <h2>{{ apiEndpoints.title }}</h2>
-        <p class="description">{{ apiEndpoints.description }}</p>
+      <!-- Slide 6: Query Service -->
+      <div *ngIf="slide.type === 'query-service'" class="slide-content">
+        <h2>{{ queryService.title }}</h2>
 
-        <div class="code-section">
-          <h3>{{ apiEndpoints.mainFile.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">app/main.py</span>
-            </div>
-            <pre><code>{{ apiEndpoints.mainFile.code }}</code></pre>
-          </div>
-        </div>
-
-        <div class="code-section">
-          <h3>{{ apiEndpoints.router.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">app/routers/scoring.py</span>
-            </div>
-            <pre><code>{{ apiEndpoints.router.code }}</code></pre>
-          </div>
+        <div class="example-box">
+          <h4>LegacyKnowledgeService.java + ConsultaResponse record</h4>
+          <pre><code>{{ queryService.javaCode }}</code></pre>
         </div>
       </div>
 
-      <!-- Slide 7: Testing -->
-      <div *ngIf="slide.type === 'testing'" class="slide-content">
-        <h2>{{ testing.title }}</h2>
-        <p class="description">{{ testing.description }}</p>
+      <!-- Slide 7: Challenge -->
+      <div *ngIf="slide.type === 'challenge'" class="slide-content">
+        <h2>
+          <span class="material-icons">emoji_events</span>
+          {{ challenge.title }}
+        </h2>
 
-        <div class="code-section">
-          <h3>{{ testing.unitTests.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">tests/test_scoring_service.py</span>
-            </div>
-            <pre><code>{{ testing.unitTests.code }}</code></pre>
-          </div>
+        <div class="challenge-description">
+          <p>{{ challenge.description }}</p>
         </div>
 
-        <div class="code-section">
-          <h3>{{ testing.integrationTests.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">tests/test_api.py</span>
-            </div>
-            <pre><code>{{ testing.integrationTests.code }}</code></pre>
-          </div>
+        <div class="requirements-section">
+          <h3>Requisitos Técnicos</h3>
+          <ul class="requirements-list">
+            <li *ngFor="let req of challenge.requirements">
+              <span class="material-icons">check_circle</span>
+              {{ req }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="prompt-card">
+          <h4>
+            <span class="material-icons">psychology</span>
+            Prompt para Copilot
+          </h4>
+          <ul class="prompt-list">
+            <li *ngFor="let p of challenge.promptCopilot">{{ p }}</li>
+          </ul>
+        </div>
+
+        <div class="time-estimate">
+          <span class="material-icons">schedule</span>
+          Tiempo estimado: {{ challenge.timeEstimate }}
         </div>
       </div>
 
       <!-- Slide 8: Best Practices -->
       <div *ngIf="slide.type === 'best-practices'" class="slide-content">
-        <h2>{{ bestPractices.title }}</h2>
+        <h2>Mejores Prácticas — Spring AI RAG</h2>
 
         <div class="practices-grid">
-          <div class="practice-category" *ngFor="let practice of bestPractices.practices">
-            <div class="category-header">
-              <span class="category-icon">{{ practice.icon }}</span>
-              <h3>{{ practice.categoria }}</h3>
-            </div>
-            <div class="practice-content">
-              <div class="good-practices">
-                <h4>✅ Hacer</h4>
-                <ul>
-                  <li *ngFor="let item of practice.good">{{ item }}</li>
-                </ul>
-              </div>
-              <div class="bad-practices">
-                <h4>❌ Evitar</h4>
-                <ul>
-                  <li *ngFor="let item of practice.bad">{{ item }}</li>
-                </ul>
-              </div>
-            </div>
+          <div *ngFor="let category of bestPractices" class="practice-category">
+            <h3>
+              <span class="material-icons">star</span>
+              {{ category.category }}
+            </h3>
+            <ul class="practices-list">
+              <li *ngFor="let practice of category.practices">
+                <span class="material-icons">arrow_right</span>
+                {{ practice }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
       <!-- Slide 9: Summary -->
       <div *ngIf="slide.type === 'summary'" class="slide-content">
-        <h2>{{ summary.title }}</h2>
+        <h2>Resumen — Spring AI RAG en Java</h2>
 
         <div class="summary-grid">
-          <div class="summary-card achievements">
-            <h3>✅ Lo que Aprendimos</h3>
+          <div class="summary-card">
+            <span class="material-icons">inventory</span>
+            <h3>Stack Utilizado</h3>
             <ul>
-              <li *ngFor="let achievement of summary.achievements">{{ achievement }}</li>
+              <li>Java 21 + Spring Boot 4.1.0 + Gradle 8</li>
+              <li>Spring AI 1.0 (RAG nativo)</li>
+              <li>TransformersEmbeddingModel (local, sin API key)</li>
+              <li>SimpleVectorStore → PgVectorStore en prod</li>
+              <li>PagePdfDocumentReader + TokenTextSplitter</li>
             </ul>
           </div>
 
-          <div class="summary-card features">
-            <h3>🌟 Características Clave</h3>
-            <div class="feature-list">
-              <div class="feature-item" *ngFor="let feature of summary.features">
-                <span class="feature-icon">{{ feature.icon }}</span>
-                <div>
-                  <h4>{{ feature.title }}</h4>
-                  <p>{{ feature.description }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="summary-card next-steps">
-            <h3>🚀 Próximos Pasos</h3>
+          <div class="summary-card">
+            <span class="material-icons">psychology</span>
+            <h3>Caso de Uso Clave</h3>
             <ul>
-              <li *ngFor="let step of summary.nextSteps">{{ step }}</li>
+              <li>Indexar manuales COBIS / especificaciones VB6 / docs .NET</li>
+              <li>Consulta en lenguaje natural: "¿Qué hace sp_apertura_cuenta?"</li>
+              <li>Respuesta fundamentada en documentos reales</li>
+              <li>Cita la fuente (sistema + módulo)</li>
+              <li>Evita alucinaciones del LLM</li>
             </ul>
           </div>
+
+          <div class="summary-card">
+            <span class="material-icons">build</span>
+            <h3>Prompting para RAG con Copilot</h3>
+            <ul>
+              <li>Especificar Spring AI 1.0 — no LangChain, no Python</li>
+              <li>Pedir embeddings locales (Transformers) — sin costo</li>
+              <li>Incluir metadatos: sistema, módulo, fuente</li>
+              <li>Pedir Java records para DTOs de respuesta</li>
+              <li>Generar test de integración: indexar → consultar → verificar</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="completion-badge">
+          <span class="material-icons">check_circle</span>
+          <span>Clase 10 completada — RAG con Spring AI en Java</span>
         </div>
       </div>
 
     </div>
   </div>
+
+  <!-- Slide Indicators -->
+  <div class="slide-indicators">
+    <span
+      *ngFor="let slide of slides; let i = index"
+      class="indicator"
+      [class.active]="currentSlide === i"
+      (click)="goToSlide(i)">
+    </span>
+  </div>
+
 </div>

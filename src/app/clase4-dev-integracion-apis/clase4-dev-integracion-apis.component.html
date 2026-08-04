@@ -22,11 +22,13 @@
 
   <!-- Slide Container -->
   <div class="slide-wrapper">
-    <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentSlide">      <!-- Slide 1: Title -->
+    <div class="slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentSlide">
+
+      <!-- Slide 1: Title -->
       <div *ngIf="slide.type === 'title'" class="slide-title">
         <div class="workshop-badge">🛠️ TALLER PRÁCTICO DEV</div>
-        <h1>APIs REST Resilientes & Creación de Servidores MCP</h1>
-        <h2 class="subtitle">Expón endpoints OpenAPI y herramientas locales a Agentes de IA mediante Model Context Protocol</h2>
+        <h1>Integración de APIs: Migración de Clientes Legacy</h1>
+        <h2 class="subtitle">De SOAP/XML en VB6, .NET y COBIS a clientes REST declarativos con @HttpExchange en Spring Boot 4.1.0</h2>
         <div class="info-grid">
           <div class="info-item">
             <span class="icon">⏱️</span>
@@ -41,7 +43,7 @@
           <div class="info-item">
             <span class="icon">🎁</span>
             <span class="label">Entregable</span>
-            <span class="value">Servidor MCP funcional</span>
+            <span class="value">Cliente @HttpExchange funcional + tests WireMock</span>
           </div>
           <div class="info-item">
             <span class="icon">💪</span>
@@ -50,11 +52,12 @@
           </div>
         </div>
         <div class="tech-stack-preview">
-          <span class="tech-badge">🔌 MCP SDK</span>
-          <span class="tech-badge">🍃 Spring Boot 3.4+</span>
-          <span class="tech-badge">🌐 WebClient</span>
-          <span class="tech-badge">🛡️ Resilience4j</span>
-          <span class="tech-badge">🗄️ Redis</span>
+          <span class="tech-badge">☕ Java 21 LTS</span>
+          <span class="tech-badge">🐘 Gradle 8</span>
+          <span class="tech-badge">🍃 Spring Boot 4.1.0</span>
+          <span class="tech-badge">🔗 @HttpExchange</span>
+          <span class="tech-badge">⚡ Virtual Threads</span>
+          <span class="tech-badge">🧪 WireMock</span>
         </div>
       </div>
 
@@ -70,8 +73,18 @@
           <p>{{ context.scenario }}</p>
         </div>
 
+        <div class="legacy-sources-section">
+          <h3>Sistemas Legacy a Migrar</h3>
+          <div class="legacy-grid">
+            <div *ngFor="let src of context.legacySources" class="legacy-card">
+              <span class="legacy-badge">{{ src.label }}</span>
+              <p>{{ src.detail }}</p>
+            </div>
+          </div>
+        </div>
+
         <div class="requirements-section">
-          <h3>Requisitos de la API Externa</h3>
+          <h3>APIs Externas a Integrar</h3>
           <ul class="requirements-list">
             <li *ngFor="let req of context.requirements">
               <span class="material-icons">check_circle</span>
@@ -83,7 +96,7 @@
         <div class="challenges-grid">
           <div *ngFor="let challenge of context.challenges" class="challenge-card">
             <div class="challenge-header">
-              <span class="material-icons">{{ challenge.icon }}</span>
+              <span class="challenge-icon">{{ challenge.icon }}</span>
               <h4>{{ challenge.title }}</h4>
             </div>
             <p>{{ challenge.description }}</p>
@@ -91,44 +104,49 @@
         </div>
       </div>
 
-      <!-- Slide 3: API Design -->
-      <div *ngIf="slide.type === 'api-design'" class="slide-content">
-        <h2>Diseño del Cliente REST</h2>
+      <!-- Slide 3: @HttpExchange Design -->
+      <div *ngIf="slide.type === 'http-exchange-design'" class="slide-content">
+        <h2>{{ httpExchangeDesign.title }}</h2>
+
+        <div class="gradle-box">
+          <h4>📦 build.gradle.kts — Dependencias</h4>
+          <pre><code>{{ httpExchangeDesign.gradleSnippet }}</code></pre>
+        </div>
 
         <div class="architecture-diagram">
           <div class="arch-layer">
             <span class="material-icons">code</span>
             <strong>Controller</strong>
-            <small>Endpoint REST</small>
+            <small>Endpoint REST interno</small>
           </div>
           <div class="arch-arrow">↓</div>
           <div class="arch-layer">
             <span class="material-icons">settings</span>
             <strong>Service</strong>
-            <small>Lógica de negocio</small>
+            <small>@Retryable + @CircuitBreaker</small>
           </div>
           <div class="arch-arrow">↓</div>
           <div class="arch-layer highlight">
             <span class="material-icons">cloud</span>
-            <strong>WebClient + Circuit Breaker</strong>
-            <small>Llamada resiliente</small>
+            <strong>@HttpExchange Interface</strong>
+            <small>Proxy generado por Spring — sin implementación manual</small>
           </div>
           <div class="arch-arrow">↓</div>
           <div class="arch-layer">
-            <span class="material-icons">storage</span>
-            <strong>Cache (Redis)</strong>
-            <small>Reducir latencia</small>
+            <span class="material-icons">http</span>
+            <strong>RestClient Bean</strong>
+            <small>OAuth2 + Timeout + Base URL</small>
           </div>
           <div class="arch-arrow">↓</div>
           <div class="arch-layer external">
             <span class="material-icons">api</span>
-            <strong>Bureau de Crédito API</strong>
-            <small>Servicio externo</small>
+            <strong>API Externa (Bureau / DIAN / DANE)</strong>
+            <small>REST/JSON — reemplaza SOAP/XML legacy</small>
           </div>
         </div>
 
         <div class="components-grid">
-          <div *ngFor="let component of apiDesign.components" class="component-card">
+          <div *ngFor="let component of httpExchangeDesign.components" class="component-card">
             <h4>
               <span class="material-icons">extension</span>
               {{ component.name }}
@@ -141,9 +159,9 @@
         </div>
       </div>
 
-      <!-- Slide 4: DTO Mapping -->
+      <!-- Slide 4: DTO Mapping (Java Records) -->
       <div *ngIf="slide.type === 'dto-mapping'" class="slide-content">
-        <h2>Mapeo de DTOs</h2>
+        <h2>DTOs como Java Records — Reemplazando Type/Struct de VB6</h2>
 
         <div class="dto-section">
           <div class="dto-card request">
@@ -174,7 +192,7 @@
 
           <div class="mapping-arrow">
             <span class="material-icons">sync_alt</span>
-            <span>API Call</span>
+            <span>@PostExchange</span>
           </div>
 
           <div class="dto-card response">
@@ -205,28 +223,19 @@
         </div>
 
         <div class="example-box">
-          <h4>Ejemplo de Flujo</h4>
-          <pre><code>// Request
-BureauRequestDTO request = new BureauRequestDTO();
-request.setDocumento("12345678");
-request.setTipoDocumento(TipoDocumentoEnum.CC);
-request.setTipoConsulta("COMPLETA");
-
-// Response
-HistorialCrediticioDTO historial = bureauService.consultarHistorial(request);
-System.out.println("Score: " + historial.getScore()); // 720
-System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pre>
+          <h4>Java 21 Records — Antes y Después</h4>
+          <pre><code>{{ dtoMapping.javaRecordExample }}</code></pre>
         </div>
       </div>
 
       <!-- Slide 5: Error Handling -->
       <div *ngIf="slide.type === 'error-handling'" class="slide-content">
-        <h2>Estrategias de Manejo de Errores</h2>
+        <h2>Resiliencia Declarativa — Reemplazando On Error GoTo de VB6</h2>
 
         <div class="strategies-grid">
           <div *ngFor="let strategy of errorHandling.strategies" class="strategy-card">
             <div class="strategy-header">
-              <span class="material-icons">error_outline</span>
+              <span class="material-icons">shield</span>
               <h4>{{ strategy.name }}</h4>
             </div>
             <p class="strategy-desc">{{ strategy.description }}</p>
@@ -246,7 +255,7 @@ System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pr
         </div>
 
         <div class="flow-diagram">
-          <h4>Flujo de Resilencia</h4>
+          <h4>Flujo de Resiliencia</h4>
           <div class="flow-steps">
             <div class="flow-step">
               <span class="step-number">1</span>
@@ -260,17 +269,17 @@ System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pr
             <span class="flow-arrow">→</span>
             <div class="flow-step">
               <span class="step-number">3</span>
-              <span class="step-label">Cache Check</span>
+              <span class="step-label">@HttpExchange Call</span>
             </div>
             <span class="flow-arrow">→</span>
             <div class="flow-step">
               <span class="step-number">4</span>
-              <span class="step-label">API Call + Retry</span>
+              <span class="step-label">Retry si falla</span>
             </div>
             <span class="flow-arrow">→</span>
             <div class="flow-step">
               <span class="step-number">5</span>
-              <span class="step-label">Fallback si falla</span>
+              <span class="step-label">Fallback si abre</span>
             </div>
           </div>
         </div>
@@ -287,6 +296,14 @@ System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pr
           <p>{{ challenge.description }}</p>
         </div>
 
+        <div class="legacy-code-section">
+          <h4>
+            <span class="material-icons">history</span>
+            Código VB6 Original a Migrar
+          </h4>
+          <pre class="legacy-code"><code>{{ challenge.legacyVb6Code }}</code></pre>
+        </div>
+
         <div class="requirements-section">
           <h3>Requisitos Técnicos</h3>
           <ul class="requirements-list">
@@ -300,7 +317,7 @@ System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pr
         <div class="prompt-card">
           <h4>
             <span class="material-icons">psychology</span>
-            Estructura del Prompt IA
+            Estructura del Prompt para Copilot
           </h4>
 
           <div class="prompt-section">
@@ -374,7 +391,7 @@ System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pr
           <span class="material-icons">warning</span>
           <div>
             <strong>Importante:</strong>
-            <p>La integración con APIs externas es crítica. Un fallo puede afectar toda la operación. Siempre implementa circuit breakers, timeouts, cache y monitoreo robusto.</p>
+            <p>La integración con APIs externas heredadas (COBIS, bureaus) es crítica. Un fallo puede detener operaciones crediticias. Siempre implementa @CircuitBreaker, timeout configurado en build.gradle, fallback con respuesta degradada y monitoreo con Actuator.</p>
           </div>
         </div>
       </div>
@@ -388,35 +405,35 @@ System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pr
             <span class="material-icons">inventory</span>
             <h3>Stack Tecnológico</h3>
             <ul>
-              <li>Spring Boot WebClient</li>
-              <li>Resilience4j (Circuit Breaker, Retry)</li>
-              <li>Redis/Caffeine Cache</li>
-              <li>WireMock (Testing)</li>
-              <li>Micrometer (Métricas)</li>
+              <li>Java 21 LTS + Virtual Threads</li>
+              <li>Spring Boot 4.1.0 + Gradle 8</li>
+              <li>@HttpExchange (cliente declarativo)</li>
+              <li>@Retryable + @CircuitBreaker</li>
+              <li>WireMock (Testing de integraciones)</li>
             </ul>
           </div>
 
           <div class="summary-card">
-            <span class="material-icons">build</span>
-            <h3>Componentes Clave</h3>
+            <span class="material-icons">compare_arrows</span>
+            <h3>Legado → Moderno</h3>
             <ul>
-              <li>WebClient configurado con timeout y retry</li>
-              <li>Circuit Breaker para resilencia</li>
-              <li>Cache en dos niveles (L1 + L2)</li>
-              <li>DTOs con validaciones completas</li>
-              <li>Tests con WireMock</li>
+              <li>XMLHTTP VB6 → @HttpExchange interface</li>
+              <li>ServiceReference .NET → proxy Spring</li>
+              <li>COBIS SOAP/XML → REST/JSON declarativo</li>
+              <li>Type/Struct VB6 → Java Record inmutable</li>
+              <li>On Error GoTo → @Retryable + @CircuitBreaker</li>
             </ul>
           </div>
 
           <div class="summary-card">
             <span class="material-icons">psychology</span>
-            <h3>Generación con IA</h3>
+            <h3>Prompting con Copilot</h3>
             <ul>
-              <li>Cliente REST completo con configuración</li>
-              <li>Manejo de excepciones personalizado</li>
-              <li>Tests de resilencia (timeouts, fallos)</li>
-              <li>Métricas y health checks</li>
-              <li>application.yml con todas las configs</li>
+              <li>Pegar código VB6/COBIS original en contexto</li>
+              <li>Especificar Spring Boot 4.1.0 + Gradle explícitamente</li>
+              <li>Pedir Java Records (no clases con setters)</li>
+              <li>Solicitar tests WireMock para cada caso</li>
+              <li>Pedir comparativa VB6 vs Java en comentarios</li>
             </ul>
           </div>
         </div>
@@ -426,22 +443,22 @@ System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pr
           <div class="next-step-item">
             <span class="step-number">1</span>
             <div>
-              <strong>Implementa el cliente Bureau</strong>
-              <p>Usa el prompt estructurado y genera código completo</p>
+              <strong>Implementa BureauClient con @HttpExchange</strong>
+              <p>Usa el prompt estructurado con Copilot — pega el VB6 original como contexto</p>
             </div>
           </div>
           <div class="next-step-item">
             <span class="step-number">2</span>
             <div>
-              <strong>Prueba con WireMock</strong>
-              <p>Simula API externa y valida resilencia</p>
+              <strong>Valida con WireMock</strong>
+              <p>Simula: respuesta OK, timeout, 500, circuit breaker abierto</p>
             </div>
           </div>
           <div class="next-step-item">
             <span class="step-number">3</span>
             <div>
-              <strong>Monitorea métricas</strong>
-              <p>Revisa latencias, tasas de error, circuit breaker status</p>
+              <strong>Habilita Virtual Threads</strong>
+              <p>Agrega spring.threads.virtual.enabled=true — mide diferencia de concurrencia</p>
             </div>
           </div>
         </div>
@@ -464,4 +481,5 @@ System.out.println("Riesgo: " + historial.getEstadoRiesgo()); // BAJO</code></pr
       (click)="goToSlide(i)">
     </span>
   </div>
+
 </div>

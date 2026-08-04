@@ -1,7 +1,7 @@
 <div class="presentation-container">
   <!-- Back to Study Plan Button -->
   <div class="back-to-menu">
-    <a routerLink="/study-plan" class="back-btn">
+    <a routerLink="/plan-dev-detallado" class="back-btn">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
       </svg>
@@ -11,7 +11,7 @@
 
   <!-- Navigation Controls -->
   <div class="controls">
-    <button (click)="prevSlide()" [disabled]="currentSlide === 0" class="control-btn">
+    <button (click)="previousSlide()" [disabled]="currentSlide === 0" class="control-btn">
       ← Anterior
     </button>
     <span class="slide-counter">{{ currentSlide + 1 }} / {{ slides.length }}</span>
@@ -26,32 +26,38 @@
 
       <!-- Slide 1: Title -->
       <div *ngIf="slide.type === 'title'" class="slide-title">
-        <div class="workshop-badge">☁️ CLASE 11 DEV</div>
-        <div class="title-icon">☁️</div>
-        <h1>AWS Lambda Serverless, Amazon Bedrock & AI Guardrails</h1>
-        <p class="subtitle">Orquestación de funciones Lambda, integración con Amazon Bedrock y políticas de seguridad en producción</p>
+        <div class="workshop-badge">🖥️ CLASE 11 DEV</div>
+        <div class="title-icon">{{ titleSlide.icon }}</div>
+        <h1>{{ titleSlide.title }}</h1>
+        <p class="subtitle">{{ titleSlide.subtitle }}</p>
         <div class="info-grid">
           <div class="info-item">
             <span class="info-icon">🎯</span>
             <span class="info-label">Objetivo</span>
-            <span class="info-value">Serverless + Bedrock + Guardrails</span>
+            <span class="info-value">Migrar UI legacy a Angular 22 Signals</span>
           </div>
           <div class="info-item">
             <span class="info-icon">⏱️</span>
             <span class="info-label">Duración</span>
-            <span class="info-value">90 minutos</span>
+            <span class="info-value">60 minutos</span>
           </div>
           <div class="info-item">
             <span class="info-icon">📊</span>
             <span class="info-label">Nivel</span>
-            <span class="info-value">Intermedio-Avanzado</span>
+            <span class="info-value">Intermedio</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">🎁</span>
+            <span class="info-label">Entregable</span>
+            <span class="info-value">Componente standalone con Signals</span>
           </div>
         </div>
         <div class="tech-stack-preview">
-          <span class="tech-badge">☁️ AWS Lambda</span>
-          <span class="tech-badge">🤖 Amazon Bedrock</span>
-          <span class="tech-badge">🛡️ AI Guardrails</span>
-          <span class="tech-badge">📦 DynamoDB</span>
+          <span class="tech-badge">🔺 Angular 22</span>
+          <span class="tech-badge">⚡ Signals</span>
+          <span class="tech-badge">📝 Reactive Forms</span>
+          <span class="tech-badge">🧩 Standalone Components</span>
+          <span class="tech-badge">🔗 HttpClient Tipado</span>
         </div>
       </div>
 
@@ -60,261 +66,229 @@
         <h2>{{ context.title }}</h2>
 
         <div class="scenario-box">
-          <span class="scenario-icon">{{ context.scenario.icon }}</span>
+          <h3>
+            <span>{{ context.scenario.icon }}</span>
+            Escenario
+          </h3>
           <p>{{ context.scenario.text }}</p>
         </div>
 
-        <div class="benefits-grid">
-          <div
-            class="benefit-card"
-            *ngFor="let benefit of context.benefits"
-            [attr.data-color]="benefit.color">
-            <div class="benefit-icon">{{ benefit.icon }}</div>
-            <h3>{{ benefit.title }}</h3>
-            <p>{{ benefit.description }}</p>
+        <div class="legacy-ui-grid">
+          <div *ngFor="let sys of context.legacyUiProblems" class="legacy-ui-card">
+            <div class="legacy-ui-header">
+              <span class="legacy-icon">{{ sys.icon }}</span>
+              <h4>{{ sys.system }}</h4>
+            </div>
+            <ul>
+              <li *ngFor="let p of sys.problems">{{ p }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="advantages-grid">
+          <h3>¿Por qué Angular 22 Signals?</h3>
+          <div class="advantages-inner">
+            <div *ngFor="let adv of context.angularAdvantages" class="advantage-card">
+              <span class="adv-icon">{{ adv.icon }}</span>
+              <h4>{{ adv.title }}</h4>
+              <p>{{ adv.description }}</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Slide 3: Setup -->
-      <div *ngIf="slide.type === 'setup'" class="slide-content">
-        <h2>{{ setup.title }}</h2>
+      <!-- Slide 3: Signals Architecture -->
+      <div *ngIf="slide.type === 'signals-architecture'" class="slide-content">
+        <h2>{{ signalsArchitecture.title }}</h2>
 
-        <div class="setup-section">
-          <h3>{{ setup.installation.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">terminal</span>
+        <div *ngFor="let comp of signalsArchitecture.comparisons" class="comparison-block">
+          <div class="comparison-split">
+            <div class="legacy-code-panel">
+              <h4 class="panel-label panel-legacy">{{ comp.legacyLabel }}</h4>
+              <pre class="legacy-code"><code>{{ comp.legacy }}</code></pre>
             </div>
-            <pre><code>{{ setup.installation.code }}</code></pre>
-          </div>
-        </div>
-
-        <div class="setup-section">
-          <h3>{{ setup.projectInit.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">sam init</span>
+            <div class="modern-code-panel">
+              <h4 class="panel-label panel-modern">{{ comp.modernLabel }}</h4>
+              <pre class="modern-code"><code>{{ comp.modern }}</code></pre>
             </div>
-            <pre><code>{{ setup.projectInit.code }}</code></pre>
-          </div>
-        </div>
-
-        <div class="setup-section">
-          <h3>{{ setup.dependencies.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">package.json / tsconfig.json</span>
-            </div>
-            <pre><code>{{ setup.dependencies.code }}</code></pre>
           </div>
         </div>
       </div>
 
-      <!-- Slide 4: Lambda Handler -->
-      <div *ngIf="slide.type === 'lambda-handler'" class="slide-content">
-        <h2>{{ lambdaHandler.title }}</h2>
-        <p class="description">{{ lambdaHandler.description }}</p>
+      <!-- Slide 4: Component Migration Process -->
+      <div *ngIf="slide.type === 'component-migration'" class="slide-content">
+        <h2>{{ componentMigration.title }}</h2>
 
-        <div class="code-section">
-          <h3>{{ lambdaHandler.handler.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">src/handlers/process-transaction.ts</span>
+        <div class="migration-steps">
+          <div *ngFor="let step of componentMigration.steps" class="migration-step-card">
+            <div class="step-header">
+              <span class="step-number">{{ step.number }}</span>
+              <h4>{{ step.title }}</h4>
             </div>
-            <pre><code>{{ lambdaHandler.handler.code }}</code></pre>
-          </div>
-        </div>
-
-        <div class="code-section">
-          <h3>{{ lambdaHandler.helpers.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">process-transaction.ts (helpers)</span>
+            <p class="step-description">{{ step.description }}</p>
+            <div class="prompt-mini">
+              <h5>
+                <span class="material-icons">psychology</span>
+                Prompt Copilot:
+              </h5>
+              <pre><code>{{ step.promptExample }}</code></pre>
             </div>
-            <pre><code>{{ lambdaHandler.helpers.code }}</code></pre>
           </div>
         </div>
       </div>
 
-      <!-- Slide 5: SAM Template -->
-      <div *ngIf="slide.type === 'sam-template'" class="slide-content">
-        <h2>{{ samTemplate.title }}</h2>
-        <p class="description">{{ samTemplate.description }}</p>
+      <!-- Slide 5: Reactive Forms -->
+      <div *ngIf="slide.type === 'reactive-forms'" class="slide-content">
+        <h2>{{ reactiveForms.title }}</h2>
 
-        <div class="code-section">
-          <h3>{{ samTemplate.template.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">template.yaml</span>
-            </div>
-            <pre><code>{{ samTemplate.template.code }}</code></pre>
-          </div>
+        <div class="equivalences-table">
+          <h4>Tabla de Equivalencias VB6 → Angular 22</h4>
+          <table class="dto-table">
+            <thead>
+              <tr>
+                <th>VB6 / .NET</th>
+                <th>Angular 22</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let eq of reactiveForms.equivalences">
+                <td><code>{{ eq.vb6 }}</code></td>
+                <td><code>{{ eq.angular }}</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-box">
+          <h4>Ejemplo completo — Equivalente al Form VB6 de Apertura de Cuenta</h4>
+          <pre><code>{{ reactiveForms.codeExample }}</code></pre>
         </div>
       </div>
 
-      <!-- Slide 6: Testing -->
-      <div *ngIf="slide.type === 'testing'" class="slide-content">
-        <h2>{{ testing.title }}</h2>
+      <!-- Slide 6: Challenge -->
+      <div *ngIf="slide.type === 'challenge'" class="slide-content">
+        <h2>
+          <span class="material-icons">emoji_events</span>
+          {{ challenge.title }}
+        </h2>
 
-        <div class="code-section">
-          <h3>{{ testing.unitTests.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">tests/unit/process-transaction.test.ts</span>
-            </div>
-            <pre><code>{{ testing.unitTests.code }}</code></pre>
-          </div>
+        <div class="challenge-description">
+          <p>{{ challenge.description }}</p>
         </div>
 
-        <div class="code-section">
-          <h3>{{ testing.localTesting.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">sam commands</span>
-            </div>
-            <pre><code>{{ testing.localTesting.code }}</code></pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 7: Deployment -->
-      <div *ngIf="slide.type === 'deployment'" class="slide-content">
-        <h2>{{ deployment.title }}</h2>
-
-        <div class="code-section">
-          <h3>{{ deployment.deploy.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">deployment</span>
-            </div>
-            <pre><code>{{ deployment.deploy.code }}</code></pre>
-          </div>
+        <div class="legacy-code-section">
+          <h4>
+            <span class="material-icons">history</span>
+            Código VB6 Original a Migrar
+          </h4>
+          <pre class="legacy-code"><code>{{ challenge.legacyVb6Form }}</code></pre>
         </div>
 
-        <div class="code-section">
-          <h3>{{ deployment.monitoring.titulo }}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-buttons">
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-                <span class="window-button"></span>
-              </div>
-              <span class="file-name">template.yaml (monitoring)</span>
-            </div>
-            <pre><code>{{ deployment.monitoring.code }}</code></pre>
-          </div>
+        <div class="requirements-section">
+          <h3>Requisitos Técnicos</h3>
+          <ul class="requirements-list">
+            <li *ngFor="let req of challenge.requirements">
+              <span class="material-icons">check_circle</span>
+              {{ req }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="prompt-card">
+          <h4>
+            <span class="material-icons">psychology</span>
+            Prompt Base para Copilot
+          </h4>
+          <ul class="prompt-list">
+            <li *ngFor="let p of challenge.promptBase">{{ p }}</li>
+          </ul>
+        </div>
+
+        <div class="time-estimate">
+          <span class="material-icons">schedule</span>
+          Tiempo estimado: {{ challenge.timeEstimate }}
         </div>
       </div>
 
-      <!-- Slide 8: Best Practices -->
+      <!-- Slide 7: Best Practices -->
       <div *ngIf="slide.type === 'best-practices'" class="slide-content">
-        <h2>{{ bestPractices.title }}</h2>
+        <h2>Mejores Prácticas — Angular 22 + Migración UI</h2>
 
         <div class="practices-grid">
-          <div class="practice-category" *ngFor="let practice of bestPractices.practices">
-            <div class="category-header">
-              <span class="category-icon">{{ practice.icon }}</span>
-              <h3>{{ practice.categoria }}</h3>
-            </div>
-            <div class="practice-content">
-              <div class="good-practices">
-                <h4>✅ Hacer</h4>
-                <ul>
-                  <li *ngFor="let item of practice.good">{{ item }}</li>
-                </ul>
-              </div>
-              <div class="bad-practices">
-                <h4>❌ Evitar</h4>
-                <ul>
-                  <li *ngFor="let item of practice.bad">{{ item }}</li>
-                </ul>
-              </div>
-            </div>
+          <div *ngFor="let category of bestPractices" class="practice-category">
+            <h3>
+              <span class="material-icons">star</span>
+              {{ category.category }}
+            </h3>
+            <ul class="practices-list">
+              <li *ngFor="let practice of category.practices">
+                <span class="material-icons">arrow_right</span>
+                {{ practice }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
-      <!-- Slide 9: Summary -->
+      <!-- Slide 8: Summary -->
       <div *ngIf="slide.type === 'summary'" class="slide-content">
-        <h2>{{ summary.title }}</h2>
+        <h2>Resumen — Migración UI Legacy a Angular 22</h2>
 
         <div class="summary-grid">
-          <div class="summary-card achievements">
-            <h3>✅ Lo que Aprendimos</h3>
+          <div class="summary-card">
+            <span class="material-icons">compare_arrows</span>
+            <h3>Legado → Moderno</h3>
             <ul>
-              <li *ngFor="let achievement of summary.achievements">{{ achievement }}</li>
+              <li>VB6 Form → Standalone Component</li>
+              <li>Eventos VB6 (Click, Change) → Reactive Forms</li>
+              <li>Variables globales Form → signal()</li>
+              <li>Binding manual (txtNombre.Text) → Two-way data binding</li>
+              <li>MsgBox / MessageBox → signal error + &#64;if en template</li>
             </ul>
           </div>
 
-          <div class="summary-card features">
-            <h3>🌟 Características Clave</h3>
-            <div class="feature-list">
-              <div class="feature-item" *ngFor="let feature of summary.features">
-                <span class="feature-icon">{{ feature.icon }}</span>
-                <div>
-                  <h4>{{ feature.title }}</h4>
-                  <p>{{ feature.description }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="summary-card next-steps">
-            <h3>🚀 Próximos Pasos</h3>
+          <div class="summary-card">
+            <span class="material-icons">inventory</span>
+            <h3>Stack Angular 22</h3>
             <ul>
-              <li *ngFor="let step of summary.nextSteps">{{ step }}</li>
+              <li>signal() / computed() / effect() — sin Zone.js</li>
+              <li>&#64;for / &#64;if — nueva sintaxis de control flow</li>
+              <li>ReactiveFormsModule + Validators</li>
+              <li>inject() — sin constructor DI verboso</li>
+              <li>HttpClient tipado con interfaces Java-compatible</li>
             </ul>
           </div>
+
+          <div class="summary-card">
+            <span class="material-icons">psychology</span>
+            <h3>Prompting con Copilot</h3>
+            <ul>
+              <li>Pegar código VB6/WinForms como contexto</li>
+              <li>Especificar "Angular 22, &#64;for y &#64;if — no *ngFor"</li>
+              <li>Pedir "signals para estado — no Subject ni BehaviorSubject"</li>
+              <li>Pedir "standalone — sin NgModule"</li>
+              <li>Generar .ts primero, template en segundo prompt</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="completion-badge">
+          <span class="material-icons">check_circle</span>
+          <span>Clase 11 completada — UI Legacy migrada a Angular 22 Signals</span>
         </div>
       </div>
 
     </div>
   </div>
+
+  <!-- Slide Indicators -->
+  <div class="slide-indicators">
+    <span
+      *ngFor="let slide of slides; let i = index"
+      class="indicator"
+      [class.active]="currentSlide === i"
+      (click)="goToSlide(i)">
+    </span>
+  </div>
+
 </div>

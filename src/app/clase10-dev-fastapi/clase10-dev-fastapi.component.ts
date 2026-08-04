@@ -15,875 +15,360 @@ export class Clase10DevFastapiComponent {
   slides = [
     { type: 'title' },
     { type: 'context' },
-    { type: 'setup' },
-    { type: 'pydantic-models' },
-    { type: 'service-layer' },
-    { type: 'api-endpoints' },
-    { type: 'testing' },
+    { type: 'rag-architecture' },
+    { type: 'spring-ai-setup' },
+    { type: 'indexing-service' },
+    { type: 'query-service' },
+    { type: 'challenge' },
     { type: 'best-practices' },
     { type: 'summary' }
   ];
 
-  // Title Slide
   titleSlide = {
-    icon: '⚡',
-    title: 'Microservicio Python con FastAPI',
-    subtitle: 'API REST de Alto Performance',
-    description: 'Aprende a crear APIs modernas con Python usando FastAPI, Pydantic y async/await para máximo rendimiento.'
+    icon: '🧠',
+    title: 'Spring AI: RAG sobre Documentación Legacy',
+    subtitle: 'Consulta Semántica de Manuales COBIS, VB6 y .NET con IA en Java',
+    description: 'Implementa un motor de búsqueda semántica en Java 21 + Spring Boot 4.1.0 que permite a los ingenieros consultar documentación técnica del sistema legacy con lenguaje natural, usando Spring AI y embeddings.'
   };
 
-  // Context
   context = {
-    title: 'Contexto: ¿Por qué FastAPI?',
+    title: '¿Por qué RAG para sistemas legacy?',
     scenario: {
-      icon: '🚀',
-      text: 'Necesitamos una API para procesamiento de scoring crediticio con cálculos intensivos y alta concurrencia. Python 3.13 + FastAPI 0.141.1 es la combinación más rápida del ecosistema.'
+      icon: '📚',
+      text: 'Los sistemas COBIS, VB6 y .NET tienen décadas de manuales técnicos, especificaciones funcionales y documentación de stored procedures que nadie lee porque es difícil de buscar. Con RAG (Retrieval-Augmented Generation) en Java, cualquier ingeniero puede preguntar en español y obtener respuestas basadas en esos documentos reales.'
     },
-    reasons: [
+    useCases: [
       {
-        icon: '⚡',
-        title: 'Performance',
-        description: 'FastAPI 0.141.1 es uno de los frameworks más rápidos de Python, comparable con Node.js y Go. Python 3.13 incluye JIT experimental y Free-Threaded mode (sin GIL)',
+        icon: '🔍',
+        title: 'Consultar Manuales COBIS',
+        description: '¿Qué hace el stored procedure sp_apertura_cuenta? → RAG busca en el manual COBIS y responde con el contexto exacto',
         color: 'blue'
       },
       {
-        icon: '📝',
-        title: 'Type Safety con Pydantic v2',
-        description: 'Pydantic v2 (Rust-powered) proporciona validación automática 5-50x más rápida con syntax moderna de Python 3.13',
+        icon: '🔄',
+        title: 'Documentación de Migración',
+        description: '¿Qué campos tiene el formulario VB6 de Apertura de Cuentas? → RAG indexa los documentos funcionales y responde',
+        color: 'orange'
+      },
+      {
+        icon: '📋',
+        title: 'Reglas de Negocio Legacy',
+        description: '¿Cuál es la regla de validación de documentos en .NET? → RAG recupera el fragmento exacto del código documentado',
         color: 'green'
       },
       {
-        icon: '🔄',
-        title: 'Async/Await Nativo',
-        description: 'Soporte nativo para operaciones asíncronas con SQLAlchemy 2.0 async, ideal para I/O intensivo',
+        icon: '🤝',
+        title: 'Asistente de Migración',
+        description: 'Chatbot que asiste al equipo durante la migración — responde sobre el sistema legacy que están reemplazando',
         color: 'purple'
-      },
-      {
-        icon: '📚',
-        title: 'Auto Documentation',
-        description: 'Swagger UI y ReDoc generados automáticamente desde el código. OpenAPI 3.1 soportado nativamente',
-        color: 'orange'
       }
     ]
   };
 
-  // Setup
-  setup = {
-    title: 'Instalación y Setup (Python 3.13 + uv)',
-    installation: {
-      titulo: 'Instalación con uv (gestor moderno Rust-based)',
-      code: `# Instalar uv (reemplaza pip + venv + poetry)
-# Windows
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-# Linux/Mac
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Inicializar proyecto
-uv init scoring-api
-cd scoring-api
-
-# Verificar Python 3.13
-uv python install 3.13
-
-# Agregar dependencias (reemplaza pip install)
-uv add "fastapi[standard]>=0.141.1"   # FastAPI con uvicorn + httpx incluidos
-uv add "pydantic>=2.11.0"              # Pydantic v2 (Rust-powered, 50x más rápido)
-uv add "sqlalchemy[asyncio]>=2.0.41"   # SQLAlchemy 2.0 async
-uv add "psycopg[binary]>=3.2.7"        # psycopg3 (reemplaza psycopg2)
-uv add "python-jose[cryptography]"
-uv add "passlib[bcrypt]"
-
-# Ejecutar (reemplaza uvicorn directo)
-uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
-    },
-    structure: {
-      titulo: 'Estructura del Proyecto',
-      code: `scoring-api/
-├── pyproject.toml         # Reemplaza requirements.txt (gestionado por uv)
-├── uv.lock                # Lock file determinista
-├── app/
-│   ├── __init__.py
-│   ├── main.py              # Entry point FastAPI 0.141.1
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── solicitud.py     # SQLAlchemy 2.0 models (mapped_column)
-│   │   └── scoring.py
-│   ├── schemas/
-│   │   ├── __init__.py
-│   │   ├── solicitud.py     # Pydantic v2 schemas (model_validator)
-│   │   └── scoring.py
-│   ├── services/
-│   │   ├── __init__.py
-│   │   └── scoring_service.py  # Business logic async
-│   ├── routers/
-│   │   ├── __init__.py
-│   │   └── scoring.py       # API endpoints
-│   └── database.py          # DB connection async (psycopg3)
-├── tests/
-│   ├── __init__.py
-│   └── test_scoring.py
-└── README.md`
-    },
-    runCommand: {
-      titulo: 'Ejecutar el Servidor',
-      code: `# Modo desarrollo con auto-reload
-uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-
-# O con granian (servidor ASGI Rust-based, más rápido que uvicorn)
-uv add granian
-uv run granian --interface asgi app.main:app --reload
-
-# Acceder a la documentación
-# Swagger UI: http://localhost:8000/docs
-# ReDoc:       http://localhost:8000/redoc`
-    }
-  };
-
-
-  // Pydantic Models
-  pydanticModels = {
-    title: 'Pydantic v2 Schemas para Validación',
-    description: 'Pydantic v2 (motor Rust) proporciona validación 5-50x más rápida con syntax moderna de Python 3.13',
-    input: {
-      titulo: 'Schema de Entrada (Pydantic v2)',
-      code: `# app/schemas/solicitud.py
-from pydantic import BaseModel, Field, model_validator, field_validator
-from typing import Annotated
-from decimal import Decimal
-from datetime import date
-from enum import StrEnum
-
-class HistorialCrediticio(StrEnum):  # Python 3.11+ StrEnum
-    EXCELENTE = "EXCELENTE"
-    BUENO = "BUENO"
-    REGULAR = "REGULAR"
-    MALO = "MALO"
-
-class SolicitudPrestamoInput(BaseModel):
-    """Schema Pydantic v2 para crear solicitud de préstamo"""
-
-    cliente_id: Annotated[int, Field(gt=0, description="ID del cliente")]
-    monto_solicitado: Annotated[Decimal, Field(gt=0, le=1_000_000)]
-    plazo_meses: Annotated[int, Field(ge=6, le=60)]
-    ingresos_mensuales: Annotated[Decimal, Field(gt=0)]
-    deudas_actuales: Annotated[Decimal, Field(default=Decimal('0'), ge=0)]
-    antiguedad_laboral_meses: Annotated[int, Field(ge=0)]
-    historial_crediticio: HistorialCrediticio
-
-    @field_validator('plazo_meses')  # Pydantic v2: @field_validator
-    @classmethod
-    def validar_plazo(cls, v: int) -> int:
-        """El plazo debe ser múltiplo de 6 meses"""
-        if v % 6 != 0:
-            raise ValueError('El plazo debe ser múltiplo de 6 meses')
-        return v
-
-    @model_validator(mode='after')  # Pydantic v2: @model_validator
-    def validar_monto_vs_ingresos(self) -> 'SolicitudPrestamoInput':
-        """La cuota no debe superar 40% de ingresos"""
-        cuota = self.monto_solicitado / self.plazo_meses
-        if cuota > self.ingresos_mensuales * Decimal('0.4'):
-            raise ValueError('La cuota estimada supera 40% de ingresos')
-        return self
-
-    model_config = {  # Pydantic v2: model_config reemplaza class Config
-        'json_schema_extra': {
-            'example': {
-                'cliente_id': 12345,
-                'monto_solicitado': 50000,
-                'plazo_meses': 24,
-                'ingresos_mensuales': 8000,
-                'deudas_actuales': 15000,
-                'antiguedad_laboral_meses': 36,
-                'historial_crediticio': 'BUENO'
-            }
-        }
-    }`
-    },
-    output: {
-      titulo: 'Schema de Salida',
-      code: `# app/schemas/scoring.py
-from pydantic import BaseModel, Field
-from typing import List, Optional
-from decimal import Decimal
-from datetime import datetime
-from enum import Enum
-
-class NivelRiesgo(str, Enum):
-    """Niveles de riesgo crediticio"""
-    BAJO = "BAJO"
-    MEDIO = "MEDIO"
-    ALTO = "ALTO"
-    MUY_ALTO = "MUY_ALTO"
-
-class DecisionCredito(str, Enum):
-    """Decisión del sistema"""
-    APROBADO = "APROBADO"
-    REVISION_MANUAL = "REVISION_MANUAL"
-    RECHAZADO = "RECHAZADO"
-
-class ScoringResultOutput(BaseModel):
-    """Schema de respuesta con resultado del scoring"""
-
-    solicitud_id: int = Field(..., description="ID de la solicitud")
-    score: int = Field(
-        ...,
-        description="Score crediticio (300-850)",
-        ge=300,
-        le=850
-    )
-    nivel_riesgo: NivelRiesgo = Field(..., description="Nivel de riesgo")
-    decision: DecisionCredito = Field(..., description="Decisión automática")
-    monto_aprobado: Decimal = Field(
-        ...,
-        description="Monto máximo aprobado",
-        ge=0
-    )
-    tasa_interes: Decimal = Field(
-        ...,
-        description="Tasa de interés anual (%)",
-        ge=0
-    )
-    observaciones: List[str] = Field(
-        default=[],
-        description="Observaciones del análisis"
-    )
-    fecha_evaluacion: datetime = Field(
-        default_factory=datetime.now,
-        description="Fecha de evaluación"
-    )
-
-    # Detalles del cálculo
-    detalles: Optional[dict] = Field(
-        None,
-        description="Detalles del cálculo de scoring"
-    )
-
-    class Config:
-        schema_extra = {
-            "example": {
-                "solicitud_id": 1,
-                "score": 720,
-                "nivel_riesgo": "MEDIO",
-                "decision": "APROBADO",
-                "monto_aprobado": 45000,
-                "tasa_interes": 18.5,
-                "observaciones": [
-                    "Score dentro del rango aceptable",
-                    "Relación deuda/ingreso: 35%"
-                ],
-                "fecha_evaluacion": "2024-01-15T10:30:00",
-                "detalles": {
-                    "puntos_ingresos": 150,
-                    "puntos_historial": 200,
-                    "puntos_deuda": 180,
-                    "puntos_estabilidad": 190
-                }
-            }
-        }`
-    }
-  };
-
-  // Service Layer
-  serviceLayer = {
-    title: 'Service Layer: Lógica de Negocio',
-    description: 'Implementación del algoritmo de scoring y reglas de decisión',
-    algorithm: {
-      titulo: 'Algoritmo de Scoring',
-      code: `# app/services/scoring_service.py
-from decimal import Decimal
-from typing import Tuple, List, Dict
-from app.schemas.solicitud import SolicitudPrestamoInput
-from app.schemas.scoring import (
-    ScoringResultOutput,
-    NivelRiesgo,
-    DecisionCredito
-)
-
-class ScoringService:
-    """Servicio de cálculo de scoring crediticio"""
-
-    # Constantes para el cálculo
-    SCORE_MIN = 300
-    SCORE_MAX = 850
-
-    # Umbrales de decisión
-    SCORE_APROBACION_DIRECTA = 700
-    SCORE_REVISION_MANUAL = 600
-
-    # Tasas de interés por nivel de riesgo
-    TASAS_INTERES = {
-        NivelRiesgo.BAJO: Decimal("12.5"),
-        NivelRiesgo.MEDIO: Decimal("18.5"),
-        NivelRiesgo.ALTO: Decimal("24.5"),
-        NivelRiesgo.MUY_ALTO: Decimal("30.0")
-    }
-
-    def calcular_scoring(
-        self,
-        solicitud: SolicitudPrestamoInput
-    ) -> ScoringResultOutput:
-        """
-        Calcula el scoring crediticio basado en múltiples factores
-
-        Args:
-            solicitud: Datos de la solicitud de préstamo
-
-        Returns:
-            ScoringResultOutput con resultado del análisis
-        """
-        # Calcular componentes del score
-        puntos_ingresos = self._calcular_puntos_ingresos(
-            solicitud.ingresos_mensuales
-        )
-        puntos_historial = self._calcular_puntos_historial(
-            solicitud.historial_crediticio
-        )
-        puntos_deuda = self._calcular_puntos_deuda(
-            solicitud.ingresos_mensuales,
-            solicitud.deudas_actuales
-        )
-        puntos_estabilidad = self._calcular_puntos_estabilidad(
-            solicitud.antiguedad_laboral_meses
-        )
-
-        # Score total (suma ponderada)
-        score = int(
-            puntos_ingresos * 0.25 +
-            puntos_historial * 0.35 +
-            puntos_deuda * 0.25 +
-            puntos_estabilidad * 0.15
-        )
-
-        # Ajustar al rango permitido
-        score = max(self.SCORE_MIN, min(self.SCORE_MAX, score))
-
-        # Determinar nivel de riesgo
-        nivel_riesgo = self._determinar_nivel_riesgo(score)
-
-        # Tomar decisión
-        decision = self._tomar_decision(score, solicitud)
-
-        # Calcular monto aprobado
-        monto_aprobado = self._calcular_monto_aprobado(
-            solicitud.monto_solicitado,
-            score,
-            solicitud.ingresos_mensuales
-        )
-
-        # Tasa de interés según riesgo
-        tasa_interes = self.TASAS_INTERES[nivel_riesgo]
-
-        # Generar observaciones
-        observaciones = self._generar_observaciones(
-            solicitud,
-            score,
-            nivel_riesgo
-        )
-
-        return ScoringResultOutput(
-            solicitud_id=0,  # Se asignará al guardar
-            score=score,
-            nivel_riesgo=nivel_riesgo,
-            decision=decision,
-            monto_aprobado=monto_aprobado,
-            tasa_interes=tasa_interes,
-            observaciones=observaciones,
-            detalles={
-                "puntos_ingresos": puntos_ingresos,
-                "puntos_historial": puntos_historial,
-                "puntos_deuda": puntos_deuda,
-                "puntos_estabilidad": puntos_estabilidad
-            }
-        )`
-    },
-    helpers: {
-      titulo: 'Métodos Helper del Algoritmo',
-      code: `    def _calcular_puntos_ingresos(
-        self,
-        ingresos: Decimal
-    ) -> int:
-        """Calcula puntos basados en nivel de ingresos"""
-        if ingresos >= 15000:
-            return 250
-        elif ingresos >= 10000:
-            return 200
-        elif ingresos >= 7000:
-            return 150
-        elif ingresos >= 5000:
-            return 100
-        else:
-            return 50
-
-    def _calcular_puntos_historial(self, historial: str) -> int:
-        """Calcula puntos por historial crediticio"""
-        puntos_historial = {
-            "EXCELENTE": 250,
-            "BUENO": 200,
-            "REGULAR": 120,
-            "MALO": 50
-        }
-        return puntos_historial.get(historial, 0)
-
-    def _calcular_puntos_deuda(
-        self,
-        ingresos: Decimal,
-        deudas: Decimal
-    ) -> int:
-        """Calcula puntos por relación deuda/ingreso"""
-        if ingresos == 0:
-            return 0
-
-        ratio_deuda = float(deudas / ingresos)
-
-        if ratio_deuda <= 0.2:
-            return 250
-        elif ratio_deuda <= 0.35:
-            return 200
-        elif ratio_deuda <= 0.5:
-            return 150
-        elif ratio_deuda <= 0.7:
-            return 100
-        else:
-            return 50
-
-    def _calcular_puntos_estabilidad(
-        self,
-        meses_empleo: int
-    ) -> int:
-        """Calcula puntos por estabilidad laboral"""
-        if meses_empleo >= 60:
-            return 250
-        elif meses_empleo >= 36:
-            return 200
-        elif meses_empleo >= 24:
-            return 150
-        elif meses_empleo >= 12:
-            return 100
-        else:
-            return 50
-
-    def _determinar_nivel_riesgo(self, score: int) -> NivelRiesgo:
-        """Determina nivel de riesgo según score"""
-        if score >= 750:
-            return NivelRiesgo.BAJO
-        elif score >= 650:
-            return NivelRiesgo.MEDIO
-        elif score >= 550:
-            return NivelRiesgo.ALTO
-        else:
-            return NivelRiesgo.MUY_ALTO
-
-    def _tomar_decision(
-        self,
-        score: int,
-        solicitud: SolicitudPrestamoInput
-    ) -> DecisionCredito:
-        """Toma decisión de crédito basada en score y otros factores"""
-        # Rechazo automático
-        if score < self.SCORE_REVISION_MANUAL:
-            return DecisionCredito.RECHAZADO
-
-        # Aprobación automática
-        if score >= self.SCORE_APROBACION_DIRECTA:
-            ratio_deuda = float(
-                solicitud.deudas_actuales /
-                solicitud.ingresos_mensuales
-            )
-            if ratio_deuda <= 0.4:
-                return DecisionCredito.APROBADO
-
-        # Revisión manual
-        return DecisionCredito.REVISION_MANUAL`
-    }
-  };
-
-  // API Endpoints
-  apiEndpoints = {
-    title: 'API Endpoints con FastAPI',
-    description: 'Definición de rutas REST con documentación automática',
-    mainFile: {
-      titulo: 'Main Application',
-      code: `# app/main.py
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from app.routers import scoring
-
-app = FastAPI(
-    title="Scoring Crediticio API",
-    description="API para evaluación de scoring crediticio en tiempo real",
-    version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc"
-)
-
-# Configurar CORS para frontend Angular
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:4200"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Incluir routers
-app.include_router(
-    scoring.router,
-    prefix="/api/scoring",
-    tags=["Scoring Crediticio"]
-)
-
-@app.get("/")
-async def root():
-    """Health check endpoint"""
-    return {
-        "status": "ok",
-        "message": "Scoring API is running",
-        "docs": "/docs"
-    }`
-    },
-    router: {
-      titulo: 'Router con Endpoints',
-      code: `# app/routers/scoring.py
-from fastapi import APIRouter, HTTPException, status
-from typing import List
-from app.schemas.solicitud import SolicitudPrestamoInput
-from app.schemas.scoring import ScoringResultOutput
-from app.services.scoring_service import ScoringService
-from loguru import logger
-
-router = APIRouter()
-scoring_service = ScoringService()
-
-@router.post(
-    "/calcular",
-    response_model=ScoringResultOutput,
-    status_code=status.HTTP_201_CREATED,
-    summary="Calcular Scoring Crediticio",
-    description="Evalúa una solicitud de préstamo y retorna scoring, nivel de riesgo y decisión"
-)
-async def calcular_scoring(
-    solicitud: SolicitudPrestamoInput
-):
-    """
-    Calcula el scoring crediticio para una solicitud de préstamo
-
-    - **cliente_id**: ID del cliente solicitante
-    - **monto_solicitado**: Monto del préstamo (min: 1, max: 1,000,000)
-    - **plazo_meses**: Plazo en meses (múltiplo de 6, entre 6 y 60)
-    - **ingresos_mensuales**: Ingresos mensuales del cliente
-    - **deudas_actuales**: Total de deudas actuales
-    - **antiguedad_laboral_meses**: Meses en empleo actual
-    - **historial_crediticio**: EXCELENTE | BUENO | REGULAR | MALO
-    """
-    try:
-        logger.info(f"Calculando scoring para cliente {solicitud.cliente_id}")
-
-        # Calcular scoring
-        resultado = scoring_service.calcular_scoring(solicitud)
-
-        # Aquí se guardaría en base de datos
-        # resultado.solicitud_id = db_solicitud.id
-
-        logger.info(
-            f"Scoring calculado: {resultado.score}, "
-            f"Decisión: {resultado.decision}"
-        )
-
-        return resultado
-
-    except ValueError as e:
-        logger.error(f"Error de validación: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
-    except Exception as e:
-        logger.error(f"Error al calcular scoring: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error interno al calcular scoring"
-        )
-
-@router.get(
-    "/{solicitud_id}",
-    response_model=ScoringResultOutput,
-    summary="Consultar Resultado de Scoring"
-)
-async def obtener_scoring(solicitud_id: int):
-    """Obtiene el resultado de scoring de una solicitud específica"""
-    # Aquí se consultaría la base de datos
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Endpoint en desarrollo"
-    )`
-    }
-  };
-
-  // Testing
-  testing = {
-    title: 'Testing con Pytest',
-    description: 'Suite de tests unitarios y de integración',
-    unitTests: {
-      titulo: 'Tests Unitarios del Servicio',
-      code: `# tests/test_scoring_service.py
-import pytest
-from decimal import Decimal
-from app.services.scoring_service import ScoringService
-from app.schemas.solicitud import SolicitudPrestamoInput
-from app.schemas.scoring import NivelRiesgo, DecisionCredito
-
-class TestScoringService:
-    """Tests del servicio de scoring"""
-
-    @pytest.fixture
-    def scoring_service(self):
-        """Fixture del servicio"""
-        return ScoringService()
-
-    @pytest.fixture
-    def solicitud_excelente(self):
-        """Solicitud con perfil excelente"""
-        return SolicitudPrestamoInput(
-            cliente_id=1,
-            monto_solicitado=Decimal("50000"),
-            plazo_meses=24,
-            ingresos_mensuales=Decimal("15000"),
-            deudas_actuales=Decimal("5000"),
-            antiguedad_laboral_meses=60,
-            historial_crediticio="EXCELENTE"
-        )
-
-    def test_scoring_perfil_excelente(
-        self,
-        scoring_service,
-        solicitud_excelente
-    ):
-        """Test scoring con perfil excelente"""
-        resultado = scoring_service.calcular_scoring(solicitud_excelente)
-
-        assert resultado.score >= 750
-        assert resultado.nivel_riesgo == NivelRiesgo.BAJO
-        assert resultado.decision == DecisionCredito.APROBADO
-        assert resultado.monto_aprobado > 0
-        assert resultado.tasa_interes == Decimal("12.5")
-
-    def test_scoring_alto_endeudamiento(self, scoring_service):
-        """Test con alto nivel de deudas"""
-        solicitud = SolicitudPrestamoInput(
-            cliente_id=2,
-            monto_solicitado=Decimal("30000"),
-            plazo_meses=18,
-            ingresos_mensuales=Decimal("5000"),
-            deudas_actuales=Decimal("8000"),  # 160% de ingresos
-            antiguedad_laboral_meses=12,
-            historial_crediticio="REGULAR"
-        )
-
-        resultado = scoring_service.calcular_scoring(solicitud)
-
-        assert resultado.score < 700
-        assert resultado.nivel_riesgo in [
-            NivelRiesgo.ALTO,
-            NivelRiesgo.MUY_ALTO
-        ]
-        assert resultado.decision != DecisionCredito.APROBADO
-
-    def test_validacion_plazo_invalido(self):
-        """Test validación de plazo no múltiplo de 6"""
-        with pytest.raises(ValueError, match="múltiplo de 6"):
-            SolicitudPrestamoInput(
-                cliente_id=3,
-                monto_solicitado=Decimal("20000"),
-                plazo_meses=15,  # No es múltiplo de 6
-                ingresos_mensuales=Decimal("8000"),
-                deudas_actuales=Decimal("2000"),
-                antiguedad_laboral_meses=24,
-                historial_crediticio="BUENO"
-            )`
-    },
-    integrationTests: {
-      titulo: 'Tests de Integración con API',
-      code: `# tests/test_api.py
-import pytest
-from fastapi.testclient import TestClient
-from app.main import app
-
-client = TestClient(app)
-
-class TestScoringAPI:
-    """Tests de integración de la API"""
-
-    def test_health_check(self):
-        """Test del endpoint raíz"""
-        response = client.get("/")
-        assert response.status_code == 200
-        assert response.json()["status"] == "ok"
-
-    def test_calcular_scoring_exitoso(self):
-        """Test cálculo de scoring exitoso"""
-        payload = {
-            "cliente_id": 12345,
-            "monto_solicitado": 50000,
-            "plazo_meses": 24,
-            "ingresos_mensuales": 10000,
-            "deudas_actuales": 15000,
-            "antiguedad_laboral_meses": 36,
-            "historial_crediticio": "BUENO"
-        }
-
-        response = client.post("/api/scoring/calcular", json=payload)
-
-        assert response.status_code == 201
-        data = response.json()
-        assert "score" in data
-        assert 300 <= data["score"] <= 850
-        assert "decision" in data
-        assert "monto_aprobado" in data
-
-    def test_validacion_monto_negativo(self):
-        """Test validación de monto negativo"""
-        payload = {
-            "cliente_id": 12345,
-            "monto_solicitado": -1000,  # Inválido
-            "plazo_meses": 24,
-            "ingresos_mensuales": 10000,
-            "deudas_actuales": 0,
-            "antiguedad_laboral_meses": 36,
-            "historial_crediticio": "BUENO"
-        }
-
-        response = client.post("/api/scoring/calcular", json=payload)
-        assert response.status_code == 422  # Validation error
-
-    def test_historial_invalido(self):
-        """Test con historial crediticio inválido"""
-        payload = {
-            "cliente_id": 12345,
-            "monto_solicitado": 50000,
-            "plazo_meses": 24,
-            "ingresos_mensuales": 10000,
-            "deudas_actuales": 15000,
-            "antiguedad_laboral_meses": 36,
-            "historial_crediticio": "INVALIDO"  # No permitido
-        }
-
-        response = client.post("/api/scoring/calcular", json=payload)
-        assert response.status_code == 422`
-    }
-  };
-
-  // Best Practices
-  bestPractices = {
-    title: 'Best Practices FastAPI',
-    practices: [
-      {
-        icon: '🎯',
-        categoria: 'Type Hints',
-        good: [
-          'Usar type hints en todas las funciones',
-          'Aprovechar Pydantic para validación automática',
-          'Definir Enums para valores constantes',
-          'Documentar con docstrings'
-        ],
-        bad: [
-          'Usar tipos genéricos como dict o list',
-          'Omitir validaciones de entrada',
-          'Dejar parámetros sin tipo',
-          'No documentar endpoints'
-        ]
-      },
-      {
-        icon: '⚡',
-        categoria: 'Async/Await',
-        good: [
-          'Usar async para operaciones I/O (DB, HTTP)',
-          'Mantener funciones CPU-bound como sync',
-          'Usar await con clients asíncronos',
-          'Configurar connection pools'
-        ],
-        bad: [
-          'Usar async sin necesidad',
-          'Bloquear event loop con operaciones síncronas',
-          'Olvidar await en llamadas async',
-          'No manejar timeouts'
-        ]
-      },
-      {
-        icon: '🔒',
-        categoria: 'Seguridad',
-        good: [
-          'Validar todo input con Pydantic',
-          'Usar OAuth2 para autenticación',
-          'Sanitizar datos sensibles en logs',
-          'Implementar rate limiting'
-        ],
-        bad: [
-          'Confiar en datos sin validar',
-          'Exponer secrets en código',
-          'Logs con información sensible',
-          'No limitar requests'
-        ]
-      }
-    ]
-  };
-
-  // Summary
-  summary = {
-    title: 'Resumen: FastAPI en Producción',
-    achievements: [
-      'API REST moderna con Python',
-      'Validación automática con Pydantic',
-      'Documentación generada automáticamente',
-      'Alta performance con async/await',
-      'Tests completos con pytest'
+  ragArchitecture = {
+    title: 'Arquitectura RAG con Spring AI',
+    explanation: 'RAG = Retrieval-Augmented Generation. En lugar de depender de la memoria del LLM (que no conoce tus manuales COBIS), primero se recuperan fragmentos relevantes de los documentos y se incluyen como contexto en el prompt.',
+    flow: [
+      { step: 1, label: 'Pregunta del usuario', icon: '💬', detail: '"¿Qué valida sp_apertura_cuenta?"' },
+      { step: 2, label: 'Embedding de la pregunta', icon: '🔢', detail: 'Convertir texto → vector numérico' },
+      { step: 3, label: 'Búsqueda vectorial', icon: '🔍', detail: 'Top-K fragmentos más similares en VectorStore' },
+      { step: 4, label: 'Prompt aumentado', icon: '📝', detail: 'Pregunta + fragmentos como contexto al LLM' },
+      { step: 5, label: 'Respuesta fundamentada', icon: '✅', detail: 'Solo información de los documentos reales' }
     ],
-    features: [
+    components: [
       {
-        icon: '⚡',
-        title: 'Performance',
-        description: 'Una de las APIs Python más rápidas'
+        name: 'DocumentReader',
+        role: 'Lee PDFs, TXTs, Word de la documentación legacy',
+        springAiClass: 'PagePdfDocumentReader, TextReader'
       },
       {
-        icon: '📝',
-        title: 'Type Safety',
-        description: 'Validación y documentación automática'
+        name: 'TokenTextSplitter',
+        role: 'Divide documentos en fragmentos de ~512 tokens',
+        springAiClass: 'TokenTextSplitter'
       },
       {
-        icon: '🧪',
-        title: 'Testing',
-        description: 'Fácil de testear con TestClient'
+        name: 'EmbeddingModel',
+        role: 'Convierte texto a vectores numéricos',
+        springAiClass: 'TransformersEmbeddingModel (local, sin API externa)'
+      },
+      {
+        name: 'VectorStore',
+        role: 'Almacena y busca vectores por similitud',
+        springAiClass: 'SimpleVectorStore (dev) / PgVectorStore (prod)'
+      },
+      {
+        name: 'ChatClient',
+        role: 'Genera respuesta con el contexto recuperado',
+        springAiClass: 'ChatClient.Builder + prompt template'
       }
-    ],
-    nextSteps: [
-      'Integrar con base de datos (SQLAlchemy)',
-      'Implementar autenticación JWT',
-      'Agregar caché con Redis',
-      'Deploy con Docker + Kubernetes',
-      'Monitoring con Prometheus'
     ]
   };
 
+  springAiSetup = {
+    title: 'Configuración Spring AI en Gradle',
+    gradleSnippet: `// build.gradle.kts
+plugins {
+    id("org.springframework.boot") version "4.1.0"
+    id("io.spring.dependency-management") version "1.1.7"
+}
 
+extra["springAiVersion"] = "1.0.0"
 
-  @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.key === 'ArrowLeft') {
-      this.prevSlide();
-    } else if (event.key === 'ArrowRight') {
-      this.nextSlide();
+dependencies {
+    // Spring AI BOM
+    implementation(platform("org.springframework.ai:spring-ai-bom:\${property("springAiVersion")}"))
+
+    // Chat con OpenAI (o Azure OpenAI si CFA tiene licencia)
+    implementation("org.springframework.ai:spring-ai-openai-spring-boot-starter")
+
+    // Embeddings locales (sin costo, sin API key — modelo en JAR)
+    implementation("org.springframework.ai:spring-ai-transformers-spring-boot-starter")
+
+    // VectorStore simple para desarrollo
+    implementation("org.springframework.ai:spring-ai-core")
+
+    // Lectura de PDFs (manuales legacy)
+    implementation("org.springframework.ai:spring-ai-pdf-document-reader")
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
+}`,
+    applicationYml: `# application.yml
+spring:
+  threads:
+    virtual:
+      enabled: true   # Java 21 Virtual Threads
+
+  ai:
+    openai:
+      api-key: \${OPENAI_API_KEY}
+      chat:
+        model: gpt-4o-mini
+      embedding:
+        model: text-embedding-3-small
+
+    # VectorStore persistido en disco (desarrollo)
+    vectorstore:
+      simple:
+        persist: true
+        path: ./vectorstore/legacy-docs.json`
+  };
+
+  indexingService = {
+    title: 'Servicio de Indexación de Documentos Legacy',
+    description: 'Tomar los manuales COBIS, especificaciones VB6 y documentación .NET y convertirlos en vectores buscables',
+    javaCode: `// LegacyDocIndexingService.java
+@Service
+public class LegacyDocIndexingService {
+
+    private final VectorStore vectorStore;
+
+    public LegacyDocIndexingService(VectorStore vectorStore) {
+        this.vectorStore = vectorStore;
     }
+
+    /**
+     * Indexar manual COBIS (PDF o TXT)
+     * Llamar una vez al desplegar, o cuando cambien los documentos
+     */
+    public void indexarManualCobis(Resource recurso, String nombreModulo) {
+        // 1. Leer el documento
+        var reader = new PagePdfDocumentReader(recurso,
+            PdfDocumentReaderConfig.builder()
+                .withPagesPerDocument(1)
+                .build());
+
+        List<Document> documentos = reader.get();
+
+        // 2. Agregar metadatos para filtrar por módulo
+        documentos.forEach(doc -> {
+            doc.getMetadata().put("fuente", "Manual COBIS");
+            doc.getMetadata().put("modulo", nombreModulo);
+            doc.getMetadata().put("sistema", "COBIS");
+        });
+
+        // 3. Dividir en fragmentos (512 tokens ≈ buen balance precisión/contexto)
+        var splitter = new TokenTextSplitter(512, 50, 5, 10000, true);
+        List<Document> fragmentos = splitter.apply(documentos);
+
+        // 4. Generar embeddings y guardar en VectorStore
+        vectorStore.add(fragmentos);
+
+        log.info("Indexados {} fragmentos del módulo COBIS: {}",
+                 fragmentos.size(), nombreModulo);
+    }
+
+    // Mismo método funciona para documentos VB6 y .NET (TXT, Word, PDF)
+    public void indexarDocumentacionLegacy(Resource recurso,
+                                           String sistema,
+                                           String modulo) {
+        var reader = new TextReader(recurso);
+        List<Document> docs = reader.get();
+
+        docs.forEach(doc -> {
+            doc.getMetadata().put("sistema", sistema);   // VB6 | .NET | COBIS
+            doc.getMetadata().put("modulo", modulo);
+        });
+
+        vectorStore.add(new TokenTextSplitter().apply(docs));
+    }
+}`
+  };
+
+  queryService = {
+    title: 'Servicio de Consulta Semántica',
+    javaCode: `// LegacyKnowledgeService.java
+@Service
+public class LegacyKnowledgeService {
+
+    private static final String PROMPT_RAG = """
+        Eres el asistente técnico del equipo de migración de sistemas legacy.
+        Responde ÚNICAMENTE usando la documentación proporcionada.
+        Si la información no está en los documentos, responde:
+        "No encontré información sobre esto en la documentación indexada."
+
+        DOCUMENTACIÓN TÉCNICA RELEVANTE:
+        {contexto}
+
+        PREGUNTA DEL INGENIERO:
+        {pregunta}
+
+        Respuesta (cita el sistema y módulo fuente):
+        """;
+
+    private final ChatClient chatClient;
+    private final VectorStore vectorStore;
+
+    public LegacyKnowledgeService(ChatClient.Builder builder,
+                                   VectorStore vectorStore) {
+        this.chatClient = builder.build();
+        this.vectorStore = vectorStore;
+    }
+
+    public ConsultaResponse consultar(String pregunta, String sistemaFiltro) {
+        // 1. Buscar fragmentos relevantes (similitud coseno)
+        var filtro = Filter.expression(
+            sistemaFiltro != null ? "sistema == '" + sistemaFiltro + "'" : "true"
+        );
+
+        List<Document> fragmentos = vectorStore.similaritySearch(
+            SearchRequest.builder()
+                .query(pregunta)
+                .topK(5)
+                .similarityThreshold(0.65)
+                .filterExpression(filtro)
+                .build()
+        );
+
+        if (fragmentos.isEmpty()) {
+            return new ConsultaResponse(
+                "No encontré documentación relevante para: " + pregunta,
+                List.of(), pregunta
+            );
+        }
+
+        // 2. Construir contexto con los fragmentos + sus fuentes
+        String contexto = fragmentos.stream()
+            .map(doc -> String.format("[%s - Módulo: %s]\\n%s",
+                doc.getMetadata().get("sistema"),
+                doc.getMetadata().get("modulo"),
+                doc.getText()))
+            .collect(Collectors.joining("\\n\\n---\\n\\n"));
+
+        // 3. Llamar al LLM con contexto aumentado
+        String respuesta = chatClient.prompt()
+            .user(u -> u.text(PROMPT_RAG)
+                .param("contexto", contexto)
+                .param("pregunta", pregunta))
+            .call()
+            .content();
+
+        List<String> fuentes = fragmentos.stream()
+            .map(doc -> doc.getMetadata().get("sistema") + " / " +
+                        doc.getMetadata().get("modulo"))
+            .distinct().toList();
+
+        return new ConsultaResponse(respuesta, fuentes, pregunta);
+    }
+}
+
+// Java Record para la respuesta
+public record ConsultaResponse(
+    String respuesta,
+    List<String> fuentesCitadas,
+    String preguntaOriginal
+) {}`
+  };
+
+  challenge = {
+    title: 'Reto: Asistente de Migración Legacy',
+    description: 'Implementa un endpoint REST en Spring Boot 4.1.0 que permita consultar documentación técnica de los sistemas legacy (COBIS/VB6/.NET) usando RAG con Spring AI.',
+    requirements: [
+      'build.gradle.kts con Spring AI 1.0.0 BOM + spring-ai-transformers (embeddings locales, sin API key)',
+      'LegacyDocIndexingService que indexe archivos TXT/PDF con metadatos: sistema y modulo',
+      'LegacyKnowledgeService.consultar(pregunta, sistemaFiltro) con SimpleVectorStore',
+      'POST /api/legacy/consultar con record ConsultaRequest(pregunta, sistema) y ConsultaResponse',
+      'CommandLineRunner que indexe al menos 3 archivos de documentación de ejemplo al arrancar',
+      'Test de integración: indexar texto de prueba → consultar → verificar que la respuesta menciona el fragmento indexado'
+    ],
+    promptCopilot: [
+      'ROL: Arquitecto Java 21 + Spring AI 1.0 especialista en RAG para documentación técnica legacy',
+      'CONTEXTO: Queremos indexar manuales PDF/TXT de COBIS, VB6 y .NET para búsqueda semántica',
+      'TAREA: Genera LegacyDocIndexingService con PagePdfDocumentReader, TokenTextSplitter y VectorStore.add()',
+      'RESTRICCIONES: Spring Boot 4.1.0, Gradle Kotlin DSL, Java records para DTOs, Virtual Threads activados'
+    ],
+    timeEstimate: '50 minutos'
+  };
+
+  bestPractices = [
+    {
+      category: 'Embeddings y VectorStore',
+      practices: [
+        'Usar TransformersEmbeddingModel (local) en desarrollo — sin costo, sin API key',
+        'SimpleVectorStore persistido en disco para dev, PgVectorStore con pgvector en producción',
+        'Fragmentos de 400-600 tokens con overlap de 50 — balance entre precisión y contexto'
+      ]
+    },
+    {
+      category: 'Calidad de Respuestas',
+      practices: [
+        'similarityThreshold >= 0.65 — evita recuperar fragmentos irrelevantes',
+        'topK=5 fragmentos máximo — más contexto no siempre mejora la respuesta',
+        'Incluir metadatos (sistema, módulo, fuente) para que el LLM cite correctamente'
+      ]
+    },
+    {
+      category: 'Prompt Engineering para RAG',
+      practices: [
+        'Instruir al LLM a responder SOLO con la documentación — evitar alucinaciones',
+        'Pedir citar la fuente (sistema + módulo) en cada respuesta',
+        'Agregar fallback explícito: "si no está en los documentos, dilo claramente"'
+      ]
+    },
+    {
+      category: 'Indexación y Mantenimiento',
+      practices: [
+        'Indexar al arrancar con @EventListener(ApplicationReadyEvent.class)',
+        'Guardar hash de cada documento para re-indexar solo cuando cambie',
+        'Registrar cuántos fragmentos se indexaron por módulo en logs — facilita diagnóstico'
+      ]
+    }
+  ];
+
+  @HostListener('window:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent): void {
+    if (event.key === 'ArrowLeft') this.previousSlide();
+    if (event.key === 'ArrowRight') this.nextSlide();
   }
 
   nextSlide() {
-    if (this.currentSlide < this.slides.length - 1) {
-      this.currentSlide++;
-    }
+    if (this.currentSlide < this.slides.length - 1) this.currentSlide++;
   }
 
-  prevSlide() {
-    if (this.currentSlide > 0) {
-      this.currentSlide--;
-    }
+  previousSlide() {
+    if (this.currentSlide > 0) this.currentSlide--;
+  }
+
+  goToSlide(index: number) {
+    this.currentSlide = index;
   }
 }
