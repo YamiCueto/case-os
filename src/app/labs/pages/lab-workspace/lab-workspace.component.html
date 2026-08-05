@@ -1,0 +1,93 @@
+<div class="h-screen flex flex-col bg-slate-950 overflow-hidden" *ngIf="lab() as currentLab">
+  
+  <!-- Header Minimalista -->
+  <header class="h-14 shrink-0 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6">
+    <div class="flex items-center gap-4">
+      <button (click)="exitLab()" class="text-slate-400 hover:text-white transition-colors" title="Salir del Laboratorio">
+        <span class="text-xl leading-none">×</span>
+      </button>
+      <div class="h-4 w-px bg-slate-700"></div>
+      <h1 class="text-sm font-semibold text-white">{{ currentLab.title }}</h1>
+      <span class="px-2 py-0.5 bg-indigo-900/40 text-indigo-400 rounded text-[10px] font-bold tracking-wider uppercase">
+        {{ currentLab.type }}
+      </span>
+    </div>
+    <div class="text-xs text-slate-500 font-medium">
+      Paso {{ currentStepIndex() + 1 }} de {{ currentLab.steps.length }}
+    </div>
+  </header>
+
+  <!-- Workspace Grid -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- PANEL IZQUIERDO: PLAYBOOK -->
+    <section class="w-1/2 flex flex-col border-r border-slate-800 bg-slate-950 relative">
+      <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <ng-container *ngIf="currentStep() as step">
+          <h2 class="text-2xl font-bold text-white mb-6">{{ step.title }}</h2>
+          <app-markdown-viewer [markdown]="step.content"></app-markdown-viewer>
+          
+          <!-- Hints y Outputs estáticos -->
+          <div *ngIf="step.validationHints?.length" class="mt-8 p-4 bg-amber-900/20 border border-amber-800/50 rounded-xl">
+            <h4 class="text-amber-500 text-sm font-bold flex items-center gap-2 mb-2">💡 Tips de Validación</h4>
+            <ul class="list-disc list-inside text-slate-300 text-sm space-y-1">
+              <li *ngFor="let hint of step.validationHints">{{ hint }}</li>
+            </ul>
+          </div>
+        </ng-container>
+
+        <div *ngIf="execution()?.status === 'COMPLETED'" class="flex flex-col items-center justify-center text-center py-20">
+          <span class="text-6xl mb-4">🏆</span>
+          <h2 class="text-2xl font-bold text-white mb-2">¡Laboratorio Completado!</h2>
+          <p class="text-slate-400">Has finalizado exitosamente el playbook de este reto.</p>
+        </div>
+      </div>
+
+      <!-- Navegación del Playbook -->
+      <div class="h-16 shrink-0 bg-slate-900/50 border-t border-slate-800 flex items-center justify-between px-8">
+        <button 
+          (click)="prevStep()"
+          [disabled]="currentStepIndex() === 0"
+          class="px-4 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-800 text-slate-300">
+          Anterior
+        </button>
+        <button 
+          *ngIf="execution()?.status !== 'COMPLETED'"
+          (click)="nextStep()"
+          class="px-6 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md text-sm font-semibold transition-colors shadow-lg shadow-indigo-900/20">
+          {{ currentStepIndex() === currentLab.steps.length - 1 ? 'Finalizar Lab' : 'Siguiente Paso' }}
+        </button>
+      </div>
+    </section>
+
+    <!-- PANEL DERECHO: CONTEXT PANEL -->
+    <section class="w-1/2 bg-[#0b0f19] flex flex-col relative overflow-hidden">
+      <!-- Pestañas simuladas -->
+      <div class="flex items-center h-10 border-b border-slate-800 bg-slate-900/50 px-2 shrink-0">
+        <div class="px-4 h-full flex items-center border-b-2 border-indigo-500 text-indigo-400 text-xs font-semibold bg-slate-900/80">
+          Context Resources
+        </div>
+        <div class="px-4 h-full flex items-center text-slate-500 text-xs font-medium cursor-not-allowed opacity-50">
+          Terminal (Próximamente)
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+        <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4">Recursos Sugeridos</h3>
+        
+        <div *ngIf="contextResources().length === 0" class="text-slate-500 text-sm text-center py-10 border border-dashed border-slate-800 rounded-xl">
+          No se requieren recursos externos para este paso.
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+          <app-resource-card 
+            *ngFor="let res of contextResources()" 
+            [resource]="res"
+            (viewDetail)="null"> <!-- TODO: Podríamos abrir el detalle en un modal superpuesto o expandirlo in situ -->
+          </app-resource-card>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

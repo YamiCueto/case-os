@@ -1,0 +1,18 @@
+<div class="markdown-container prose prose-invert max-w-none">
+  <ng-container *ngFor="let block of blocks()">
+    
+    <!-- Renderizado de HTML (Párrafos, Listas, Headings) -->
+    <div 
+      *ngIf="block.type === 'html'" 
+      [innerHTML]="block.content">
+    </div>
+
+    <!-- Bloque de código interactivo -->
+    <app-code-block 
+      *ngIf="block.type === 'code'" 
+      [code]="block.content" 
+      [language]="block.language || ''">
+    </app-code-block>
+
+  </ng-container>
+</div>

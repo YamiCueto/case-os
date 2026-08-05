@@ -1,0 +1,47 @@
+<div class="space-y-8">
+  <header>
+    <h1 class="text-3xl font-extrabold text-white tracking-tight mb-2">CASE Labs</h1>
+    <p class="text-slate-400 text-lg max-w-2xl">
+      Entornos de experimentación guiada. Resuelve retos reales usando Inteligencia Artificial.
+    </p>
+  </header>
+
+  <main class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div 
+      *ngFor="let lab of labs()" 
+      class="bg-slate-900 border border-slate-800 rounded-2xl p-6 cursor-pointer hover:border-indigo-500/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] transition-all group relative"
+      (click)="openLab(lab)">
+      
+      <!-- Decoración de tipo de lab -->
+      <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-2xl"></div>
+
+      <div class="flex items-center justify-between mb-4">
+        <span class="px-2.5 py-1 bg-indigo-900/40 text-indigo-400 rounded-md text-xs font-semibold tracking-wide">
+          {{ lab.type }}
+        </span>
+        <span class="text-[10px] font-bold uppercase text-slate-400">
+          {{ lab.estimatedTime }} MIN
+        </span>
+      </div>
+
+      <h3 class="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-indigo-300 transition-colors">
+        {{ lab.title }}
+      </h3>
+      
+      <p class="text-slate-400 text-sm line-clamp-3 mb-6 flex-1">
+        {{ lab.description }}
+      </p>
+
+      <div class="flex items-center justify-between">
+        <div class="flex flex-wrap gap-1">
+          <span *ngFor="let tech of lab.technologies.slice(0,3)" class="px-2 py-0.5 bg-slate-950 text-slate-400 rounded text-[10px] font-medium border border-slate-800">
+            {{ tech }}
+          </span>
+        </div>
+        <span class="text-indigo-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+          Iniciar <span class="text-lg leading-none">→</span>
+        </span>
+      </div>
+    </div>
+  </main>
+</div>

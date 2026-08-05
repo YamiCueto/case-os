@@ -4,8 +4,8 @@
     <div class="flex-1">
       <h1 class="text-3xl font-extrabold text-white tracking-tight mb-2">CASE Library</h1>
       <p class="text-slate-400 text-lg max-w-2xl">
-        El repositorio oficial de Prompts, Arquitecturas y Plantillas de BancoFiel. 
-        Copie e implemente soluciones en segundos.
+        El motor de conocimiento oficial de BancoFiel. 
+        Prompts, Arquitecturas y Plantillas listas para implementar.
       </p>
     </div>
     <div class="w-full md:w-auto md:min-w-[400px]">
@@ -45,13 +45,5 @@
         </app-resource-card>
       </div>
     </main>
-
   </div>
 </div>
-
-<!-- Modal de Detalle -->
-<app-resource-detail 
-  *ngIf="selectedResource() !== null" 
-  [resource]="selectedResource()!" 
-  (close)="closeDetail()">
-</app-resource-detail>

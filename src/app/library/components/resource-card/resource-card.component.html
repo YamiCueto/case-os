@@ -6,15 +6,18 @@
         {{ resource.type }}
       </span>
     </div>
-    <span class="text-[10px] font-bold uppercase"
-      [ngClass]="{
-        'text-green-400': resource.difficulty === 'BEGINNER',
-        'text-yellow-400': resource.difficulty === 'INTERMEDIATE',
-        'text-orange-400': resource.difficulty === 'ADVANCED',
-        'text-red-400': resource.difficulty === 'EXPERT'
-      }">
-      {{ resource.difficulty }}
-    </span>
+    <div class="flex items-center gap-2">
+      <span class="text-[10px] font-bold uppercase"
+        [ngClass]="{
+          'text-green-400': resource.difficulty === 'BEGINNER',
+          'text-yellow-400': resource.difficulty === 'INTERMEDIATE',
+          'text-orange-400': resource.difficulty === 'ADVANCED',
+          'text-red-400': resource.difficulty === 'EXPERT'
+        }">
+        {{ resource.difficulty }}
+      </span>
+      <app-favorite-button [resourceId]="resource.id"></app-favorite-button>
+    </div>
   </div>
 
   <h3 class="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-indigo-400 transition-colors">

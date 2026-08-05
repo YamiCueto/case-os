@@ -1,14 +1,23 @@
-import { Resource } from '../../core/models/resource.models';
+import { KnowledgeResource } from '../../core/models/knowledge.models';
 
-export const LIBRARY_CONFIG: Resource[] = [
+const NOW = new Date().toISOString();
+
+export const LIBRARY_CONFIG: KnowledgeResource[] = [
   {
     id: 'res-001',
+    slug: 'migracion-vb6-spring-boot',
+    version: '1.0.0',
+    status: 'PUBLISHED',
+    createdAt: NOW,
+    updatedAt: NOW,
+    author: 'CASE Team',
     type: 'PROMPT',
     title: 'Migración VB6 a Spring Boot REST API',
-    description: 'Prompt especializado para convertir lógica legacy escrita en Visual Basic 6 a controladores y servicios de Spring Boot 3, preservando la lógica de negocio y aplicando arquitectura limpia.',
+    description: 'Prompt especializado para convertir lógica legacy escrita en Visual Basic 6 a controladores y servicios de Spring Boot 3.',
     difficulty: 'ADVANCED',
     technologies: ['VB6', 'Spring Boot', 'Java'],
     tags: ['Migración', 'Legacy', 'Refactoring'],
+    keywords: ['legacy', 'visual basic', 'rest', 'api', 'modernization'],
     content: `Actúa como un Principal Software Engineer experto en modernización de sistemas legacy.
 
 Tu objetivo es migrar el siguiente bloque de código Visual Basic 6 a una estructura RESTful moderna utilizando Java 21 y Spring Boot 3.
@@ -25,17 +34,23 @@ Tu objetivo es migrar el siguiente bloque de código Visual Basic 6 a una estruc
 [INSERTA TU CÓDIGO VB6 AQUÍ]
 \`\`\`
 
-Proporciona únicamente el código Java resultante y una breve explicación de las decisiones arquitectónicas tomadas.`,
-    metadata: { author: 'CASE Team', version: '1.0' }
+Proporciona únicamente el código Java resultante y una breve explicación de las decisiones arquitectónicas tomadas.`
   },
   {
     id: 'res-002',
+    slug: 'generacion-tests-unitarios-junit5',
+    version: '1.1.0',
+    status: 'PUBLISHED',
+    createdAt: NOW,
+    updatedAt: NOW,
+    author: 'CASE QA Team',
     type: 'PROMPT',
     title: 'Generación de Tests Unitarios (JUnit 5 + Mockito)',
     description: 'Prompt estructurado para generar tests unitarios exhaustivos asegurando casos de borde, mocks correctos y alta cobertura.',
     difficulty: 'INTERMEDIATE',
     technologies: ['Java', 'JUnit 5', 'Mockito'],
     tags: ['Testing', 'TDD'],
+    keywords: ['unit tests', 'pruebas unitarias', 'mocking', 'cobertura'],
     content: `Actúa como un QA Automation Engineer experto en TDD.
 
 Analiza la siguiente clase Java y genera las pruebas unitarias correspondientes utilizando **JUnit 5** y **Mockito**.
@@ -52,11 +67,16 @@ Analiza la siguiente clase Java y genera las pruebas unitarias correspondientes 
 [INSERTA TU CÓDIGO JAVA AQUÍ]
 \`\`\`
 
-Devuelve la clase de prueba lista para ser ejecutada.`,
-    metadata: { author: 'CASE Team', version: '1.1' }
+Devuelve la clase de prueba lista para ser ejecutada.`
   },
   {
     id: 'res-003',
+    slug: 'analisis-documentacion-stored-procedures',
+    version: '1.0.0',
+    status: 'PUBLISHED',
+    createdAt: NOW,
+    updatedAt: NOW,
+    author: 'CASE Data Team',
     type: 'PROMPT',
     title: 'Análisis y Documentación de Stored Procedures',
     description: 'Instrucción para que el LLM lea un SP complejo (SQL Server / Oracle) y extraiga sus reglas de negocio en un formato legible para analistas.',
@@ -78,11 +98,16 @@ El objetivo es que un programador que no conoce SQL pueda entender las reglas de
 \`\`\`sql
 [INSERTA TU SCRIPT SQL AQUÍ]
 \`\`\`
-`,
-    metadata: { author: 'CASE Team', version: '1.0' }
+`
   },
   {
     id: 'res-004',
+    slug: 'scripts-migracion-flyway-plantilla',
+    version: '1.0.0',
+    status: 'PUBLISHED',
+    createdAt: NOW,
+    updatedAt: NOW,
+    author: 'CASE DevOps Team',
     type: 'TEMPLATE',
     title: 'Scripts de Migración Flyway (Plantilla)',
     description: 'Plantilla de prompt para traducir scripts DDL tradicionales a formatos versionados de Flyway respetando convenciones corporativas.',
@@ -100,11 +125,16 @@ El objetivo es que un programador que no conoce SQL pueda entender las reglas de
 \`\`\`sql
 [INSERTA TU SCRIPT AQUÍ]
 \`\`\`
-`,
-    metadata: { author: 'CASE Team', version: '1.0' }
+`
   },
   {
     id: 'res-005',
+    slug: 'generador-especificacion-openapi-swagger',
+    version: '1.0.0',
+    status: 'PUBLISHED',
+    createdAt: NOW,
+    updatedAt: NOW,
+    author: 'CASE Team',
     type: 'PROMPT',
     title: 'Generador de Especificación OpenAPI (Swagger)',
     description: 'Prompt para deducir y generar la especificación OpenAPI v3 a partir del código de un controlador o de una descripción funcional.',
@@ -125,17 +155,23 @@ Genera una especificación **OpenAPI 3.0.x** en formato YAML basada en la descri
 \`\`\`text
 [INSERTA LA DESCRIPCIÓN DE TUS ENDPOINTS O CÓDIGO DEL CONTROLLER AQUÍ]
 \`\`\`
-`,
-    metadata: { author: 'CASE Team', version: '1.0' }
+`
   },
   {
     id: 'res-006',
+    slug: 'arquitectura-hexagonal-spring-boot',
+    version: '2.0.0',
+    status: 'PUBLISHED',
+    createdAt: NOW,
+    updatedAt: NOW,
+    author: 'CASE Architecture Board',
     type: 'ARCHITECTURE',
     title: 'Arquitectura Hexagonal en Spring Boot',
     description: 'Guía y estructura de carpetas sugerida para implementar Arquitectura Hexagonal (Ports and Adapters) en microservicios Java.',
     difficulty: 'EXPERT',
     technologies: ['Spring Boot', 'Java'],
     tags: ['Arquitectura', 'Clean Code'],
+    aliases: ['Clean Architecture', 'Ports and Adapters'],
     content: `# Arquitectura Hexagonal en Spring Boot
 
 La arquitectura hexagonal separa el dominio (lógica de negocio) de las dependencias externas (bases de datos, APIs web, mensajería).
@@ -164,11 +200,16 @@ com.bancofiel.microservicio
 ## Principios Clave:
 1. **El dominio no conoce a Spring:** Evita anotaciones como \`@Service\` o \`@Entity\` dentro de la carpeta \`domain\`.
 2. **Inversión de Dependencias:** La infraestructura depende del dominio, nunca al revés.
-3. **Mapeo Explícito:** Los datos que entran por los controladores deben mapearse a objetos de dominio antes de pasar al servicio. Los objetos de dominio deben mapearse a entidades JPA antes de guardarse.`,
-    metadata: { author: 'CASE Architecture Board' }
+3. **Mapeo Explícito:** Los datos que entran por los controladores deben mapearse a objetos de dominio antes de pasar al servicio. Los objetos de dominio deben mapearse a entidades JPA antes de guardarse.`
   },
   {
     id: 'res-007',
+    slug: 'checklist-code-review-asistido-ia',
+    version: '1.0.0',
+    status: 'PUBLISHED',
+    createdAt: NOW,
+    updatedAt: NOW,
+    author: 'CASE QA Team',
     type: 'CHECKLIST',
     title: 'Checklist: Code Review Asistido por IA',
     description: 'Puntos clave a considerar cuando se utiliza un LLM para realizar un Code Review de un Pull Request.',
@@ -186,11 +227,16 @@ Cuando utilices GenAI para analizar un Pull Request, asegúrate de validar los s
 - [ ] **Complejidad Ciclomática:** ¿La sugerencia de refactorización de la IA hace el código más legible o simplemente más "inteligente" e incomprensible?
 
 **Prompt recomendado para Code Review:**
-> "Actúa como un Senior Reviewer. Revisa el siguiente diff de código. Enfócate en: 1) Posibles NullPointerExceptions, 2) Fugas de memoria o conexiones no cerradas, 3) Violaciones a principios SOLID. No me des correcciones de estilo (espacios/tabs)."`,
-    metadata: { author: 'CASE QA Team' }
+> "Actúa como un Senior Reviewer. Revisa el siguiente diff de código. Enfócate en: 1) Posibles NullPointerExceptions, 2) Fugas de memoria o conexiones no cerradas, 3) Violaciones a principios SOLID. No me des correcciones de estilo (espacios/tabs)."`
   },
   {
     id: 'res-008',
+    slug: 'context-engineering-roles-personas',
+    version: '1.0.0',
+    status: 'PUBLISHED',
+    createdAt: NOW,
+    updatedAt: NOW,
+    author: 'CASE Team',
     type: 'CONTEXT',
     title: 'Context Engineering: Roles y Personas',
     description: 'Plantillas de inicialización (System Prompts) para asignar roles efectivos a la IA según la tarea técnica.',
