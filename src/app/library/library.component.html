@@ -1,0 +1,57 @@
+<div class="space-y-8 relative">
+  <!-- Cabecera y Buscador -->
+  <header class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="flex-1">
+      <h1 class="text-3xl font-extrabold text-white tracking-tight mb-2">CASE Library</h1>
+      <p class="text-slate-400 text-lg max-w-2xl">
+        El repositorio oficial de Prompts, Arquitecturas y Plantillas de BancoFiel. 
+        Copie e implemente soluciones en segundos.
+      </p>
+    </div>
+    <div class="w-full md:w-auto md:min-w-[400px]">
+      <app-library-search (search)="onSearch($event)"></app-library-search>
+    </div>
+  </header>
+
+  <!-- Layout Principal (Sidebar + Grid) -->
+  <div class="flex flex-col lg:flex-row gap-8 items-start">
+    
+    <!-- Sidebar de Filtros -->
+    <aside class="w-full lg:w-64 shrink-0 lg:sticky lg:top-24">
+      <app-library-filters (filterChange)="onFilterChange($event)"></app-library-filters>
+    </aside>
+
+    <!-- Grid de Recursos -->
+    <main class="flex-1 w-full min-w-0">
+      
+      <!-- Contador de Resultados -->
+      <div class="mb-4 text-sm font-semibold text-slate-400">
+        <span class="text-white">{{ resources().length }}</span> recursos encontrados
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="resources().length === 0" class="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center flex flex-col items-center">
+        <span class="text-5xl mb-4">🔍</span>
+        <h3 class="text-xl font-bold text-white mb-2">No encontramos recursos</h3>
+        <p class="text-slate-400 max-w-md">Intenta ajustando los filtros o utilizando otros términos de búsqueda.</p>
+      </div>
+
+      <!-- Grid -->
+      <div *ngIf="resources().length > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <app-resource-card 
+          *ngFor="let res of resources()" 
+          [resource]="res" 
+          (viewDetail)="openDetail($event)">
+        </app-resource-card>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<!-- Modal de Detalle -->
+<app-resource-detail 
+  *ngIf="selectedResource() !== null" 
+  [resource]="selectedResource()!" 
+  (close)="closeDetail()">
+</app-resource-detail>

@@ -1,0 +1,43 @@
+<div class="bg-slate-900 border border-slate-800 hover:border-indigo-500/50 rounded-xl p-5 transition-all flex flex-col h-full group">
+  <div class="flex justify-between items-start mb-3">
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">{{ getIconForType(resource.type) }}</span>
+      <span class="text-[10px] font-bold tracking-wider uppercase bg-slate-800 text-slate-300 px-2 py-1 rounded">
+        {{ resource.type }}
+      </span>
+    </div>
+    <span class="text-[10px] font-bold uppercase"
+      [ngClass]="{
+        'text-green-400': resource.difficulty === 'BEGINNER',
+        'text-yellow-400': resource.difficulty === 'INTERMEDIATE',
+        'text-orange-400': resource.difficulty === 'ADVANCED',
+        'text-red-400': resource.difficulty === 'EXPERT'
+      }">
+      {{ resource.difficulty }}
+    </span>
+  </div>
+
+  <h3 class="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-indigo-400 transition-colors">
+    {{ resource.title }}
+  </h3>
+  
+  <p class="text-sm text-slate-400 mb-4 flex-1 line-clamp-3">
+    {{ resource.description }}
+  </p>
+
+  <div class="flex flex-wrap gap-1 mb-4">
+    <span *ngFor="let tech of resource.technologies | slice:0:3" 
+          class="text-[10px] bg-slate-800/50 border border-slate-700 text-slate-300 px-1.5 py-0.5 rounded">
+      {{ tech }}
+    </span>
+    <span *ngIf="resource.technologies.length > 3" class="text-[10px] text-slate-500 px-1">
+      +{{ resource.technologies.length - 3 }}
+    </span>
+  </div>
+
+  <button 
+    (click)="onViewClick()"
+    class="w-full py-2 bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-400 font-bold text-sm rounded-lg border border-indigo-500/20 transition-colors">
+    Ver Recurso
+  </button>
+</div>

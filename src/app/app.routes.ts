@@ -71,6 +71,30 @@ export const routes: Routes = [
     loadComponent: () => import('./tech-stack/tech-stack.component').then(m => m.TechStackComponent)
   },
   {
+    path: 'academy/home',
+    loadComponent: () => import('./academy/home/home.component').then(m => m.HomeComponent)
+  },
+  {
+    path: 'academy/roadmap',
+    loadComponent: () => import('./academy/roadmap/roadmap.component').then(m => m.RoadmapComponent)
+  },
+  {
+    path: 'academy/certifications',
+    loadComponent: () => import('./academy/certifications/certifications.component').then(m => m.CertificationsComponent)
+  },
+  {
+    path: 'library',
+    loadComponent: () => import('./library/library.component').then(m => m.LibraryComponent)
+  },
+  {
+    path: 'labs',
+    loadComponent: () => import('./labs/labs.component').then(m => m.LabsComponent)
+  },
+  {
+    path: 'framework',
+    loadComponent: () => import('./framework/framework.component').then(m => m.FrameworkComponent)
+  },
+  {
     path: '**',
     redirectTo: 'plan-dev-detallado'
   }

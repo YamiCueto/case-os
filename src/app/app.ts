@@ -1,29 +1,26 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, signal, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { SidebarComponent } from './core/layout/sidebar/sidebar.component';
+import { MobileHeaderComponent } from './core/layout/mobile-header/mobile-header.component';
+import { BreadcrumbComponent } from './core/layout/breadcrumb/breadcrumb.component';
+import { ClassMetadataComponent } from './core/layout/class-metadata/class-metadata.component';
+import { ClassNavigationComponent } from './core/layout/class-navigation/class-navigation.component';
+import { NavigationContextService } from './core/services/navigation-context.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
+  imports: [
+    RouterOutlet, CommonModule,
+    SidebarComponent, MobileHeaderComponent, BreadcrumbComponent,
+    ClassMetadataComponent, ClassNavigationComponent
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('Curso IA Generativa para Ingenieros de Software');
-  sidebarCollapsed = false;
-  mobileMenuOpen = false;
-  classesOpen = true;
-
-  toggleSidebar() {
-    this.sidebarCollapsed = !this.sidebarCollapsed;
-  }
-
-  toggleMobileMenu() {
-    this.mobileMenuOpen = !this.mobileMenuOpen;
-  }
-
-  closeMobileMenu() {
-    this.mobileMenuOpen = false;
-  }
+  // NavigationContextService se inyecta a nivel raíz para que comience a escuchar eventos del router
+  // de forma temprana, aunque el layout principal es ultra-liviano.
+  private navContextService = inject(NavigationContextService);
 }

@@ -1,0 +1,45 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+  <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    
+    <!-- Header -->
+    <div class="p-6 border-b border-slate-800 flex justify-between items-start bg-slate-900/50">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-2xl">{{ getIconForType(resource.type) }}</span>
+          <h2 class="text-2xl font-bold text-white">{{ resource.title }}</h2>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="text-xs font-bold uppercase bg-slate-800 text-slate-300 px-2 py-1 rounded">
+            {{ resource.type }}
+          </span>
+          <span *ngFor="let tech of resource.technologies" class="text-xs bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded border border-indigo-500/20">
+            {{ tech }}
+          </span>
+        </div>
+      </div>
+      <button (click)="onClose()" class="text-slate-400 hover:text-white p-2 bg-slate-800 rounded-full transition-colors">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 overflow-y-auto flex-1 bg-slate-950">
+      <p class="text-slate-300 text-sm mb-6">{{ resource.description }}</p>
+
+      <div class="relative group">
+        <div class="absolute right-4 top-4 z-10 flex gap-2">
+          <button (click)="copyToClipboard()" 
+                  class="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-indigo-600 text-slate-200 text-xs font-bold rounded-lg border border-slate-700 transition-colors shadow-lg">
+            <span *ngIf="!copySuccess">📋 Copiar Contenido</span>
+            <span *ngIf="copySuccess" class="text-green-400">✔️ Copiado</span>
+          </button>
+        </div>
+        
+        <pre class="bg-slate-900 border border-slate-800 rounded-xl p-6 text-sm text-slate-300 overflow-x-auto font-mono whitespace-pre-wrap selection:bg-indigo-500/30">{{ resource.content }}</pre>
+      </div>
+    </div>
+    
+  </div>
+</div>

@@ -1,251 +1,28 @@
 <div class="min-h-screen flex bg-slate-900 text-slate-100 font-sans">
   <!-- Desktop Sidebar -->
-  <aside 
-    [class.w-72]="!sidebarCollapsed" 
-    [class.w-20]="sidebarCollapsed" 
-    class="hidden md:flex flex-col bg-slate-950 border-r border-slate-800 transition-all duration-300 relative z-30 sticky top-0 h-screen"
-  >
-    <!-- Sidebar Header -->
-    <div class="p-4 border-b border-slate-800 flex items-center justify-between">
-      <a routerLink="/plan-dev-detallado" class="flex items-center gap-3 overflow-hidden">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/20 shrink-0">
-          DEV
-        </div>
-        <div *ngIf="!sidebarCollapsed" class="flex flex-col">
-          <span class="font-extrabold text-white text-base leading-tight tracking-tight">Curso IA Gen</span>
-          <span class="text-xs text-indigo-400 font-medium">Software Engineering</span>
-        </div>
-      </a>
-      <button 
-        (click)="toggleSidebar()" 
-        class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-        [title]="sidebarCollapsed ? 'Expandir menú' : 'Colapsar menú'"
-      >
-        <svg *ngIf="!sidebarCollapsed" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-        </svg>
-        <svg *ngIf="sidebarCollapsed" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-        </svg>
-      </button>
-    </div>
+  <app-sidebar></app-sidebar>
 
-    <!-- Navigation List -->
-    <nav class="flex-1 overflow-y-auto p-3 space-y-1">
-      <!-- Plan de Estudio -->
-      <a 
-        routerLink="/plan-dev-detallado" 
-        routerLinkActive="bg-indigo-600 text-white shadow-md shadow-indigo-600/30" 
-        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-all text-sm font-medium"
-      >
-        <span class="text-lg">📌</span>
-        <span *ngIf="!sidebarCollapsed">Plan de Estudio DEV</span>
-      </a>
-
-      <!-- Guías de Instalación -->
-      <a 
-        routerLink="/installation-guides" 
-        routerLinkActive="bg-indigo-600 text-white shadow-md shadow-indigo-600/30" 
-        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-all text-sm font-medium"
-      >
-        <span class="text-lg">🛠️</span>
-        <span *ngIf="!sidebarCollapsed">Guías de Instalación</span>
-      </a>
-
-      <!-- Tech Stack Bancario -->
-      <a 
-        routerLink="/tech-stack" 
-        routerLinkActive="bg-indigo-600 text-white shadow-md shadow-indigo-600/30" 
-        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-all text-sm font-medium"
-      >
-        <span class="text-lg">🏦</span>
-        <span *ngIf="!sidebarCollapsed">Stack BancoFiel</span>
-      </a>
-
-      <div class="my-4 border-t border-slate-800"></div>
-
-      <!-- Section Title: Clases -->
-      <div *ngIf="!sidebarCollapsed" class="px-3 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-        12 Clases Prácticas DEV
-      </div>
-
-      <!-- Clases Links -->
-      <div class="space-y-1">
-        <a 
-          routerLink="/clase1-dev-fundamentos" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C1</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Fundamentos GenIA</span>
-        </a>
-
-        <a 
-          routerLink="/clase2-dev-spring-boot" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C2</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Spring Boot con IA</span>
-        </a>
-
-        <a 
-          routerLink="/clase3-dev-migracion-legacy" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C3</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Migración VB6 Legacy</span>
-        </a>
-
-        <a 
-          routerLink="/clase4-dev-integracion-apis" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C4</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">APIs REST & Swagger</span>
-        </a>
-
-        <a 
-          routerLink="/clase5-dev-testing-avanzado" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C5</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Unit Testing & TDD</span>
-        </a>
-
-        <a 
-          routerLink="/clase6-dev-modulo-angular" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C6</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Componentes Angular</span>
-        </a>
-
-        <a 
-          routerLink="/clase7-dev-frontend-legacy" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C7</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Modernización Frontend</span>
-        </a>
-
-        <a 
-          routerLink="/clase8-dev-estado-rxjs" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C8</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Estado & RxJS</span>
-        </a>
-
-        <a 
-          routerLink="/clase9-dev-testing-e2e" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C9</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Testing E2E Devs</span>
-        </a>
-
-        <a 
-          routerLink="/clase10-dev-fastapi" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C10</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Spring AI &amp; RAG</span>
-        </a>
-
-        <a 
-          routerLink="/clase11-dev-lambda-serverless" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C11</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Angular UI Legacy</span>
-        </a>
-
-        <a 
-          routerLink="/clase12-dev-proyecto-final" 
-          routerLinkActive="bg-slate-800 text-indigo-400 font-semibold border-l-2 border-indigo-500 pl-2.5" 
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all text-xs"
-        >
-          <span class="w-6 text-center font-bold text-indigo-400">C12</span>
-          <span *ngIf="!sidebarCollapsed" class="truncate">Proyecto Integrador</span>
-        </a>
-      </div>
-    </nav>
-
-    <!-- Sidebar Footer -->
-    <div class="p-3 border-t border-slate-800">
-      <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800/60 flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs shrink-0">
-          💻
-        </div>
-        <div *ngIf="!sidebarCollapsed" class="overflow-hidden">
-          <p class="text-xs font-semibold text-white truncate">Full Stack DEV</p>
-          <p class="text-[10px] text-indigo-300 font-medium truncate">3 Meses (12 Semanas)</p>
-        </div>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Mobile Header -->
-  <div class="flex-1 flex flex-col min-w-0">
-    <header class="md:hidden bg-slate-950 border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-      <a routerLink="/plan-dev-detallado" class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">
-          DEV
-        </div>
-        <span class="font-bold text-white text-sm">IA Gen Devs</span>
-      </a>
-      <button (click)="toggleMobileMenu()" class="p-2 text-slate-400 hover:text-white">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div *ngIf="mobileMenuOpen" class="md:hidden fixed inset-0 z-50 bg-slate-950/95 flex flex-col p-4 overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-        <span class="font-bold text-white text-lg">Menú del Curso DEV</span>
-        <button (click)="closeMobileMenu()" class="p-2 text-slate-400 hover:text-white">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      <nav class="space-y-2">
-        <a (click)="closeMobileMenu()" routerLink="/plan-dev-detallado" class="block px-3 py-2 rounded-lg bg-indigo-600 text-white font-medium">📌 Plan de Estudio DEV</a>
-        <a (click)="closeMobileMenu()" routerLink="/installation-guides" class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800">🛠️ Guías de Instalación</a>
-        <a (click)="closeMobileMenu()" routerLink="/tech-stack" class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800">🏦 Stack BancoFiel</a>
-
-        <div class="pt-3 border-t border-slate-800 text-xs font-semibold text-slate-400 uppercase">Clases DEV</div>
-        <a (click)="closeMobileMenu()" routerLink="/clase1-dev-fundamentos" class="block px-3 py-1.5 text-sm text-slate-300">C1: Fundamentos GenIA</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase2-dev-spring-boot" class="block px-3 py-1.5 text-sm text-slate-300">C2: Spring Boot con IA</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase3-dev-migracion-legacy" class="block px-3 py-1.5 text-sm text-slate-300">C3: Migración VB6 Legacy</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase4-dev-integracion-apis" class="block px-3 py-1.5 text-sm text-slate-300">C4: APIs REST & Swagger</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase5-dev-testing-avanzado" class="block px-3 py-1.5 text-sm text-slate-300">C5: Unit Testing & TDD</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase6-dev-modulo-angular" class="block px-3 py-1.5 text-sm text-slate-300">C6: Componentes Angular</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase7-dev-frontend-legacy" class="block px-3 py-1.5 text-sm text-slate-300">C7: Modernización Frontend</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase8-dev-estado-rxjs" class="block px-3 py-1.5 text-sm text-slate-300">C8: Estado & RxJS</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase9-dev-testing-e2e" class="block px-3 py-1.5 text-sm text-slate-300">C9: Testing E2E Devs</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase10-dev-fastapi" class="block px-3 py-1.5 text-sm text-slate-300">C10: Spring AI &amp; RAG</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase11-dev-lambda-serverless" class="block px-3 py-1.5 text-sm text-slate-300">C11: Angular UI Legacy</a>
-        <a (click)="closeMobileMenu()" routerLink="/clase12-dev-proyecto-final" class="block px-3 py-1.5 text-sm text-slate-300">C12: Proyecto Integrador</a>
-      </nav>
-    </div>
+  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+    <!-- Mobile Header -->
+    <app-mobile-header></app-mobile-header>
 
     <!-- Main Content Area -->
-    <main class="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto">
-      <router-outlet></router-outlet>
+    <main class="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto flex flex-col min-h-0">
+      
+      <!-- Context UI: Breadcrumb -->
+      <app-breadcrumb></app-breadcrumb>
+
+      <!-- Context UI: Metadata -->
+      <app-class-metadata></app-class-metadata>
+      
+      <!-- Legacy Class Content or Future Modules -->
+      <div class="flex-1 relative">
+        <router-outlet></router-outlet>
+      </div>
+
+      <!-- Context UI: Navigation -->
+      <app-class-navigation></app-class-navigation>
+
     </main>
   </div>
 </div>

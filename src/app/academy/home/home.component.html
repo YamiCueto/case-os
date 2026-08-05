@@ -1,0 +1,55 @@
+<div class="space-y-8">
+  <header class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-extrabold text-white tracking-tight">Bienvenido a CASE Academy</h1>
+      <p class="text-slate-400 mt-2 text-lg">La plataforma de formación para Software Engineers de BancoFiel.</p>
+    </div>
+    
+    <div *ngIf="progress() as prog" class="bg-slate-800/50 rounded-xl p-4 min-w-[250px] border border-slate-700">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-sm font-semibold text-slate-300">Tu Progreso Global</span>
+        <span class="text-sm font-bold text-indigo-400">{{ prog.completionPercentage }}%</span>
+      </div>
+      <div class="w-full bg-slate-900 rounded-full h-2">
+        <div class="bg-indigo-500 h-2 rounded-full" [style.width.%]="prog.completionPercentage"></div>
+      </div>
+    </div>
+  </header>
+
+  <section *ngIf="progress()?.lastVisitedLessonPath as lastPath" class="bg-gradient-to-r from-indigo-900/40 to-slate-900 border border-indigo-500/20 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div>
+      <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">Continuar Aprendiendo</div>
+      <h2 class="text-xl font-bold text-white">{{ progress()?.lastVisitedLessonTitle }}</h2>
+    </div>
+    <a [routerLink]="lastPath" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-colors shrink-0">
+      Retomar Clase →
+    </a>
+  </section>
+
+  <section>
+    <h2 class="text-xl font-bold text-slate-200 mb-6 flex items-center gap-2">
+      <span class="text-2xl">📚</span> Programa de Formación
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let mod of modules" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden flex flex-col h-full hover:border-slate-700 transition-colors">
+      <div *ngIf="mod.state === 'LOCKED'" class="absolute top-4 right-4 bg-slate-800 text-slate-400 text-xs font-bold px-2 py-1 rounded uppercase">
+        Bloqueado
+      </div>
+      <div *ngIf="mod.state === 'LIVE'" class="absolute top-4 right-4 bg-indigo-500/20 text-indigo-400 text-xs font-bold px-2 py-1 rounded uppercase">
+        Activo
+      </div>
+      
+      <div class="text-4xl mb-4">{{ mod.icon }}</div>
+      <h3 class="text-xl font-bold text-white mb-2">{{ mod.title }}</h3>
+      <p class="text-sm text-slate-400 mb-6 flex-1">{{ mod.description }}</p>
+      
+      <div class="flex items-center justify-between text-sm">
+        <span class="text-slate-500">{{ mod.duration }}</span>
+        <a *ngIf="mod.state === 'LIVE'" routerLink="/plan-dev-detallado" class="text-indigo-400 font-semibold hover:text-indigo-300">
+          Entrar →
+        </a>
+      </div>
+    </div>
+    </div>
+  </section>
+</div>
