@@ -2,6 +2,7 @@ import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavigationContextService } from './core/services/navigation-context.service';
+import { LearningProgressService } from './core/services/learning-progress.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { NavigationContextService } from './core/services/navigation-context.ser
   styleUrl: './app.css',
 })
 export class App {
-  // NavigationContextService se inyecta a nivel raíz para que comience a escuchar eventos del router
-  // de forma temprana, aunque el layout principal es ultra-liviano.
+  // Inicialización de servicios core de monitoreo de rutas
   private navContextService = inject(NavigationContextService);
+  private learningProgress = inject(LearningProgressService);
 }

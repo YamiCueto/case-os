@@ -58,25 +58,34 @@ import { UserStatsService } from '../../services/user-stats.service';
           </a>
         </div>
 
-        <!-- CONTEXTUAL NAVIGATION (Only visible if inside a module/lesson) -->
-        <div *ngIf="context()?.module as activeModule" class="border-t border-slate-800 p-4 bg-slate-950 mt-auto">
-          <p class="px-2 text-xs font-bold uppercase tracking-wider text-indigo-400 mb-3">{{ activeModule.title }}</p>
-          <div class="space-y-1">
-            <a *ngFor="let lesson of activeModule.lessons"
-               [routerLink]="lesson.path"
-               routerLinkActive="bg-indigo-900/40 text-indigo-300"
-               class="flex items-center gap-3 px-2 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-colors text-xs font-medium relative group"
-               [title]="lesson.title">
-              
-              <!-- Indicator of completion/current -->
-              <span class="w-1.5 h-1.5 rounded-full shrink-0" 
-                    [ngClass]="{
-                      'bg-indigo-500': isCurrentLesson(lesson.id),
-                      'bg-slate-600': !isCurrentLesson(lesson.id)
-                    }"></span>
-              
-              <span class="truncate">{{ lesson.title }}</span>
-            </a>
+        <!-- ACADEMY MODULES (Contextual / Navigation) -->
+        <div class="border-t border-slate-800 bg-slate-950 mt-auto flex-shrink-0">
+          <div *ngFor="let mod of modules" class="flex flex-col">
+            <!-- Module Header (Clickable to expand/collapse if we wanted, but here we'll just show it or expand if active) -->
+            <div class="px-4 py-3 bg-slate-900/50 border-b border-slate-800 flex items-center justify-between group cursor-pointer">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-indigo-400 truncate">{{ mod.title }}</p>
+              <span class="text-slate-600 text-xs">{{ mod.lessons.length }} clases</span>
+            </div>
+            
+            <!-- Lessons List (Always visible for now so user can navigate, or conditionally visible if we want it strictly contextual, but user wants to navigate to them) -->
+            <!-- If the user wants to navigate to them, we should show them. Let's show the active module expanded, and if no module is active, maybe show the first one or all collapsed? -->
+            <!-- Wait, the simplest is to always show the lessons of the modules, or just the active one? The user said "sigo sin poder ver las clases... para navegar a ellas". So they want to see them. Let's render them. -->
+            <div class="space-y-0.5 p-2" [ngClass]="{'hidden': context()?.module?.id !== mod.id && context()?.module}">
+              <a *ngFor="let lesson of mod.lessons"
+                 [routerLink]="lesson.path"
+                 routerLinkActive="bg-indigo-900/40 text-indigo-300"
+                 class="flex items-center gap-3 px-2 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-colors text-xs font-medium relative group"
+                 [title]="lesson.title">
+                
+                <span class="w-1.5 h-1.5 rounded-full shrink-0" 
+                      [ngClass]="{
+                        'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]': isCurrentLesson(lesson.id),
+                        'bg-slate-700': !isCurrentLesson(lesson.id)
+                      }"></span>
+                
+                <span class="truncate" [ngClass]="{'text-indigo-200': isCurrentLesson(lesson.id)}">{{ lesson.title }}</span>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -98,7 +107,10 @@ import { UserStatsService } from '../../services/user-stats.service';
 })
 export class SidebarComponent {
   private navContext = inject(NavigationContextService);
+  private courseService = inject(CourseService);
+  
   context = this.navContext.getContext();
+  modules = this.courseService.getModules();
 
   isCurrentLesson(lessonId: string): boolean {
     return this.context()?.currentLesson?.id === lessonId;
