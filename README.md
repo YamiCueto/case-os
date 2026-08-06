@@ -1,4 +1,4 @@
-# 🚀 Curso de IA Generativa para Ingenieros de Software (DEV - 3 Meses / 12 Semanas)
+# 🚀 CASE OS — Engineering Workspace
 
 [![Angular](https://img.shields.io/badge/Angular-19+-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev/)
 [![Java](https://img.shields.io/badge/Java-21_LTS-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://adoptium.net/)
@@ -8,7 +8,9 @@
 [![AWS Bedrock](https://img.shields.io/badge/AWS-Amazon_Bedrock-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/bedrock/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-Bienvenido al **Curso Intensivo de IA Generativa para Desarrolladores de Software**. Un programa trimestral de **3 MESES (12 Semanas)** estructurado para transformar la ingeniería de software tradicional mediante **Agentic Coding**, **Model Context Protocol (MCP)**, **Spec-Driven Development (`AGENTS.md`)** y modelos de razonamiento de vanguardia (**Google Gemini 2.5 Pro / 3.x**, **DeepSeek R1 / V3**, **Claude 3.7 / 4.x**, **OpenAI o3 / GPT-5.x**).
+Bienvenido a **CASE OS**. Originalmente concebido como un Curso de IA Generativa, el proyecto ha evolucionado para convertirse en un **Engineering Workspace** inmersivo. Es un sistema operativo diseñado por y para ingenieros de software, integrando herramientas nativas de IA, plataformas de comandos, y laboratorios prácticos.
+
+La antigua experiencia del "Curso" vive ahora dentro del Workspace **Academy**, rodeada de otras capacidades como Library, Labs y un asistente integrado.
 
 ---
 

@@ -19,11 +19,11 @@ import { WorkspaceRegistryService } from '../workspace-registry/workspace-regist
     <header class="topbar" role="banner">
 
       <!-- Brand -->
-      <a routerLink="/dashboard" class="topbar__brand" aria-label="CASE Engineering Workspace — Ir al inicio">
+      <a routerLink="/dashboard" class="topbar__brand" aria-label="CASE OS — Engineering Workspace">
         <div class="topbar__brand-mark" aria-hidden="true">
           <span class="material-symbols-outlined">terminal</span>
         </div>
-        <span class="topbar__brand-name">CASE</span>
+        <span class="topbar__brand-name">CASE OS</span>
       </a>
 
       <!-- Divider -->

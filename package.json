@@ -1,7 +1,7 @@
 {
   "name": "curso-ia-generativa",
   "version": "1.0.0",
-  "description": "Curso de IA Generativa para Ingenieros de Software",
+  "description": "CASE OS — Engineering Workspace",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
