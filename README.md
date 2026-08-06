@@ -1,36 +1,46 @@
 <div align="center">
-  <!-- Reemplazar con una captura real del Engineering Workspace -->
-  <img src="docs/assets/case-os-hero.png" alt="CASE OS Engineering Workspace" width="100%" />
-  
-  <br />
-  
   <h1>CASE OS</h1>
-  
-  <p><strong>Engineering Operating System</strong></p>
-  <p><em>The workspace where Software Engineers learn, build, experiment and collaborate.</em></p>
-  
+  <p><strong>The Engineering Operating System</strong></p>
+  <p><em>Learn. Build. Experiment. Ship.</em></p>
   <br />
-
+  <p>An engineering workspace inspired by VS Code, Linear and Raycast, designed for software engineers mastering AI, Java, Angular, AWS and modern engineering practices.</p>
+  <br />
+  
   [![Angular](https://img.shields.io/badge/Angular-22+-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![Signals](https://img.shields.io/badge/Signals-Reactive-009688?style=for-the-badge&logo=angular&logoColor=white)]()
   [![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-Automated-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/features/actions)
   [![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-Deployed-222222?style=for-the-badge&logo=github&logoColor=white)]()
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+</div>
 
+<br />
+
+<div align="center">
+  <!-- TODO: Reemplazar con captura limpia o GIF de la Command Palette -->
+  <img src="docs/assets/case-os-hero.png" alt="CASE OS Dashboard" width="100%" />
 </div>
 
 ---
 
-## 🌌 Visión
+## ✨ Features
 
-**CASE ha evolucionado.** Lo que comenzó como un curso de IA Generativa es ahora **CASE OS**: un Operating System completo diseñado exclusivamente para ingeniería de software. No es un LMS (Learning Management System) tradicional, sino un **Engineering Workspace** inmersivo impulsado por arquitectura declarativa, motores de estado centralizados e interfaces orientadas al teclado que replican la experiencia de herramientas como VS Code, Linear y Raycast.
+- **Engineering Workspace:** El hub central de operaciones.
+- **Academy:** Currículum y módulos de aprendizaje integrados.
+- **Library:** Recursos y documentación de ingeniería curados.
+- **Labs:** Entornos experimentales para código y arquitectura.
+- **Command Palette:** Búsqueda global y ejecución ultra rápida (`Ctrl+K`).
+- **Keyboard First:** Diseñado para power users, totalmente accesible por atajos.
+- **Design System:** Tokens de CSS puros, arquitectura escalable sin frameworks.
+- **Declarative Architecture:** Plataforma basada en motores sin acoplamiento horizontal.
+- **Angular Signals:** Reactividad moderna de última generación.
+- **GitHub Pages Deployment:** Pipeline automatizado de despliegue continuo.
 
 ---
 
-## ⚙️ Arquitectura de Motores (Engines)
+## ⚙️ Arquitectura
 
-El sistema operativo está construido sobre 4 pilares fundamentales totalmente desacoplados:
+CASE OS no es una aplicación tradicional. Es un sistema operativo construido sobre 4 pilares fundamentales (Motores) totalmente desacoplados:
 
 ```text
 CASE OS
@@ -40,38 +50,12 @@ CASE OS
 └── Knowledge Platform    (WIP - Search Providers & AI Context)
 ```
 
-1. **Design Engine:** La única fuente de verdad visual. Consumo estricto de CSS Design Tokens (`var(--case-...)`). Cero colores hardcodeados o utilidades libres.
-2. **Workspace Platform:** Orquesta la aplicación leyendo un manifiesto declarativo (`WorkspaceRegistry`). El Shell nunca conoce la lógica interna de un módulo.
-3. **Command Platform:** Un ecosistema centralizado (`Ctrl+K`) para descubrir y ejecutar comandos, manejado por un Dispatcher puro.
-4. **Knowledge Platform (WIP):** El futuro buscador unificado capaz de consultar múltiples proveedores (Academy, Labs, AI).
+1. **Design Engine:** La única fuente de verdad visual. Consumo estricto de CSS Design Tokens (`var(--case-...)`).
+2. **Workspace Platform:** Orquesta la aplicación leyendo un manifiesto declarativo (`WorkspaceRegistry`).
+3. **Command Platform:** Un ecosistema centralizado (`Ctrl+K`) para descubrir y ejecutar comandos a través del Dispatcher.
+4. **Knowledge Platform:** El futuro buscador unificado capaz de consultar múltiples proveedores (Academy, Labs, AI).
 
----
-
-## 🏢 Workspaces
-
-La plataforma se organiza en áreas de trabajo modulares:
-
-* **Engineering Workspace (Dashboard)** — *El Hub central.*
-* **Academy** — *Módulo de lecciones y currículum.*
-* **Library** — *(Próximamente)*
-* **Labs** — *(Próximamente)*
-* **Projects** — *(Próximamente)*
-* **Agents** — *(Próximamente)*
-* **Framework** — *(Próximamente)*
-
----
-
-## ⚖️ Principios de Ingeniería (Reglas de Oro)
-
-1. **Declarative First:** Registries inmutables; los comandos y workspaces se configuran como datos, no como funciones imperativas.
-2. **Dumb UI:** Los componentes visuales (ej. `CommandPalette`) no contienen lógica de negocio ni dependencias de otros módulos.
-3. **Keyboard First:** Todas las acciones críticas son accesibles mediante `ShortcutService` y navegación por teclado (Autofocus, ARIA).
-4. **Zero Horizontal Coupling:** Academy no conoce a Labs. Ambos se conectan únicamente al OS a través de manifiestos.
-5. **Design Tokens Only:** Prohibida la inyección de estilos fuera del Design System.
-
----
-
-## 🗺️ Arquitectura Visual
+### Arquitectura Visual
 
 ```mermaid
 graph TD
@@ -105,22 +89,17 @@ graph TD
 
 ---
 
-## 💻 Desarrollo Local
+## 💻 Quick Start
 
 ### Requisitos
-- Node.js v22.x o superior
-- npm v10.x o superior
+- Node.js v22.x+
+- npm v10.x+
 
-### Pasos de Instalación
+### Instalación
 ```bash
-# 1. Clonar el repositorio
 git clone https://github.com/YamiCueto/case-os.git
 cd case-os
-
-# 2. Instalar dependencias
 npm install
-
-# 3. Iniciar el servidor de desarrollo
 npm start
 ```
 Abre tu navegador en `http://localhost:4200/`.
@@ -135,11 +114,32 @@ npm run build
 ```
 
 ### GitHub Pages (Automático)
-El despliegue está orquestado mediante **GitHub Actions**. Cualquier push o merge a la rama `main` disparará el workflow (`.github/workflows/deploy.yml`), el cual inyectará el `base-href` correcto y publicará la SPA en `yamicueto.github.io/case-os/`.
+El despliegue está orquestado mediante **GitHub Actions**. Cualquier push a `main` disparará el workflow (`.github/workflows/deploy.yml`), publicando la SPA optimizada en `yamicueto.github.io/case-os/`.
 
 ---
 
-## 📖 Documentación Principal
+## 🛣️ Roadmap
+
+### Phase I — Operating System
+- [x] Design Engine
+- [x] Workspace Platform
+- [x] Command Platform
+- [x] Engineering Workspace
+
+### Phase II — Knowledge Platform
+- [ ] Unified Search
+- [ ] AI Assistant
+- [ ] Context Engine
+
+### Phase III — Collaborative Engineering
+- [ ] Projects
+- [ ] Agents
+- [ ] Framework
+- [ ] Multiplayer
+
+---
+
+## 📖 Documentación
 
 El código fuente está respaldado por manifiestos arquitectónicos:
 
@@ -147,34 +147,14 @@ El código fuente está respaldado por manifiestos arquitectónicos:
 - [`CASE_UX_FOUNDATION.md`](CASE_UX_FOUNDATION.md) — Filosofía de Experiencia de Usuario.
 - [`DESIGN.md`](DESIGN.md) — Documentación del Design System.
 
-*(Los documentos antiguos de la etapa "Curso" han sido archivados como Legacy en `/docs`).*
-
----
-
-## 🛣️ Roadmap
-
-### Phase 1 (Completada) 
-- [x] Design Engine
-- [x] Workspace Platform
-- [x] Command Platform
-- [x] Engineering Workspace
-- [x] Project Renaissance
-
-### Phase 2 (En Desarrollo) 
-- [ ] Knowledge Platform
-- [ ] Unified Search
-- [ ] AI Platform
-- [ ] Context Engine
-- [ ] Projects / Agents / Framework
-
 ---
 
 ## 🤝 Contribución
 
 CASE OS es estricto en su arquitectura. Antes de proponer un PR:
-1. Lee las **Reglas de Oro** y la **Documentación Principal**.
-2. Verifica que tu UI sea "tonta" (Dumb UI) y dependa de un servicio inyectado.
-3. Asegúrate de no introducir CSS hardcodeado; utiliza únicamente las variables `var(--case-*)`.
+1. Asegúrate de que tu UI sea "Dumb" y dependa de un servicio inyectado.
+2. Evita introducir CSS hardcodeado; utiliza únicamente `var(--case-*)`.
+3. Todos los componentes de negocio deben registrarse vía Manifest.
 
 ---
 
