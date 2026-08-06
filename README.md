@@ -1,89 +1,121 @@
-# 🚀 CASE OS — Engineering Workspace
+<div align="center">
+  <!-- Reemplazar con una captura real del Engineering Workspace -->
+  <img src="docs/assets/case-os-hero.png" alt="CASE OS Engineering Workspace" width="100%" />
+  
+  <br />
+  
+  <h1>CASE OS</h1>
+  
+  <p><strong>Engineering Operating System</strong></p>
+  <p><em>The workspace where Software Engineers learn, build, experiment and collaborate.</em></p>
+  
+  <br />
 
-[![Angular](https://img.shields.io/badge/Angular-19+-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev/)
-[![Java](https://img.shields.io/badge/Java-21_LTS-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://adoptium.net/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4+-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![AWS Bedrock](https://img.shields.io/badge/AWS-Amazon_Bedrock-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/bedrock/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+  [![Angular](https://img.shields.io/badge/Angular-22+-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Signals](https://img.shields.io/badge/Signals-Reactive-009688?style=for-the-badge&logo=angular&logoColor=white)]()
+  [![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-Automated-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/features/actions)
+  [![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-Deployed-222222?style=for-the-badge&logo=github&logoColor=white)]()
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-Bienvenido a **CASE OS**. Originalmente concebido como un Curso de IA Generativa, el proyecto ha evolucionado para convertirse en un **Engineering Workspace** inmersivo. Es un sistema operativo diseñado por y para ingenieros de software, integrando herramientas nativas de IA, plataformas de comandos, y laboratorios prácticos.
-
-La antigua experiencia del "Curso" vive ahora dentro del Workspace **Academy**, rodeada de otras capacidades como Library, Labs y un asistente integrado.
-
----
-
-## 🎯 Enfoque del Curso
-
-Este programa está diseñado por y para desarrolladores de software. Pasa del "prompting básico" al **desarrollo AI-Native enterprise**, abarcando:
-- **Model Context Protocol (MCP)**: Conexión nativa de LLMs con bases de datos PostgreSQL, APIs locales y repositorios Git.
-- **Spec-Driven Development (`AGENTS.md`)**: Definición de reglas y arquitecturas legibles por agentes inteligentes.
-- **Backend Moderno**: Microservicios con **Java 21 (Virtual Threads)** y **Spring Boot 3.4+**.
-- **Frontend Reactivo**: Web apps interactivas construidas sobre **Angular 19 Signals** y **Tailwind CSS v4**.
-- **Microservicios RAG**: Recuperación Aumentada por Generación utilizando **Python 3.12**, **FastAPI** y almacenamiento vectorial en **PgVector / ChromaDB**.
-- **Cloud & Agentic Serverless**: Despliegue en **AWS Lambda** e integración con **Amazon Bedrock & Guardrails**.
+</div>
 
 ---
 
-## 📚 Plan de Estudio Trimestral (12 Semanas)
+## 🌌 Visión
 
-### 🗓️ Módulo 1: Fundamentos de IA Generativa, MCP & Modernización Backend (Semanas 1 - 4)
-- **Semana 1: Fundamentos de IA, Context Engineering & MCP**
-  - Prompting estructurado (ROL, CONTEXTO, TAREA, RESTRICCIONES).
-  - Introducción al estándar **Model Context Protocol (MCP)** y Spec-Driven Development (`AGENTS.md`).
-- **Semana 2: Spring Boot 3.4+ & Java 21 con Agentes de IA**
-  - Generación de arquitectura hexagonal production-ready y aproveche de Virtual Threads.
-- **Semana 3: Migración de Código Legacy (VB6 / Java 8 → Spring Boot 3.4)**
-  - Estrategias de refactorización automatizada, conversión de AST y preservación de reglas de negocio.
-- **Semana 4: APIs REST Resilientes & Creación de Servidores MCP**
-  - Integración con APIs bancarias, patrón Circuit Breaker (Resilience4j) y desarrollo de un **Servidor MCP propio**.
-
-### 🗓️ Módulo 2: Frontend Moderno con Angular 19, Testing & Agentic Repair (Semanas 5 - 8)
-- **Semana 5: Testing Unitario Avanzado & Agentic Self-Fixing**
-  - Generación de suites con JUnit 5, Mockito y Testcontainers. Bucles de autocorrección automática (*Agentic Self-Fixing Loops*).
-- **Semana 6: Frontend Moderno con Angular 19+ Signals**
-  - Componentes Standalone, reactividad pura con Signals (`signal()`, `computed()`, `effect()`) y Tailwind CSS v4.
-- **Semana 7: Modernización Frontend (Legacy JS/jQuery → Angular 19 Signals)**
-  - Migración asistida de scripts imperativos a patrones declarativos Smart/Dumb.
-- **Semana 8: Estado Reactivo Avanzado (Signals + RxJS & Signal Store)**
-  - Integración asíncrona con NgRx Signal Store y manejo de flujos complejos.
-
-### 🗓️ Módulo 3: RAG Enterprise, Serverless Cloud & Proyecto Final (Semanas 9 - 12)
-- **Semana 9: Testing E2E con Playwright / Cypress & Agentes Self-Healing**
-  - Automatización de flujos E2E con selectores autorreparables asistidos por IA.
-- **Semana 10: Microservicio RAG con Python 3.12, FastAPI & PgVector**
-  - Búsqueda semántica, embeddings vectoriales, bases de datos vectoriales e integración RAG.
-- **Semana 11: AWS Lambda Serverless, Amazon Bedrock & AI Guardrails**
-  - Arquitectura Serverless, orquestación de LLMs en la nube y políticas de seguridad y filtrado.
-- **Semana 12: Proyecto Final Integrador (Aplicación AI-Native Enterprise)**
-  - Construcción del **Sistema de Aprobación Crediticia Inteligente** integrando Java 21, Angular 19, Python RAG y Servidores MCP.
+**CASE ha evolucionado.** Lo que comenzó como un curso de IA Generativa es ahora **CASE OS**: un Operating System completo diseñado exclusivamente para ingeniería de software. No es un LMS (Learning Management System) tradicional, sino un **Engineering Workspace** inmersivo impulsado por arquitectura declarativa, motores de estado centralizados e interfaces orientadas al teclado que replican la experiencia de herramientas como VS Code, Linear y Raycast.
 
 ---
 
-## 🛠️ Stack Tecnológico SOTA 2026
+## ⚙️ Arquitectura de Motores (Engines)
 
-- **IDEs & Agentes de IA**: Google Antigravity IDE, VS Code (Copilot Chat & Agent Mode), Cursor AI, Windsurf (Codeium), OpenAI Codex, JetBrains AI Assistant.
-- **Modelos de Razonamiento SOTA**: Google Gemini 2.5 Pro / 3.x Flash Thinking, DeepSeek R1 / V3, Claude 3.7 / 4.x Extended Thinking, OpenAI o3-mini / o3 / GPT-5.x.
-- **Protocolos**: Model Context Protocol (MCP Standard Open Protocol).
-- **Backend Core**: Java 21 LTS, Spring Boot 3.4+, Spring Data JPA, Lombok, MapStruct, Testcontainers.
-- **Frontend Core**: Angular 19+, TypeScript 5.5+, Angular Signals, Tailwind CSS v4.
-- **AI & RAG Core**: Python 3.12+, FastAPI, PgVector, ChromaDB, LangChain.
-- **Cloud & Serverless**: AWS Lambda, Amazon Bedrock, Guardrails, DynamoDB.
+El sistema operativo está construido sobre 4 pilares fundamentales totalmente desacoplados:
+
+```text
+CASE OS
+├── Design Engine         (Design Tokens & Primitives)
+├── Workspace Platform    (Declarative Manifests & Routing)
+├── Command Platform      (Keyboard Shortcuts & Dispatching)
+└── Knowledge Platform    (WIP - Search Providers & AI Context)
+```
+
+1. **Design Engine:** La única fuente de verdad visual. Consumo estricto de CSS Design Tokens (`var(--case-...)`). Cero colores hardcodeados o utilidades libres.
+2. **Workspace Platform:** Orquesta la aplicación leyendo un manifiesto declarativo (`WorkspaceRegistry`). El Shell nunca conoce la lógica interna de un módulo.
+3. **Command Platform:** Un ecosistema centralizado (`Ctrl+K`) para descubrir y ejecutar comandos, manejado por un Dispatcher puro.
+4. **Knowledge Platform (WIP):** El futuro buscador unificado capaz de consultar múltiples proveedores (Academy, Labs, AI).
+
+---
+
+## 🏢 Workspaces
+
+La plataforma se organiza en áreas de trabajo modulares:
+
+* **Engineering Workspace (Dashboard)** — *El Hub central.*
+* **Academy** — *Módulo de lecciones y currículum.*
+* **Library** — *(Próximamente)*
+* **Labs** — *(Próximamente)*
+* **Projects** — *(Próximamente)*
+* **Agents** — *(Próximamente)*
+* **Framework** — *(Próximamente)*
+
+---
+
+## ⚖️ Principios de Ingeniería (Reglas de Oro)
+
+1. **Declarative First:** Registries inmutables; los comandos y workspaces se configuran como datos, no como funciones imperativas.
+2. **Dumb UI:** Los componentes visuales (ej. `CommandPalette`) no contienen lógica de negocio ni dependencias de otros módulos.
+3. **Keyboard First:** Todas las acciones críticas son accesibles mediante `ShortcutService` y navegación por teclado (Autofocus, ARIA).
+4. **Zero Horizontal Coupling:** Academy no conoce a Labs. Ambos se conectan únicamente al OS a través de manifiestos.
+5. **Design Tokens Only:** Prohibida la inyección de estilos fuera del Design System.
+
+---
+
+## 🗺️ Arquitectura Visual
+
+```mermaid
+graph TD
+    subgraph CASE OS
+        A[Design System] 
+        B[Workspace Platform]
+        C[Command Platform]
+        D[Knowledge Engine]
+    end
+
+    A --- B
+    B --- C
+    C --- D
+
+    D --> E(Academy)
+    D --> F(Library)
+    D --> G(Labs)
+    D --> H(AI Assistant)
+```
+
+---
+
+## 🛠️ Stack Tecnológico
+
+- **Framework:** Angular 22 (Standalone Components)
+- **Reactivity:** Angular Signals (`signal`, `computed`, `effect`)
+- **Language:** TypeScript 5.5+
+- **Styling:** CSS Design Tokens & Primitives
+- **Icons:** Material Symbols Outlined
+- **CI/CD:** GitHub Actions & GitHub Pages
 
 ---
 
 ## 💻 Desarrollo Local
 
-### Requisitos Previos
-- Node.js v18.x o superior
-- npm v9.x o superior
+### Requisitos
+- Node.js v22.x o superior
+- npm v10.x o superior
 
 ### Pasos de Instalación
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/YamiCueto/curso-ia-generativa.git
-cd curso-ia-generativa
+git clone https://github.com/YamiCueto/case-os.git
+cd case-os
 
 # 2. Instalar dependencias
 npm install
@@ -91,18 +123,61 @@ npm install
 # 3. Iniciar el servidor de desarrollo
 npm start
 ```
-Abre tu navegador en `http://localhost:4200/` para explorar la aplicación interactiva del curso.
+Abre tu navegador en `http://localhost:4200/`.
 
-### Compilar para Producción / GitHub Pages
+---
+
+## 🚀 Build y Deployment
+
+### Compilación Local
 ```bash
-npm run build:gh-pages
+npm run build
 ```
+
+### GitHub Pages (Automático)
+El despliegue está orquestado mediante **GitHub Actions**. Cualquier push o merge a la rama `main` disparará el workflow (`.github/workflows/deploy.yml`), el cual inyectará el `base-href` correcto y publicará la SPA en `yamicueto.github.io/case-os/`.
+
+---
+
+## 📖 Documentación Principal
+
+El código fuente está respaldado por manifiestos arquitectónicos:
+
+- [`CASE_OS_ARCHITECTURE.md`](CASE_OS_ARCHITECTURE.md) — Paradigma de Motores.
+- [`CASE_UX_FOUNDATION.md`](CASE_UX_FOUNDATION.md) — Filosofía de Experiencia de Usuario.
+- [`DESIGN.md`](DESIGN.md) — Documentación del Design System.
+
+*(Los documentos antiguos de la etapa "Curso" han sido archivados como Legacy en `/docs`).*
+
+---
+
+## 🛣️ Roadmap
+
+### Phase 1 (Completada) 
+- [x] Design Engine
+- [x] Workspace Platform
+- [x] Command Platform
+- [x] Engineering Workspace
+- [x] Project Renaissance
+
+### Phase 2 (En Desarrollo) 
+- [ ] Knowledge Platform
+- [ ] Unified Search
+- [ ] AI Platform
+- [ ] Context Engine
+- [ ] Projects / Agents / Framework
+
+---
+
+## 🤝 Contribución
+
+CASE OS es estricto en su arquitectura. Antes de proponer un PR:
+1. Lee las **Reglas de Oro** y la **Documentación Principal**.
+2. Verifica que tu UI sea "tonta" (Dumb UI) y dependa de un servicio inyectado.
+3. Asegúrate de no introducir CSS hardcodeado; utiliza únicamente las variables `var(--case-*)`.
 
 ---
 
 ## 📜 Licencia
 
-Este proyecto está bajo la Licencia [MIT](LICENSE). Siéntete libre de utilizar, modificar y distribuir el material para fines de aprendizaje e ingeniería.
-
----
-*Desarrollado con ❤️ para la comunidad de Ingenieros de Software.*
+Distribuido bajo la licencia [MIT](LICENSE). Construido con rigor para la ingeniería del futuro.
