@@ -329,7 +329,7 @@ export class CommandPaletteComponent {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   // Estado Reactivo Local
-  readonly isOpen = this.overlayManager.isCommandPaletteOpen;
+  readonly isOpen = computed(() => this.overlayManager.isCommandPaletteOpen());
   readonly query = signal('');
   readonly selectedIndex = signal(0);
 
