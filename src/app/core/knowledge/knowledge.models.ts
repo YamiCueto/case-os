@@ -38,6 +38,15 @@ export type KnowledgeCapability =
   | string;
 
 /**
+ * A standard pointer/reference to any KnowledgeNode across the OS.
+ * Enables delayed resolution and prevents hardcoding objects or loose IDs.
+ */
+export interface KnowledgeReference {
+  readonly providerId: string;
+  readonly nodeId: string;
+}
+
+/**
  * The fundamental entity of the Knowledge Platform.
  * Represents any piece of knowledge across the operating system (e.g., Course, Lab, Prompt).
  * Nodes are strictly immutable to prevent unintended mutations by Engines.

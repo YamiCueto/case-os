@@ -11,6 +11,11 @@ export type ProviderCapability =
   | string;
 
 /**
+ * Indicates the operational health of a KnowledgeProvider.
+ */
+export type ProviderStatus = 'ONLINE' | 'OFFLINE' | 'DEGRADED';
+
+/**
  * The contract that every Workspace or Data Source must implement to inject its 
  * content into the Knowledge Platform.
  * 
@@ -47,6 +52,11 @@ export interface KnowledgeProvider {
    * Capabilities supported by this provider.
    */
   readonly capabilities: readonly ProviderCapability[];
+
+  /**
+   * Operational health status of the provider (for observability/resilience).
+   */
+  readonly status?: ProviderStatus;
 
   /**
    * Resolves a specific KnowledgeNode by its ID.
