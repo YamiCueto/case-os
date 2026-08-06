@@ -53,6 +53,7 @@ export interface KnowledgeReference {
  */
 export interface KnowledgeNode {
   readonly id: string;
+  readonly canonicalId?: string; // Used to deduplicate identical knowledge across different providers
   readonly kind: string; // Open string instead of enum to allow dynamic Workspaces to register new kinds
   readonly title: string;
   readonly description?: string;
@@ -64,30 +65,10 @@ export interface KnowledgeNode {
 }
 
 /**
- * Represents the exact property and index range of a search match.
+ * Raw DTO returned by a KnowledgeProvider during the Collection phase.
+ * Contains only minimal references. The engine will hydrate and score this candidate later.
  */
-export interface SearchMatch {
-  readonly property: string; // e.g., 'title', 'description', 'tags'
-  readonly indices: readonly [number, number][]; // [startIndex, endIndex] of the match
-}
-
-/**
- * Represents a highlighted snippet for a search match.
- */
-export interface SearchHighlight {
-  readonly property: string;
-  readonly snippet: string; // HTML or Markdown snippet with highlighted terms
-}
-
-/**
- * Data Transfer Object (DTO) returned by the Search Engine.
- * It does not own the knowledge; it only holds references to the Node.
- */
-export interface SearchResult {
+export interface SearchCandidate {
   readonly nodeId: string;
   readonly providerId: string;
-  readonly score: number; // Relevance score
-  readonly reason?: string; // AI Explanation of why this result matched (e.g., 'Coincide con tags')
-  readonly matches?: readonly SearchMatch[];
-  readonly highlights?: readonly SearchHighlight[];
 }

@@ -1,4 +1,4 @@
-import { KnowledgeNode, SearchResult } from './knowledge.models';
+import { KnowledgeNode, SearchCandidate } from './knowledge.models';
 
 /**
  * Standard capabilities a KnowledgeProvider can declare.
@@ -69,10 +69,10 @@ export interface KnowledgeProvider {
 
   /**
    * Performs a search against this provider's domain.
-   * Returns references (SearchResults) rather than full objects to keep memory usage low.
+   * Returns references (SearchCandidates) rather than full objects to keep memory usage low.
    * 
    * @param query The search query string.
-   * @returns A promise resolving to an array of SearchResult DTOs.
+   * @returns A promise resolving to an array of SearchCandidate DTOs.
    */
-  search(query: string): Promise<readonly SearchResult[]>;
+  search(query: string): Promise<readonly SearchCandidate[]>;
 }
