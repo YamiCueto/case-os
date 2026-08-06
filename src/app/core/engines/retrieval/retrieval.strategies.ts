@@ -1,5 +1,5 @@
 import { KnowledgeNode } from '../../knowledge/knowledge.models';
-import { SearchRequest } from '../../context/context.models';
+import { RetrievalRequest } from '../../context/context.models';
 import { SearchEvidence, ScoredCandidate, RankedCandidate } from './retrieval.models';
 
 /**
@@ -13,7 +13,7 @@ export interface RetrievalStrategy {
    * Evaluates the node and returns evidence if it matches.
    * Returns null if the strategy yields no relevant score for this node.
    */
-  score(node: KnowledgeNode, request: SearchRequest): Promise<SearchEvidence | null> | SearchEvidence | null;
+  score(node: KnowledgeNode, request: RetrievalRequest): Promise<SearchEvidence | null> | SearchEvidence | null;
 }
 
 /**
@@ -26,7 +26,7 @@ export interface RankingStrategy {
   /**
    * Sorts and re-ranks the candidates based on custom logic.
    */
-  rank(candidates: readonly ScoredCandidate[], request: SearchRequest): Promise<readonly RankedCandidate[]> | readonly RankedCandidate[];
+  rank(candidates: readonly ScoredCandidate[], request: RetrievalRequest): Promise<readonly RankedCandidate[]> | readonly RankedCandidate[];
 }
 
 /**

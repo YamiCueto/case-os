@@ -1,4 +1,4 @@
-import { SearchRequest } from '../../context/context.models';
+import { RetrievalRequest } from '../../context/context.models';
 import { SearchResult, KnowledgeSource } from './retrieval.models';
 import { RetrievalPipeline } from './retrieval.pipeline';
 import { RetrievalStrategyRegistry, RankingStrategyRegistry } from './retrieval.strategies';
@@ -22,7 +22,7 @@ export class KnowledgeRetrievalEngine {
    * NOTE: The actual pipeline stages (Collect, Hydrate, Score, Deduplicate, Rank) 
    * will be composed here. For this sprint, we establish the contract and structure.
    */
-  async retrieve(request: SearchRequest): Promise<readonly SearchResult[]> {
+  async retrieve(request: RetrievalRequest): Promise<readonly SearchResult[]> {
     // In a fully implemented engine, we would build the pipeline:
     // const pipeline = new RetrievalPipeline<void, readonly SearchResult[]>()
     //   .addStage(new CollectStage(this.source))

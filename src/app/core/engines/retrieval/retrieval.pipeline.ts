@@ -1,4 +1,4 @@
-import { SearchRequest } from '../../context/context.models';
+import { RetrievalRequest } from '../../context/context.models';
 
 /**
  * A standard, composable stage within the Knowledge Retrieval Pipeline.
@@ -8,7 +8,7 @@ import { SearchRequest } from '../../context/context.models';
  */
 export interface PipelineStage<TIn, TOut> {
   readonly name: string;
-  execute(input: TIn, request: SearchRequest): Promise<TOut> | TOut;
+  execute(input: TIn, request: RetrievalRequest): Promise<TOut> | TOut;
 }
 
 /**
@@ -30,7 +30,7 @@ export class RetrievalPipeline<TInitial, TFinal> {
   /**
    * Executes the entire pipeline sequentially.
    */
-  async run(initialInput: TInitial, request: SearchRequest): Promise<TFinal> {
+  async run(initialInput: TInitial, request: RetrievalRequest): Promise<TFinal> {
     let currentData: any = initialInput;
     for (const stage of this.stages) {
       currentData = await stage.execute(currentData, request);

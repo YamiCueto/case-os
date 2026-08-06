@@ -1,3 +1,5 @@
+import { KnowledgeReference, KnowledgeRelation } from '../knowledge/knowledge.models';
+
 /**
  * Standard filters for searching and retrieving knowledge.
  */
@@ -9,12 +11,39 @@ export interface SearchFilters {
 }
 
 /**
- * Encapsulates the user's current environment/state.
- * Shared across the Search Engine, Context Engine, and AI Engine.
+ * Indicates the user's implicit or explicit intention when issuing a command.
+ * Allows the Context Engine to decide how to build the context.
  */
-export interface SearchContext {
+export enum RetrievalIntent {
+  SEARCH = 'SEARCH',
+  NAVIGATION = 'NAVIGATION',
+  LEARNING = 'LEARNING',
+  RECOMMENDATION = 'RECOMMENDATION',
+  AI_CONTEXT = 'AI_CONTEXT'
+}
+
+/**
+ * Pure input received from the UI/Facade, devoid of Angular state.
+ */
+export interface ContextInput {
+  readonly activeNode?: KnowledgeReference;
   readonly workspace?: string;
-  readonly locale?: string;
+  readonly history?: readonly KnowledgeReference[];
+  readonly command?: string;
+  readonly selection?: readonly KnowledgeReference[];
+}
+
+/**
+ * Encapsulates the user's rich environment/state.
+ * Constructed purely by the Context Engine.
+ */
+export interface KnowledgeContext {
+  readonly activeNode?: KnowledgeReference;
+  readonly workspace?: string;
+  readonly history: readonly KnowledgeReference[];
+  readonly inferredIntent: RetrievalIntent;
+  readonly semanticNeighborhood?: readonly KnowledgeReference[];
+  readonly activeRelations?: readonly KnowledgeRelation[];
 }
 
 /**
@@ -34,12 +63,13 @@ export interface SearchOptions {
 
 /**
  * The unified contract for initiating a knowledge retrieval request.
- * Search is no longer a plain text string; it is an intention.
+ * Completely orchestrates how the Retrieval Engine will execute strategies.
  */
-export interface SearchRequest {
-  readonly query: string;
+export interface RetrievalRequest {
+  readonly query?: string;
+  readonly intent: RetrievalIntent;
+  readonly context: KnowledgeContext;
   readonly filters?: SearchFilters;
-  readonly context?: SearchContext;
   readonly pagination?: SearchPagination;
   readonly options?: SearchOptions;
 }
