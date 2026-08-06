@@ -3,8 +3,6 @@
   <p><strong>The Engineering Operating System</strong></p>
   <p><em>Learn. Build. Experiment. Ship.</em></p>
   <br />
-  <p>An engineering workspace inspired by VS Code, Linear and Raycast, designed for software engineers mastering AI, Java, Angular, AWS and modern engineering practices.</p>
-  <br />
   
   [![Angular](https://img.shields.io/badge/Angular-22+-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -16,8 +14,16 @@
 
 <br />
 
+## 🌌 Why CASE OS?
+
+> Modern software engineers no solo consumen contenido. Investigan, experimentan, documentan, automatizan y construyen.
+>
+> CASE OS unifica esas actividades dentro de un único Engineering Workspace, eliminando la fragmentación entre cursos, documentación, laboratorios y herramientas de productividad.
+
+<br />
+
 <div align="center">
-  <!-- TODO: Reemplazar con captura limpia o GIF de la Command Palette -->
+  <!-- TODO: Guarda la captura real del Dashboard en docs/assets/case-os-hero.png -->
   <img src="docs/assets/case-os-hero.png" alt="CASE OS Dashboard" width="100%" />
 </div>
 
@@ -38,9 +44,9 @@
 
 ---
 
-## ⚙️ Arquitectura
+## ⚙️ Arquitectura de Motores (Engines)
 
-CASE OS no es una aplicación tradicional. Es un sistema operativo construido sobre 4 pilares fundamentales (Motores) totalmente desacoplados:
+CASE OS no es una aplicación tradicional. Es un sistema operativo construido sobre 4 pilares fundamentales totalmente desacoplados:
 
 ```text
 CASE OS
@@ -50,31 +56,45 @@ CASE OS
 └── Knowledge Platform    (WIP - Search Providers & AI Context)
 ```
 
-1. **Design Engine:** La única fuente de verdad visual. Consumo estricto de CSS Design Tokens (`var(--case-...)`).
-2. **Workspace Platform:** Orquesta la aplicación leyendo un manifiesto declarativo (`WorkspaceRegistry`).
-3. **Command Platform:** Un ecosistema centralizado (`Ctrl+K`) para descubrir y ejecutar comandos a través del Dispatcher.
-4. **Knowledge Platform:** El futuro buscador unificado capaz de consultar múltiples proveedores (Academy, Labs, AI).
+### Arquitectura de Runtime
 
-### Arquitectura Visual
+Este diagrama detalla cómo se ejecuta el sistema en tiempo real, desde el Shell visual hasta la Command Palette:
 
-```mermaid
-graph TD
-    subgraph CASE OS
-        A[Design System] 
-        B[Workspace Platform]
-        C[Command Platform]
-        D[Knowledge Engine]
-    end
+```text
+                 CASE OS
 
-    A --- B
-    B --- C
-    C --- D
-
-    D --> E(Academy)
-    D --> F(Library)
-    D --> G(Labs)
-    D --> H(AI Assistant)
+             Workspace Shell
+                    │
+     ┌──────────────┼──────────────┐
+     │              │              │
+ GlobalNav    ContextExplorer   TopBar
+     │              │              │
+     └──────────────┼──────────────┘
+                    │
+          Workspace Registry
+                    │
+        ┌───────────┼───────────┐
+        │           │           │
+     Academy     Library      Labs
+                    │
+            Knowledge Platform
+                    │
+            Command Platform
+                    │
+             Command Palette
 ```
+
+---
+
+## ⚖️ Architecture Principles
+
+- **✓ Declarative-first**
+- **✓ Signals over mutable state**
+- **✓ Keyboard-first UX**
+- **✓ Registry-driven architecture**
+- **✓ Dumb presentation components**
+- **✓ Zero horizontal coupling**
+- **✓ Design Tokens only**
 
 ---
 
@@ -118,7 +138,7 @@ El despliegue está orquestado mediante **GitHub Actions**. Cualquier push a `ma
 
 ---
 
-## 🛣️ Roadmap
+## 🛣️ CASE OS Roadmap
 
 ### Phase I — Operating System
 - [x] Design Engine
@@ -152,7 +172,7 @@ El código fuente está respaldado por manifiestos arquitectónicos:
 ## 🤝 Contribución
 
 CASE OS es estricto en su arquitectura. Antes de proponer un PR:
-1. Asegúrate de que tu UI sea "Dumb" y dependa de un servicio inyectado.
+1. Asegúrate de que tu UI siga el principio **Dumb presentation components**.
 2. Evita introducir CSS hardcodeado; utiliza únicamente `var(--case-*)`.
 3. Todos los componentes de negocio deben registrarse vía Manifest.
 
