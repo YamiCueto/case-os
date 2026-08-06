@@ -1,8 +1,18 @@
 import { KnowledgeNode, SearchResult } from './knowledge.models';
 
 /**
+ * Standard capabilities a KnowledgeProvider can declare.
+ */
+export type ProviderCapability =
+  | 'search'
+  | 'hydration'
+  | 'streaming'
+  | 'aiContext'
+  | string;
+
+/**
  * The contract that every Workspace or Data Source must implement to inject its 
- * content into the Knowledge Platform (e.g., Academy, Library, Labs, AI).
+ * content into the Knowledge Platform.
  * 
  * NOTE: This contract uses pure Promises by design to maintain neutrality 
  * from any framework (like RxJS or Angular), ensuring the core remains 
@@ -23,6 +33,22 @@ export interface KnowledgeProvider {
   readonly name: string;
 
   /**
+   * Version of the provider, enabling multiple providers for the same domain 
+   * (e.g., StaticProvider vs RESTProvider vs RAGProvider).
+   */
+  readonly version: string;
+
+  /**
+   * Priority for resolving conflicts or ordering results.
+   */
+  readonly priority: number;
+
+  /**
+   * Capabilities supported by this provider.
+   */
+  readonly capabilities: readonly ProviderCapability[];
+
+  /**
    * Resolves a specific KnowledgeNode by its ID.
    * Used by the system to lazily hydrate search results or traverse context.
    * 
@@ -38,5 +64,5 @@ export interface KnowledgeProvider {
    * @param query The search query string.
    * @returns A promise resolving to an array of SearchResult DTOs.
    */
-  search(query: string): Promise<SearchResult[]>;
+  search(query: string): Promise<readonly SearchResult[]>;
 }
