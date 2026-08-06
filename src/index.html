@@ -2,7 +2,7 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>Curso IA Generativa para Ingenieros de Software (DEV)</title>
+    <title>CASE — Engineering Workspace</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -52,7 +52,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
@@ -64,22 +64,32 @@
           extend: {
             fontFamily: {
               sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+              mono: ['JetBrains Mono', 'Cascadia Code', 'Fira Code', 'Consolas', 'monospace'],
+            },
+            colors: {
+              'case': {
+                'surface-0': '#050505',
+                'surface-1': '#0A0A0A',
+                'surface-2': '#111111',
+                'surface-3': '#161616',
+                'surface-4': '#1E1E1E',
+                'surface-5': '#2A2A2A',
+                'border':    '#1F1F1F',
+                'accent':    '#007AFF',
+                'text':      '#EDEDED',
+                'secondary': '#8A8A8A',
+                'muted':     '#555555',
+              }
             },
             animation: {
-              fadeIn: 'fadeIn 0.3s ease-out',
+              'case-fade': 'case-fade-in 200ms cubic-bezier(0, 0, 0.2, 1) both',
             },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              }
-            }
           }
         }
       }
     </script>
   </head>
-  <body class="bg-slate-900 text-slate-100 font-sans antialiased">
+  <body class="font-sans antialiased" style="background-color: #050505; color: #EDEDED;">
     <app-root></app-root>
   </body>
 </html>

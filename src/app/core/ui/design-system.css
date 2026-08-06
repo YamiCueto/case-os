@@ -1,0 +1,396 @@
+/**
+ * CASE Design System — design-system.css
+ * Épica 5 — Sprint 1 — Foundation
+ *
+ * Este archivo es la ÚNICA fuente de verdad del sistema visual.
+ * Todos los componentes de la CASE UI Library consumen estas variables.
+ * No definir valores hardcodeados (px, colores, etc.) fuera de este archivo.
+ *
+ * Secciones:
+ *   1. Fonts
+ *   2. Surface & Elevation
+ *   3. Borders
+ *   4. Text
+ *   5. Accent & Semantic Colors
+ *   6. States
+ *   7. Spacing
+ *   8. Radius
+ *   9. Icon Sizes
+ *  10. Opacity
+ *  11. Z-Index
+ *  12. Motion
+ *  13. Typography Sizes & Weights
+ *  14. Shell Dimensions
+ *  15. Keyframes
+ *  16. Utility Classes
+ *  17. Reduced Motion Override
+ */
+
+/* ─────────────────────────────────────────────────
+   1. FONTS
+   ───────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --case-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --case-font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ─────────────────────────────────────────────────
+   2. SURFACE & ELEVATION
+   Hyper-Dark palette — DESIGN.md
+   Depth communicated through tonal shifts, not shadows.
+   ───────────────────────────────────────────────── */
+:root {
+  --case-surface-0:   #050505;   /* App shell base — the absolute bottom */
+  --case-surface-1:   #0A0A0A;   /* Sidebars, nav panels */
+  --case-surface-2:   #111111;   /* Cards, elevated panels */
+  --case-surface-3:   #161616;   /* Modals, context menus, tooltips */
+  --case-surface-4:   #1E1E1E;   /* Hover target, soft selection */
+  --case-surface-5:   #2A2A2A;   /* Active selection, strong hover */
+}
+
+/* ─────────────────────────────────────────────────
+   3. BORDERS
+   Always 1px. Thicker borders = design violation.
+   ───────────────────────────────────────────────── */
+:root {
+  --case-border:          #1F1F1F;   /* Default — all panels, components */
+  --case-border-subtle:   #141414;   /* Very faint — interior subdivisions */
+  --case-border-strong:   #2A2A2A;   /* Emphasized — section separators */
+  --case-border-accent:   #007AFF;   /* Focus ring, active indicator */
+
+  --case-border-width: 1px;
+  --case-border-style: solid;
+}
+
+/* ─────────────────────────────────────────────────
+   4. TEXT
+   ───────────────────────────────────────────────── */
+:root {
+  --case-text-primary:   #EDEDED;   /* Main content, headings */
+  --case-text-secondary: #8A8A8A;   /* Supporting text, labels */
+  --case-text-muted:     #555555;   /* De-emphasized, timestamps */
+  --case-text-disabled:  #333333;   /* Disabled state text */
+  --case-text-inverse:   #050505;   /* Text on light/accent backgrounds */
+  --case-text-accent:    #007AFF;   /* Links, accent text */
+  --case-text-on-accent: #FFFFFF;   /* Text on accent button */
+}
+
+/* ─────────────────────────────────────────────────
+   5. ACCENT & SEMANTIC COLORS
+   Accent = Electric Blue. Use ONLY for:
+     - Primary buttons
+     - Active nav indicators (2px line)
+     - Progress bars
+     - Focus rings
+     - Links
+   ───────────────────────────────────────────────── */
+:root {
+  /* Accent */
+  --case-accent:           #007AFF;
+  --case-accent-hover:     #0A84FF;
+  --case-accent-muted:     rgba(0, 122, 255, 0.12);
+  --case-accent-subtle:    rgba(0, 122, 255, 0.06);
+
+  /* Semantic */
+  --case-color-success:    #22C55E;
+  --case-color-success-bg: rgba(34, 197, 94, 0.08);
+  --case-color-warning:    #F59E0B;
+  --case-color-warning-bg: rgba(245, 158, 11, 0.08);
+  --case-color-error:      #EF4444;
+  --case-color-error-bg:   rgba(239, 68, 68, 0.08);
+  --case-color-info:       #3B82F6;
+  --case-color-info-bg:    rgba(59, 130, 246, 0.08);
+}
+
+/* ─────────────────────────────────────────────────
+   6. STATES
+   Used for interactive element backgrounds.
+   ───────────────────────────────────────────────── */
+:root {
+  --case-state-hover:    rgba(255, 255, 255, 0.05);  /* Subtle hover highlight */
+  --case-state-active:   rgba(255, 255, 255, 0.10);  /* Active/pressed state */
+  --case-state-selected: rgba(0, 122, 255, 0.10);    /* Selected item bg */
+  --case-state-focus:    rgba(0, 122, 255, 0.20);    /* Focus ring glow (not blur) */
+}
+
+/* ─────────────────────────────────────────────────
+   7. SPACING
+   Base unit: 4px. All values are multiples of 4.
+   ───────────────────────────────────────────────── */
+:root {
+  --case-space-0:   0;
+  --case-space-px:  1px;
+  --case-space-0-5: 2px;
+  --case-space-1:   4px;
+  --case-space-2:   8px;
+  --case-space-3:   12px;
+  --case-space-4:   16px;
+  --case-space-5:   20px;
+  --case-space-6:   24px;
+  --case-space-7:   28px;
+  --case-space-8:   32px;
+  --case-space-10:  40px;
+  --case-space-12:  48px;
+  --case-space-16:  64px;
+  --case-space-20:  80px;
+  --case-space-24:  96px;
+}
+
+/* ─────────────────────────────────────────────────
+   8. RADIUS
+   Sharp and technical. Max 6px in shell components.
+   ───────────────────────────────────────────────── */
+:root {
+  --case-radius-none: 0;
+  --case-radius-sm:   2px;
+  --case-radius:      4px;    /* Default — buttons, inputs, cards */
+  --case-radius-md:   6px;    /* Max for shell components */
+  --case-radius-lg:   8px;    /* Content cards only */
+  --case-radius-pill: 9999px; /* Tags, badges with pill shape */
+}
+
+/* ─────────────────────────────────────────────────
+   9. ICON SIZES
+   ───────────────────────────────────────────────── */
+:root {
+  --case-icon-xs:  14px;  /* Inline with text */
+  --case-icon-sm:  16px;  /* Explorer items, compact badges */
+  --case-icon-md:  20px;  /* Global Nav, Top Bar — default */
+  --case-icon-lg:  24px;  /* Feature icons */
+  --case-icon-xl:  32px;  /* Empty states, onboarding */
+  --case-icon-2xl: 48px;  /* Hero / splash (rare) */
+}
+
+/* ─────────────────────────────────────────────────
+   10. OPACITY
+   ───────────────────────────────────────────────── */
+:root {
+  --case-opacity-disabled: 0.35;
+  --case-opacity-muted:    0.55;
+  --case-opacity-subtle:   0.08;
+  --case-opacity-hover:    0.05;
+  --case-opacity-active:   0.10;
+  --case-opacity-focus:    0.20;
+}
+
+/* ─────────────────────────────────────────────────
+   11. Z-INDEX
+   Strict layering system.
+   ───────────────────────────────────────────────── */
+:root {
+  --case-z-base:    0;
+  --case-z-raised:  10;   /* TopBar, sticky elements */
+  --case-z-overlay: 100;  /* Dropdowns, context menus */
+  --case-z-modal:   200;  /* Modals, dialogs */
+  --case-z-toast:   300;  /* Toast notifications */
+  --case-z-command: 400;  /* Command Palette — always on top */
+}
+
+/* ─────────────────────────────────────────────────
+   12. MOTION
+   Functional motion only. No decorative animations.
+   ───────────────────────────────────────────────── */
+:root {
+  /* Durations */
+  --case-duration-instant: 0ms;
+  --case-duration-fast:    100ms;
+  --case-duration-normal:  150ms;
+  --case-duration-slow:    250ms;
+  --case-duration-enter:   200ms;
+  --case-duration-exit:    150ms;
+
+  /* Easing */
+  --case-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --case-ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --case-ease-out:     cubic-bezier(0, 0, 0.2, 1);
+
+  /* Transition shortcuts */
+  --case-transition:      var(--case-duration-normal) var(--case-ease-default);
+  --case-transition-fast: var(--case-duration-fast) var(--case-ease-default);
+  --case-transition-slow: var(--case-duration-slow) var(--case-ease-out);
+}
+
+/* ─────────────────────────────────────────────────
+   13. TYPOGRAPHY SIZES & WEIGHTS
+   Scale defined in CASE_UX_FOUNDATION.md
+   ───────────────────────────────────────────────── */
+:root {
+  /* Font sizes */
+  --case-text-xs:   11px;
+  --case-text-sm:   13px;
+  --case-text-base: 14px;
+  --case-text-md:   15px;
+  --case-text-lg:   17px;
+  --case-text-xl:   20px;
+  --case-text-2xl:  24px;
+
+  /* Line heights */
+  --case-leading-tight:   1.25;
+  --case-leading-snug:    1.375;
+  --case-leading-normal:  1.5;
+  --case-leading-relaxed: 1.625;
+
+  /* Weights */
+  --case-weight-light:    300;
+  --case-weight-regular:  400;
+  --case-weight-medium:   500;
+  --case-weight-semibold: 600;
+  --case-weight-bold:     700;
+  --case-weight-extrabold: 800;
+
+  /* Letter spacing */
+  --case-tracking-tight:  -0.02em;
+  --case-tracking-normal: 0;
+  --case-tracking-wide:   0.04em;
+  --case-tracking-wider:  0.08em;
+}
+
+/* ─────────────────────────────────────────────────
+   14. SHELL DIMENSIONS
+   Fixed structural dimensions of the Workspace.
+   ───────────────────────────────────────────────── */
+:root {
+  --case-topbar-height:     40px;
+  --case-global-nav-width:  48px;
+  --case-explorer-width:    240px;
+  --case-explorer-collapsed: 0px;
+  --case-row-height-sm:     24px;  /* Dense list rows */
+  --case-row-height:        28px;  /* Explorer items */
+  --case-row-height-md:     32px;  /* Standard interactive rows */
+  --case-row-height-lg:     40px;  /* Comfortable list rows */
+}
+
+/* ─────────────────────────────────────────────────
+   15. KEYFRAMES
+   Only functional animations. See Motion Guidelines.
+   ───────────────────────────────────────────────── */
+@keyframes case-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes case-slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes case-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes case-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ─────────────────────────────────────────────────
+   16. UTILITY CLASSES
+   Minimal set. Components use variables directly.
+   ───────────────────────────────────────────────── */
+
+/* Animation shortcuts */
+.case-animate-fade {
+  animation: case-fade-in var(--case-duration-enter) var(--case-ease-out) both;
+}
+.case-animate-slide-left {
+  animation: case-slide-left var(--case-duration-normal) var(--case-ease-out) both;
+}
+.case-animate-scale {
+  animation: case-scale-in var(--case-duration-normal) var(--case-ease-out) both;
+}
+
+/* Typography utilities */
+.case-text-mono {
+  font-family: var(--case-font-mono);
+}
+.case-text-sans {
+  font-family: var(--case-font-sans);
+}
+
+/* Surface utilities */
+.case-surface-0 { background-color: var(--case-surface-0); }
+.case-surface-1 { background-color: var(--case-surface-1); }
+.case-surface-2 { background-color: var(--case-surface-2); }
+.case-surface-3 { background-color: var(--case-surface-3); }
+
+/* Border utility */
+.case-border {
+  border: var(--case-border-width) var(--case-border-style) var(--case-border);
+}
+.case-border-b {
+  border-bottom: var(--case-border-width) var(--case-border-style) var(--case-border);
+}
+.case-border-t {
+  border-top: var(--case-border-width) var(--case-border-style) var(--case-border);
+}
+.case-border-r {
+  border-right: var(--case-border-width) var(--case-border-style) var(--case-border);
+}
+.case-border-l {
+  border-left: var(--case-border-width) var(--case-border-style) var(--case-border);
+}
+
+/* Focus ring — accessible, no glow */
+.case-focus-ring:focus-visible {
+  outline: 2px solid var(--case-accent);
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.case-disabled {
+  opacity: var(--case-opacity-disabled);
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Scrollbar — CASE style */
+.case-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.case-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.case-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--case-border-strong);
+  border-radius: var(--case-radius-pill);
+}
+.case-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--case-text-muted);
+}
+
+/* ─────────────────────────────────────────────────
+   17. REDUCED MOTION OVERRIDE
+   MANDATORY — Always at the end of the file.
+   ───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+  }
+}
