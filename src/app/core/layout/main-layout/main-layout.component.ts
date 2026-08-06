@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { WorkspaceTopBarComponent } from '../workspace-topbar/workspace-topbar.component';
 import { GlobalNavComponent } from '../global-nav/global-nav.component';
 import { ContextExplorerComponent } from '../context-explorer/context-explorer.component';
+import { CommandPaletteComponent } from '../../command/command-palette/command-palette.component';
 
 /**
  * MainLayoutComponent — CASE Shell
@@ -29,6 +30,7 @@ import { ContextExplorerComponent } from '../context-explorer/context-explorer.c
     WorkspaceTopBarComponent,
     GlobalNavComponent,
     ContextExplorerComponent,
+    CommandPaletteComponent
   ],
   template: `
     <div class="workspace">
@@ -51,6 +53,9 @@ import { ContextExplorerComponent } from '../context-explorer/context-explorer.c
         </main>
 
       </div>
+
+      <!-- Command Platform Overlay -->
+      <app-command-palette />
     </div>
   `,
   styles: [`
