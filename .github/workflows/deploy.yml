@@ -34,7 +34,7 @@ jobs:
         run: npm ci
 
       - name: Build Angular App for GitHub Pages
-        run: npx ng build --configuration production --base-href /curso-ia-generativa/
+        run: npx ng build --configuration production --base-href /case-os/
 
       - name: Copy index.html to 404.html for Fallback
         run: cp dist/curso-ia-generativa/browser/index.html dist/curso-ia-generativa/browser/404.html
