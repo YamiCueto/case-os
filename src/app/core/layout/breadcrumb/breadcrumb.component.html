@@ -5,7 +5,7 @@
     </li>
     <li class="flex items-center space-x-2">
       <span class="text-slate-600">/</span>
-      <a routerLink="/plan-dev-detallado" class="hover:text-white transition-colors">{{ context()?.module?.title }}</a>
+      <a [routerLink]="context()?.module?.lessons?.[0]?.path" class="hover:text-white transition-colors">{{ context()?.module?.title }}</a>
     </li>
     <li class="flex items-center space-x-2">
       <span class="text-slate-600">/</span>
