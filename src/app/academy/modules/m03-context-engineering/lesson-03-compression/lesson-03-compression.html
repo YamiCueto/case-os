@@ -1,7 +1,9 @@
 <div class="presentation-container">
   <div class="back-to-menu">
     <a routerLink="/academy/home" class="back-btn">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
       Anterior
     </a>
   </div>
@@ -23,9 +25,12 @@
 
       <div class="slide-content">
         <h2>El Presupuesto de Tokens</h2>
-        <p>Todo modelo tiene una ventana máxima de tokens (ej. 128k) y un costo por token de entrada. Tratar de enviarlo todo no solo es caro, también vuelve lento al sistema. La compresión técnica busca maximizar la densidad de información.</p>
-        
-        <div class="tech-card" style="margin-top: 32px; padding: 24px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 24px;">
+        <p>Todo modelo tiene una ventana máxima de tokens (ej. 128k) y un costo por token de entrada. Tratar de enviarlo
+          todo no solo es caro, también vuelve lento al sistema. La compresión técnica busca maximizar la densidad de
+          información.</p>
+
+        <div class="tech-card"
+          style="margin-top: 32px; padding: 24px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 24px;">
           <div style="text-align: center;">
             <div style="font-size: 32px; margin-bottom: 8px;">🗂️</div>
             <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c7c4d7;">Raw Context</div>
@@ -69,13 +74,15 @@
           <div class="tech-card">
             <div class="tech-icon" style="color: #ef4444;">✂️</div>
             <h3>Truncation (Evitar)</h3>
-            <p>Cortar un string a los primeros 4000 caracteres. Rompe el formato (ej. corta JSON por la mitad), destruye XML tags y pierde la información más reciente.</p>
+            <p>Cortar un string a los primeros 4000 caracteres. Rompe el formato (ej. corta JSON por la mitad), destruye
+              XML tags y pierde la información más reciente.</p>
           </div>
-          
+
           <div class="tech-card active">
             <div class="tech-icon" style="color: #10b981;">🗜️</div>
             <h3>Distillation (Ideal)</h3>
-            <p>Usar código para limpiar el contexto: eliminar campos null de un JSON, remover clases CSS de un HTML, resumir el historial de conversación con un modelo barato antes de llamar al modelo pesado.</p>
+            <p>Usar código para limpiar el contexto: eliminar campos null de un JSON, remover clases CSS de un HTML,
+              resumir el historial de conversación con un modelo barato antes de llamar al modelo pesado.</p>
           </div>
         </div>
       </div>
@@ -93,10 +100,14 @@
 
       <div class="slide-content">
         <div class="warning-box">
-          <strong>Concepto de Ingeniería:</strong> Un contexto perfectamente seleccionado, ensamblado, priorizado y comprimido <strong>NO garantiza</strong> una respuesta correcta.
+          <strong>Concepto de Ingeniería:</strong> Un contexto perfectamente seleccionado, ensamblado, priorizado y
+          comprimido <strong>NO garantiza</strong> una respuesta correcta.
         </div>
 
-        <p style="margin-top: 24px;">Simplemente hace que el sistema probabilístico tenga las <strong>mejores condiciones matemáticas posibles</strong> para producirla. La validación del Context Payload te asegura que no fallaste por falta de información. Si el LLM falla con un contexto perfecto, el problema está en las capacidades del modelo (Model) o en sus reglas (Instruction).</p>
+        <p style="margin-top: 24px;">Simplemente hace que el sistema probabilístico tenga las <strong>mejores
+            condiciones matemáticas posibles</strong> para producirla. La validación del Context Payload te asegura que
+          no fallaste por falta de información. Si el LLM falla con un contexto perfecto, el problema está en las
+          capacidades del modelo (Model) o en sus reglas (Instruction).</p>
       </div>
     </div>
 
@@ -115,12 +126,15 @@
           <div class="tech-meta">Demo 03 · Interactive</div>
           <div class="tech-icon" style="color: #6366f1;">🎮</div>
           <h3>Demo 03 — Engineer the Context</h3>
-          <p>Experimenta interactivamente con presupuestos de tokens, fuentes de contexto indispensables y eliminación de basura o promociones para alcanzar el <strong>Minimum Useful Context</strong>.</p>
-          <p style="margin-top: 16px;">Observa en tiempo real cómo la sobreabundancia de información o el ruido degradan la atención del modelo antes de diseñar tu <strong>Context Manifest</strong> en el Real Engineering Lab.</p>
+          <p>Experimenta interactivamente con presupuestos de tokens, fuentes de contexto indispensables y eliminación
+            de basura o promociones para alcanzar el <strong>Minimum Useful Context</strong>.</p>
+          <p style="margin-top: 16px;">Observa en tiempo real cómo la sobreabundancia de información o el ruido degradan
+            la atención del modelo antes de diseñar tu <strong>Context Manifest</strong> en el Real Engineering Lab.</p>
         </div>
-        
+
         <div style="text-align: center;">
-          <a routerLink="/academy/modules/m03-context-engineering/demo-engineer-context" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+          <a routerLink="/academy/modules/m03-context-engineering/demo-engineer-context" class="control-btn primary"
+            style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
             🎮 Probar Demo 03 &rarr;
           </a>
         </div>

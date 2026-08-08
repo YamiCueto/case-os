@@ -1,0 +1,257 @@
+﻿<div class="presentation-container pb-32">
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
+
+    <!-- Context Chips -->
+    <div class="lab-context-chips" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 28px;">
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6366f1; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); padding: 3px 10px; border-radius: 4px;">LAB 04 · REAL ENGINEERING</span>
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; background: #0f172a; border: 1px solid #1e293b; padding: 3px 10px; border-radius: 4px;">Module 04 · Retrieval & RAG</span>
+      <span style="color: #334155; font-size: 10px;">·</span>
+      <span style="font-size: 12px; color: #64748b;">⏱️ 60 min</span>
+      <span style="font-size: 12px; color: #64748b;">· Advanced</span>
+      <span style="font-size: 12px; color: #64748b;">· Retrieval Specification</span>
+    </div>
+
+    <!-- Security Boundary Alert -->
+    <div style="background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.25); border-left: 3px solid #dc2626; border-radius: 8px; padding: 18px 20px; margin-bottom: 36px; display: flex; gap: 14px; align-items: flex-start;">
+      <span class="material-symbols-outlined" style="color: #f87171; font-size: 20px; flex-shrink: 0; margin-top: 1px;">warning</span>
+      <div>
+        <h4 style="color: #f87171; font-size: 13px; font-weight: 700; margin: 0 0 6px 0; letter-spacing: 0.02em;">Security Boundary</h4>
+        <p style="color: #fca5a5; font-size: 13px; line-height: 1.6; margin: 0;">
+          <strong>Nunca subas documentación técnica confidencial, esquemas de BD propietarios o credenciales</strong> a servicios no autorizados.
+          CASE Academy no ejecuta ni almacena tu base de vectores. Este laboratorio es la guía técnica de ingeniería que ejecutas localmente en tu entorno corporativo.
+        </p>
+      </div>
+    </div>
+
+    <div class="slide-content" style="display: flex; flex-direction: column; gap: 40px;">
+
+      <!-- 01 — Context: Candidate Generation vs Context Engineering -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">01 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Retrieval es Generación de Candidatos, no Contexto Final</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+          Existe el error conceptual de asumir que "hacer RAG es pegar los resultados de una base de datos vectorial directamente en el prompt". <strong style="color: #e4e1ed;">Retrieval no sustituye a Context Engineering</strong>. Retrieval es la etapa que recupera candidatos potenciales a escala masiva; luego esos candidatos deben evaluarse, filtrarse y ensamblarse:
+        </p>
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 16px 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #818cf8; text-align: center; line-height: 1.8;">
+          Query &rarr; Retrieve Candidates &rarr; Evaluate Relevance &rarr; Select &rarr; Assemble &rarr; Validate &rarr; Useful Context
+        </div>
+      </section>
+
+      <!-- 02 — Target Knowledge Selection -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">02 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Selección de la Fuente de Conocimiento Real</h2>
+        </div>
+        <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 20px 24px;">
+          <p style="color: #a5b4fc; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 10px 0;">Repositorio o Base de Datos Corporativa Masiva</p>
+          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+            Elige una fuente de conocimiento de tu organización donde la selección manual de archivos (M03) ya no sea viable:
+          </p>
+          <ul style="color: #94a3b8; font-size: 13px; line-height: 1.8; margin: 0; padding-left: 20px;">
+            <li>Documentación de APIs internas o especificaciones Swagger/OpenAPI extensas.</li>
+            <li>Diccionario de datos o esquemas de base de datos relacionales con más de 100 tablas.</li>
+            <li>Manuales operativos, políticas normativas o contratos legales corporativos.</li>
+            <li>Historial anonimizado de incidentes técnicos o tickets de soporte.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 03 — Search Strategy Diversity (Lexical, Semantic, Hybrid, Reranking) -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">03 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Estrategia de Búsqueda: Más allá de los Embeddings</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          No todas las búsquedas requieren bases de datos vectoriales. Tu especificación debe justificar la combinación adecuada de técnicas:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #38bdf8; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8;">LEXICAL SEARCH (BM25 / Full-Text)</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Ideal para coincidencia exacta de nombres de funciones, IDs de error, tablas SQL y términos técnicos específicos.</p>
+          </div>
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #818cf8; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #818cf8;">SEMANTIC SEARCH (Embeddings)</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Ideal para preguntas conceptuales en lenguaje natural donde el usuario no conoce la terminología exacta.</p>
+          </div>
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #22c55e; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #22c55e;">HYBRID SEARCH (Lexical + Vector)</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Combina puntuación semántica y léxica para maximizar la cobertura sin perder precisión de términos.</p>
+          </div>
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #eab308; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #eab308;">METADATA FILTERING & RERANKING</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Filtra candidatos por versión, fecha o permisos, y reordena con un Cross-Encoder para eliminar ruido (M03).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 — Deliverable: RETRIEVAL SPECIFICATION STRUCTURE -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">04 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">El Artefacto: Retrieval Specification (14 Secciones)</h2>
+        </div>
+
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F1F1F; padding-bottom: 12px; margin-bottom: 18px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #6366f1; letter-spacing: 0.1em;">RETRIEVAL SPECIFICATION TEMPLATE</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b;">CASE OS STANDARD</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 12px; color: #cbd5e1;">
+            <div>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">1. Knowledge Source:</span> Fuente de datos y formato.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">2. Retrieval Problem:</span> Tipo de consultas y requerimiento.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">3. Chunking Strategy:</span> Tamaño (tokens), overlap y límites.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">4. Metadata Strategy:</span> Tags, módulos, timestamps, roles.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">5. Search Strategy:</span> Léxica, semántica o híbrida.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">6. Top-K Policy:</span> Justificación del umbral de candidatos.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">7. Reranking Rules:</span> Reglas de re-ordenamiento.
+            </div>
+            <div>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">8. Evaluation Benchmark:</span> Matriz de 5 queries.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">9. Precision@K Target:</span> % mínimo aceptable.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">10. Recall / Hit Rate:</span> % de cobertura requerido.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">11. Failure Cases:</span> Comportamiento ante no-match.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">12. Context Integration:</span> Filtros post-retrieval.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">13. Security Constraints:</span> Control de acceso por rol.<br>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">14. Acceptance Criteria:</span> Umbral de pase.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 — Heart of the Lab: EVALUATION BENCHMARK TABLE -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">05 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">El Corazón del Lab: Evaluation Benchmark (5 Queries)</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Para demostrar que la estrategia funciona, debes ejecutar un benchmark de 5 consultas reales representando casos típicos, casos borde y casos sin respuesta:
+        </p>
+
+        <!-- Benchmark Table -->
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+            <thead>
+              <tr style="background: #090d16; border-bottom: 1px solid #1F1F1F; color: #818cf8;">
+                <th style="padding: 10px 12px;">Query</th>
+                <th style="padding: 10px 12px;">Fuentes Esperadas</th>
+                <th style="padding: 10px 12px;">Top-K</th>
+                <th style="padding: 10px 12px;">Falsos Positivos</th>
+                <th style="padding: 10px 12px;">Precision@K</th>
+                <th style="padding: 10px 12px;">Hit Rate</th>
+                <th style="padding: 10px 12px;">Decisión</th>
+              </tr>
+            </thead>
+            <tbody style="color: #cbd5e1;">
+              <tr style="border-bottom: 1px solid #1f293d;">
+                <td style="padding: 10px 12px; color: #f8fafc;">Q1 (Típica)</td>
+                <td style="padding: 10px 12px;">Doc-A, Doc-B</td>
+                <td style="padding: 10px 12px;">K=3</td>
+                <td style="padding: 10px 12px; color: #22c55e;">1</td>
+                <td style="padding: 10px 12px; color: #22c55e;">66%</td>
+                <td style="padding: 10px 12px; color: #22c55e;">100%</td>
+                <td style="padding: 10px 12px; color: #86efac;">PASS</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1f293d;">
+                <td style="padding: 10px 12px; color: #f8fafc;">Q2 (Término exacto)</td>
+                <td style="padding: 10px 12px;">SQL-Schema-User</td>
+                <td style="padding: 10px 12px;">K=2</td>
+                <td style="padding: 10px 12px; color: #22c55e;">0</td>
+                <td style="padding: 10px 12px; color: #22c55e;">100%</td>
+                <td style="padding: 10px 12px; color: #22c55e;">100%</td>
+                <td style="padding: 10px 12px; color: #86efac;">PASS</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1f293d;">
+                <td style="padding: 10px 12px; color: #f8fafc;">Q3 (Sin respuesta)</td>
+                <td style="padding: 10px 12px;">Ninguna (Out of scope)</td>
+                <td style="padding: 10px 12px;">K=3</td>
+                <td style="padding: 10px 12px; color: #ef4444;">3 (Ruido)</td>
+                <td style="padding: 10px 12px; color: #ef4444;">0%</td>
+                <td style="padding: 10px 12px; color: #ef4444;">0%</td>
+                <td style="padding: 10px 12px; color: #fca5a5;">FAIL &rarr; Añadir Threshold</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1f293d;">
+                <td style="padding: 10px 12px; color: #f8fafc;">Q4 (Ambigua)</td>
+                <td style="padding: 10px 12px;">Doc-C, Config-Env</td>
+                <td style="padding: 10px 12px;">K=4</td>
+                <td style="padding: 10px 12px; color: #eab308;">2</td>
+                <td style="padding: 10px 12px; color: #eab308;">50%</td>
+                <td style="padding: 10px 12px; color: #22c55e;">100%</td>
+                <td style="padding: 10px 12px; color: #fde047;">RE-RANK REQUIRED</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px 12px; color: #f8fafc;">Q5 (Multi-modulo)</td>
+                <td style="padding: 10px 12px;">Doc-A, Doc-D, Auth-Spec</td>
+                <td style="padding: 10px 12px;">K=5</td>
+                <td style="padding: 10px 12px; color: #22c55e;">2</td>
+                <td style="padding: 10px 12px; color: #22c55e;">60%</td>
+                <td style="padding: 10px 12px; color: #22c55e;">100%</td>
+                <td style="padding: 10px 12px; color: #86efac;">PASS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 06 — Execution Options under Corporate Restraints -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">06 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Opciones de Ejecución según Restricciones del Entorno</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+          No estás obligado a instalar una base de datos vectorial específica. Elige la opción de validación compatible con la infraestructura autorizada en tu empresa:
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; background: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px;">Script Local en Python / Node (Cosine Sim)</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; background: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px;">PostgreSQL con extensión pgvector</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; background: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px;">Chroma / Qdrant / Weaviate / Pinecone</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; background: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px;">Búsqueda Empresarial Autorizada (Azure AI Search / AWS Kendra)</span>
+        </div>
+      </section>
+
+      <!-- 07 — Bridge to M05 (AI Agents) -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">07 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">El Puente Pedagógico hacia M05 (AI Agents)</h2>
+        </div>
+        <div style="background: #090d16; border: 1px solid #1e293b; border-left: 3px solid #818cf8; border-radius: 8px; padding: 22px 24px;">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #818cf8; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 8px 0;">
+            De la búsqueda estática a la decisión autónoma
+          </p>
+          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7; margin: 0 0 12px 0;">
+            Ahora que sabes diseñar estrategias de búsqueda a escala y medir la relevancia de los resultados recuperados, surge el siguiente nivel de ingeniería:
+          </p>
+          <p style="color: #f8fafc; font-size: 15px; font-weight: 700; line-height: 1.6; margin: 0 0 12px 0;">
+            <em>¿Qué ocurre cuando una IA debe DECIDIR AUTÓNOMAMENTE cuándo buscar, qué herramientas invocar y cómo iterar ante un resultado insuficiente?</em>
+          </p>
+          <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">
+            En <strong>Module 05 (AI Agents & Tool Calling)</strong> entraremos al ciclo agente, Tool Calling y la toma de decisiones autónoma.
+          </p>
+        </div>
+      </section>
+
+      <!-- Navigation & Closure -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid #1e293b; margin-top: 12px;">
+        <a routerLink="/academy/modules/m04-retrieval-rag/demo-build-retrieval" class="control-btn" style="border-color: #1e293b; color: #94a3b8; font-size: 12px;">
+          ← Volver a Demo 04
+        </a>
+        <a routerLink="/labs" class="control-btn primary" style="font-size: 12px;">
+          Ver Real Engineering Labs →
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

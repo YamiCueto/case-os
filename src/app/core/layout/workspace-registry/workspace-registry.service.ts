@@ -323,6 +323,13 @@ export class WorkspaceRegistryService {
                   icon: 'terminal',
                   depth: 1,
                 },
+                {
+                  id: 'lab-04',
+                  label: 'Lab 04 — Build a Retrieval Strategy',
+                  path: '/academy/modules/m04-retrieval-rag/lab-04-build-retrieval-strategy',
+                  icon: 'terminal',
+                  depth: 1,
+                },
               ],
             },
           ]
@@ -333,6 +340,7 @@ export class WorkspaceRegistryService {
         const isLab01 = url.startsWith('/academy/modules/m01-ai-foundations/lab-01-legacy-routine');
         const isLab02 = url.startsWith('/academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract');
         const isLab03 = url.startsWith('/academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context');
+        const isLab04 = url.startsWith('/academy/modules/m04-retrieval-rag/lab-04-build-retrieval-strategy');
 
         const crumbs: BreadcrumbItem[] = [
           { label: 'Labs', path: '/labs', icon: 'science' }
@@ -344,6 +352,8 @@ export class WorkspaceRegistryService {
           crumbs.push({ label: 'Lab 02 — Engineer an AI Instruction Contract', path: url });
         } else if (isLab03) {
           crumbs.push({ label: 'Lab 03 — Build the Minimum Useful Context', path: url });
+        } else if (isLab04) {
+          crumbs.push({ label: 'Lab 04 — Build a Retrieval Strategy', path: url });
         }
         return crumbs;
       }

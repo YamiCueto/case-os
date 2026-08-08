@@ -285,16 +285,31 @@ export const COURSE_CONFIG: CourseConfig = {
           resources: []
         },
         {
-          id: 'l4',
-          title: 'Lab 04 — Build Retrieval',
+          id: 'd4',
+          title: 'Demo 04 — Build Retrieval',
           order: 4,
+          duration: '15 min',
+          difficulty: 'ADVANCED',
+          icon: '🎮',
+          tags: ['Demo', 'Interactive'],
+          type: 'DEMO',
+          prerequisites: ['c12'],
+          path: '/academy/modules/m04-retrieval-rag/demo-build-retrieval',
+          objectives: ['Simular generación de candidatos, Top-K y el dilema Precision vs. Recall'],
+          resources: []
+        },
+        {
+          id: 'l4',
+          title: 'Lab 04 — Build a Retrieval Strategy',
+          order: 5,
           duration: '60 min',
           difficulty: 'ADVANCED',
           icon: '🔬',
-          tags: ['Lab', 'Practice'],
-          prerequisites: ['c12'],
-          path: '/labs/build-retrieval',
-          objectives: ['Construir un motor de recuperación simulado y evaluar el Top-K'],
+          tags: ['Lab', 'Real Engineering'],
+          type: 'LAB',
+          prerequisites: ['d4'],
+          path: '/academy/modules/m04-retrieval-rag/lab-04-build-retrieval-strategy',
+          objectives: ['Diseñar una especificación formal de búsqueda y un benchmark de evaluación de 5 queries'],
           resources: []
         }
       ]

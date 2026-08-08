@@ -92,10 +92,6 @@ export const routes: Routes = [
         loadComponent: () => import('./labs/token-playground/token-playground').then(m => m.TokenPlayground)
       },
       {
-        path: 'labs/build-retrieval',
-        loadComponent: () => import('./labs/build-retrieval/build-retrieval').then(m => m.BuildRetrievalLab)
-      },
-      {
         path: 'labs/agent-loop',
         loadComponent: () => import('./labs/agent-loop/agent-loop').then(m => m.AgentLoopLab)
       },
@@ -266,6 +262,14 @@ export const routes: Routes = [
           {
             path: 'academy/modules/m04-retrieval-rag/lesson-03-evaluation',
             loadComponent: () => import('./academy/modules/m04-retrieval-rag/lesson-03-evaluation/lesson-03-evaluation').then(m => m.Lesson03Evaluation)
+          },
+          {
+            path: 'academy/modules/m04-retrieval-rag/demo-build-retrieval',
+            loadComponent: () => import('./academy/modules/m04-retrieval-rag/demo-build-retrieval/demo-build-retrieval').then(m => m.DemoBuildRetrieval)
+          },
+          {
+            path: 'academy/modules/m04-retrieval-rag/lab-04-build-retrieval-strategy',
+            loadComponent: () => import('./academy/modules/m04-retrieval-rag/lab-04-build-retrieval-strategy/lab-04-build-retrieval-strategy').then(m => m.Lab04BuildRetrievalStrategy)
           },
           {
             path: 'academy/modules/m05-ai-agents/lesson-01-workflows',
