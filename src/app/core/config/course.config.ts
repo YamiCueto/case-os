@@ -597,16 +597,31 @@ export const COURSE_CONFIG: CourseConfig = {
           resources: []
         },
         {
-          id: 'l8',
-          title: 'Lab 08 — The Eval Pipeline',
+          id: 'd8',
+          title: 'Demo 08 — The Eval Pipeline',
           order: 4,
-          duration: '60 min',
+          duration: '15 min',
+          difficulty: 'ADVANCED',
+          icon: '🎮',
+          tags: ['Demo', 'Interactive'],
+          type: 'DEMO',
+          prerequisites: ['c24'],
+          path: '/academy/modules/m08-production/demo-eval-pipeline',
+          objectives: ['Experimentar con LLM-as-a-judge y evitar False Passes'],
+          resources: []
+        },
+        {
+          id: 'l8',
+          title: 'Lab 08 — Design a Production AI Protocol',
+          order: 5,
+          duration: '90 min',
           difficulty: 'ADVANCED',
           icon: '🔬',
-          tags: ['Lab', 'Practice'],
-          prerequisites: ['c24'],
-          path: '/labs/eval-pipeline',
-          objectives: ['Diseñar una rúbrica de evaluación y detectar falsos positivos'],
+          tags: ['Lab', 'Real Engineering'],
+          type: 'LAB',
+          prerequisites: ['d8'],
+          path: '/academy/modules/m08-production/lab-08-production-ai-protocol',
+          objectives: ['Diseñar un Production Readiness Review evaluando boundaries y constraints'],
           resources: []
         }
       ]

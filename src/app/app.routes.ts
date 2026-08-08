@@ -94,10 +94,7 @@ export const routes: Routes = [
 
 
 
-      {
-        path: 'labs/eval-pipeline',
-        loadComponent: () => import('./labs/eval-pipeline/eval-pipeline').then(m => m.EvalPipelineLab)
-      },
+
       {
         path: 'labs/architecture-blueprint',
         loadComponent: () => import('./labs/architecture-blueprint/architecture-blueprint').then(m => m.ArchitectureBlueprintLab)
@@ -333,6 +330,14 @@ export const routes: Routes = [
           {
             path: 'academy/modules/m08-production/lesson-03-security',
             loadComponent: () => import('./academy/modules/m08-production/lesson-03-security/lesson-03-security').then(m => m.Lesson03Security)
+          },
+          {
+            path: 'academy/modules/m08-production/demo-eval-pipeline',
+            loadComponent: () => import('./academy/modules/m08-production/demo-eval-pipeline/demo-eval-pipeline').then(m => m.DemoEvalPipeline)
+          },
+          {
+            path: 'academy/modules/m08-production/lab-08-production-ai-protocol',
+            loadComponent: () => import('./academy/modules/m08-production/lab-08-production-ai-protocol/lab-08-production-ai-protocol').then(m => m.Lab08ProductionAiProtocol)
           },
           {
             path: 'academy/modules/m09-architecture/lesson-01-monolith',

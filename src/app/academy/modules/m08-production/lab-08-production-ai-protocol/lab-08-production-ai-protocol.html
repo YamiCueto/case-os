@@ -1,0 +1,182 @@
+﻿<div class="presentation-container pb-32">
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
+
+    <!-- Context Chips -->
+    <div class="lab-context-chips" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 28px;">
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #10b981; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); padding: 3px 10px; border-radius: 4px;">LAB 08 · REAL ENGINEERING</span>
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; background: #0f172a; border: 1px solid #1e293b; padding: 3px 10px; border-radius: 4px;">Module 08 · Production AI</span>
+      <span style="color: #334155; font-size: 10px;">·</span>
+      <span style="font-size: 12px; color: #64748b;">⏱️ 90 min</span>
+      <span style="font-size: 12px; color: #64748b;">· Advanced</span>
+      <span style="font-size: 12px; color: #64748b;">· Production Readiness Review</span>
+    </div>
+
+    <div class="slide-content" style="display: flex; flex-direction: column; gap: 40px;">
+
+      <!-- Intro -->
+      <section>
+        <p style="color: #cbd5e1; font-size: 16px; line-height: 1.7; margin: 0;">
+          Diseña el <strong>Production Readiness Review</strong> de tu sistema. Este artefacto es la revisión de ingeniería final que determina si un agente de IA está autorizado a desplegarse, asegurando que cumple con las fronteras de seguridad, límites operativos y criterios de regresión definidos.
+        </p>
+      </section>
+
+      <!-- 00 — Production Baseline -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">00 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Production Baseline</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+          Antes de modificar y evaluar, establece el punto de partida (Baseline Before AI). Documenta:
+        </p>
+        <ul style="font-size: 14px; color: #cbd5e1; line-height: 1.8; margin-left: 20px; padding: 0;">
+          <li>Versión actual del modelo y prompt.</li>
+          <li>Comportamiento y casos de error conocidos.</li>
+          <li>Latencia y costo actuales.</li>
+          <li>Restricciones operativas existentes.</li>
+        </ul>
+      </section>
+
+      <!-- 01 — Golden Dataset Definition -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">01 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Golden Dataset Definition</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Define los casos de prueba inmutables que deben ejecutarse en cada despliegue.
+        </p>
+        <ul style="font-size: 14px; color: #cbd5e1; line-height: 1.8; margin-left: 20px; padding: 0;">
+          <li><strong style="color: #10b981;">Happy Paths:</strong> Uso estándar esperado.</li>
+          <li><strong style="color: #fbbf24;">Edge Cases:</strong> Casos ambiguos o límites.</li>
+          <li><strong style="color: #ef4444;">Adversarial Inputs (Jailbreaks):</strong> Intentos de extraer datos o saltar reglas.</li>
+          <li><strong style="color: #3b82f6;">Regressions:</strong> Bugs resueltos en versiones anteriores que no deben reaparecer.</li>
+        </ul>
+      </section>
+
+      <!-- 02 — Evaluation Strategy -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">02 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Evaluation Strategy</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Diseña el pipeline de evaluación jerárquico. No uses LLMs para tareas determinísticas.
+        </p>
+        <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
+          <ul style="font-size: 14px; color: #cbd5e1; line-height: 1.8; margin-left: 20px; padding: 0;">
+            <li><strong>1. Deterministic Checks:</strong> Validación de JSON Schema, Regex para PII, HTTP Status.</li>
+            <li><strong>2. Semantic Evaluation:</strong> Similitud de incrustaciones (embeddings) con respuestas esperadas.</li>
+            <li><strong>3. LLM-as-a-judge:</strong> Rúbrica para evaluar calidad, tono y completitud de la respuesta.</li>
+            <li><strong>4. Human Review:</strong> Validación final de métricas de aceptación de negocio.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 03 — Systemic Security Boundaries -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">03 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Systemic Security Boundaries</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Asume que el modelo será engañado (Prompt Injection). ¿Qué impide el desastre?
+        </p>
+        <ul style="font-size: 14px; color: #cbd5e1; line-height: 1.8; margin-left: 20px; padding: 0;">
+          <li>¿Qué mecanismos de red o RBAC impiden la exfiltración de PII?</li>
+          <li>¿Qué impide ejecutar operaciones destructivas si el LLM las solicita? (Referencia a Least Privilege en M07).</li>
+        </ul>
+      </section>
+
+      <!-- 04 — Operational Constraints -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">04 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Operational Constraints</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Aplica el principio de <strong>Least Complexity Necessary</strong>. Una respuesta perfecta que tarde 45 segundos o cueste el triple puede ser un Deployment Failure.
+        </p>
+        <ul style="font-size: 14px; color: #cbd5e1; line-height: 1.8; margin-left: 20px; padding: 0;">
+          <li>MAX LATENCY</li>
+          <li>MAX COST / REQUEST</li>
+          <li>MAX TOKENS</li>
+          <li>MAX RETRIES / TOOL CALLS</li>
+        </ul>
+      </section>
+
+      <!-- 05 — The Deployment Gate -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">05 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">The Deployment Gate</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          No todas las métricas tienen el mismo peso. Define los Hard Blockers que impiden automáticamente el despliegue.
+        </p>
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 0; overflow: hidden;">
+          <table style="width: 100%; text-align: left; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12px;">
+            <thead style="background: #0f172a; border-bottom: 1px solid #1e293b; color: #cbd5e1;">
+              <tr>
+                <th style="padding: 12px 16px;">Evento</th>
+                <th style="padding: 12px 16px;">Decisión Automática</th>
+              </tr>
+            </thead>
+            <tbody style="color: #94a3b8;">
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0;">SECURITY CRITICAL FAILURE</td>
+                <td style="padding: 12px 16px; color: #ef4444; font-weight: bold;">BLOCK</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0;">PII EXFILTRATION</td>
+                <td style="padding: 12px 16px; color: #ef4444; font-weight: bold;">BLOCK</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0;">UNAUTHORIZED SIDE EFFECT</td>
+                <td style="padding: 12px 16px; color: #ef4444; font-weight: bold;">BLOCK</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0;">GOLDEN DATASET REGRESSION</td>
+                <td style="padding: 12px 16px; color: #f59e0b; font-weight: bold;">REVIEW</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0;">LATENCY / COST REGRESSION</td>
+                <td style="padding: 12px 16px; color: #f59e0b; font-weight: bold;">REVIEW</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 06 — Final Decision -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">06 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Final Decision</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          ¿Estamos autorizados a desplegar este sistema?
+        </p>
+        <div style="display: flex; gap: 12px;">
+          <span style="font-size: 11px; font-weight: 700; background: #064e3b; color: #34d399; padding: 6px 12px; border-radius: 4px; border: 1px solid #059669; cursor: pointer;">[ APPROVE ]</span>
+          <span style="font-size: 11px; font-weight: 700; background: #78350f; color: #fbbf24; padding: 6px 12px; border-radius: 4px; border: 1px solid #d97706; cursor: pointer;">[ REVISE ]</span>
+          <span style="font-size: 11px; font-weight: 700; background: #7f1d1d; color: #f87171; padding: 6px 12px; border-radius: 4px; border: 1px solid #dc2626; cursor: pointer;">[ REJECT ]</span>
+        </div>
+      </section>
+
+      <!-- Navigation & Closure -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid #1e293b; margin-top: 12px;">
+        <a routerLink="/academy/modules/m08-production/demo-eval-pipeline" class="control-btn" style="border-color: #1e293b; color: #94a3b8; font-size: 12px;">
+          ← Volver a Demo 08
+        </a>
+        <a routerLink="/labs" class="control-btn primary" style="font-size: 12px;">
+          Ver Real Engineering Labs →
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

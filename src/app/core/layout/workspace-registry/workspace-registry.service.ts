@@ -351,6 +351,13 @@ export class WorkspaceRegistryService {
                   icon: 'terminal',
                   depth: 1,
                 },
+                {
+                  id: 'lab-08',
+                  label: 'Lab 08 — Design a Production AI Protocol',
+                  path: '/academy/modules/m08-production/lab-08-production-ai-protocol',
+                  icon: 'terminal',
+                  depth: 1,
+                },
               ],
             },
           ]
@@ -365,6 +372,7 @@ export class WorkspaceRegistryService {
         const isLab05 = url.startsWith('/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow');
         const isLab06 = url.startsWith('/academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol');
         const isLab07 = url.startsWith('/academy/modules/m07-mcp/lab-07-map-integration-to-mcp');
+        const isLab08 = url.startsWith('/academy/modules/m08-production/lab-08-production-ai-protocol');
 
         const crumbs: BreadcrumbItem[] = [
           { label: 'Labs', path: '/labs', icon: 'science' }
@@ -384,6 +392,8 @@ export class WorkspaceRegistryService {
           crumbs.push({ label: 'Lab 06 — Design an Agentic SWE Protocol', path: url });
         } else if (isLab07) {
           crumbs.push({ label: 'Lab 07 — Map a Legacy Integration to MCP', path: url });
+        } else if (isLab08) {
+          crumbs.push({ label: 'Lab 08 — Design a Production AI Protocol', path: url });
         }
         return crumbs;
       }

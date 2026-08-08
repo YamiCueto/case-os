@@ -1,0 +1,123 @@
+﻿<div class="presentation-container pb-32">
+  <div class="back-to-menu">
+    <a routerLink="/academy/modules/m08-production/lesson-03-security" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a la Leccion
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 1000px; margin: 0 auto; padding: 32px 40px;">
+    <div class="slide-title">
+      <span class="workshop-badge">
+        <span class="icon">◈</span>
+        Demo 08 · Production AI
+      </span>
+      <h1>The Eval Pipeline</h1>
+      <p class="subtitle">Evitando regresiones y False Passes antes del despliegue</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+      
+      <!-- Panel Izquierdo: Configuración de la Rúbrica -->
+      <div>
+        <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #cbd5e1; margin-bottom: 16px;">
+          Configuración de la Rúbrica
+        </h3>
+        <p style="font-size: 13px; color: #94a3b8; margin-bottom: 24px; line-height: 1.6;">
+          Selecciona los criterios que el <strong>Pipeline de Evaluación</strong> utilizará para juzgar el Golden Dataset. 
+        </p>
+        
+        <!-- Evaluation Hierarchy Visual -->
+        <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+          <h4 style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #64748b; margin: 0 0 12px 0;">EVALUATION HIERARCHY</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div *ngFor="let item of rubric()" 
+                 (click)="toggleRubric(item.id)"
+                 style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 6px; cursor: pointer; border: 1px solid;"
+                 [ngStyle]="{'background': item.selected ? (item.type === 'DETERMINISTIC' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(99, 102, 241, 0.1)') : 'transparent',
+                             'border-color': item.selected ? (item.type === 'DETERMINISTIC' ? '#10b981' : '#6366f1') : '#334155'}">
+              <span class="material-symbols-outlined" 
+                    [ngStyle]="{'color': item.selected ? (item.type === 'DETERMINISTIC' ? '#10b981' : '#6366f1') : '#475569'}">
+                {{ item.selected ? 'check_box' : 'check_box_outline_blank' }}
+              </span>
+              <span style="font-size: 13px;" [ngStyle]="{'color': item.selected ? '#e2e8f0' : '#94a3b8'}">
+                {{ item.label }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <button (click)="runEval()" class="control-btn primary" style="width: 100%; justify-content: center; padding: 16px;">
+          Ejecutar Pipeline de Evaluación
+        </button>
+      </div>
+
+      <!-- Panel Derecho: Resultados del Dataset -->
+      <div>
+        <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #cbd5e1; margin-bottom: 16px;">
+          Resultados sobre el Golden Dataset
+        </h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div *ngFor="let c of testCases()" style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #e2e8f0;">{{ c.name }}</span>
+              <span *ngIf="c.evalResult === 'PENDING'" style="font-size: 10px; padding: 4px 8px; border-radius: 4px; background: #334155; color: #cbd5e1;">PENDING</span>
+              <span *ngIf="c.evalResult === 'PASS'" style="font-size: 10px; padding: 4px 8px; border-radius: 4px; background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid #10b981;">PASS</span>
+              <span *ngIf="c.evalResult === 'FAIL'" style="font-size: 10px; padding: 4px 8px; border-radius: 4px; background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid #ef4444;">FAIL</span>
+            </div>
+            
+            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 4px;">
+              <strong style="color: #cbd5e1;">Input:</strong> {{ c.userInput }}
+            </div>
+            <div style="font-size: 12px; color: #94a3b8;">
+              <strong style="color: #cbd5e1;">Response:</strong> "{{ c.candidateResponse }}"
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deployment Status -->
+    <div style="margin-top: 32px; border-top: 1px solid #1e293b; padding-top: 32px;">
+      <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #cbd5e1; margin-bottom: 16px; text-align: center;">
+        Deployment Gate
+      </h3>
+
+      <div *ngIf="deploymentStatus() === 'LOCKED'" style="background: #0f172a; border: 1px dashed #334155; padding: 24px; text-align: center; border-radius: 8px;">
+        <span class="material-symbols-outlined" style="font-size: 32px; color: #64748b; margin-bottom: 8px;">lock</span>
+        <div style="font-size: 14px; color: #94a3b8;">El despliegue está bloqueado hasta que el pipeline se ejecute con éxito.</div>
+      </div>
+
+      <div *ngIf="deploymentStatus() === 'SUCCESS'" style="background: rgba(16,185,129,0.1); border: 1px solid #10b981; padding: 24px; text-align: center; border-radius: 8px;">
+        <span class="material-symbols-outlined" style="font-size: 32px; color: #10b981; margin-bottom: 8px;">check_circle</span>
+        <div style="font-size: 16px; font-weight: bold; color: #10b981; margin-bottom: 4px;">APROBADO PARA PRODUCCIÓN</div>
+        <div style="font-size: 14px; color: #cbd5e1;">La rúbrica detectó correctamente los casos ideales y bloqueó los peligrosos.</div>
+      </div>
+
+      <div *ngIf="deploymentStatus() === 'FAILED_FALSE_PASS'" style="background: rgba(239,68,68,0.1); border: 1px solid #ef4444; padding: 24px; text-align: center; border-radius: 8px;">
+        <span class="material-symbols-outlined" style="font-size: 32px; color: #ef4444; margin-bottom: 8px;">warning</span>
+        <div style="font-size: 16px; font-weight: bold; color: #ef4444; margin-bottom: 4px;">DESPLIEGUE BLOQUEADO: FALSE PASS</div>
+        <div style="font-size: 14px; color: #cbd5e1;">Tu rúbrica marcó como "PASS" una respuesta que es dañina o filtra información. (¿Olvidaste incluir la validación determinística?)</div>
+      </div>
+
+      <div *ngIf="deploymentStatus() === 'FAILED_FALSE_FAIL'" style="background: rgba(245,158,11,0.1); border: 1px solid #f59e0b; padding: 24px; text-align: center; border-radius: 8px;">
+        <span class="material-symbols-outlined" style="font-size: 32px; color: #f59e0b; margin-bottom: 8px;">report_problem</span>
+        <div style="font-size: 16px; font-weight: bold; color: #f59e0b; margin-bottom: 4px;">DESPLIEGUE BLOQUEADO: FALSE FAIL</div>
+        <div style="font-size: 14px; color: #cbd5e1;">Tu rúbrica es demasiado estricta. Marcó como "FAIL" una respuesta que es correcta, generando fricción operativa innecesaria.</div>
+      </div>
+    </div>
+
+    <!-- Takeaway -->
+    <div class="warning-box" style="border-left-color: #6366f1; background: #0d0d1a; margin-top: 2rem;">
+      <h4 style="color: #818cf8; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;">◈ Takeaway</h4>
+      <p style="color: #c7c4d7; font-size: 14px; line-height: 1.7; margin-bottom: 1rem;">
+        Un Deployment Gate efectivo depende de evaluar múltiples capas. Confiar únicamente en un "LLM-as-a-judge" sin validaciones determinísticas previas abre la puerta a <strong>False Passes</strong> que pueden filtrar información o ejecutar acciones no autorizadas.
+      </p>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a routerLink="/academy/modules/m08-production/lab-08-production-ai-protocol" class="control-btn" style="border-color: #6366f1; color: #818cf8; font-size: 11px;">Ir al Lab 08 →</a>
+      </div>
+    </div>
+
+  </div>
+</div>

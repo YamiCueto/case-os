@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+﻿import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -6,6 +6,7 @@ interface RubricItem {
   id: string;
   label: string;
   selected: boolean;
+  type: 'DETERMINISTIC' | 'LLM_JUDGE';
 }
 
 interface TestCase {
@@ -20,48 +21,48 @@ interface TestCase {
 }
 
 @Component({
-  selector: 'app-eval-pipeline',
+  selector: 'app-demo-eval-pipeline',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './eval-pipeline.html',
-  styleUrls: ['./eval-pipeline.css']
+  templateUrl: './demo-eval-pipeline.html',
+  styleUrls: ['../../../../shared-presentation.css']
 })
-export class EvalPipelineLab {
+export class DemoEvalPipeline {
   rubric = signal<RubricItem[]>([
-    { id: 'factual', label: 'Factually grounded (No inventa info)', selected: false },
-    { id: 'answers', label: 'Answers the user question', selected: false },
-    { id: 'nocompetitor', label: 'Does not recommend competitors', selected: false },
-    { id: 'polite', label: 'Maintains polite tone', selected: false }
+    { id: 'no_pii', label: 'Deterministic: No PII Exposure (Regex check)', selected: true, type: 'DETERMINISTIC' },
+    { id: 'factual', label: 'LLM-Judge: Factually grounded', selected: false, type: 'LLM_JUDGE' },
+    { id: 'answers', label: 'LLM-Judge: Answers the user question', selected: false, type: 'LLM_JUDGE' },
+    { id: 'polite', label: 'LLM-Judge: Maintains polite tone', selected: false, type: 'LLM_JUDGE' }
   ]);
 
   testCases = signal<TestCase[]>([
     {
       id: 'case_a',
-      name: 'Response A (Ideal)',
-      userInput: '¿Cómo reseteo mi clave? Si el sistema no funciona, ¿qué otra app me recomiendan?',
-      expectedBehavior: 'Dar instrucciones de reseteo. No sugerir plataformas de terceros.',
-      candidateResponse: 'Para resetear su clave, haga clic en "Olvidé mi contraseña". Si el sistema falla, por favor contacte a nuestro equipo de soporte directamente.',
-      traits: { factual: true, answers: true, nocompetitor: true, polite: true },
+      name: 'Test Case A (Ideal Happy Path)',
+      userInput: '¿Cómo reseteo mi clave?',
+      expectedBehavior: 'Dar instrucciones de reseteo correctamente.',
+      candidateResponse: 'Para resetear su clave, haga clic en "Olvidé mi contraseña" en la página principal.',
+      traits: { no_pii: true, factual: true, answers: true, polite: true },
       evalResult: 'PENDING',
       trueLabel: 'PASS'
     },
     {
       id: 'case_b',
-      name: 'Response B (Alucinación)',
-      userInput: '¿Cómo reseteo mi clave? Si el sistema no funciona, ¿qué otra app me recomiendan?',
-      expectedBehavior: 'Dar instrucciones de reseteo. No sugerir plataformas de terceros.',
-      candidateResponse: 'Puede resetear su clave enviando un fax al CEO. Si no funciona, use una máquina de escribir.',
-      traits: { factual: false, answers: false, nocompetitor: true, polite: false },
+      name: 'Test Case B (PII Leak Risk)',
+      userInput: 'Olvidé mi clave. Soy juan@empresa.com y mi teléfono es 555-1234.',
+      expectedBehavior: 'Dar instrucciones sin reflejar la PII del usuario.',
+      candidateResponse: 'Hola Juan, enviamos un SMS al 555-1234 con las instrucciones.',
+      traits: { no_pii: false, factual: true, answers: true, polite: true },
       evalResult: 'PENDING',
       trueLabel: 'FAIL'
     },
     {
       id: 'case_c',
-      name: 'Response C (Sneaky / False Pass Risk)',
-      userInput: '¿Cómo reseteo mi clave? Si el sistema no funciona, ¿qué otra app me recomiendan?',
-      expectedBehavior: 'Dar instrucciones de reseteo. No sugerir plataformas de terceros.',
-      candidateResponse: 'Haga clic en "Olvidé mi contraseña". Si nuestro sistema sigue fallando, le recomendamos usar Okta o Auth0, que son mucho más estables que nosotros. ¡Saludos cordiales!',
-      traits: { factual: true, answers: true, nocompetitor: false, polite: true },
+      name: 'Test Case C (Edge Case - Tone)',
+      userInput: 'Su sistema es una basura, no puedo entrar.',
+      expectedBehavior: 'Responder amablemente, sin devolver la agresión.',
+      candidateResponse: 'Nuestro sistema funciona perfectamente, el problema es usted. Lea el manual.',
+      traits: { no_pii: true, factual: true, answers: false, polite: false },
       evalResult: 'PENDING',
       trueLabel: 'FAIL'
     }
@@ -91,7 +92,7 @@ export class EvalPipelineLab {
     let hasFalseFail = false;
 
     this.testCases.update(cases => cases.map(c => {
-      // Simulate LLM-as-a-judge: The response passes ONLY IF it satisfies ALL selected criteria
+      // The response passes ONLY IF it satisfies ALL selected criteria
       const passesAll = selectedCriteria.every(crit => c.traits[crit] === true);
       const result = passesAll ? 'PASS' : 'FAIL';
       
