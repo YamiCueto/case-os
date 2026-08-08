@@ -1,0 +1,131 @@
+﻿<div class="presentation-container pb-32">
+  <div class="back-to-menu">
+    <a routerLink="/academy/modules/m09-architecture/lesson-03-case-study" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a la Lección
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 1000px; margin: 0 auto; padding: 32px 40px;">
+    <div class="slide-title">
+      <span class="workshop-badge">
+        <span class="icon">◈</span>
+        Demo 09 · Architecture
+      </span>
+      <h1>Architecture on Demand</h1>
+      <p class="subtitle">Ensamblando capacidades desde los requerimientos</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 350px 1fr; gap: 32px;">
+      
+      <!-- Panel Izquierdo: Requerimientos -->
+      <div>
+        <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #cbd5e1; margin-bottom: 16px;">
+          Business Requirement
+        </h3>
+        
+        <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 20px;">
+          <div style="margin-bottom: 16px;">
+            <span style="display: block; font-size: 10px; color: #64748b; font-weight: bold; margin-bottom: 4px;">USE CASE</span>
+            <span style="color: #e2e8f0; font-size: 13px;">Internal HR Policy Assistant</span>
+          </div>
+          
+          <div style="margin-bottom: 16px;">
+            <span style="display: block; font-size: 10px; color: #64748b; font-weight: bold; margin-bottom: 4px;">KNOWLEDGE</span>
+            <span style="color: #e2e8f0; font-size: 13px;">500 pages of internal PDF policies</span>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <span style="display: block; font-size: 10px; color: #64748b; font-weight: bold; margin-bottom: 4px;">ACTIONS / EXTERNAL APIs</span>
+            <span style="color: #e2e8f0; font-size: 13px;">None</span>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <span style="display: block; font-size: 10px; color: #64748b; font-weight: bold; margin-bottom: 4px;">LATENCY CONSTRAINT</span>
+            <span style="color: #ef4444; font-size: 13px; font-weight: bold;">< 3 seconds</span>
+          </div>
+
+          <div>
+            <span style="display: block; font-size: 10px; color: #64748b; font-weight: bold; margin-bottom: 4px;">WORKFLOW</span>
+            <span style="color: #e2e8f0; font-size: 13px;">Deterministic</span>
+          </div>
+        </div>
+
+        <button (click)="evaluateArchitecture()" class="control-btn primary" style="width: 100%; justify-content: center; padding: 16px; margin-top: 24px;">
+          Evaluar Arquitectura
+        </button>
+      </div>
+
+      <!-- Panel Derecho: Arquitectura -->
+      <div>
+        <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #cbd5e1; margin-bottom: 16px;">
+          Capabilities
+        </h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+          <div *ngFor="let comp of components()" 
+               (click)="toggleComponent(comp.id)"
+               style="background: #050505; border: 1px solid; border-radius: 8px; padding: 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 16px; transition: all 0.2s;"
+               [ngStyle]="{'border-color': comp.selected ? '#3b82f6' : '#1f293d', 'opacity': comp.id === 'model' ? 0.7 : 1}">
+            
+            <div style="font-size: 24px;">{{ comp.icon }}</div>
+            
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;" [ngStyle]="{'color': comp.selected ? '#60a5fa' : '#cbd5e1'}">
+                  {{ comp.name }}
+                </span>
+                <span class="material-symbols-outlined" [ngStyle]="{'color': comp.selected ? '#3b82f6' : '#475569', 'font-size': '18px'}">
+                  {{ comp.selected ? 'check_circle' : 'radio_button_unchecked' }}
+                </span>
+              </div>
+              <p style="font-size: 12px; color: #94a3b8; margin: 0 0 8px 0;">{{ comp.description }}</p>
+              
+              <div style="display: flex; gap: 8px;">
+                <span style="font-size: 10px; padding: 2px 6px; border-radius: 4px; background: #1e293b;"
+                      [ngStyle]="{'color': comp.costImpact === 'HIGH' ? '#ef4444' : comp.costImpact === 'MEDIUM' ? '#f59e0b' : '#10b981'}">
+                  Cost: {{ comp.costImpact }}
+                </span>
+                <span style="font-size: 10px; padding: 2px 6px; border-radius: 4px; background: #1e293b;"
+                      [ngStyle]="{'color': comp.latencyImpact === 'HIGH' ? '#ef4444' : comp.latencyImpact === 'MEDIUM' ? '#f59e0b' : '#10b981'}">
+                  Latency: {{ comp.latencyImpact }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Evaluation Results -->
+        <div *ngIf="evalResult() !== 'PENDING'" style="margin-top: 24px; padding: 20px; border-radius: 8px; border: 1px solid;"
+             [ngStyle]="{
+               'background': evalResult() === 'SUCCESS' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
+               'border-color': evalResult() === 'SUCCESS' ? '#10b981' : '#ef4444'
+             }">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <span class="material-symbols-outlined" [ngStyle]="{'color': evalResult() === 'SUCCESS' ? '#10b981' : '#ef4444'}">
+              {{ evalResult() === 'SUCCESS' ? 'check_circle' : 'warning' }}
+            </span>
+            <h4 style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px;" [ngStyle]="{'color': evalResult() === 'SUCCESS' ? '#10b981' : '#ef4444'}">
+              {{ evalResult() === 'SUCCESS' ? 'ARCHITECTURE VALIDATED' : 'ARCHITECTURE REJECTED' }}
+            </h4>
+          </div>
+          <p style="font-size: 13px; margin: 0; line-height: 1.6;" [ngStyle]="{'color': evalResult() === 'SUCCESS' ? '#a7f3d0' : '#fca5a5'}">
+            {{ feedbackMessage() }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Takeaway -->
+    <div class="warning-box" style="border-left-color: #3b82f6; background: #0d1117; margin-top: 2rem;">
+      <h4 style="color: #60a5fa; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;">◈ Takeaway</h4>
+      <p style="color: #c7c4d7; font-size: 14px; line-height: 1.7; margin-bottom: 1rem;">
+        No existe una arquitectura "correcta" en el vacío. Los Agentes y MCPs no son inherentemente malos, pero incorporarlos sin un requerimiento que justifique su costo y latencia es sobreingeniería. Construye a partir del requerimiento, no de los componentes de moda.
+      </p>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a routerLink="/academy/modules/m09-architecture/lab-09-architecture-blueprint" class="control-btn" style="border-color: #3b82f6; color: #60a5fa; font-size: 11px;">Ir al Lab 09 →</a>
+      </div>
+    </div>
+
+  </div>
+</div>

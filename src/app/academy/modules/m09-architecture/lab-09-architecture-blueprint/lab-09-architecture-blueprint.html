@@ -1,0 +1,163 @@
+﻿<div class="presentation-container pb-32">
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
+
+    <!-- Context Chips -->
+    <div class="lab-context-chips" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 28px;">
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #10b981; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); padding: 3px 10px; border-radius: 4px;">LAB 09 · REAL ENGINEERING</span>
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; background: #0f172a; border: 1px solid #1e293b; padding: 3px 10px; border-radius: 4px;">Module 09 · Architecture</span>
+      <span style="color: #334155; font-size: 10px;">·</span>
+      <span style="font-size: 12px; color: #64748b;">⏱️ 90 min</span>
+      <span style="font-size: 12px; color: #64748b;">· Expert</span>
+      <span style="font-size: 12px; color: #64748b;">· System Migration</span>
+    </div>
+
+    <div class="slide-content" style="display: flex; flex-direction: column; gap: 40px;">
+
+      <!-- Intro -->
+      <section>
+        <p style="color: #cbd5e1; font-size: 16px; line-height: 1.7; margin: 0;">
+          Diseña el <strong>AI Modernization Architecture Blueprint</strong>. No construyas desde cero; elige un sistema Legacy existente en tu organización y define la arquitectura requerida para modernizarlo usando IA, justificando estrictamente la inclusión o exclusión de cada componente.
+        </p>
+      </section>
+
+      <!-- 00 — Legacy System & Business Requirement -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">00 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Legacy System & Business Requirement</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+          ¿Qué sistema vamos a modernizar y por qué?
+        </p>
+        <ul style="font-size: 14px; color: #cbd5e1; line-height: 1.8; margin-left: 20px; padding: 0;">
+          <li>Arquitectura actual (ej. Monolito en Java, Base de datos en MySQL).</li>
+          <li>El proceso de negocio que deseamos automatizar o mejorar.</li>
+          <li>El objetivo de negocio medible (ej. "Reducir tiempo de respuesta en soporte un 40%").</li>
+        </ul>
+      </section>
+
+      <!-- 01 — Constraints -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">01 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Constraints</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Las limitaciones que tu arquitectura no puede romper bajo ninguna circunstancia.
+        </p>
+        <ul style="font-size: 14px; color: #cbd5e1; line-height: 1.8; margin-left: 20px; padding: 0;">
+          <li>Límites operativos: Latencia máxima, presupuesto por llamada.</li>
+          <li>Privacidad de datos: GDPR, Compliance, información sensible que no debe salir.</li>
+        </ul>
+      </section>
+
+      <!-- 02 — Capability Decision Matrix -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">02 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Capability Decision Matrix</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Mapea tus requerimientos a las capacidades GenAI correspondientes. Ningún componente entra gratis.
+        </p>
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 0; overflow: hidden;">
+          <table style="width: 100%; text-align: left; border-collapse: collapse; font-family: 'Inter', sans-serif; font-size: 13px;">
+            <thead style="background: #0f172a; border-bottom: 1px solid #1e293b; color: #cbd5e1; font-family: 'JetBrains Mono', monospace;">
+              <tr>
+                <th style="padding: 12px 16px;">Capability</th>
+                <th style="padding: 12px 16px;">Required?</th>
+                <th style="padding: 12px 16px;">Why?</th>
+                <th style="padding: 12px 16px;">Decision</th>
+              </tr>
+            </thead>
+            <tbody style="color: #94a3b8;">
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0; font-weight: bold;">LLM Engine</td>
+                <td style="padding: 12px 16px;">Yes</td>
+                <td style="padding: 12px 16px;">Generate text classification</td>
+                <td style="padding: 12px 16px; color: #10b981; font-weight: bold;">INCLUDE</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0; font-weight: bold;">RAG Pipeline</td>
+                <td style="padding: 12px 16px;">Yes</td>
+                <td style="padding: 12px 16px;">Internal knowledge access needed</td>
+                <td style="padding: 12px 16px; color: #10b981; font-weight: bold;">INCLUDE</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0; font-weight: bold;">Agent Loop</td>
+                <td style="padding: 12px 16px;">No</td>
+                <td style="padding: 12px 16px;">Workflow is strictly deterministic</td>
+                <td style="padding: 12px 16px; color: #ef4444; font-weight: bold;">EXCLUDE</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0; font-weight: bold;">MCP Client</td>
+                <td style="padding: 12px 16px;">No</td>
+                <td style="padding: 12px 16px;">No external actions are performed</td>
+                <td style="padding: 12px 16px; color: #ef4444; font-weight: bold;">EXCLUDE</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0; font-weight: bold;">Eval Pipeline</td>
+                <td style="padding: 12px 16px;">Yes</td>
+                <td style="padding: 12px 16px;">Regression control prior to deployment</td>
+                <td style="padding: 12px 16px; color: #10b981; font-weight: bold;">INCLUDE</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 03 — Security & Evaluation Boundaries -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">03 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Security & Evaluation Boundaries</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Integra los contratos definidos en M07 y M08. Define cómo evaluarás el sistema antes del despliegue y cómo protegerás el sistema contra inyecciones y exfiltración.
+        </p>
+      </section>
+
+      <!-- 04 — Target Architecture -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">04 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Target Architecture</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Dibuja o documenta tu arquitectura final propuesta incorporando los componentes seleccionados de tu matriz.
+        </p>
+      </section>
+
+      <!-- 05 — Migration Boundary -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">05 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Migration Boundary</h2>
+        </div>
+        <div style="background: #1e1b4b; border: 1px solid #3730a3; border-radius: 8px; padding: 24px; margin-bottom: 16px;">
+          <p style="color: #a5b4fc; font-family: 'JetBrains Mono', monospace; font-size: 14px; margin: 0;">
+            ¿Qué cambia ahora y qué permanece legacy?
+          </p>
+        </div>
+        <ul style="font-size: 14px; color: #cbd5e1; line-height: 1.8; margin-left: 20px; padding: 0;">
+          <li>Qué componente legacy permanece intacto.</li>
+          <li>Qué componente se reemplaza por el motor AI.</li>
+          <li>Qué componente se "envuelve" (wraps) con una API.</li>
+          <li>Por dónde entra y sale el flujo de información de la IA.</li>
+          <li>Estrategia de Rollback (si la IA falla en producción).</li>
+        </ul>
+      </section>
+
+      <!-- Navigation & Closure -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid #1e293b; margin-top: 12px;">
+        <a routerLink="/academy/modules/m09-architecture/demo-architecture-builder" class="control-btn" style="border-color: #1e293b; color: #94a3b8; font-size: 12px;">
+          ← Volver a Demo 09
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

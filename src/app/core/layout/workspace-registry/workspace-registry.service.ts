@@ -358,6 +358,13 @@ export class WorkspaceRegistryService {
                   icon: 'terminal',
                   depth: 1,
                 },
+                {
+                  id: 'lab-09',
+                  label: 'Lab 09 — AI Modernization Architecture Blueprint',
+                  path: '/academy/modules/m09-architecture/lab-09-architecture-blueprint',
+                  icon: 'terminal',
+                  depth: 1,
+                },
               ],
             },
           ]
@@ -373,6 +380,7 @@ export class WorkspaceRegistryService {
         const isLab06 = url.startsWith('/academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol');
         const isLab07 = url.startsWith('/academy/modules/m07-mcp/lab-07-map-integration-to-mcp');
         const isLab08 = url.startsWith('/academy/modules/m08-production/lab-08-production-ai-protocol');
+        const isLab09 = url.startsWith('/academy/modules/m09-architecture/lab-09-architecture-blueprint');
 
         const crumbs: BreadcrumbItem[] = [
           { label: 'Labs', path: '/labs', icon: 'science' }
@@ -394,6 +402,8 @@ export class WorkspaceRegistryService {
           crumbs.push({ label: 'Lab 07 — Map a Legacy Integration to MCP', path: url });
         } else if (isLab08) {
           crumbs.push({ label: 'Lab 08 — Design a Production AI Protocol', path: url });
+        } else if (isLab09) {
+          crumbs.push({ label: 'Lab 09 — AI Modernization Architecture Blueprint', path: url });
         }
         return crumbs;
       }

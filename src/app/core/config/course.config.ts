@@ -675,16 +675,31 @@ export const COURSE_CONFIG: CourseConfig = {
           resources: []
         },
         {
-          id: 'l9',
-          title: 'Lab 09 — The Architecture Blueprint',
+          id: 'd9',
+          title: 'Demo 09 — Architecture on Demand',
           order: 4,
-          duration: '60 min',
+          duration: '15 min',
+          difficulty: 'ADVANCED',
+          icon: '🎮',
+          tags: ['Demo', 'Interactive'],
+          type: 'DEMO',
+          prerequisites: ['c27'],
+          path: '/academy/modules/m09-architecture/demo-architecture-builder',
+          objectives: ['Comprender que la arquitectura es consecuencia de requerimientos y no del hype'],
+          resources: []
+        },
+        {
+          id: 'l9',
+          title: 'Lab 09 — AI Modernization Architecture Blueprint',
+          order: 5,
+          duration: '90 min',
           difficulty: 'EXPERT',
           icon: '🔬',
-          tags: ['Lab', 'Design'],
-          prerequisites: ['c27'],
-          path: '/labs/architecture-blueprint',
-          objectives: ['Seleccionar capacidades arquitectónicas evaluando trade-offs'],
+          tags: ['Lab', 'Real Engineering'],
+          type: 'LAB',
+          prerequisites: ['d9'],
+          path: '/academy/modules/m09-architecture/lab-09-architecture-blueprint',
+          objectives: ['Diseñar el blueprint de modernización definiendo migration boundaries'],
           resources: []
         }
       ]

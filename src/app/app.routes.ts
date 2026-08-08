@@ -95,10 +95,7 @@ export const routes: Routes = [
 
 
 
-      {
-        path: 'labs/architecture-blueprint',
-        loadComponent: () => import('./labs/architecture-blueprint/architecture-blueprint').then(m => m.ArchitectureBlueprintLab)
-      },
+
       {
         path: 'framework',
         loadComponent: () => import('./framework/framework.component').then(m => m.FrameworkComponent)
@@ -350,6 +347,14 @@ export const routes: Routes = [
           {
             path: 'academy/modules/m09-architecture/lesson-03-case-study',
             loadComponent: () => import('./academy/modules/m09-architecture/lesson-03-case-study/lesson-03-case-study').then(m => m.Lesson03CaseStudy)
+          },
+          {
+            path: 'academy/modules/m09-architecture/demo-architecture-builder',
+            loadComponent: () => import('./academy/modules/m09-architecture/demo-architecture-builder/demo-architecture-builder').then(m => m.DemoArchitectureBuilder)
+          },
+          {
+            path: 'academy/modules/m09-architecture/lab-09-architecture-blueprint',
+            loadComponent: () => import('./academy/modules/m09-architecture/lab-09-architecture-blueprint/lab-09-architecture-blueprint').then(m => m.Lab09ArchitectureBlueprint)
           }
         ]
       }
