@@ -1,47 +1,281 @@
-<div class="space-y-8">
-  <header>
-    <h1 class="text-3xl font-extrabold text-white tracking-tight mb-2">CASE Labs</h1>
-    <p class="text-slate-400 text-lg max-w-2xl">
-      Entornos de experimentación guiada. Resuelve retos reales usando Inteligencia Artificial.
+<div class="labs-index">
+
+  <!-- Header -->
+  <header class="labs-index__header">
+    <div class="labs-index__eyebrow">CASE OS · Engineering Workspace</div>
+    <h1 class="labs-index__title">CASE Labs</h1>
+    <p class="labs-index__subtitle">
+      Playbooks de ingeniería para aplicar lo aprendido en CASE Academy sobre sistemas reales.
+      El trabajo ocurre en tu repositorio local, con tu IDE y tus herramientas autorizadas.
     </p>
   </header>
 
-  <main class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-    <div 
-      *ngFor="let lab of labs()" 
-      class="bg-slate-900 border border-slate-800 rounded-2xl p-6 cursor-pointer hover:border-indigo-500/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] transition-all group relative"
-      (click)="openLab(lab)">
-      
-      <!-- Decoración de tipo de lab -->
-      <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-2xl"></div>
+  <!-- Separador conceptual -->
+  <div class="labs-index__divider">
+    <span class="labs-index__divider-label">Real Engineering Labs</span>
+  </div>
 
-      <div class="flex items-center justify-between mb-4">
-        <span class="px-2.5 py-1 bg-indigo-900/40 text-indigo-400 rounded-md text-xs font-semibold tracking-wide">
-          {{ lab.type }}
-        </span>
-        <span class="text-[10px] font-bold uppercase text-slate-400">
-          {{ lab.estimatedTime }} MIN
-        </span>
+  <!-- Security boundary -->
+  <div class="labs-index__security-notice">
+    <span class="material-symbols-outlined labs-index__security-icon" aria-hidden="true">shield</span>
+    <p>
+      <strong>Security Boundary —</strong>
+      Nunca subas código propietario, credenciales o información confidencial a herramientas de IA no autorizadas.
+      CASE Academy no recibe tu repositorio. La ingeniería ocurre localmente.
+    </p>
+  </div>
+
+  <!-- Grid de Labs -->
+  <section class="labs-index__grid" aria-label="Real Engineering Labs disponibles">
+
+    <!-- Lab 01 — Analyze a Legacy Routine -->
+    <a
+      routerLink="/academy/modules/m01-ai-foundations/lab-01-legacy-routine"
+      class="lab-card"
+      id="lab-01-card"
+      aria-label="Ir al Lab 01: Analyze a Legacy Routine"
+    >
+      <div class="lab-card__header">
+        <div class="lab-card__badges">
+          <span class="lab-card__badge lab-card__badge--module">Module 01 · AI Foundations</span>
+          <span class="lab-card__badge lab-card__badge--type">Real Engineering Lab</span>
+        </div>
+        <span class="lab-card__arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
       </div>
 
-      <h3 class="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-indigo-300 transition-colors">
-        {{ lab.title }}
-      </h3>
-      
-      <p class="text-slate-400 text-sm line-clamp-3 mb-6 flex-1">
-        {{ lab.description }}
+      <h2 class="lab-card__title">Lab 01 — Analyze a Legacy Routine</h2>
+      <p class="lab-card__description">
+        Analiza una rutina legacy real de tu repositorio, separa la lógica determinista de las oportunidades probabilísticas
+        y documenta los riesgos antes de modificar el sistema.
       </p>
 
-      <div class="flex items-center justify-between">
-        <div class="flex flex-wrap gap-1">
-          <span *ngFor="let tech of lab.technologies.slice(0,3)" class="px-2 py-0.5 bg-slate-950 text-slate-400 rounded text-[10px] font-medium border border-slate-800">
-            {{ tech }}
-          </span>
-        </div>
-        <span class="text-indigo-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-          Iniciar <span class="text-lg leading-none">→</span>
+      <div class="lab-card__meta">
+        <span class="lab-card__meta-item">
+          <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
+          60 min
+        </span>
+        <span class="lab-card__meta-item">
+          <span class="material-symbols-outlined" aria-hidden="true">signal_cellular_alt</span>
+          Intermediate
+        </span>
+        <span class="lab-card__meta-item">
+          <span class="material-symbols-outlined" aria-hidden="true">computer</span>
+          Real-world analysis
         </span>
       </div>
-    </div>
-  </main>
+    </a>
+
+  </section>
+
+  <!-- Próximos Labs -->
+  <footer class="labs-index__footer">
+    <p class="labs-index__footer-text">
+      Los Labs de M02–M09 se irán publicando progresivamente a medida que cada módulo avance.
+    </p>
+  </footer>
+
 </div>
+
+<style>
+  .labs-index {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* Header */
+  .labs-index__header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .labs-index__eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--case-text-muted, #64748b);
+  }
+  .labs-index__title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--case-text-primary, #f8fafc);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .labs-index__subtitle {
+    font-size: 14px;
+    color: var(--case-text-secondary, #94a3b8);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0;
+  }
+
+  /* Divider */
+  .labs-index__divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .labs-index__divider::before,
+  .labs-index__divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--case-border, #1e293b);
+  }
+  .labs-index__divider-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--case-accent, #6366f1);
+    white-space: nowrap;
+    padding: 0 4px;
+  }
+
+  /* Security notice */
+  .labs-index__security-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: color-mix(in srgb, #dc2626 6%, transparent);
+    border: 1px solid color-mix(in srgb, #dc2626 30%, transparent);
+    border-left: 3px solid #dc2626;
+    border-radius: 8px;
+  }
+  .labs-index__security-icon {
+    font-size: 18px;
+    color: #f87171;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .labs-index__security-notice p {
+    font-size: 13px;
+    color: #fca5a5;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .labs-index__security-notice strong {
+    color: #f87171;
+  }
+
+  /* Grid */
+  .labs-index__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Lab Card */
+  .lab-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+    background: var(--case-surface-1, #0f172a);
+    border: 1px solid var(--case-border, #1e293b);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+    cursor: pointer;
+  }
+  .lab-card:hover {
+    border-color: color-mix(in srgb, var(--case-accent, #6366f1) 50%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--case-accent, #6366f1) 20%, transparent);
+  }
+  .lab-card:focus-visible {
+    outline: 2px solid var(--case-accent, #6366f1);
+    outline-offset: 2px;
+  }
+
+  .lab-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .lab-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .lab-card__badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .lab-card__badge--module {
+    background: color-mix(in srgb, var(--case-accent, #6366f1) 15%, transparent);
+    color: #a5b4fc;
+    border: 1px solid color-mix(in srgb, var(--case-accent, #6366f1) 30%, transparent);
+  }
+  .lab-card__badge--type {
+    background: var(--case-surface-2, #1e293b);
+    color: var(--case-text-muted, #64748b);
+    border: 1px solid var(--case-border, #1e293b);
+  }
+  .lab-card__arrow {
+    font-size: 18px;
+    color: var(--case-text-muted, #64748b);
+    flex-shrink: 0;
+    transition: color 180ms ease, transform 180ms ease;
+  }
+  .lab-card:hover .lab-card__arrow {
+    color: var(--case-accent, #6366f1);
+    transform: translateX(2px);
+  }
+
+  .lab-card__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--case-text-primary, #f8fafc);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .lab-card:hover .lab-card__title {
+    color: #a5b4fc;
+  }
+
+  .lab-card__description {
+    font-size: 13px;
+    color: var(--case-text-secondary, #94a3b8);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .lab-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--case-border, #1e293b);
+  }
+  .lab-card__meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--case-text-muted, #64748b);
+  }
+  .lab-card__meta-item .material-symbols-outlined {
+    font-size: 14px;
+  }
+
+  /* Footer */
+  .labs-index__footer {
+    text-align: center;
+  }
+  .labs-index__footer-text {
+    font-size: 12px;
+    color: var(--case-text-muted, #64748b);
+    margin: 0;
+  }
+</style>

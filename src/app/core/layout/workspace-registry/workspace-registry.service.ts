@@ -296,36 +296,34 @@ export class WorkspaceRegistryService {
           sections: [
             {
               id: 'labs-home',
-              items: [{ id: 'labs-all', label: 'Todos los Labs', path: '/labs', icon: 'science' }],
+              items: [{ id: 'labs-all', label: 'CASE Labs', path: '/labs', icon: 'science' }],
             },
             {
-              id: 'labs-list',
-              title: 'Labs Disponibles',
-              items: LABS_CONFIG.map(lab => ({
-                id: lab.id,
-                label: lab.title,
-                path: `/labs/${lab.slug}`,
-                icon: resolveLabIcon(lab),
-                depth: 1,
-              })),
+              id: 'labs-real-engineering',
+              title: 'Real Engineering Labs',
+              items: [
+                {
+                  id: 'lab-01',
+                  label: 'Lab 01 — Analyze a Legacy Routine',
+                  path: '/academy/modules/m01-ai-foundations/lab-01-legacy-routine',
+                  icon: 'terminal',
+                  depth: 1,
+                },
+              ],
             },
           ]
         };
       },
       breadcrumbResolver: () => {
         const url = this.currentUrl();
-        const isLab = url.startsWith('/labs/') && url.length > 6;
-        
+        const isLab01 = url.startsWith('/academy/modules/m01-ai-foundations/lab-01-legacy-routine');
+
         const crumbs: BreadcrumbItem[] = [
           { label: 'Labs', path: '/labs', icon: 'science' }
         ];
 
-        if (isLab) {
-          const slug = url.split('/').pop()?.split('?')[0];
-          const lab = LABS_CONFIG.find(l => l.slug === slug);
-          if (lab) {
-            crumbs.push({ label: lab.title, path: url });
-          }
+        if (isLab01) {
+          crumbs.push({ label: 'Lab 01 — Analyze a Legacy Routine', path: url });
         }
         return crumbs;
       }

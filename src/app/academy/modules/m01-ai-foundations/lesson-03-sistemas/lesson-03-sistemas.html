@@ -1,7 +1,9 @@
 <div class="presentation-container">
   <div class="back-to-menu">
     <a routerLink="/academy/home" class="back-btn">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
       Anterior
     </a>
   </div>
@@ -23,27 +25,29 @@
 
       <div class="slide-content">
         <h2>Un LLM desnudo es inútil</h2>
-        
+
         <div class="comparison-matrix" style="margin-bottom: 24px;">
           <!-- Model -->
           <div class="matrix-col tech-card" style="border: none; border-radius: 0;">
             <div class="tech-meta">El Cerebro</div>
             <div class="tech-icon" style="color: #c7c4d7;">🧠</div>
             <h3>Capacidad del Modelo</h3>
-            <p>Es la inteligencia "cruda". Lo que el modelo sabe o deduce únicamente basándose en sus pesos y entrenamiento.</p>
+            <p>Es la inteligencia "cruda". Lo que el modelo sabe o deduce únicamente basándose en sus pesos y
+              entrenamiento.</p>
             <ul class="tech-list" style="margin-top: 24px;">
               <li>Sabe hablar perfectamente.</li>
               <li>Sabe programar (hasta fecha corte).</li>
               <li style="color: #f59e0b;">NO sabe la hora actual ni datos privados.</li>
             </ul>
           </div>
-          
+
           <!-- System -->
           <div class="matrix-col tech-card active" style="border: none; border-radius: 0;">
             <div class="tech-meta">El Exoesqueleto</div>
             <div class="tech-icon" style="color: #6366f1;">⚙️</div>
             <h3>Capacidad del Sistema</h3>
-            <p>Es el modelo "vestido" por código determinista (como CASE OS). Orquesta la recuperación de datos, herramientas y protecciones.</p>
+            <p>Es el modelo "vestido" por código determinista (como CASE OS). Orquesta la recuperación de datos,
+              herramientas y protecciones.</p>
             <ul class="tech-list" style="margin-top: 24px;">
               <li>Busca información fresca (RAG).</li>
               <li>Usa calculadoras y ejecuta código.</li>
@@ -65,17 +69,22 @@
       </div>
 
       <div class="slide-content">
-        <p style="margin-bottom: 32px;">Una "alucinación" no es un bug del modelo, es una <strong>característica estadística</strong>. Como su único trabajo es predecir la siguiente palabra, si no sabe la respuesta real, predecirá la palabra que suene más plausible (aunque sea mentira).</p>
-        
+        <p style="margin-bottom: 32px;">Una "alucinación" no es un bug del modelo, es una <strong>característica
+            estadística</strong>. Como su único trabajo es predecir la siguiente palabra, si no sabe la respuesta real,
+          predecirá la palabra que suene más plausible (aunque sea mentira).</p>
+
         <div class="template-container" style="border-radius: 8px; border: 1px solid #1F1F1F;">
           <div class="template-header" style="background: #1A1A1A; padding: 16px 24px; color: #e4e1ed;">
-            <h3 style="font-size: 14px; margin: 0; font-family: 'JetBrains Mono', monospace; color: #6366f1;">// Defensas contra la Alucinación</h3>
+            <h3 style="font-size: 14px; margin: 0; font-family: 'JetBrains Mono', monospace; color: #6366f1;">//
+              Defensas contra la Alucinación</h3>
           </div>
           <div style="padding: 24px; background: #0A0A0A;">
             <ul class="tech-list">
-              <li><strong>Contexto Duro:</strong> Inyectar en el prompt la respuesta correcta antes de que hable (RAG).</li>
+              <li><strong>Contexto Duro:</strong> Inyectar en el prompt la respuesta correcta antes de que hable (RAG).
+              </li>
               <li><strong>Grounding:</strong> Forzarle a citar las fuentes desde donde extrajo la información.</li>
-              <li><strong>System Prompts Restrictivos:</strong> Instruirle estrictamente: "Si no sabes la respuesta basándote en el contexto, di 'No lo sé'."</li>
+              <li><strong>System Prompts Restrictivos:</strong> Instruirle estrictamente: "Si no sabes la respuesta
+                basándote en el contexto, di 'No lo sé'."</li>
             </ul>
           </div>
         </div>
@@ -97,13 +106,17 @@
           <div class="tech-meta">Lab 01</div>
           <div class="tech-icon" style="color: #6366f1;">🧪</div>
           <h3>De la Teoría al Laboratorio</h3>
-          <p>Ya hemos entendido que los modelos operan con Tokens y Probabilidades. Es momento de dejar de teorizar y ver cómo funciona esto en código.</p>
-          <p style="margin-top: 16px;">En el <strong>Lab 01</strong>, vamos a construir una herramienta para entender visualmente los tokens. Esta herramienta se quedará en nuestra <strong>Library</strong> y la usaremos como pieza de infraestructura para optimizar costos en futuros laboratorios.</p>
+          <p>Ya hemos entendido que los modelos operan con Tokens y Probabilidades. Es momento de dejar de teorizar y
+            ver cómo funciona esto en código.</p>
+          <p style="margin-top: 16px;">En el <strong>Lab 01</strong>, vamos a construir una herramienta para entender
+            visualmente los tokens. Esta herramienta se quedará en nuestra <strong>Library</strong> y la usaremos como
+            pieza de infraestructura para optimizar costos en futuros laboratorios.</p>
         </div>
 
         <div style="text-align: center;">
-          <a routerLink="/labs/token-playground" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
-            Ir al Lab 01: Token Playground &rarr;
+          <a routerLink="/academy/modules/m01-ai-foundations/demo-token-playground" class="control-btn primary"
+            style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            Ir a Demo 01: Token Playground &rarr;
           </a>
         </div>
       </div>

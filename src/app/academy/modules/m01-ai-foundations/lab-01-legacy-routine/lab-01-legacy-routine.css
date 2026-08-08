@@ -1,0 +1,95 @@
+/* Interactive Classification Visual Experience */
+.interactive-classification {
+  position: relative;
+  overflow: hidden;
+}
+
+.logic-node {
+  background: #151515;
+  border: 1px solid #333;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #fff;
+  transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 300px;
+}
+
+.logic-node.pending {
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.logic-node.pending:hover {
+  transform: translateY(-2px);
+  border-color: #6366f1;
+}
+
+.logic-node.pending .actions {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.2s ease;
+}
+
+.logic-node.pending:hover .actions {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.btn-det, .btn-prob {
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+}
+
+.btn-det { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+.btn-det:hover { background: rgba(16, 185, 129, 0.4); }
+
+.btn-prob { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.btn-prob:hover { background: rgba(245, 158, 11, 0.4); }
+
+.bucket {
+  background: rgba(0,0,0,0.3);
+  border: 1px dashed #333;
+  border-radius: 8px;
+  padding: 16px;
+  position: relative;
+}
+
+.bucket h4 {
+  font-size: 14px;
+}
+
+.logic-node.deterministic {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+  color: #34d399;
+  max-width: 100%;
+}
+
+.logic-node.probabilistic {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+  color: #fbbf24;
+  max-width: 100%;
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-20px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.slide-in {
+  animation: slideInDown 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
+}

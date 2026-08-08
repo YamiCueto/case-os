@@ -51,16 +51,31 @@ export const COURSE_CONFIG: CourseConfig = {
           resources: []
         },
         {
-          id: 'l1',
-          title: 'Lab 01 — Token Playground',
+          id: 'd1',
+          title: 'Demo 01 — Token Playground',
           order: 4,
-          duration: '60 min',
+          duration: '15 min',
           difficulty: 'BEGINNER',
-          icon: '🔬',
-          tags: ['Lab', 'Practice'],
+          icon: '🎮',
+          tags: ['Demo', 'Interactive'],
           prerequisites: ['c3'],
-          path: '/labs/token-playground',
+          path: '/academy/modules/m01-ai-foundations/demo-token-playground',
+          type: 'DEMO',
           objectives: ['Experimentar empíricamente con la tokenización'],
+          resources: []
+        },
+        {
+          id: 'l1',
+          title: 'Lab 01 — Analyze a Legacy Routine',
+          order: 5,
+          duration: '60 min',
+          difficulty: 'INTERMEDIATE',
+          icon: '🔬',
+          tags: ['Lab', 'Real Engineering'],
+          prerequisites: ['d1'],
+          path: '/academy/modules/m01-ai-foundations/lab-01-legacy-routine',
+          type: 'LAB',
+          objectives: ['Analizar código legacy real y separar lógica determinista de probabilística'],
           resources: []
         }
       ]

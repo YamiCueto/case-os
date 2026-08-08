@@ -86,12 +86,9 @@ export const routes: Routes = [
         path: 'labs',
         loadComponent: () => import('./labs/pages/labs-home/labs-home.component').then(m => m.LabsHomeComponent)
       },
+      // labs/:slug eliminado — los Real Engineering Labs son rutas explícitas bajo academy/
       {
-        path: 'labs/:slug',
-        loadComponent: () => import('./labs/pages/lab-workspace/lab-workspace.component').then(m => m.LabWorkspaceComponent)
-      },
-      {
-        path: 'labs/token-playground',
+        path: 'academy/modules/m01-ai-foundations/demo-token-playground',
         loadComponent: () => import('./labs/token-playground/token-playground').then(m => m.TokenPlayground)
       },
       {
@@ -221,6 +218,10 @@ export const routes: Routes = [
           {
             path: 'academy/modules/m01-ai-foundations/lesson-03-sistemas',
             loadComponent: () => import('./academy/modules/m01-ai-foundations/lesson-03-sistemas/lesson-03-sistemas').then(m => m.Lesson03Sistemas)
+          },
+          {
+            path: 'academy/modules/m01-ai-foundations/lab-01-legacy-routine',
+            loadComponent: () => import('./academy/modules/m01-ai-foundations/lab-01-legacy-routine/lab-01-legacy-routine').then(m => m.Lab01LegacyRoutine)
           },
           {
             path: 'academy/modules/m02-prompt-engineering/lesson-01-reliable-behavior',

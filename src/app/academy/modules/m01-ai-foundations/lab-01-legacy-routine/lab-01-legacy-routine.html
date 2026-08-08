@@ -1,0 +1,204 @@
+<div class="presentation-container pb-32">
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding-top: 20px;">
+    
+    <!-- Lab context chips — el título lo provee el shell (class-metadata) -->
+    <div class="lab-context-chips" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 28px;">
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6366f1; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); padding: 3px 10px; border-radius: 4px;">LAB 01 · REAL ENGINEERING</span>
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; background: #0f172a; border: 1px solid #1e293b; padding: 3px 10px; border-radius: 4px;">Module 01 · AI Foundations</span>
+      <span style="color: #334155; font-size: 10px;">·</span>
+      <span style="font-size: 12px; color: #64748b;">⏱️ 60 min</span>
+      <span style="font-size: 12px; color: #64748b;">· Intermediate</span>
+      <span style="font-size: 12px; color: #64748b;">· Real-world analysis</span>
+    </div>
+
+    <!-- Security Boundary Alert -->
+    <div class="bg-red-900/20 border border-red-500/50 border-l-4 border-l-red-500 p-6 rounded-lg mb-10 shadow-lg shadow-red-900/20">
+      <h3 class="text-red-400 font-bold text-lg mb-2 flex items-center gap-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        Security Boundary
+      </h3>
+      <p class="text-red-200 text-sm"><strong>Nunca subas código propietario, credenciales, secretos, PII o información confidencial a una herramienta de IA que no esté autorizada por tu organización.</strong></p>
+      <p class="text-red-200/70 text-sm mt-2">CASE Academy <strong>no requiere</strong> que subas tu repositorio ni código privado a esta plataforma. Este laboratorio se ejecuta completamente en tu máquina local y entorno corporativo.</p>
+    </div>
+
+    <!-- 01 Context -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-indigo-400 mb-4 border-b border-slate-800 pb-2">01 — Context</h2>
+      <p class="text-slate-300 leading-relaxed mb-4">La Inteligencia Artificial no reemplaza la ingeniería de software; requiere que seamos mejores ingenieros. Antes de delegar código a un modelo, debes poder auditar el sistema existente y entender la diferencia entre <strong>lógica determinista estricta</strong> y <strong>oportunidades probabilísticas</strong>.</p>
+    </section>
+
+    <!-- 02 Scenario -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-indigo-400 mb-4 border-b border-slate-800 pb-2">02 — Scenario</h2>
+      <div class="bg-slate-900 border border-slate-700 p-6 rounded-lg">
+        <p class="text-slate-300 italic">"El equipo de modernización necesita identificar qué componentes de tu módulo actual podrían beneficiarse de IA generativa (extracción de datos, explicabilidad, clasificación) sin introducir riesgo de alucinación en las reglas financieras o de negocio duras."</p>
+      </div>
+    </section>
+
+    <!-- 03 Starting Point -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-indigo-400 mb-4 border-b border-slate-800 pb-2">03 — Starting Point</h2>
+      <p class="text-slate-300 mb-4">Debes identificar en tu entorno local:</p>
+      <ul class="list-disc pl-6 text-slate-300 space-y-2">
+        <li>Un repositorio de código que tengas autorización para analizar.</li>
+        <li>Un módulo o servicio específico.</li>
+        <li>Una rutina compleja (puede ser Java, SQL, C#, VB6, etc.).</li>
+      </ul>
+      <div class="mt-4 p-4 bg-indigo-900/10 border border-indigo-500/20 rounded">
+        <span class="text-indigo-400 font-bold">Tip:</span> Busca una rutina que tome decisiones, valide datos y procese información externa.
+      </div>
+    </section>
+
+    <!-- 04 Objective -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-indigo-400 mb-4 border-b border-slate-800 pb-2">04 — Objective</h2>
+      <p class="text-slate-300">Generar un <strong>Risk & Opportunity Assessment</strong> sobre la rutina legacy, separando claramente qué partes deben permanecer deterministas y cuáles pueden delegarse a un asistente de IA, justificando la decisión humana.</p>
+    </section>
+
+    <!-- 05 Tasks -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-indigo-400 mb-4 border-b border-slate-800 pb-2">05 — Tasks (Local Execution)</h2>
+      
+      <div class="space-y-6">
+        <div class="bg-slate-800/50 p-5 rounded-lg border border-slate-700">
+          <h3 class="text-white font-bold mb-2">Task 01 — Select</h3>
+          <p class="text-slate-400 text-sm">Selecciona la rutina legacy real en tu IDE.</p>
+        </div>
+        
+        <div class="bg-slate-800/50 p-5 rounded-lg border border-slate-700">
+          <h3 class="text-white font-bold mb-2">Task 02 — Understand</h3>
+          <p class="text-slate-400 text-sm">Documenta en un block de notas local: inputs, outputs, reglas principales y side-effects.</p>
+        </div>
+        
+        <div class="bg-slate-800/50 p-5 rounded-lg border border-slate-700">
+          <h3 class="text-white font-bold mb-2">Task 03 — Classify (Mental Model)</h3>
+          <p class="text-slate-400 text-sm mb-4">Separa mentalmente la lógica. Puedes practicar con este diagrama interactivo antes de aplicarlo a tu código real:</p>
+          
+          <!-- Interactive Blendy POC -->
+          <div class="interactive-classification bg-slate-900 p-6 rounded border border-slate-700">
+            <div class="text-center mb-6 text-slate-300 font-bold">Unidades de Lógica de la Rutina</div>
+            
+            <!-- Pending Elements -->
+            <div class="flex flex-wrap gap-3 justify-center mb-12 min-h-[60px]">
+              <ng-container *ngFor="let el of elements()">
+                <div *ngIf="el.classification === 'PENDING'" class="logic-node pending group">
+                  <span>{{ el.label }}</span>
+                  <div class="actions">
+                    <button (click)="classify(el.id, 'DETERMINISTIC')" class="btn-det">Determinista</button>
+                    <button (click)="classify(el.id, 'PROBABILISTIC')" class="btn-prob">Probabilista</button>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+
+            <!-- Buckets -->
+            <div class="grid grid-cols-2 gap-8">
+              <div class="bucket deterministic-bucket">
+                <h4 class="text-emerald-400 mb-4 font-bold border-b border-emerald-900 pb-2 text-center">Strict Deterministic Logic</h4>
+                <div class="min-h-[100px] flex flex-col gap-2">
+                  <ng-container *ngFor="let el of elements()">
+                    <div *ngIf="el.classification === 'DETERMINISTIC'" class="logic-node deterministic slide-in">
+                      {{ el.label }}
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              
+              <div class="bucket probabilistic-bucket">
+                <h4 class="text-amber-400 mb-4 font-bold border-b border-amber-900 pb-2 text-center">Probabilistic Opportunity</h4>
+                <div class="min-h-[100px] flex flex-col gap-2">
+                  <ng-container *ngFor="let el of elements()">
+                    <div *ngIf="el.classification === 'PROBABILISTIC'" class="logic-node probabilistic slide-in">
+                      {{ el.label }}
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-800/50 p-5 rounded-lg border border-slate-700">
+          <h3 class="text-white font-bold mb-2">Task 04 — AI Analysis</h3>
+          <p class="text-slate-400 text-sm">Utiliza el asistente autorizado en tu entorno para que analice la rutina, SIN darle permiso de modificar nada todavía.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 AI Usage -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-indigo-400 mb-4 border-b border-slate-800 pb-2">06 — AI Usage Guideline</h2>
+      <p class="text-slate-300 mb-4">Utiliza tu herramienta corporativa autorizada (ej. GitHub Copilot, Cursor, Claude Code, Gemini). Sigue este pipeline de disciplina:</p>
+      
+      <div class="bg-indigo-900/10 border border-indigo-500/20 p-6 rounded-lg text-center font-mono text-sm text-indigo-300 flex flex-col md:flex-row items-center justify-center gap-4">
+        <span class="bg-indigo-900/50 px-3 py-2 rounded">Understand</span>
+        <span>→</span>
+        <span class="bg-indigo-900/50 px-3 py-2 rounded">Analyze</span>
+        <span>→</span>
+        <span class="bg-indigo-900/50 px-3 py-2 rounded">Question</span>
+        <span>→</span>
+        <span class="bg-indigo-900/50 px-3 py-2 rounded">Propose</span>
+        <span>→</span>
+        <span class="bg-emerald-900/50 text-emerald-400 border border-emerald-500/30 px-3 py-2 rounded">Human Review</span>
+      </div>
+      <p class="text-slate-400 text-sm mt-4 italic">No uses el patrón tóxico: "Pegar código → Generar reemplazo → Desplegar".</p>
+    </section>
+
+    <!-- 07 Human Verification -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-indigo-400 mb-4 border-b border-slate-800 pb-2">07 — Human Verification</h2>
+      <p class="text-slate-300 mb-4">Antes de dar por finalizado el laboratorio, responde sinceramente (en tu documento de evidencia):</p>
+      <ul class="list-disc pl-6 text-slate-300 space-y-2">
+        <li>¿La IA entendió correctamente las reglas de la rutina?</li>
+        <li>¿Detectó todas las reglas ocultas o falló en dependencias implícitas?</li>
+        <li>¿Confundió lógica determinista con comportamiento probabilístico?</li>
+        <li>¿Qué riesgo de regresión existe si delegas parte de este cálculo a un modelo?</li>
+      </ul>
+    </section>
+
+    <!-- 08 Acceptance Criteria & Evidence -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <div class="bg-slate-900 border border-slate-700 p-6 rounded-lg">
+        <h2 class="text-xl font-bold text-white mb-4">08 — Acceptance Criteria</h2>
+        <div class="space-y-3">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 bg-slate-800 text-indigo-500">
+            <span class="text-slate-300 text-sm">Rutina legacy identificada</span>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 bg-slate-800 text-indigo-500">
+            <span class="text-slate-300 text-sm">Inputs/Outputs documentados</span>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 bg-slate-800 text-indigo-500">
+            <span class="text-slate-300 text-sm">Separación Determinista vs Probabilista completada</span>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 bg-slate-800 text-indigo-500">
+            <span class="text-slate-300 text-sm">Riesgos identificados y Decisión Humana tomada</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-700 p-6 rounded-lg">
+        <h2 class="text-xl font-bold text-white mb-4">09 — Evidence</h2>
+        <p class="text-slate-400 text-sm leading-relaxed mb-4">Conserva la evidencia en tu máquina (Issue de Jira, doc Markdown local, ADR, etc.). No la subas aquí.</p>
+        <p class="text-indigo-400 font-mono text-xs p-3 bg-indigo-900/10 border border-indigo-500/20 rounded">
+          Expected: Analysis Document + AI Interaction Log + Risk Assessment
+        </p>
+      </div>
+    </section>
+    
+    <!-- Navigation -->
+    <div class="flex justify-between items-center mt-16 pt-8 border-t border-slate-800">
+      <a routerLink="/academy/modules/m01-ai-foundations/demo-token-playground" class="px-4 py-2 border border-slate-700 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+        &larr; Anterior: Demo 01 (Playground)
+      </a>
+      <a routerLink="/academy/modules/m02-prompt-engineering/lesson-01-reliable-behavior" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-colors shadow-lg shadow-indigo-500/25">
+        Siguiente Módulo: Prompt Engineering &rarr;
+      </a>
+    </div>
+
+  </div>
+</div>

@@ -24,7 +24,9 @@ export class TokenPlayground {
     
     return rawPieces.map((piece, i) => ({
       text: piece,
-      color: `hsl(${(i * 137.5) % 360}, 70%, 80%)`, // Golden angle approximation for unique colors
+      // Luminosidad 22% → superficies oscuras diferenciables sobre background dark
+      // Saturación 60% → diferenciación funcional/pedagógica, no decorativa
+      color: `hsl(${(i * 137.5) % 360}, 60%, 22%)`,
       isSpace: /^\s+$/.test(piece)
     }));
   });

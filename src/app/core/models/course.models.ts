@@ -11,6 +11,7 @@ export interface Lesson {
   tags: string[];
   prerequisites: string[]; // IDs of prerequisite lessons
   path: string; // The existing legacy path or new path
+  type?: 'LESSON' | 'DEMO' | 'LAB';
   objectives?: string[];
   resources?: { title: string; url: string; }[];
 }

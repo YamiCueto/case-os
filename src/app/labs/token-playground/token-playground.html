@@ -1,4 +1,4 @@
-<div class="presentation-container">
+<div class="presentation-container pb-32">
   <div class="back-to-menu">
     <a routerLink="/academy/modules/m01-ai-foundations/lesson-03-sistemas" class="back-btn">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -6,96 +6,168 @@
     </a>
   </div>
 
-  <div class="slide-wrapper" style="max-width: 1200px; margin: 0 auto;">
+  <div class="slide-wrapper" style="max-width: 960px; margin: 0 auto;">
     <div class="slide active">
+
+      <!-- Header -->
       <div class="slide-title">
-        <span class="workshop-badge" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Lab 01: Build</span>
-        <h1>Tokenization Playground</h1>
-        <p class="subtitle">Descubre cómo un LLM "corta" y "ve" tu texto</p>
+        <span class="workshop-badge">
+          <span class="icon">◈</span>
+          Demo 01 · AI Foundations
+        </span>
+        <h1>Token Playground</h1>
+        <p class="subtitle">Descubre cómo un LLM segmenta y "ve" tu texto antes de procesarlo</p>
       </div>
 
       <div class="slide-content">
-        <div class="hu-box">
-          <h4>Objetivo del Laboratorio</h4>
-          <p>Construir y probar una herramienta para estimar la cantidad de tokens de un texto.</p>
-          
-          <h4 style="margin-top: 1rem;">Experimenta:</h4>
-          <ol style="margin-left: 1.5rem; color: #0c4a6e;">
-            <li>Escribe un prompt cualquiera.</li>
-            <li>Observa la cantidad de tokens y el costo estimado.</li>
-            <li>Ahora modifica el prompt, cambia una palabra por un sinónimo o añade signos de exclamación.</li>
-            <li><strong>¿Qué cambió en los tokens visualizados? ¿Por qué se rompen las palabras? ¿Qué relación tiene con el límite de contexto?</strong></li>
-          </ol>
+
+        <!-- Objetivo de la Demo -->
+        <div style="
+          background: #0A0A0A;
+          border: 1px solid #1F1F1F;
+          border-left: 2px solid #6366f1;
+          border-radius: 6px;
+          padding: 20px 24px;
+          margin-bottom: 2rem;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+        ">
+          <div>
+            <p style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #6366f1; margin: 0 0 10px 0;">Objective</p>
+            <p style="font-size: 14px; color: #c7c4d7; line-height: 1.7; margin: 0;">
+              Visualiza cómo un LLM fragmenta texto en tokens y cómo esa representación afecta contexto y costo.
+            </p>
+          </div>
+          <div>
+            <p style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #6366f1; margin: 0 0 10px 0;">Try it</p>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; gap: 12px; align-items: baseline;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #4b5563; flex-shrink: 0; width: 16px;">01</span>
+                <span style="font-size: 13px; color: #94a3b8;">Escribe cualquier texto en el panel izquierdo.</span>
+              </div>
+              <div style="display: flex; gap: 12px; align-items: baseline;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #4b5563; flex-shrink: 0; width: 16px;">02</span>
+                <span style="font-size: 13px; color: #94a3b8;">Observa cómo se fragmenta en el panel derecho.</span>
+              </div>
+              <div style="display: flex; gap: 12px; align-items: baseline;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #4b5563; flex-shrink: 0; width: 16px;">03</span>
+                <span style="font-size: 13px; color: #e4e1ed; font-weight: 500;">Cambia palabras o agrega signos — ¿cambia el conteo?</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
-          
-          <!-- Input Section -->
-          <div class="template-container" style="background: white; border: 2px solid #e2e8f0;">
-            <div class="template-header" style="background: #475569;">
-              <h3>1. Escribe tu Prompt</h3>
+        <!-- Paneles: Input + Token View -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+
+          <!-- Panel 1: Input -->
+          <div class="template-container" style="display: flex; flex-direction: column;">
+            <div class="template-header" style="padding: 12px 16px; border-bottom: 1px solid #1F1F1F;">
+              <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #908fa0; margin: 0;">
+                01 · Escribe tu prompt
+              </h3>
             </div>
-            <div style="padding: 1.5rem;">
-              <textarea 
-                [(ngModel)]="inputText" 
-                rows="8" 
-                style="width: 100%; padding: 1rem; border-radius: 8px; border: 1px solid #cbd5e1; font-family: 'Inter', sans-serif; font-size: 1rem; resize: vertical;"
-                placeholder="Escribe texto o código aquí..."></textarea>
+            <div style="padding: 1rem; flex: 1;">
+              <textarea
+                [(ngModel)]="inputText"
+                rows="10"
+                style="
+                  width: 100%;
+                  padding: 12px 14px;
+                  border-radius: 6px;
+                  border: 1px solid #1F1F1F;
+                  background: #050505;
+                  color: #c7c4d7;
+                  font-family: 'JetBrains Mono', monospace;
+                  font-size: 13px;
+                  line-height: 1.6;
+                  resize: vertical;
+                  outline: none;
+                  transition: border-color 0.2s ease;
+                  box-sizing: border-box;
+                "
+                onfocus="this.style.borderColor='#6366f1'"
+                onblur="this.style.borderColor='#1F1F1F'"
+                placeholder="Escribe texto o código aquí…"></textarea>
             </div>
           </div>
 
-          <!-- Output Section -->
-          <div class="template-container" style="background: white; border: 2px solid #e2e8f0;">
-            <div class="template-header" style="background: #3b82f6;">
-              <h3>2. Visión del LLM (Tokens)</h3>
+          <!-- Panel 2: Token view -->
+          <div class="template-container" style="display: flex; flex-direction: column;">
+            <div class="template-header" style="padding: 12px 16px; border-bottom: 1px solid #1F1F1F;">
+              <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #908fa0; margin: 0;">
+                02 · Visión del LLM (tokens)
+              </h3>
             </div>
-            <div style="padding: 1.5rem; display: flex; flex-wrap: wrap; gap: 2px; background: #f8fafc; border-radius: 8px; min-height: 200px; align-content: flex-start;">
-              
-              <span *ngFor="let token of tokens()" 
-                    [style.background]="token.isSpace ? 'transparent' : token.color"
-                    [style.padding]="token.isSpace ? '0' : '0.2rem 0.4rem'"
-                    [style.border-radius]="'4px'"
-                    [style.color]="token.isSpace ? 'transparent' : '#1e293b'"
-                    [style.font-family]="'monospace'"
-                    [style.font-size]="'0.9rem'"
-                    [style.border]="token.isSpace ? 'none' : '1px solid rgba(0,0,0,0.1)'"
-                    [style.white-space]="'pre-wrap'"
-                    style="display: inline-block;">
+            <div style="
+              padding: 1rem;
+              display: flex;
+              flex-wrap: wrap;
+              gap: 3px;
+              align-content: flex-start;
+              min-height: 200px;
+              flex: 1;
+            ">
+              <span *ngFor="let token of tokens()"
+                [style.background]="token.isSpace ? 'transparent' : token.color"
+                [style.padding]="token.isSpace ? '0 3px' : '2px 6px'"
+                [style.border-radius]="'3px'"
+                [style.color]="token.isSpace ? 'transparent' : '#e4e1ed'"
+                [style.font-family]="'JetBrains Mono, monospace'"
+                [style.font-size]="'12px'"
+                [style.border]="token.isSpace ? 'none' : '1px solid rgba(255,255,255,0.08)'"
+                [style.white-space]="'pre-wrap'"
+                [style.letter-spacing]="'0.02em'"
+                style="display: inline-block; line-height: 1.6;">
                 {{ token.text }}
               </span>
-
             </div>
           </div>
 
         </div>
 
-        <!-- Metrics Grid -->
-        <div class="info-grid" style="margin-bottom: 3rem;">
-          <div class="info-item">
-            <span class="info-icon">🔢</span>
-            <span class="info-label">Tokens Estimados</span>
-            <span class="info-value" style="font-size: 2rem; color: #4f46e5 !important;">{{ estimatedTokens() }}</span>
+        <!-- Technical Metrics -->
+        <div style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1px;
+          background: #1F1F1F;
+          border: 1px solid #1F1F1F;
+          border-radius: 8px;
+          overflow: hidden;
+          margin-bottom: 2rem;
+        ">
+          <div style="background: #0A0A0A; padding: 20px 24px; display: flex; flex-direction: column; gap: 6px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #4b5563;">TOKENS ESTIMADOS</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; color: #818cf8; line-height: 1;">{{ estimatedTokens() }}</span>
           </div>
-          
-          <div class="info-item">
-            <span class="info-icon">💸</span>
-            <span class="info-label">Costo Input Estimado ($)</span>
-            <span class="info-value" style="font-size: 2rem; color: #22c55e !important;">${{ estimatedCost() }}</span>
+          <div style="background: #0A0A0A; padding: 20px 24px; display: flex; flex-direction: column; gap: 6px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #4b5563;">INPUT COST ESTIMADO</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; color: #34d399; line-height: 1;">${{ estimatedCost() }}</span>
           </div>
         </div>
 
-        <div class="warning-box" style="background: #faf5ff; border-left-color: #a855f7;">
-          <h4 style="color: #7e22ce; margin-bottom: 0.5rem;">Cierre del Laboratorio</h4>
-          <p style="color: #4c1d95; margin-bottom: 1rem;">Para conservar este conocimiento y herramientas en el ecosistema CASE OS, hemos extraído estos conceptos hacia la <strong>Library</strong>. En futuros laboratorios reutilizaremos el snippet de estimación.</p>
-          <div style="display: flex; gap: 1rem;">
-            <a routerLink="/library/resources/ai-glossary" class="control-btn" style="background: #a855f7; color: white; border: none;">
-              📖 Repasar AI Glossary
+        <!-- Concepto para llevar -->
+        <div class="warning-box" style="border-left-color: #6366f1; background: #0d0d1a; margin-top: 0;">
+          <h4 style="color: #818cf8; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;">
+            ◈ Concepto para llevar
+          </h4>
+          <p style="color: #c7c4d7; font-size: 14px; line-height: 1.7; margin-bottom: 1rem;">
+            Los LLMs no procesan palabras — procesan <strong style="color: #e4e1ed;">tokens</strong>. Un token puede ser una palabra completa, una sílaba, un signo de puntuación o un espacio.
+            La ventana de contexto mide cuántos tokens puede "ver" el modelo a la vez, y cada token tiene un costo de inferencia.
+            Optimizar tokens es optimizar costo y calidad.
+          </p>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <a routerLink="/library/resources/ai-glossary" class="control-btn primary" style="font-size: 11px;">
+              📖 AI Glossary
             </a>
-            <a routerLink="/library/resources/token-estimator" class="control-btn" style="background: white; color: #a855f7; border: 2px solid #a855f7;">
-              💻 Ver Token Estimator Snippet
+            <a routerLink="/library/resources/token-estimator" class="control-btn" style="border-color: #1F1F1F; font-size: 11px;">
+              💻 Token Estimator Snippet
             </a>
           </div>
         </div>
+
       </div>
     </div>
   </div>
