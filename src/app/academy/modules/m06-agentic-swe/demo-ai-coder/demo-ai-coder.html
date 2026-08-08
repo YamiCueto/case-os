@@ -1,0 +1,143 @@
+﻿<div class="presentation-container pb-32">
+  <div class="back-to-menu">
+    <a routerLink="/academy/modules/m06-agentic-swe/lesson-03-repository-context" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a la Leccion
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 1000px; margin: 0 auto; padding: 32px 40px;">
+    <div class="slide-title">
+      <span class="workshop-badge">
+        <span class="icon">◈</span>
+        Demo 06 · Agentic SWE
+      </span>
+      <h1>The AI-Assisted Change</h1>
+      <p class="subtitle">Simulación: Context &rarr; Issue &rarr; Generation &rarr; Verification &rarr; Human Review</p>
+    </div>
+
+    <!-- Alert / Definition -->
+    <div style="background:#0A0A0A; border:1px solid #1F1F1F; border-left:3px solid #6366f1; border-radius:6px; padding:20px 24px; margin-bottom:2rem;">
+      <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin:0 0 10px 0;">Context Boundary Rule</p>
+      <p style="font-size:14px; color:#c7c4d7; line-height:1.7; margin:0;">
+        Selecciona los archivos que enviarás como <strong>Contexto</strong> al agente para resolver el issue: <em>"Corregir el payload de login que se envía al backend"</em>. 
+        Un buen ingeniero controla el perímetro: no asume que la IA deducirá las dependencias, pero tampoco le entrega el repositorio entero.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 280px 1fr; gap: 2rem;">
+      
+      <!-- Left: File Explorer -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#cbd5e1; text-transform:uppercase; margin:0;">1. Select Context</h3>
+        </div>
+
+        <div style="background:#050505; border:1px solid #1f293d; border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:8px;">
+          <div *ngFor="let file of files(); let i = index" 
+               (click)="toggleFile(i)"
+               style="display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:4px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:12px; transition: all 0.2s;"
+               [ngClass]="{
+                 'bg-indigo-900 border border-indigo-500 text-indigo-300': file.selected,
+                 'bg-transparent border border-transparent text-slate-400 hover:bg-slate-900': !file.selected
+               }"
+               [style.pointer-events]="status() !== 'SELECTING' ? 'none' : 'auto'"
+               [style.opacity]="status() !== 'SELECTING' && !file.selected ? '0.5' : '1'">
+            <span class="material-symbols-outlined" style="font-size:16px;">
+              {{ file.selected ? 'check_box' : 'check_box_outline_blank' }}
+            </span>
+            <span>{{ file.name }}</span>
+          </div>
+        </div>
+
+        <button *ngIf="status() === 'SELECTING'" (click)="generatePatch()" class="control-btn primary" style="width:100%; justify-content:center;">
+          2. Generar Diff &rarr;
+        </button>
+      </div>
+
+      <!-- Right: Pipeline Stages -->
+      <div style="display:flex; flex-direction:column; gap:20px;">
+        
+        <!-- Status Indicator -->
+        <div style="display:flex; gap:12px; margin-bottom:12px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; padding:4px 8px; border-radius:4px;"
+            [ngClass]="{
+              'bg-blue-900 text-blue-300': status() === 'SELECTING' || status() === 'GENERATING',
+              'bg-yellow-900 text-yellow-300': status() === 'VERIFYING',
+              'bg-purple-900 text-purple-300': status() === 'REVIEWING',
+              'bg-green-900 text-green-300': status() === 'SUCCESS'
+            }">
+            PIPELINE STATUS: {{ status() }}
+          </span>
+        </div>
+
+        <!-- GENERATING -->
+        <div *ngIf="status() === 'GENERATING'" style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:32px; text-align:center;">
+          <div style="color:#64748b; font-family:'JetBrains Mono',monospace; font-size:12px; animation: pulse 2s infinite;">
+            Agent is generating code based on {{ files().length }} file(s) of context...
+          </div>
+        </div>
+
+        <!-- VERIFYING / REVIEWING -->
+        <div *ngIf="status() === 'VERIFYING' || status() === 'REVIEWING' || status() === 'SUCCESS'" style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:24px; display:flex; flex-direction:column; gap:20px;">
+          
+          <div>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#818cf8;">3. AI-ASSISTED CHANGE (DIFF)</span>
+            <div style="margin-top:12px; padding:16px; background:#050505; border:1px solid #1F1F1F; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.6; white-space:pre-wrap;"
+                 [ngClass]="{
+                   'text-red-400': contextType() === 'INSUFFICIENT',
+                   'text-green-400': contextType() === 'CORRECT',
+                   'text-yellow-400': contextType() === 'EXCESSIVE'
+                 }">{{ patchMessage() }}</div>
+          </div>
+
+          <!-- Tests -->
+          <div *ngIf="status() === 'VERIFYING' || status() === 'REVIEWING' || status() === 'SUCCESS'">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#818cf8;">4. VERIFICATION PROTOCOL</span>
+            <div style="margin-top:12px; display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#050505; border:1px solid #1F1F1F; border-radius:6px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#c7c4d7;">Automated Test Suite</span>
+              
+              <button *ngIf="testResult() === 'PENDING'" (click)="runTests()" class="control-btn" style="border-color:#38bdf8; color:#38bdf8; font-size:11px; padding:6px 12px;">Run Tests</button>
+              
+              <span *ngIf="testResult() === 'PASS'" style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#22c55e; font-weight:700;">[PASS]</span>
+              <span *ngIf="testResult() === 'FAIL'" style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#ef4444; font-weight:700;">[FAIL] Rolling back...</span>
+            </div>
+          </div>
+
+          <!-- Human Review -->
+          <div *ngIf="status() === 'REVIEWING'">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#818cf8;">5. HUMAN REVIEW (ACCEPTANCE)</span>
+            <div style="margin-top:12px; display:flex; gap:12px;">
+              <button (click)="approve()" class="control-btn" style="border-color:#22c55e; color:#22c55e; flex:1; justify-content:center;">Approve &amp; Commit</button>
+              <button (click)="reject()" class="control-btn" style="border-color:#ef4444; color:#ef4444; flex:1; justify-content:center;">Reject &amp; Discard</button>
+            </div>
+          </div>
+
+          <!-- Success -->
+          <div *ngIf="status() === 'SUCCESS'" style="text-align:center; padding:16px;">
+            <span style="color:#22c55e; font-size:24px;" class="material-symbols-outlined">check_circle</span>
+            <p style="color:#86efac; font-family:'JetBrains Mono',monospace; font-size:12px; margin-top:8px;">Change merged successfully.</p>
+          </div>
+
+        </div>
+
+        <button *ngIf="status() !== 'SELECTING'" (click)="resetLab()" class="control-btn" style="width:100%; justify-content:center; border-color:#1e293b; color:#94a3b8;">
+          Reset Simulator
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Takeaway Box -->
+    <div class="warning-box" style="border-left-color:#6366f1; background:#0d0d1a; margin-top:2rem;">
+      <h4 style="color:#818cf8; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem;">◈ Takeaway</h4>
+      <p style="color:#c7c4d7; font-size:14px; line-height:1.7; margin-bottom:1rem;">
+        La automatización (Generation) es solo una pequeña parte del ciclo de vida del software. Controlar el alcance (<span style="color:#a78bfa;">Context Boundary</span>), verificar mediante <span style="color:#38bdf8;">Tests</span> y aplicar un estricto escrutinio <span style="color:#fbbf24;">Humano</span> garantiza que el código generado no introduzca deudas técnicas o fallos críticos silenciosos.
+      </p>
+      <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+        <a routerLink="/academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol" class="control-btn" style="border-color:#6366f1; color:#818cf8; font-size:11px;">Ir al Lab 06 →</a>
+      </div>
+    </div>
+
+  </div>
+</div>

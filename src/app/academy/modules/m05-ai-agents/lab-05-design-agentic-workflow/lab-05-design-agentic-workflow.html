@@ -1,0 +1,147 @@
+﻿<div class="presentation-container pb-32">
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
+
+    <!-- Context Chips -->
+    <div class="lab-context-chips" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 28px;">
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6366f1; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); padding: 3px 10px; border-radius: 4px;">LAB 05 · REAL ENGINEERING</span>
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; background: #0f172a; border: 1px solid #1e293b; padding: 3px 10px; border-radius: 4px;">Module 05 · AI Agents</span>
+      <span style="color: #334155; font-size: 10px;">·</span>
+      <span style="font-size: 12px; color: #64748b;">⏱️ 60 min</span>
+      <span style="font-size: 12px; color: #64748b;">· Advanced</span>
+      <span style="font-size: 12px; color: #64748b;">· Agent Specification</span>
+    </div>
+
+    <div class="slide-content" style="display: flex; flex-direction: column; gap: 40px;">
+
+      <!-- 01 — Target: Legacy Process Origination -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">01 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Selección del Problema: Empezar en la Realidad Legacy</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+          No inventes un "agente para hacer X". Selecciona un <strong>proceso legacy real</strong> de tu organización. Para justificar autonomía, debes encontrar un proceso que hoy sufre cuellos de botella por requerir decisiones ambiguas, manejo de excepciones complejas o revisión de múltiples fuentes de datos.
+        </p>
+        <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 20px 24px;">
+          <p style="color: #cbd5e1; font-size: 13px; font-family: 'JetBrains Mono', monospace; margin: 0 0 8px 0; color:#818cf8;">&gt; Proceso actual:</p>
+          <p style="color: #cbd5e1; font-size: 13px; font-family: 'JetBrains Mono', monospace; margin: 0 0 8px 0; color:#818cf8;">&gt; Puntos de decisión ambigua:</p>
+          <p style="color: #cbd5e1; font-size: 13px; font-family: 'JetBrains Mono', monospace; margin: 0 0 8px 0; color:#818cf8;">&gt; Fallos frecuentes o excepciones manuales:</p>
+        </div>
+      </section>
+
+      <!-- 02 — The Autonomy Test -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">02 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">El "Autonomy Test": Use the least autonomy necessary</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Los agentes son caros, lentos y propensos a errores. Antes de diseñar uno, justifica por qué las alternativas más simples fallarían para el problema legacy seleccionado:
+        </p>
+
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">
+          <div style="margin-bottom: 16px;">
+            <div style="color: #cbd5e1; font-weight: 700; margin-bottom: 4px;">¿Los pasos son conocidos de antemano de inicio a fin?</div>
+            <div style="display: flex; gap: 16px;">
+              <span style="color: #22c55e;">&rarr; SÍ: Fixed Pipeline (Script). Fin del diseño.</span>
+              <span style="color: #ef4444;">&rarr; NO: Pasar a la siguiente pregunta.</span>
+            </div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="color: #cbd5e1; font-weight: 700; margin-bottom: 4px;">¿Hay estados y transiciones claramente definidos, aunque condicionales?</div>
+            <div style="display: flex; gap: 16px;">
+              <span style="color: #22c55e;">&rarr; SÍ: State Machine (DAG). Fin del diseño.</span>
+              <span style="color: #ef4444;">&rarr; NO: Pasar a la siguiente pregunta.</span>
+            </div>
+          </div>
+          <div>
+            <div style="color: #cbd5e1; font-weight: 700; margin-bottom: 4px;">¿La tarea requiere exploración, decisiones dinámicas y re-evaluación constante de resultados fallidos?</div>
+            <div style="display: flex; gap: 16px;">
+              <span style="color: #22c55e;">&rarr; SÍ: Autonomous Agent justificado. Puedes continuar con el Lab.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 — Progresión de Contratos (M02 -> M05 -> M07) -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">03 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">De Instrucciones a Herramientas: La Progresión de Contratos</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Diseñar herramientas no es simplemente escribir funciones. Es extender los principios de control y predictibilidad a las <strong>acciones</strong> del modelo:
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1;">[M02] Instruction Contract</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Cómo restringir el <strong>formato de salida</strong> y las reglas que debe seguir el modelo.</p>
+          </div>
+          <div style="background: #172033; border: 1px solid #2d3748; border-radius: 6px; padding: 16px; box-shadow: inset 0 0 0 1px rgba(99,102,241,0.3);">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #818cf8;">[M05] Tool Contract</span>
+            <p style="font-size: 12px; color: #cbd5e1; margin: 6px 0 0 0; line-height: 1.5;">Cómo restringir las <strong>acciones</strong> que el modelo puede solicitar y los argumentos que debe proveer.</p>
+          </div>
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; opacity: 0.7;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #64748b;">[M07] MCP Contract</span>
+            <p style="font-size: 12px; color: #64748b; margin: 6px 0 0 0; line-height: 1.5;">Cómo <strong>estandarizar y abstraer</strong> esas capacidades para conectarlas a cualquier plataforma.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 — The Deliverable: AGENT SPECIFICATION -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">04 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">El Artefacto: Agent Specification Document</h2>
+        </div>
+
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F1F1F; padding-bottom: 12px; margin-bottom: 18px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #6366f1; letter-spacing: 0.1em;">AGENT SPECIFICATION TEMPLATE</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b;">CASE OS STANDARD</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr; gap: 16px; font-size: 12px; color: #cbd5e1;">
+            <div>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">1. Core Instruction (System Prompt):</span> Definición estricta del rol, el objetivo y las restricciones de razonamiento.
+            </div>
+            <div>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">2. Tool Contracts:</span> Firmas JSON/OpenAPI de cada herramienta (nombre, descripción detallada, argumentos requeridos).
+            </div>
+            <div>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">3. Guardrails & Limits:</span> Límite máximo de iteraciones (ej. max_steps=5), bloqueo de argumentos prohibidos.
+            </div>
+            <div>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">4. Human-in-the-Loop (HITL) - Análisis de Riesgo:</span> 
+              <ul style="margin: 4px 0 0 20px; color: #94a3b8;">
+                <li><strong style="color: #22c55e;">READ Actions:</strong> Automáticas.</li>
+                <li><strong style="color: #eab308;">WRITE Actions:</strong> Auditoría diferida o control condicional.</li>
+                <li><strong style="color: #ef4444;">DELETE / FINANCIAL / PRODUCTION Actions:</strong> Requieren autorización explícita del humano.</li>
+              </ul>
+            </div>
+            <div>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">5. Failure & Recovery:</span> ¿Qué ocurre si la herramienta falla? (Timeout, Retry, Fallback al usuario, Abortar el bucle).
+            </div>
+            <div>
+              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">6. State Management:</span> ¿Qué información debe retener el agente entre iteraciones?
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation & Closure -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid #1e293b; margin-top: 12px;">
+        <a routerLink="/academy/modules/m05-ai-agents/demo-agent-loop" class="control-btn" style="border-color: #1e293b; color: #94a3b8; font-size: 12px;">
+          ← Volver a Demo 05
+        </a>
+        <a routerLink="/labs" class="control-btn primary" style="font-size: 12px;">
+          Ver Real Engineering Labs →
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

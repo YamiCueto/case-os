@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+﻿import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -7,16 +7,17 @@ interface Iteration {
   intent: string;
   actionTaken?: string;
   observation?: string;
+  stateUpdate?: string;
 }
 
 @Component({
-  selector: 'app-agent-loop',
+  selector: 'app-demo-agent-loop',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './agent-loop.html',
-  styleUrls: ['./agent-loop.css']
+  templateUrl: './demo-agent-loop.html',
+  styleUrls: ['../../../../shared-presentation.css']
 })
-export class AgentLoopLab {
+export class DemoAgentLoop {
   maxIterations = 5;
   currentStep = signal(1);
   status = signal<'RUNNING' | 'SUCCESS' | 'FAILED'>('RUNNING');
@@ -24,7 +25,7 @@ export class AgentLoopLab {
   history = signal<Iteration[]>([
     {
       step: 1,
-      intent: 'Necesito encontrar la política de reembolso de viajes para poder enviarla por email al manager.',
+      intent: 'Goal: Find the travel reimbursement policy and email it to manager@empresa.com. Status: Initializing.',
     }
   ]);
 
@@ -35,8 +36,9 @@ export class AgentLoopLab {
     if (this.status() !== 'RUNNING') return;
     
     this.addObservation(
-      'call searchKnowledge(query="política reembolso viajes")',
-      'Found Document: "Los reembolsos de viaje tienen un límite de $50 diarios para comidas y requieren factura obligatoria. Los vuelos deben ser en clase turista."'
+      'call tool: searchKnowledge(query="política reembolso viajes")',
+      'Found Document: "Los reembolsos de viaje tienen un límite de $50 diarios para comidas y requieren factura obligatoria. Los vuelos deben ser en clase turista."',
+      'Context loaded. Next step: format and send email.'
     );
     this.hasSearched.set(true);
     this.prepareNextStep();
@@ -46,8 +48,9 @@ export class AgentLoopLab {
     if (this.status() !== 'RUNNING') return;
     
     this.addObservation(
-      'call calculateMath(expression="50 * 5")',
-      'Result: 250'
+      'call tool: calculateMath(expression="50 * 5")',
+      'Result: 250',
+      'Calculation stored in context.'
     );
     this.prepareNextStep();
   }
@@ -57,13 +60,15 @@ export class AgentLoopLab {
     
     if (!this.hasSearched()) {
       this.addObservation(
-        'call sendEmail(to="manager@empresa.com", body="Aquí está la política.")',
-        'Error: El cuerpo del mensaje no contiene la política detallada. El LLM está alucinando información.'
+        'call tool: sendEmail(to="manager@empresa.com", body="Aquí está la política.")',
+        'Error: Message body lacks details. Guardrail activated (Missing required context).',
+        'Email failed. Must retrieve policy first.'
       );
     } else {
       this.addObservation(
-        'call sendEmail(to="manager@empresa.com", body="Límite $50 diarios, requiere factura, clase turista.")',
-        'Success: Email enviado correctamente a manager@empresa.com'
+        'call tool: sendEmail(to="manager@empresa.com", body="Límite $50 diarios, requiere factura, clase turista.")',
+        'Success: Email sent to manager@empresa.com',
+        'Goal achieved. Ready to terminate loop.'
       );
       this.hasEmailed.set(true);
     }
@@ -74,19 +79,20 @@ export class AgentLoopLab {
     if (this.status() !== 'RUNNING') return;
     
     if (this.hasSearched() && this.hasEmailed()) {
-      this.addObservation('Return Final Answer', 'He buscado la política y enviado el resumen al manager.');
+      this.addObservation('Final Answer (Return)', 'He buscado la política y enviado el resumen al manager.', 'Terminal state reached successfully.');
       this.status.set('SUCCESS');
     } else {
-      this.addObservation('Return Final Answer', 'Error fatal: El agente intentó terminar antes de completar los objetivos.');
+      this.addObservation('Final Answer (Return)', 'SYSTEM ERROR: Agent attempted to terminate before completing required sub-tasks.', 'Terminal state reached with failure.');
       this.status.set('FAILED');
     }
   }
 
-  private addObservation(action: string, obs: string) {
+  private addObservation(action: string, obs: string, state: string) {
     this.history.update(h => {
       const current = h[h.length - 1];
       current.actionTaken = action;
       current.observation = obs;
+      current.stateUpdate = state;
       return [...h];
     });
   }
@@ -97,7 +103,7 @@ export class AgentLoopLab {
     if (this.currentStep() >= this.maxIterations && !this.hasEmailed()) {
       this.history.update(h => [
         ...h,
-        { step: this.currentStep() + 1, intent: 'SYSTEM HALTED: Max iterations reached (5/5). Infinite loop prevented.' }
+        { step: this.currentStep() + 1, intent: 'SYSTEM HALTED: Max iterations reached (5/5). Loop terminated to prevent runaway execution.' }
       ]);
       this.status.set('FAILED');
       return;
@@ -108,11 +114,11 @@ export class AgentLoopLab {
       
       let nextIntent = '';
       if (!this.hasSearched()) {
-        nextIntent = 'La última acción falló o no me dio la política. Debo buscar la política de reembolso de viajes.';
+        nextIntent = 'Decision: Must search for travel reimbursement policy.';
       } else if (this.hasSearched() && !this.hasEmailed()) {
-        nextIntent = 'Ya tengo la política. Ahora debo redactar y enviar un email a manager@empresa.com con los detalles.';
+        nextIntent = 'Decision: Must compose and send email to manager@empresa.com with policy details.';
       } else if (this.hasEmailed()) {
-        nextIntent = 'He enviado el email correctamente. Ya puedo devolver la respuesta final al usuario y terminar el ciclo.';
+        nextIntent = 'Decision: Send final response to user and terminate loop.';
       }
 
       this.history.update(h => [
@@ -130,7 +136,7 @@ export class AgentLoopLab {
     this.history.set([
       {
         step: 1,
-        intent: 'Necesito encontrar la política de reembolso de viajes para poder enviarla por email al manager.',
+        intent: 'Goal: Find the travel reimbursement policy and email it to manager@empresa.com. Status: Initializing.',
       }
     ]);
   }

@@ -1,0 +1,151 @@
+﻿<div class="presentation-container pb-32">
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
+
+    <!-- Context Chips -->
+    <div class="lab-context-chips" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 28px;">
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6366f1; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); padding: 3px 10px; border-radius: 4px;">LAB 06 · REAL ENGINEERING</span>
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; background: #0f172a; border: 1px solid #1e293b; padding: 3px 10px; border-radius: 4px;">Module 06 · Agentic SWE</span>
+      <span style="color: #334155; font-size: 10px;">·</span>
+      <span style="font-size: 12px; color: #64748b;">⏱️ 90 min</span>
+      <span style="font-size: 12px; color: #64748b;">· Advanced</span>
+      <span style="font-size: 12px; color: #64748b;">· Protocol Design</span>
+    </div>
+
+    <div class="slide-content" style="display: flex; flex-direction: column; gap: 40px;">
+
+      <!-- Intro -->
+      <section>
+        <p style="color: #cbd5e1; font-size: 16px; line-height: 1.7; margin: 0;">
+          <strong>AI generates candidates; the engineer owns the change.</strong> Este lab no trata sobre cómo usar un IDE con IA. Trata sobre cómo orquestar, validar y auditar una modificación de software cuando un modelo probabilístico está escribiendo el código.
+        </p>
+      </section>
+
+      <!-- 01 — Baseline Before AI -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">01 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Baseline Before AI</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+          Antes de pedir a la IA que modifique una sola línea, debes conocer el estado exacto del sistema. Si los tests ya fallaban, necesitas saberlo para no atribuirle la regresión a la IA.
+        </p>
+        <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 20px 24px;">
+          <ul style="color: #cbd5e1; font-size: 13px; font-family: 'JetBrains Mono', monospace; list-style-type: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+            <li><span style="color: #818cf8;">[ ]</span> Current behavior (¿Qué hace ahora mismo?)</li>
+            <li><span style="color: #818cf8;">[ ]</span> Current tests (¿Cuántos hay? ¿Están pasando?)</li>
+            <li><span style="color: #818cf8;">[ ]</span> Current warnings/errors (Logs limpios o sucios)</li>
+            <li><span style="color: #818cf8;">[ ]</span> Current git state (Workspace limpio, rama correcta)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 02 — Context Boundary Rule -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">02 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Context Boundary Rule</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          No delegues a la IA la autoridad sobre la arquitectura. Tampoco asumas que un contexto mínimo es suficiente. Proporciónale el contexto relevante, declara tus supuestos y exige validación.
+        </p>
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 20px; border-left: 3px solid #f59e0b;">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #fbbf24; margin: 0 0 8px 0;">Ejemplo de prompt de control de alcance:</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.6;">
+            "Revisa estos archivos (Context). El objetivo es refactorizar X. Asumo que las dependencias están limitadas a Service Y y Utils Z. <strong>Identifica cualquier dependencia o contexto faltante antes de proponer la modificación de código.</strong>"
+          </p>
+        </div>
+      </section>
+
+      <!-- 03 — Change Scope & Rollback -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">03 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Change Scope &amp; Rollback</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Debes delimitar explícitamente lo que está permitido y planificar el escenario de fallo, especialmente en sistemas legacy.
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #22c55e;">ALLOWED SCOPE</span>
+            <ul style="font-size: 12px; color: #94a3b8; margin: 8px 0 0 16px; padding: 0;">
+              <li>Archivos permitidos para modificar.</li>
+              <li>Comportamiento que DEBE mantenerse.</li>
+              <li>Criterio de aceptación técnica.</li>
+            </ul>
+          </div>
+          <div style="background: #170f11; border: 1px solid #3f1d24; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #ef4444;">ROLLBACK PLAN</span>
+            <ul style="font-size: 12px; color: #94a3b8; margin: 8px 0 0 16px; padding: 0;">
+              <li>¿Qué archivos están fuera de alcance?</li>
+              <li>¿Cómo revertimos (git reset/checkout)?</li>
+              <li>¿Qué pasa si fallan tests pre-existentes?</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 — Human Review Checklist -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">04 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Human Review Checklist</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Para combatir la <em>ceguera por automatización</em> (aprobar porque parece correcto), el equipo debe auditar el Diff generado respondiendo obligatoriamente a estos 9 puntos:
+        </p>
+
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 24px;">
+          <div style="display: grid; grid-template-columns: 1fr; gap: 12px; font-size: 12px; color: #cbd5e1; font-family: 'JetBrains Mono', monospace;">
+            <div><span style="color: #818cf8; font-weight: 700;">1. FUNCTIONAL:</span> ¿Resuelve exactamente el issue original?</div>
+            <div><span style="color: #818cf8; font-weight: 700;">2. SCOPE:</span> ¿Modificó solamente lo necesario o hizo refactor oculto?</div>
+            <div><span style="color: #818cf8; font-weight: 700;">3. BEHAVIOR:</span> ¿Cambió comportamiento existente no relacionado?</div>
+            <div><span style="color: #818cf8; font-weight: 700;">4. DEPENDENCIES:</span> ¿Introdujo nuevas dependencias o librerías?</div>
+            <div><span style="color: #ef4444; font-weight: 700;">5. SECURITY:</span> ¿Introdujo una vulnerabilidad (inyecciones, logs sensibles)?</div>
+            <div><span style="color: #38bdf8; font-weight: 700;">6. QUALITY:</span> ¿El código sigue las convenciones y estilo del repo?</div>
+            <div><span style="color: #38bdf8; font-weight: 700;">7. TESTS:</span> ¿Los tests realmente demuestran que el cambio funciona?</div>
+            <div><span style="color: #38bdf8; font-weight: 700;">8. MAINTAINABILITY:</span> ¿Aumenta o reduce la complejidad ciclomática?</div>
+            <div><span style="color: #10b981; font-weight: 700;">9. ROLLBACK:</span> ¿Podemos revertirlo limpiamente si falla en CI/CD?</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 — The Evidence Package -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">05 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">The Deliverable: EVIDENCE PACKAGE</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Para este Lab, ejecuta un cambio real en un repositorio usando IA. Reúne los siguientes artefactos localmente para demostrar que auditaste el proceso completo:
+        </p>
+
+        <div style="background: #1e1b4b; border: 1px solid #3730a3; border-radius: 8px; padding: 24px;">
+          <ul style="color: #e0e7ff; font-size: 13px; font-family: 'JetBrains Mono', monospace; list-style-type: decimal; padding-left: 20px; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+            <li>Original Issue (Descripción del problema).</li>
+            <li>Context Manifest (Archivos inyectados).</li>
+            <li>AI Instruction (El prompt usado).</li>
+            <li>Generated Diff (El parche propuesto).</li>
+            <li>Test Results (Evidencia de ejecución pre y post).</li>
+            <li>Human Review (Checklist de 9 puntos respondido).</li>
+            <li>Final Decision (Accept/Reject y justificación).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Navigation & Closure -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid #1e293b; margin-top: 12px;">
+        <a routerLink="/academy/modules/m06-agentic-swe/demo-ai-coder" class="control-btn" style="border-color: #1e293b; color: #94a3b8; font-size: 12px;">
+          ← Volver a Demo 06
+        </a>
+        <a routerLink="/labs" class="control-btn primary" style="font-size: 12px;">
+          Ver Real Engineering Labs →
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -363,16 +363,31 @@ export const COURSE_CONFIG: CourseConfig = {
           resources: []
         },
         {
-          id: 'l5',
-          title: 'Lab 05 — The Agent Loop',
+          id: 'd5',
+          title: 'Demo 05 — The Agent Loop',
           order: 4,
+          duration: '15 min',
+          difficulty: 'ADVANCED',
+          icon: '🎮',
+          tags: ['Demo', 'Interactive'],
+          type: 'DEMO',
+          prerequisites: ['c15'],
+          path: '/academy/modules/m05-ai-agents/demo-agent-loop',
+          objectives: ['Operar un ciclo de toma de decisiones (Intent -> Action -> Observation) manualmente'],
+          resources: []
+        },
+        {
+          id: 'l5',
+          title: 'Lab 05 — Design an Agentic Workflow',
+          order: 5,
           duration: '60 min',
           difficulty: 'ADVANCED',
           icon: '🔬',
-          tags: ['Lab', 'Practice'],
-          prerequisites: ['c15'],
-          path: '/labs/agent-loop',
-          objectives: ['Operar un ciclo ReAct manualmente con herramientas'],
+          tags: ['Lab', 'Real Engineering'],
+          type: 'LAB',
+          prerequisites: ['d5'],
+          path: '/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow',
+          objectives: ['Justificar el grado de autonomía necesario para un problema legacy real y definir el Agent Specification'],
           resources: []
         }
       ]
@@ -426,16 +441,31 @@ export const COURSE_CONFIG: CourseConfig = {
           resources: []
         },
         {
-          id: 'l6',
-          title: 'Lab 06 — The Context-Aware Coder',
+          id: 'd6',
+          title: 'Demo 06 — The AI-Assisted Change',
           order: 4,
-          duration: '60 min',
+          duration: '15 min',
+          difficulty: 'ADVANCED',
+          icon: '🎮',
+          tags: ['Demo', 'Interactive'],
+          type: 'DEMO',
+          prerequisites: ['c18'],
+          path: '/academy/modules/m06-agentic-swe/demo-ai-coder',
+          objectives: ['Experimentar el impacto del perímetro de contexto en la generación de código'],
+          resources: []
+        },
+        {
+          id: 'l6',
+          title: 'Lab 06 — Design an Agentic SWE Protocol',
+          order: 5,
+          duration: '90 min',
           difficulty: 'ADVANCED',
           icon: '🔬',
-          tags: ['Lab', 'Practice'],
-          prerequisites: ['c18'],
-          path: '/labs/ai-coder',
-          objectives: ['Experimentar el impacto del contexto en la generación de código'],
+          tags: ['Lab', 'Real Engineering'],
+          type: 'LAB',
+          prerequisites: ['d6'],
+          path: '/academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol',
+          objectives: ['Diseñar un protocolo de equipo para ingeniería de software asistida por IA'],
           resources: []
         }
       ]

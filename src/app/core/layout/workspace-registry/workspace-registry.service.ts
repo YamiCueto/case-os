@@ -330,6 +330,20 @@ export class WorkspaceRegistryService {
                   icon: 'terminal',
                   depth: 1,
                 },
+                {
+                  id: 'lab-05',
+                  label: 'Lab 05 — Design an Agentic Workflow',
+                  path: '/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow',
+                  icon: 'terminal',
+                  depth: 1,
+                },
+                {
+                  id: 'lab-06',
+                  label: 'Lab 06 — Design an Agentic SWE Protocol',
+                  path: '/academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol',
+                  icon: 'terminal',
+                  depth: 1,
+                },
               ],
             },
           ]
@@ -341,6 +355,8 @@ export class WorkspaceRegistryService {
         const isLab02 = url.startsWith('/academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract');
         const isLab03 = url.startsWith('/academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context');
         const isLab04 = url.startsWith('/academy/modules/m04-retrieval-rag/lab-04-build-retrieval-strategy');
+        const isLab05 = url.startsWith('/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow');
+        const isLab06 = url.startsWith('/academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol');
 
         const crumbs: BreadcrumbItem[] = [
           { label: 'Labs', path: '/labs', icon: 'science' }
@@ -354,6 +370,10 @@ export class WorkspaceRegistryService {
           crumbs.push({ label: 'Lab 03 — Build the Minimum Useful Context', path: url });
         } else if (isLab04) {
           crumbs.push({ label: 'Lab 04 — Build a Retrieval Strategy', path: url });
+        } else if (isLab05) {
+          crumbs.push({ label: 'Lab 05 — Design an Agentic Workflow', path: url });
+        } else if (isLab06) {
+          crumbs.push({ label: 'Lab 06 — Design an Agentic SWE Protocol', path: url });
         }
         return crumbs;
       }

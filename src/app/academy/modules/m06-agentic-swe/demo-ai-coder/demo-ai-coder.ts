@@ -1,26 +1,27 @@
-import { Component, signal, computed } from '@angular/core';
+﻿import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 interface FileNode {
   name: string;
   selected: boolean;
+  type: 'component' | 'service' | 'utils' | 'config' | 'doc';
 }
 
 @Component({
-  selector: 'app-ai-coder',
+  selector: 'app-demo-ai-coder',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './ai-coder.html',
-  styleUrls: ['./ai-coder.css']
+  templateUrl: './demo-ai-coder.html',
+  styleUrls: ['../../../../shared-presentation.css']
 })
-export class AiCoderLab {
+export class DemoAiCoder {
   files = signal<FileNode[]>([
-    { name: 'auth.component.ts', selected: false },
-    { name: 'auth.service.ts', selected: false },
-    { name: 'utils.ts', selected: false },
-    { name: 'package.json', selected: false },
-    { name: 'README.md', selected: false }
+    { name: 'auth.component.ts', selected: false, type: 'component' },
+    { name: 'auth.service.ts', selected: false, type: 'service' },
+    { name: 'utils.ts', selected: false, type: 'utils' },
+    { name: 'package.json', selected: false, type: 'config' },
+    { name: 'README.md', selected: false, type: 'doc' }
   ]);
 
   status = signal<'SELECTING' | 'GENERATING' | 'VERIFYING' | 'REVIEWING' | 'SUCCESS'>('SELECTING');
@@ -51,23 +52,23 @@ export class AiCoderLab {
     setTimeout(() => {
       if (selectedFiles.length === 1 && selectedFiles.includes('auth.component.ts')) {
         this.contextType.set('INSUFFICIENT');
-        this.patchMessage.set('Agregada validación de UI en auth.component.ts para mostrar mensaje genérico si falla el login. (El agente no pudo ver auth.service.ts, por lo que no arregló la llamada HTTP real).');
+        this.patchMessage.set('Result: Missing dependency / Incorrect assumption.\n\nAI modified auth.component.ts but assumed a non-existent HTTP method in auth.service.ts because it was excluded from context. The component will compile but fail at runtime.');
       } else if (selectedFiles.length === 2 && selectedFiles.includes('auth.component.ts') && selectedFiles.includes('auth.service.ts')) {
         this.contextType.set('CORRECT');
-        this.patchMessage.set('Agregado encodeURIComponent(email) en auth.service.ts antes de hacer el POST. Actualizado auth.component.ts para manejar el nuevo formato.');
+        this.patchMessage.set('Result: Relevant dependencies / Scoped change.\n\nAI successfully updated auth.service.ts to handle the new format, and properly wired the response in auth.component.ts. Diff is verifiable and clean.');
       } else if (selectedFiles.length > 2) {
         this.contextType.set('EXCESSIVE');
-        this.patchMessage.set('Refactorización masiva de Utils, AuthComponent y AuthService. Agregadas dependencias sugeridas basadas en package.json. (El agente se distrajo con información irrelevante y propuso cambios drásticos).');
+        this.patchMessage.set('Result: Scope expansion / Unrequested refactoring.\n\nAI updated auth logic, but also hallucinated a massive refactor of utils.ts and attempted to bump dependencies in package.json. Risk of breaking existing tests is high.');
       } else {
         this.contextType.set('INSUFFICIENT');
-        this.patchMessage.set('El agente alucinó una librería externa para manejar la autenticación porque no tenía el contexto de cómo lo hace actualmente tu app.');
+        this.patchMessage.set('Result: Hallucinated implementation.\n\nAI invented a completely new authentication library because it lacked the actual component/service context.');
       }
       this.status.set('VERIFYING');
     }, 1500);
   }
 
   runTests() {
-    if (this.contextType() === 'INSUFFICIENT') {
+    if (this.contextType() === 'INSUFFICIENT' || this.contextType() === 'EXCESSIVE') {
       this.testResult.set('FAIL');
       setTimeout(() => {
         this.status.set('SELECTING');

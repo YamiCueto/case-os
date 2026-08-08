@@ -1,0 +1,141 @@
+﻿<div class="presentation-container pb-32">
+  <div class="back-to-menu">
+    <a routerLink="/academy/modules/m05-ai-agents/lesson-03-agent-loop" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a la Leccion
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 1000px; margin: 0 auto; padding: 32px 40px;">
+    <div class="slide-title">
+      <span class="workshop-badge">
+        <span class="icon">◈</span>
+        Demo 05 · AI Agents
+      </span>
+      <h1>The Agent Loop</h1>
+      <p class="subtitle">Simulación del Bucle: Intent &rarr; Action &rarr; Observation &rarr; State Update</p>
+    </div>
+
+    <!-- Alert / Definition -->
+    <div style="background:#0A0A0A; border:1px solid #1F1F1F; border-left:3px solid #6366f1; border-radius:6px; padding:20px 24px; margin-bottom:2rem;">
+      <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin:0 0 10px 0;">Conceptual Simulation</p>
+      <p style="font-size:14px; color:#c7c4d7; line-height:1.7; margin:0;">
+        Esta demostración <strong>no ejecuta una IA real</strong>. Es una representación técnica del flujo de decisión observable (State Update) que ocurre en un agente autónomo frente a herramientas externas.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem;">
+      
+      <!-- Left: Agent Trace (Terminal) -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#cbd5e1; text-transform:uppercase; margin:0;">Agent Execution Trace</h3>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; padding:4px 8px; border-radius:4px;"
+            [ngClass]="{
+              'bg-blue-900 text-blue-300': status() === 'RUNNING',
+              'bg-green-900 text-green-300': status() === 'SUCCESS',
+              'bg-red-900 text-red-300': status() === 'FAILED'
+            }">
+            STATUS: {{ status() }}
+          </span>
+        </div>
+
+        <div style="background:#050505; border:1px solid #1f293d; border-radius:8px; padding:24px; min-height:400px; display:flex; flex-direction:column; gap:20px;">
+          
+          <div *ngFor="let iteration of history()" style="padding-bottom:16px; border-bottom:1px solid #1F1F1F;">
+            <div style="display:flex; gap:12px; margin-bottom:12px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#64748b; font-weight:700;">[ITERATION {{iteration.step}}/{{maxIterations}}]</span>
+            </div>
+            
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              
+              <!-- Intent / State Decision -->
+              <div style="display:flex; gap:12px; align-items:flex-start;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#818cf8; width:100px; flex-shrink:0;">&gt; INTENT:</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#e4e1ed;">{{ iteration.intent }}</span>
+              </div>
+
+              <!-- Action -->
+              <div *ngIf="iteration.actionTaken" style="display:flex; gap:12px; align-items:flex-start;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#fbbf24; width:100px; flex-shrink:0;">&gt; ACTION:</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#fbbf24; background:rgba(251, 191, 36, 0.1); padding:2px 6px; border-radius:4px;">{{ iteration.actionTaken }}</span>
+              </div>
+
+              <!-- Observation -->
+              <div *ngIf="iteration.observation" style="display:flex; gap:12px; align-items:flex-start;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#22c55e; width:100px; flex-shrink:0;">&gt; OBSERVATION:</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#86efac; border-left:2px solid #22c55e; padding-left:10px;">{{ iteration.observation }}</span>
+              </div>
+
+              <!-- State Update -->
+              <div *ngIf="iteration.stateUpdate" style="display:flex; gap:12px; align-items:flex-start;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#c084fc; width:100px; flex-shrink:0;">&gt; STATE UPDATE:</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#d8b4fe; font-style:italic;">{{ iteration.stateUpdate }}</span>
+              </div>
+
+            </div>
+          </div>
+          
+          <div *ngIf="status() === 'RUNNING'" style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#64748b; animation: pulse 2s infinite;">Waiting for tool execution...</div>
+          <div *ngIf="status() !== 'RUNNING'" style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#64748b;">Execution Terminated.</div>
+        </div>
+      </div>
+
+      <!-- Right: Tool Interface Simulator -->
+      <div style="display:flex; flex-direction:column; gap:20px;">
+        <h3 style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#cbd5e1; text-transform:uppercase; margin:0;">Available Tools</h3>
+        
+        <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:20px; display:flex; flex-direction:column; gap:16px;">
+          <p style="font-size:12px; color:#94a3b8; margin:0;">Simula la decisión del agente inyectando resultados de herramientas en el contexto.</p>
+
+          <button (click)="executeSearch()" [disabled]="status() !== 'RUNNING'" class="control-btn" style="width:100%; justify-content:flex-start; padding:12px; border-color:#38bdf8;">
+            <span style="color:#38bdf8; font-size:16px; margin-right:12px;" class="material-symbols-outlined">search</span>
+            <div>
+              <div style="color:#e0f2fe; font-size:12px; font-weight:600; text-align:left;">searchKnowledge()</div>
+              <div style="color:#7dd3fc; font-size:10px; text-align:left; font-family:'JetBrains Mono',monospace;">(query: string)</div>
+            </div>
+          </button>
+
+          <button (click)="executeMath()" [disabled]="status() !== 'RUNNING'" class="control-btn" style="width:100%; justify-content:flex-start; padding:12px; border-color:#fbbf24;">
+            <span style="color:#fbbf24; font-size:16px; margin-right:12px;" class="material-symbols-outlined">calculate</span>
+            <div>
+              <div style="color:#fef3c7; font-size:12px; font-weight:600; text-align:left;">calculateMath()</div>
+              <div style="color:#fcd34d; font-size:10px; text-align:left; font-family:'JetBrains Mono',monospace;">(expression: string)</div>
+            </div>
+          </button>
+
+          <button (click)="executeEmail()" [disabled]="status() !== 'RUNNING'" class="control-btn" style="width:100%; justify-content:flex-start; padding:12px; border-color:#22c55e;">
+            <span style="color:#22c55e; font-size:16px; margin-right:12px;" class="material-symbols-outlined">mail</span>
+            <div>
+              <div style="color:#dcfce7; font-size:12px; font-weight:600; text-align:left;">sendEmail()</div>
+              <div style="color:#86efac; font-size:10px; text-align:left; font-family:'JetBrains Mono',monospace;">(to: string, body: string)</div>
+            </div>
+          </button>
+
+          <div style="border-top:1px solid #1e293b; margin-top:8px; padding-top:16px;">
+            <button (click)="finishLoop()" [disabled]="status() !== 'RUNNING'" class="control-btn primary" style="width:100%; justify-content:center;">
+              Return Final Answer
+            </button>
+          </div>
+          
+          <button *ngIf="status() !== 'RUNNING'" (click)="resetLab()" class="control-btn" style="width:100%; justify-content:center; margin-top:8px; border-color:#1e293b; color:#94a3b8;">
+            Reset Simulation
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Takeaway Box -->
+    <div class="warning-box" style="border-left-color:#6366f1; background:#0d0d1a; margin-top:2rem;">
+      <h4 style="color:#818cf8; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem;">◈ Takeaway</h4>
+      <p style="color:#c7c4d7; font-size:14px; line-height:1.7; margin-bottom:1rem;">
+        Un Agente no es un modelo mágico. Es un <strong>bucle determinista de evaluación de estado</strong>. El LLM se invoca repetidamente, recibe las <span style="color:#86efac;">observaciones</span> previas y genera la <span style="color:#fbbf24;">siguiente acción</span> (Tool Call) o decide terminar. El principal riesgo son los bucles infinitos y las alucinaciones de argumentos.
+      </p>
+      <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+        <a routerLink="/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow" class="control-btn" style="border-color:#6366f1; color:#818cf8; font-size:11px;">Ir al Lab 05 →</a>
+      </div>
+    </div>
+
+  </div>
+</div>

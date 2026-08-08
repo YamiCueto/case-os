@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CASE Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "text-muted": "#C1C6D7",
+                    "lang-ts": "#3178C6",
+                    "on-primary-container": "#00285c",
+                    "surface-bright": "#3a3939",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary": "#2f3131",
+                    "surface-tint": "#adc6ff",
+                    "primary-container": "#4b8eff",
+                    "surface-container": "#201f1f",
+                    "tertiary-fixed-dim": "#c1c6d7",
+                    "lang-go": "#00ADD8",
+                    "surface-container-highest": "#353534",
+                    "surface-container-lowest": "#0e0e0e",
+                    "inverse-primary": "#005bc1",
+                    "surface-dim": "#131313",
+                    "surface-variant": "#353534",
+                    "on-background": "#e5e2e1",
+                    "secondary-fixed": "#e2e2e2",
+                    "on-surface-variant": "#c1c6d7",
+                    "on-primary": "#002e69",
+                    "tertiary-fixed": "#dde2f4",
+                    "surface-lowest": "#0E0E0E",
+                    "secondary-container": "#454747",
+                    "on-tertiary-container": "#242a37",
+                    "outline": "#8b90a0",
+                    "primary": "#adc6ff",
+                    "text-on-surface": "#E5E2E1",
+                    "primary-fixed": "#d8e2ff",
+                    "secondary": "#c6c6c7",
+                    "tertiary": "#c1c6d7",
+                    "outline-variant": "#414755",
+                    "surface-container-low": "#1c1b1b",
+                    "on-primary-fixed": "#001a41",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-surface": "#e5e2e1",
+                    "surface": "#131313",
+                    "background": "#131313",
+                    "error-container": "#93000a",
+                    "on-tertiary": "#2a303e",
+                    "on-tertiary-fixed-variant": "#414755",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed": "#151c28",
+                    "border-muted": "#1F1F1F",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "error": "#ffb4ab",
+                    "tertiary-container": "#8b91a1",
+                    "on-secondary-container": "#b4b5b5",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "on-primary-fixed-variant": "#004493",
+                    "inverse-surface": "#e5e2e1",
+                    "inverse-on-surface": "#313030",
+                    "surface-container-high": "#2a2a2a",
+                    "on-secondary-fixed-variant": "#454747"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "0.25rem",
+                    "gutter": "12px",
+                    "margin": "16px",
+                    "xl": "2rem",
+                    "lg": "1.5rem",
+                    "md": "1rem",
+                    "sm": "0.5rem"
+            },
+            "fontFamily": {
+                    "label-caps": [
+                            "Inter"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "label-mono": [
+                            "JetBrains Mono"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "display": [
+                            "Inter"
+                    ],
+                    "code-sm": [
+                            "JetBrains Mono"
+                    ],
+                    "body-base": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "label-caps": [
+                            "11px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-sm": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-mono": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "display": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "code-sm": [
+                            "10px",
+                            {
+                                    "lineHeight": "14px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-base": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #E5E2E1;
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 8px #007AFF;
+        }
+        .text-digital-blue {
+            color: #007AFF;
+        }
+        .bg-digital-blue {
+            background-color: #007AFF;
+        }
+        .border-digital-blue {
+            border-color: #007AFF;
+        }
+        .hover-bg-digital-blue:hover {
+            background-color: #007AFF;
+        }
+        .hover-border-digital-blue:hover {
+            border-color: #007AFF;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="docked full-height left-0 w-64 border-r border-outline-variant dark:border-outline-variant flat no shadows fixed inset-y-0 left-0 flex flex-col z-40 bg-surface-container-lowest dark:bg-surface-container-lowest">
+<div class="flex items-center gap-3 p-4 border-b border-outline-variant">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-sm">school</span>
+</div>
+<div>
+<h1 class="font-label-caps text-label-caps text-on-surface">CASE Academy</h1>
+<p class="font-code-sm text-code-sm text-text-muted">AI Engineering Workspace</p>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-4">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors font-body-sm text-body-sm tracking-tight" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span>Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container dark:bg-secondary-container text-primary dark:text-primary-fixed-dim border-l-2 border-primary font-body-sm text-body-sm tracking-tight opacity-90 scale-95 duration-100" href="#">
+<span class="material-symbols-outlined text-[18px]">school</span>
+<span>Academy</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors font-body-sm text-body-sm tracking-tight" href="#">
+<span class="material-symbols-outlined text-[18px]">local_library</span>
+<span>Library</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors font-body-sm text-body-sm tracking-tight" href="#">
+<span class="material-symbols-outlined text-[18px]">science</span>
+<span>Labs</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors font-body-sm text-body-sm tracking-tight" href="#">
+<span class="material-symbols-outlined text-[18px]">architecture</span>
+<span>Framework</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors font-body-sm text-body-sm tracking-tight" href="#">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>
+<span>Agents</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors font-body-sm text-body-sm tracking-tight" href="#">
+<span class="material-symbols-outlined text-[18px]">account_tree</span>
+<span>Projects</span>
+</a>
+</li>
+</ul>
+<div class="mt-8 px-4">
+<div class="text-[10px] font-label-mono text-text-muted mb-2 uppercase tracking-wider">Explorer</div>
+<div class="space-y-4">
+<!-- Module 01 -->
+<div>
+<div class="flex items-center gap-2 text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[14px]">folder</span>
+                            01. AI Foundations
+                        </div>
+<div class="pl-6 mt-1 space-y-1 border-l border-[#1F1F1F] ml-[7px]">
+<div class="flex items-center gap-2 text-text-muted font-body-sm text-body-sm hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[12px]">description</span>
+                                Lesson 01 — De Código a Pro...
+                            </div>
+<div class="flex items-center gap-2 text-text-muted font-body-sm text-body-sm hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[12px]">description</span>
+                                Lesson 02 — Anatomía de la I...
+                            </div>
+<div class="flex items-center gap-2 text-text-muted font-body-sm text-body-sm hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[12px]">play_circle</span>
+                                Demo 01 — Token Playground
+                            </div>
+<div class="flex items-center gap-2 text-text-muted font-body-sm text-body-sm hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[12px]">code</span>
+                                Lab 01 — Analyze a Legacy R...
+                            </div>
+</div>
+</div>
+<!-- Module 02 -->
+<div>
+<div class="flex items-center gap-2 text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[14px]">folder</span>
+                            02. Prompt Engineering
+                        </div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-outline-variant">
+<button class="w-full bg-digital-blue text-white rounded-[2px] h-8 flex items-center justify-center font-body-sm text-body-sm hover:opacity-90 transition-opacity">
+                New Project
+            </button>
+<div class="mt-4 flex justify-between">
+<a class="text-text-muted hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</a>
+<a class="text-text-muted hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 ml-64 flex flex-col h-full bg-[#050505]">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-4 h-12 sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md border-b border-outline-variant dark:border-outline-variant flat no shadows focus-within:ring-1 focus-within:ring-primary">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-text-muted font-body-sm text-body-sm">
+<span class="hover:text-on-surface cursor-pointer">Home</span>
+<span>/</span>
+<span class="text-on-surface">Academy</span>
+</div>
+</div>
+<div class="flex-1 max-w-md mx-4">
+<div class="relative flex items-center w-full h-8 bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] px-3 focus-within:border-digital-blue transition-colors">
+<span class="material-symbols-outlined text-text-muted text-[16px] mr-2">search</span>
+<input class="bg-transparent border-none outline-none text-body-sm text-on-surface w-full placeholder-text-muted h-full py-0" placeholder="Search..." type="text"/>
+<span class="font-label-mono text-[10px] text-text-muted bg-[#201F1F] px-1.5 py-0.5 rounded-[2px] border border-[#1F1F1F]">Ctrl K</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<span class="font-label-mono text-[10px] text-text-muted bg-[#201F1F] px-1.5 py-0.5 rounded-[2px] border border-[#1F1F1F]">CURRICULUM v1</span>
+<span class="font-label-mono text-[10px] text-text-muted bg-[#201F1F] px-1.5 py-0.5 rounded-[2px] border border-[#1F1F1F]">9 MODULES</span>
+</div>
+<button class="text-text-muted hover:text-on-surface">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="text-text-muted hover:text-on-surface">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+</button>
+<img alt="User Profile" class="w-7 h-7 rounded-full border border-[#1F1F1F] object-cover" data-alt="A small, circular avatar image of a professional software engineer, dark moody lighting, subtle blue rim light, high tech aesthetic, minimal background." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<div class="flex-1 overflow-y-auto p-8">
+<div class="max-w-6xl mx-auto space-y-8">
+<!-- Header / Hero -->
+<div class="flex justify-between items-end">
+<div>
+<h1 class="font-display text-display text-on-surface mb-2">CASE Academy</h1>
+<p class="font-body-base text-body-base text-text-muted">AI Engineering education for Software Engineers.</p>
+</div>
+<!-- Progress Overview Widget -->
+<div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-4 min-w-[280px]">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-mono text-label-mono text-text-muted uppercase">Your Progress</span>
+<span class="font-label-mono text-[10px] text-digital-blue bg-[#007AFF]/10 px-1.5 py-0.5 rounded-[2px]">0/9 modules</span>
+</div>
+<div class="flex items-center gap-2 mb-1">
+<div class="flex-1 h-1 bg-[#1F1F1F] rounded-full overflow-hidden">
+<div class="w-0 h-full bg-digital-blue"></div>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface">0%</span>
+</div>
+<div class="flex justify-between font-code-sm text-[10px] text-text-muted mt-2">
+<span>FOUNDATIONS</span>
+<span>ARCHITECTURE</span>
+</div>
+</div>
+</div>
+<!-- Continue Learning Hero -->
+<div class="bg-[#0A0A0A] border border-digital-blue rounded-[2px] p-6 relative overflow-hidden flex items-center justify-between">
+<div class="absolute inset-0 bg-[#007AFF]/5 pointer-events-none"></div>
+<div class="relative z-10">
+<div class="font-label-mono text-label-mono text-digital-blue uppercase mb-2">Continue Learning</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-1">Module 04 — Retrieval &amp; RAG</h2>
+<p class="font-body-sm text-body-sm text-text-muted">Lesson 03 — Evaluation</p>
+</div>
+<button class="relative z-10 bg-digital-blue text-white font-body-sm text-body-sm px-4 py-2 rounded-[2px] flex items-center gap-2 hover:opacity-90 transition-opacity">
+                        Resume Session
+                        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<!-- Curriculum Roadmap & Grid -->
+<div>
+<h3 class="font-label-mono text-label-mono text-text-muted uppercase mb-4">Programa de Formación</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Module 01 -->
+<div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-5 flex flex-col h-full card-glow transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-mono text-[24px] text-[#201F1F] font-bold">01</span>
+<span class="font-label-mono text-[10px] text-on-surface bg-[#1F1F1F] px-2 py-1 rounded-[2px] border border-[#353534]">ACTIVO</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 font-semibold">AI Foundations</h4>
+<p class="font-body-sm text-body-sm text-text-muted mb-6 flex-1">Fundamentos de Inteligencia Artificial para Ingeniería de Software</p>
+<div class="mt-auto flex justify-between items-center border-t border-[#1F1F1F] pt-4">
+<div class="font-code-sm text-code-sm text-text-muted flex gap-2">
+<span>4 lessons</span>
+<span>•</span>
+<span>1 demo</span>
+<span>•</span>
+<span>1 lab</span>
+</div>
+<button class="font-body-sm text-body-sm text-digital-blue flex items-center gap-1 hover:text-white transition-colors group-hover:translate-x-1 duration-200">
+                                    Entrar
+                                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Module 02 -->
+<div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-5 flex flex-col h-full card-glow transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-mono text-[24px] text-[#201F1F] font-bold">02</span>
+<span class="font-label-mono text-[10px] text-on-surface bg-[#1F1F1F] px-2 py-1 rounded-[2px] border border-[#353534]">ACTIVO</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 font-semibold">Prompt Engineering</h4>
+<p class="font-body-sm text-body-sm text-text-muted mb-6 flex-1">Ingeniería de instrucciones robustas y reproducibles</p>
+<div class="mt-auto flex justify-between items-center border-t border-[#1F1F1F] pt-4">
+<div class="font-code-sm text-code-sm text-text-muted flex gap-2">
+<span>4 lessons</span>
+</div>
+<button class="font-body-sm text-body-sm text-digital-blue flex items-center gap-1 hover:text-white transition-colors group-hover:translate-x-1 duration-200">
+                                    Entrar
+                                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Module 03 -->
+<div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-5 flex flex-col h-full card-glow transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-mono text-[24px] text-[#201F1F] font-bold">03</span>
+<span class="font-label-mono text-[10px] text-on-surface bg-[#1F1F1F] px-2 py-1 rounded-[2px] border border-[#353534]">ACTIVO</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 font-semibold">Context Engineering</h4>
+<p class="font-body-sm text-body-sm text-text-muted mb-6 flex-1">Diseño e inyección de contexto dinámico</p>
+<div class="mt-auto flex justify-between items-center border-t border-[#1F1F1F] pt-4">
+<div class="font-code-sm text-code-sm text-text-muted flex gap-2">
+<span>4 lessons</span>
+</div>
+<button class="font-body-sm text-body-sm text-digital-blue flex items-center gap-1 hover:text-white transition-colors group-hover:translate-x-1 duration-200">
+                                    Entrar
+                                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Module 04 -->
+<div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-5 flex flex-col h-full card-glow transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-mono text-[24px] text-[#201F1F] font-bold">04</span>
+<span class="font-label-mono text-[10px] text-on-surface bg-[#1F1F1F] px-2 py-1 rounded-[2px] border border-[#353534]">ACTIVO</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 font-semibold">Retrieval &amp; RAG</h4>
+<p class="font-body-sm text-body-sm text-text-muted mb-6 flex-1">Recuperación de conocimiento y evaluación (Precision/Recall)</p>
+<div class="mt-auto flex justify-between items-center border-t border-[#1F1F1F] pt-4">
+<div class="font-code-sm text-code-sm text-text-muted flex gap-2">
+<span>4 lessons</span>
+</div>
+<button class="font-body-sm text-body-sm text-digital-blue flex items-center gap-1 hover:text-white transition-colors group-hover:translate-x-1 duration-200">
+                                    Entrar
+                                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Module 05 -->
+<div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-5 flex flex-col h-full card-glow transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-mono text-[24px] text-[#201F1F] font-bold">05</span>
+<span class="font-label-mono text-[10px] text-on-surface bg-[#1F1F1F] px-2 py-1 rounded-[2px] border border-[#353534]">ACTIVO</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 font-semibold">AI Agents</h4>
+<p class="font-body-sm text-body-sm text-text-muted mb-6 flex-1">Workflows, Tool-calling y el Agent Loop</p>
+<div class="mt-auto flex justify-between items-center border-t border-[#1F1F1F] pt-4">
+<div class="font-code-sm text-code-sm text-text-muted flex gap-2">
+<span>4 lessons</span>
+</div>
+<button class="font-body-sm text-body-sm text-digital-blue flex items-center gap-1 hover:text-white transition-colors group-hover:translate-x-1 duration-200">
+                                    Entrar
+                                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Module 06 -->
+<div class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-5 flex flex-col h-full card-glow transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-mono text-[24px] text-[#201F1F] font-bold">06</span>
+<span class="font-label-mono text-[10px] text-text-muted border border-[#1F1F1F] px-2 py-1 rounded-[2px]">PRÓXIMO</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-2 font-semibold">Agentic Software Engineering</h4>
+<p class="font-body-sm text-body-sm text-text-muted mb-6 flex-1">Cómo los agentes están transformando la programación</p>
+<div class="mt-auto flex justify-between items-center border-t border-[#1F1F1F] pt-4 opacity-50">
+<div class="font-code-sm text-code-sm text-text-muted flex gap-2">
+<span>TBA</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-text-muted">lock</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

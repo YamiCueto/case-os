@@ -91,14 +91,8 @@ export const routes: Routes = [
         path: 'academy/modules/m01-ai-foundations/demo-token-playground',
         loadComponent: () => import('./labs/token-playground/token-playground').then(m => m.TokenPlayground)
       },
-      {
-        path: 'labs/agent-loop',
-        loadComponent: () => import('./labs/agent-loop/agent-loop').then(m => m.AgentLoopLab)
-      },
-      {
-        path: 'labs/ai-coder',
-        loadComponent: () => import('./labs/ai-coder/ai-coder').then(m => m.AiCoderLab)
-      },
+
+
       {
         path: 'labs/mcp-connector',
         loadComponent: () => import('./labs/mcp-connector/mcp-connector').then(m => m.McpConnectorLab)
@@ -284,6 +278,14 @@ export const routes: Routes = [
             loadComponent: () => import('./academy/modules/m05-ai-agents/lesson-03-agent-loop/lesson-03-agent-loop').then(m => m.Lesson03AgentLoop)
           },
           {
+            path: 'academy/modules/m05-ai-agents/demo-agent-loop',
+            loadComponent: () => import('./academy/modules/m05-ai-agents/demo-agent-loop/demo-agent-loop').then(m => m.DemoAgentLoop)
+          },
+          {
+            path: 'academy/modules/m05-ai-agents/lab-05-design-agentic-workflow',
+            loadComponent: () => import('./academy/modules/m05-ai-agents/lab-05-design-agentic-workflow/lab-05-design-agentic-workflow').then(m => m.Lab05DesignAgenticWorkflow)
+          },
+          {
             path: 'academy/modules/m06-agentic-swe/lesson-01-agentic-coding',
             loadComponent: () => import('./academy/modules/m06-agentic-swe/lesson-01-agentic-coding/lesson-01-agentic-coding').then(m => m.Lesson01AgenticCoding)
           },
@@ -294,6 +296,14 @@ export const routes: Routes = [
           {
             path: 'academy/modules/m06-agentic-swe/lesson-03-repository-context',
             loadComponent: () => import('./academy/modules/m06-agentic-swe/lesson-03-repository-context/lesson-03-repository-context').then(m => m.Lesson03RepositoryContext)
+          },
+          {
+            path: 'academy/modules/m06-agentic-swe/demo-ai-coder',
+            loadComponent: () => import('./academy/modules/m06-agentic-swe/demo-ai-coder/demo-ai-coder').then(m => m.DemoAiCoder)
+          },
+          {
+            path: 'academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol',
+            loadComponent: () => import('./academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol/lab-06-agentic-swe-protocol').then(m => m.Lab06AgenticSweProtocol)
           },
           {
             path: 'academy/modules/m07-mcp/lesson-01-nxm-problem',
