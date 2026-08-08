@@ -2,27 +2,21 @@
   <div class="back-to-menu">
     <a routerLink="/academy/home" class="back-btn">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Volver a Academy
+      Anterior
     </a>
   </div>
 
-  <div class="controls">
-    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-      &larr; Anterior
-    </button>
-    <div class="slide-counter">
-      {{ currentSlide() + 1 }} / {{ totalSlides }}
-    </div>
-    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-      Siguiente &rarr;
-    </button>
-  </div>
-
   <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
     <!-- Slide 1: Intro -->
     <div class="slide" [class.active]="currentSlide() === 0">
       <div class="slide-title">
-        <span class="workshop-badge">Módulo 02: Prompt Engineering</span>
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Reasoning Patterns</h1>
         <p class="subtitle">Estructurando el pensamiento del modelo</p>
       </div>
@@ -31,16 +25,16 @@
         <h2>Structured Problem Solving</h2>
         <p>Un LLM predice el siguiente token basándose en el contexto previo. Si le pides una respuesta compleja directamente (Zero-Shot), debe generar la respuesta final de inmediato sin espacio para descomponer la lógica. Esto suele causar alucinaciones o respuestas superficiales.</p>
         
-        <div class="theory-grid" style="margin-top: 2rem;">
-          <div class="theory-card orange">
-            <div class="theory-icon">❌</div>
+        <div class="tech-grid" style="margin-top: 24px;">
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #f59e0b;">❌</div>
             <h3>Petición Directa (Frágil)</h3>
-            <p><strong>Input:</strong> "¿Es este código seguro? [Código de 500 líneas]"</p>
+            <p style="margin-bottom: 8px;"><strong>Input:</strong> "¿Es este código seguro? [Código de 500 líneas]"</p>
             <p><strong>Output:</strong> "Sí, parece seguro." (El modelo adivina sin desglosar el problema).</p>
           </div>
           
-          <div class="theory-card green">
-            <div class="theory-icon">✅</div>
+          <div class="tech-card active">
+            <div class="tech-icon" style="color: #10b981;">✅</div>
             <h3>Descomposición Estructurada</h3>
             <p>El flujo debe ser: <strong>Decomposition &rarr; Intermediate structure &rarr; Verification &rarr; Final answer</strong>. El alumno debe aprender a forzar al modelo a seguir pasos lógicos explícitos.</p>
           </div>
@@ -51,35 +45,31 @@
     <!-- Slide 2: Chain of Thought -->
     <div class="slide" [class.active]="currentSlide() === 1">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Chain of Thought (CoT)</h1>
         <p class="subtitle">La navaja suiza del razonamiento</p>
       </div>
 
       <div class="slide-content">
-        <p>CoT es el patrón más famoso. Consiste en instruir al modelo explícitamente a pensar paso a paso. No es magia, es obligar al modelo a <strong>generar tokens intermedios</strong> que sirvan de base para la predicción final.</p>
+        <p style="margin-bottom: 24px;">CoT es el patrón más famoso. Consiste en instruir al modelo explícitamente a pensar paso a paso. No es magia, es obligar al modelo a <strong>generar tokens intermedios</strong> que sirvan de base para la predicción final.</p>
         
-        <div class="examples-container mt-4">
-          <div class="example-card">
-            <div class="example-header">
-              <span class="accordion-icon">📝</span>
-              <h3>Patrón: Zero-Shot CoT</h3>
-            </div>
-            <div class="example-content">
-              <div class="good-prompt">
-                <div class="prompt-text">
-Analiza la siguiente vulnerabilidad en el código.
+        <div class="template-container" style="border-radius: 8px; border: 1px solid #1F1F1F;">
+          <div class="template-header" style="background: #1A1A1A; padding: 12px 24px; color: #e4e1ed;">
+            <h3 style="font-size: 14px; margin: 0; font-family: 'JetBrains Mono', monospace; color: #6366f1;">// Patrón: Zero-Shot CoT</h3>
+          </div>
+          <div style="padding: 24px; background: #0A0A0A;">
+            <div class="prompt-text">Analiza la siguiente vulnerabilidad en el código.
 <strong>Antes de dar un veredicto, piensa paso a paso:</strong>
 1. Identifica el flujo de datos de entrada.
 2. Identifica si hay sanitización.
 3. Evalúa el impacto potencial.
-Finalmente, genera tu reporte.
-                </div>
-              </div>
-            </div>
+Finalmente, genera tu reporte.</div>
           </div>
         </div>
         
-        <div class="warning-box" style="margin-top: 2rem;">
+        <div class="warning-box">
           <strong>Aviso de Ingeniería:</strong> CoT consume más tokens (más costo y latencia). No uses CoT para extraer un Regex o formatear un JSON simple. <strong>Usa CoT solo cuando el problema requiere evaluación, comparación o síntesis lógica.</strong>
         </div>
       </div>
@@ -88,51 +78,66 @@ Finalmente, genera tu reporte.
     <!-- Slide 3: Descomposición -->
     <div class="slide" [class.active]="currentSlide() === 2">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Descomposición de Problemas</h1>
         <p class="subtitle">Divide y vencerás</p>
       </div>
 
       <div class="slide-content">
-        <p>A veces, Chain of Thought no es suficiente porque la tarea es demasiado amplia para una sola inferencia. Necesitas <strong>Structured Problem Solving</strong> (Least-to-Most prompting).</p>
+        <p style="margin-bottom: 24px;">A veces, Chain of Thought no es suficiente porque la tarea es demasiado amplia para una sola inferencia. Necesitas <strong>Structured Problem Solving</strong> (Least-to-Most prompting).</p>
         
-        <div class="theory-card blue mt-4">
-          <div class="theory-icon">🧩</div>
+        <div class="tech-card active" style="margin-bottom: 24px;">
+          <div class="tech-icon" style="color: #6366f1;">🧩</div>
           <h3>Patrón: Descomposición Explícita</h3>
-          <p>En lugar de pedir al LLM que resuelva el problema de una, le pides que genere un <strong>plan de acción</strong>. Luego, usas código (tu aplicación) para ejecutar cada paso del plan iterativamente, o le pides al LLM que resuelva sub-paso por sub-paso.</p>
-          <div class="good-prompt mt-2">
-            <div class="prompt-text">
-Tarea: Migrar este módulo Angular 1.x a Angular 17.
-Primero, lista los pasos exactos que tomarías (componentes, servicios, dependencias). No escribas código aún, solo el plan.
-            </div>
-          </div>
+          <p>En lugar de pedir al LLM que resuelva el problema de una vez, le pides que genere un <strong>plan de acción</strong>. Luego, usas código para ejecutar cada paso iterativamente.</p>
+          <div class="prompt-text" style="margin-top: 16px;">Tarea: Migrar este módulo Angular 1.x a Angular 17.
+Primero, lista los pasos exactos que tomarías (componentes, servicios, dependencias). No escribas código aún, solo el plan.</div>
         </div>
       </div>
     </div>
 
-    <!-- Slide 4: Next Steps -->
+    <!-- Slide 4: Conclusion -->
     <div class="slide" [class.active]="currentSlide() === 3">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Conclusión</h1>
         <p class="subtitle">Cuándo pensar, cuándo actuar</p>
       </div>
 
       <div class="slide-content">
-        <div class="theory-card green">
-          <div class="theory-icon">⚖️</div>
-          <h3>Regla de Selección de Patrón:</h3>
-          <ul>
-            <li><strong>Tarea de Extracción / Transformación:</strong> No uses CoT. Ve directo (Zero/Few Shot).</li>
-            <li><strong>Tarea de Lógica / Análisis de Código:</strong> Usa Chain of Thought (pensar antes de actuar).</li>
+        <div class="tech-card" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #10b981;">⚖️</div>
+          <h3>Regla de Selección de Patrón</h3>
+          <ul class="tech-list">
+            <li><strong>Extracción / Transformación:</strong> No uses CoT. Ve directo (Zero/Few Shot).</li>
+            <li><strong>Lógica / Análisis de Código:</strong> Usa Chain of Thought (pensar antes de actuar).</li>
             <li><strong>Tarea Compleja / Migraciones:</strong> Usa Descomposición (Least-to-Most).</li>
           </ul>
         </div>
         
-        <div style="margin-top: 3rem; text-align: center;">
-          <a routerLink="/academy/modules/m02-prompt-engineering/lesson-03-structured-outputs" class="control-btn" style="background: #4f46e5; color: white;">
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m02-prompt-engineering/lesson-03-structured-outputs" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
             Siguiente Lección: Structured Outputs &rarr;
           </a>
         </div>
       </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
     </div>
 
   </div>

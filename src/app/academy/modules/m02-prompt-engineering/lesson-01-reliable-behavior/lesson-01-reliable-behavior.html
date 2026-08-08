@@ -2,42 +2,36 @@
   <div class="back-to-menu">
     <a routerLink="/academy/home" class="back-btn">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Volver a Academy
+      Anterior
     </a>
   </div>
 
-  <div class="controls">
-    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-      &larr; Anterior
-    </button>
-    <div class="slide-counter">
-      {{ currentSlide() + 1 }} / {{ totalSlides }}
-    </div>
-    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-      Siguiente &rarr;
-    </button>
-  </div>
-
   <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
     <!-- Slide 1: Intro -->
     <div class="slide" [class.active]="currentSlide() === 0">
       <div class="slide-title">
-        <span class="workshop-badge">Módulo 02: Prompt Engineering</span>
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Reliable Behavior</h1>
         <p class="subtitle">Ingeniería para el control, no magia para el determinismo</p>
       </div>
 
       <div class="slide-content">
         <h2>El mito del "Prompt Perfecto"</h2>
-        <div class="theory-grid">
-          <div class="theory-card orange">
-            <div class="theory-icon">❌</div>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #f59e0b;">❌</div>
             <h3>Determinismo Absoluto</h3>
-            <p>Pensar que si encuentras las "palabras mágicas", el LLM se convertirá en una función matemática determinista. <strong>Falso.</strong> Es un motor estadístico; siempre habrá varianza.</p>
+            <p>Pensar que si encuentras las "palabras mágicas", el LLM se convertirá en una función matemática determinista. <strong style="color: #f59e0b;">Falso.</strong> Es un motor estadístico; siempre habrá varianza.</p>
           </div>
           
-          <div class="theory-card green">
-            <div class="theory-icon">✅</div>
+          <div class="tech-card active">
+            <div class="tech-icon" style="color: #10b981;">✅</div>
             <h3>Comportamiento Reproducible</h3>
             <p>Aceptar la variabilidad y diseñar <strong>restricciones (constraints)</strong> que acorralen al modelo para que cualquier variación semántica caiga dentro de tu caso de uso aceptable.</p>
           </div>
@@ -51,47 +45,38 @@
     <!-- Slide 2: Zero-Shot vs Few-Shot -->
     <div class="slide" [class.active]="currentSlide() === 1">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Zero-Shot vs Few-Shot</h1>
         <p class="subtitle">Mostrando en lugar de explicando</p>
       </div>
 
       <div class="slide-content">
-        <div class="examples-container">
-          <div class="example-card">
-            <div class="example-header">
-              <span class="accordion-icon">1️⃣</span>
-              <h3>Zero-Shot Prompting</h3>
+        <div class="tech-grid">
+          <div class="tech-card" style="padding-bottom: 24px;">
+            <div class="tech-meta">Básico</div>
+            <h3>Zero-Shot Prompting</h3>
+            <p style="margin-bottom: 16px;">Pedirle algo al modelo sin ejemplos. Funciona bien para tareas universales, pero fracasa cuando necesitas formatos estrictos.</p>
+            <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #ef4444; padding: 16px; border-radius: 4px;">
+              <h4 style="color: #ef4444; font-family: 'JetBrains Mono', monospace; font-size: 12px; margin: 0 0 8px 0; text-transform: uppercase;">Ejemplo Frágil:</h4>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c7c4d7;">Extrae las entidades de este texto y devuélvelas en formato JSON.</div>
             </div>
-            <div class="example-content">
-              <p>Pedirle algo al modelo sin ejemplos. Funciona bien para tareas universales, pero fracasa espectacularmente cuando necesitas formatos estrictos o lenguajes de dominio específicos.</p>
-              <div class="bad-prompt">
-                <h4>Ejemplo Zero-Shot (Frágil):</h4>
-                <div class="prompt-text">Extrae las entidades de este texto y devuélvelas en formato JSON.</div>
-                <p>El LLM puede responder: <em>"¡Claro! Aquí tienes el JSON: {{ '{' }} ... {{ '}' }}"</em> (rompiendo tu parser de código que esperaba SOLO el JSON).</p>
-              </div>
-            </div>
+            <p style="font-size: 12px; color: #908fa0; margin-top: 16px; margin-bottom: 0;">El LLM puede responder: <em>"¡Claro! Aquí tienes: {{ '{' }}...{{ '}' }}"</em> rompiendo tu parser.</p>
           </div>
 
-          <div class="example-card">
-            <div class="example-header">
-              <span class="accordion-icon">3️⃣</span>
-              <h3>Few-Shot Prompting</h3>
-            </div>
-            <div class="example-content">
-              <p>Dar ejemplos del comportamiento deseado <strong>dentro del prompt</strong>. Es la técnica más poderosa para "alinear" temporalmente los pesos del modelo hacia tu tarea.</p>
-              <div class="good-prompt">
-                <h4>Ejemplo Few-Shot (Robusto):</h4>
-                <div class="prompt-text">Input: "Compré manzanas"
+          <div class="tech-card active" style="padding-bottom: 24px;">
+            <div class="tech-meta">Avanzado</div>
+            <h3>Few-Shot Prompting</h3>
+            <p style="margin-bottom: 16px;">Dar ejemplos del comportamiento deseado <strong>dentro del prompt</strong>. Alinea los pesos del modelo hacia tu tarea.</p>
+            <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #10b981; padding: 16px; border-radius: 4px;">
+              <h4 style="color: #10b981; font-family: 'JetBrains Mono', monospace; font-size: 12px; margin: 0 0 8px 0; text-transform: uppercase;">Ejemplo Robusto:</h4>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c7c4d7; white-space: pre-wrap;">Input: "Compré manzanas"
 Output: ["manzanas"]
-
-Input: "El cliente canceló la tarjeta VISA"
-Output: ["tarjeta VISA"]
-
 Input: "Se cayó el servidor AWS"
 Output:</div>
-                <p>Al ver el patrón, el modelo completará `["servidor AWS"]` sin añadir charla innecesaria.</p>
-              </div>
             </div>
+            <p style="font-size: 12px; color: #908fa0; margin-top: 16px; margin-bottom: 0;">Al ver el patrón, el modelo completará `["servidor AWS"]` sin charla.</p>
           </div>
         </div>
       </div>
@@ -100,56 +85,77 @@ Output:</div>
     <!-- Slide 3: Restricciones -->
     <div class="slide" [class.active]="currentSlide() === 2">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Negative Constraints</h1>
         <p class="subtitle">Lo que NO debe hacer es tan importante como lo que SÍ</p>
       </div>
 
       <div class="slide-content">
-        <div class="theory-card blue">
-          <div class="theory-icon">🛡️</div>
+        <div class="tech-card active" style="margin-bottom: 24px;">
+          <div class="tech-icon" style="color: #6366f1;">🛡️</div>
           <h3>Protegiendo los bordes</h3>
-          <p>Los LLMs sufren de complacencia (sycophancy). Tienden a querer ayudar demasiado o justificar sus respuestas. Para un flujo de ingeniería automatizado, necesitamos cortar eso de raíz.</p>
+          <p>Los LLMs sufren de complacencia (sycophancy). Tienden a querer justificar sus respuestas. Para un flujo automatizado, necesitamos cortar eso.</p>
           
-          <ul style="margin-top: 1.5rem; list-style: none; padding: 0;">
-            <li style="margin-bottom: 1rem; padding: 1rem; background: white; border-left: 4px solid #ef4444; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-              <strong>NO USAR:</strong> "Intenta no incluir texto antes del JSON." (El modelo lee "incluir texto" y lo toma como sugerencia).
-            </li>
-            <li style="padding: 1rem; background: white; border-left: 4px solid #22c55e; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-              <strong>SÍ USAR:</strong> "WARNING: Return ONLY valid JSON. Do not include markdown formatting, greetings, or explanations. Any text outside the JSON structure will cause a system crash."
-            </li>
-          </ul>
+          <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;">
+            <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #ef4444; padding: 16px; border-radius: 4px;">
+              <strong style="color: #ef4444; font-family: 'JetBrains Mono', monospace; font-size: 12px;">NO USAR:</strong> 
+              <span style="font-size: 14px;">"Intenta no incluir texto antes del JSON." (El modelo lee "incluir texto" y lo toma como sugerencia).</span>
+            </div>
+            <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #10b981; padding: 16px; border-radius: 4px;">
+              <strong style="color: #10b981; font-family: 'JetBrains Mono', monospace; font-size: 12px;">SÍ USAR:</strong> 
+              <span style="font-size: 14px;">"WARNING: Return ONLY valid JSON. Do not include markdown formatting. Any text outside the JSON structure will cause a system crash."</span>
+            </div>
+          </div>
         </div>
 
-        <div class="warning-box" style="margin-top: 1.5rem; background: #fffbeb; border-left-color: #f59e0b;">
-          <strong>Concepto de Ingeniería:</strong> Las "negative constraints" (como NO EXPLANATION) <strong>no garantizan</strong> que el modelo cumpla el contrato. Solo reducen la probabilidad de desviación. La garantía real se logra mediante <strong>validación externa en tu código</strong> (que veremos más adelante).
+        <div class="warning-box">
+          <strong>Concepto de Ingeniería:</strong> Las "negative constraints" (como NO EXPLANATION) <strong>no garantizan</strong> que el modelo cumpla el contrato. Solo reducen la probabilidad de desviación. La garantía se logra mediante <strong>validación externa en tu código</strong>.
         </div>
       </div>
     </div>
 
-    <!-- Slide 4: Next Steps -->
+    <!-- Slide 4: Conclusion -->
     <div class="slide" [class.active]="currentSlide() === 3">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Conclusión</h1>
         <p class="subtitle">Hacia un comportamiento de sistema</p>
       </div>
 
       <div class="slide-content">
-        <div class="theory-card green">
-          <div class="theory-icon">🎯</div>
-          <h3>Resumen de la Ingeniería:</h3>
-          <ul>
+        <div class="tech-card" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #10b981;">🎯</div>
+          <h3>Resumen de la Ingeniería</h3>
+          <ul class="tech-list">
             <li>Abandona la ilusión de convertir un modelo probabilístico en una función matemática pura.</li>
             <li><strong>Reduce la desviación estándar</strong> mediante reglas explícitas (System Prompt) y ejemplos (Few-Shot).</li>
             <li>Usa restricciones negativas estrictas ("Return ONLY...") para proteger tu código.</li>
           </ul>
         </div>
         
-        <div style="margin-top: 3rem; text-align: center;">
-          <a routerLink="/academy/modules/m02-prompt-engineering/lesson-02-reasoning-patterns" class="control-btn" style="background: #4f46e5; color: white;">
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m02-prompt-engineering/lesson-02-reasoning-patterns" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
             Siguiente Lección: Reasoning Patterns &rarr;
           </a>
         </div>
       </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
     </div>
 
   </div>

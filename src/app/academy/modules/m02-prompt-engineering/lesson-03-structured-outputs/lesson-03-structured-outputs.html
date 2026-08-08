@@ -2,27 +2,21 @@
   <div class="back-to-menu">
     <a routerLink="/academy/home" class="back-btn">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Volver a Academy
+      Anterior
     </a>
   </div>
 
-  <div class="controls">
-    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-      &larr; Anterior
-    </button>
-    <div class="slide-counter">
-      {{ currentSlide() + 1 }} / {{ totalSlides }}
-    </div>
-    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-      Siguiente &rarr;
-    </button>
-  </div>
-
   <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
     <!-- Slide 1: Intro -->
     <div class="slide" [class.active]="currentSlide() === 0">
       <div class="slide-title">
-        <span class="workshop-badge">Módulo 02: Prompt Engineering</span>
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Structured Outputs</h1>
         <p class="subtitle">Diseñando para ser consumido por software, no por humanos</p>
       </div>
@@ -31,25 +25,25 @@
         <h2>El puente entre Lenguaje Natural y Código</h2>
         <p>Los humanos leen Markdown. El software lee JSON. Si estás integrando IA en una aplicación, <strong>no puedes depender de expresiones regulares frágiles</strong> para extraer la respuesta del modelo.</p>
         
-        <div class="workflow-diagram" style="margin-top: 2rem; display: flex; align-items: center; justify-content: center; gap: 1rem; background: #f8fafc; padding: 2rem; border-radius: 12px;">
+        <div class="tech-card" style="margin-top: 32px; padding: 24px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 24px;">
           <div style="text-align: center;">
-            <div style="font-size: 2rem;">🗣️</div>
-            <div style="font-weight: bold; font-size: 0.9rem;">Natural Language</div>
+            <div style="font-size: 32px; margin-bottom: 8px;">🗣️</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c7c4d7;">Language</div>
           </div>
-          <div style="color: #94a3b8;">&rarr;</div>
+          <div style="color: #6366f1;">&rarr;</div>
           <div style="text-align: center;">
-            <div style="font-size: 2rem;">{{ '{' }} {{ '}' }}</div>
-            <div style="font-weight: bold; font-size: 0.9rem; color: #4f46e5;">Structured Output</div>
+            <div style="font-size: 32px; margin-bottom: 8px;">{{ '{' }} {{ '}' }}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6366f1;">Structured Output</div>
           </div>
-          <div style="color: #94a3b8;">&rarr;</div>
+          <div style="color: #6366f1;">&rarr;</div>
           <div style="text-align: center;">
-            <div style="font-size: 2rem;">✅</div>
-            <div style="font-weight: bold; font-size: 0.9rem; color: #22c55e;">Validation</div>
+            <div style="font-size: 32px; margin-bottom: 8px;">✅</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #10b981;">Validation</div>
           </div>
-          <div style="color: #94a3b8;">&rarr;</div>
+          <div style="color: #6366f1;">&rarr;</div>
           <div style="text-align: center;">
-            <div style="font-size: 2rem;">⚙️</div>
-            <div style="font-weight: bold; font-size: 0.9rem;">Software</div>
+            <div style="font-size: 32px; margin-bottom: 8px;">⚙️</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c7c4d7;">Software</div>
           </div>
         </div>
       </div>
@@ -58,19 +52,20 @@
     <!-- Slide 2: Schemas -->
     <div class="slide" [class.active]="currentSlide() === 1">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>JSON & Schemas</h1>
         <p class="subtitle">Forzando el formato</p>
       </div>
 
       <div class="slide-content">
-        <p>La técnica más efectiva para obtener datos estructurados es proveer un <strong>Schema Tipado</strong> (ej. TypeScript interface o JSON Schema) directamente en el prompt, y usar Few-Shot para demostrarlo.</p>
+        <p style="margin-bottom: 24px;">La técnica más efectiva para obtener datos estructurados es proveer un <strong>Schema Tipado</strong> (ej. TypeScript interface o JSON Schema) directamente en el prompt, y usar Few-Shot para demostrarlo.</p>
         
-        <div class="theory-card green mt-4">
-          <div class="theory-icon">📝</div>
+        <div class="tech-card active">
+          <div class="tech-icon" style="color: #10b981;">📝</div>
           <h3>El Prompt Estructurado Perfecto:</h3>
-          <div class="good-prompt mt-2">
-            <div class="prompt-text" style="font-family: monospace; font-size: 0.85rem;">
-Analiza el ticket de soporte y devuelve un JSON válido que cumpla estrictamente con este schema de TypeScript:
+          <div class="prompt-text" style="margin-top: 16px;">Analiza el ticket de soporte y devuelve un JSON válido que cumpla estrictamente con este schema de TypeScript:
 
 interface TicketAnalysis {{ '{' }}
   severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
@@ -79,9 +74,7 @@ interface TicketAnalysis {{ '{' }}
   summary: string;
 {{ '}' }}
 
-WARNING: Return ONLY valid JSON. No markdown backticks.
-            </div>
-          </div>
+WARNING: Return ONLY valid JSON. No markdown backticks.</div>
         </div>
       </div>
     </div>
@@ -89,57 +82,77 @@ WARNING: Return ONLY valid JSON. No markdown backticks.
     <!-- Slide 3: Fallos y Validación -->
     <div class="slide" [class.active]="currentSlide() === 2">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Manejo de Errores de Formato</h1>
         <p class="subtitle">Los modelos desobedecen. Prepárate.</p>
       </div>
 
       <div class="slide-content">
-        <div class="theory-grid">
-          <div class="theory-card orange">
-            <div class="theory-icon">🚨</div>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #ef4444;">🚨</div>
             <h3>Problemas Comunes</h3>
-            <ul>
-              <li>El modelo envuelve el JSON en ```json ... ```</li>
-              <li>Añade texto antes o después: "Aquí tienes el JSON solicitado:"</li>
+            <ul class="tech-list" style="margin-top: 16px;">
+              <li>Envuelve el JSON en ```json ... ```</li>
+              <li>Añade texto: "Aquí tienes el JSON:"</li>
               <li>Falta escapar comillas internas.</li>
-              <li>Inventa nuevas propiedades que no estaban en tu Schema.</li>
+              <li>Inventa propiedades no tipadas.</li>
             </ul>
           </div>
           
-          <div class="theory-card blue">
-            <div class="theory-icon">🛡️</div>
+          <div class="tech-card active">
+            <div class="tech-icon" style="color: #6366f1;">🛡️</div>
             <h3>Defensas de Software</h3>
-            <ul>
-              <li><strong>Pre-procesamiento:</strong> Usa un regex para buscar la primera {{ '{' }} y la última {{ '}' }} antes de hacer <code>JSON.parse()</code>.</li>
-              <li><strong>Parseable ≠ Valid:</strong> Un JSON que hace parse correctamente puede no cumplir el contrato de tu aplicación. <strong>El LLM produce una propuesta; el software decide si es válida.</strong></li>
-              <li><strong>Validación estricta:</strong> Usa librerías como Zod o Pydantic para validar la estructura parseada contra un Schema. Si falla, <strong>rechaza la respuesta</strong>.</li>
+            <ul class="tech-list" style="margin-top: 16px;">
+              <li><strong>Pre-procesamiento:</strong> Regex para extraer entre la primera {{ '{' }} y la última {{ '}' }}.</li>
+              <li><strong>Parseable ≠ Valid:</strong> El LLM produce una propuesta; el software decide si es válida.</li>
+              <li><strong>Validación estricta:</strong> Usa librerías como Zod o Pydantic. Si falla, rechaza.</li>
             </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Slide 4: Next Steps -->
+    <!-- Slide 4: Conclusion -->
     <div class="slide" [class.active]="currentSlide() === 3">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 02: Prompt Engineering
+        </div>
         <h1>Del Concepto a la Práctica</h1>
         <p class="subtitle">Es hora de construir</p>
       </div>
 
       <div class="slide-content">
-        <div class="theory-card green">
-          <div class="theory-icon">🧪</div>
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-meta">Lab 02</div>
+          <div class="tech-icon" style="color: #6366f1;">🧪</div>
           <h3>Laboratorio: Engineer the Instruction</h3>
           <p>En el siguiente laboratorio no serás un usuario de ChatGPT. Serás un ingeniero. Recibirás un trozo de código defectuoso y tu tarea será diseñar iterativamente una instrucción robusta que obligue al LLM a analizar el código y devolver el resultado en un JSON estricto.</p>
-          <p>Experimentarás de primera mano la fragilidad del LLM y cómo acorralarlo con <strong>Negative Constraints</strong> y <strong>Schemas</strong>.</p>
+          <p style="margin-top: 16px;">Experimentarás de primera mano la fragilidad del LLM y cómo acorralarlo con <strong>Negative Constraints</strong> y <strong>Schemas</strong>.</p>
         </div>
         
-        <div style="margin-top: 3rem; text-align: center;">
-          <a routerLink="/labs/engineer-instruction" class="control-btn" style="background: #a855f7; color: white; border: none; padding: 1rem 2rem; font-size: 1.2rem;">
+        <div style="text-align: center;">
+          <a routerLink="/labs/engineer-instruction" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
             🔬 Entrar al Lab 02 &rarr;
           </a>
         </div>
       </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
     </div>
 
   </div>

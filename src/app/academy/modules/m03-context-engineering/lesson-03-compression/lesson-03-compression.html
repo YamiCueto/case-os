@@ -2,27 +2,21 @@
   <div class="back-to-menu">
     <a routerLink="/academy/home" class="back-btn">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Volver a Academy
+      Anterior
     </a>
   </div>
 
-  <div class="controls">
-    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-      &larr; Anterior
-    </button>
-    <div class="slide-counter">
-      {{ currentSlide() + 1 }} / {{ totalSlides }}
-    </div>
-    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-      Siguiente &rarr;
-    </button>
-  </div>
-
   <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
     <!-- Slide 1: Intro -->
     <div class="slide" [class.active]="currentSlide() === 0">
       <div class="slide-title">
-        <span class="workshop-badge">Módulo 03: Context Engineering</span>
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 03: Context Engineering
+        </div>
         <h1>Compression & Validation</h1>
         <p class="subtitle">Comprimir no es truncar. Es destilar.</p>
       </div>
@@ -31,30 +25,30 @@
         <h2>El Presupuesto de Tokens</h2>
         <p>Todo modelo tiene una ventana máxima de tokens (ej. 128k) y un costo por token de entrada. Tratar de enviarlo todo no solo es caro, también vuelve lento al sistema. La compresión técnica busca maximizar la densidad de información.</p>
         
-        <div class="workflow-diagram" style="margin-top: 2rem; display: flex; align-items: center; justify-content: center; gap: 1rem; background: #f8fafc; padding: 2rem; border-radius: 12px;">
+        <div class="tech-card" style="margin-top: 32px; padding: 24px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 24px;">
           <div style="text-align: center;">
-            <div style="font-size: 2rem;">🗂️</div>
-            <div style="font-weight: bold; font-size: 0.9rem;">Raw Context</div>
+            <div style="font-size: 32px; margin-bottom: 8px;">🗂️</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c7c4d7;">Raw Context</div>
           </div>
-          <div style="color: #94a3b8;">&rarr;</div>
+          <div style="color: #6366f1;">&rarr;</div>
           <div style="text-align: center;">
-            <div style="font-size: 2rem;">🧲</div>
-            <div style="font-weight: bold; font-size: 0.9rem;">Select</div>
+            <div style="font-size: 32px; margin-bottom: 8px;">🧲</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c7c4d7;">Select</div>
           </div>
-          <div style="color: #94a3b8;">&rarr;</div>
+          <div style="color: #6366f1;">&rarr;</div>
           <div style="text-align: center;">
-            <div style="font-size: 2rem;">🧩</div>
-            <div style="font-weight: bold; font-size: 0.9rem;">Assemble</div>
+            <div style="font-size: 32px; margin-bottom: 8px;">🧩</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c7c4d7;">Assemble</div>
           </div>
-          <div style="color: #94a3b8;">&rarr;</div>
+          <div style="color: #6366f1;">&rarr;</div>
           <div style="text-align: center;">
-            <div style="font-size: 2rem;">🗜️</div>
-            <div style="font-weight: bold; font-size: 0.9rem; color: #4f46e5;">Compress</div>
+            <div style="font-size: 32px; margin-bottom: 8px;">🗜️</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6366f1;">Compress</div>
           </div>
-          <div style="color: #94a3b8;">&rarr;</div>
+          <div style="color: #6366f1;">&rarr;</div>
           <div style="text-align: center;">
-            <div style="font-size: 2rem;">✅</div>
-            <div style="font-weight: bold; font-size: 0.9rem; color: #22c55e;">Validate</div>
+            <div style="font-size: 32px; margin-bottom: 8px;">✅</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #10b981;">Validate</div>
           </div>
         </div>
       </div>
@@ -63,22 +57,25 @@
     <!-- Slide 2: Técnicas de Compresión -->
     <div class="slide" [class.active]="currentSlide() === 1">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 03: Context Engineering
+        </div>
         <h1>Técnicas de Compresión</h1>
         <p class="subtitle">Truncar es para amateurs</p>
       </div>
 
       <div class="slide-content">
-        <div class="theory-grid">
-          <div class="theory-card orange">
-            <div class="theory-icon">✂️</div>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #ef4444;">✂️</div>
             <h3>Truncation (Evitar)</h3>
             <p>Cortar un string a los primeros 4000 caracteres. Rompe el formato (ej. corta JSON por la mitad), destruye XML tags y pierde la información más reciente.</p>
           </div>
           
-          <div class="theory-card green">
-            <div class="theory-icon">🗜️</div>
+          <div class="tech-card active">
+            <div class="tech-icon" style="color: #10b981;">🗜️</div>
             <h3>Distillation (Ideal)</h3>
-            <p>Usar código para limpiar el contexto: eliminar campos null de un JSON, remover clases CSS de un HTML devuelto por scrapping, resumir el historial de conversación en una sola frase usando un modelo más barato rápido antes de llamar al modelo pesado.</p>
+            <p>Usar código para limpiar el contexto: eliminar campos null de un JSON, remover clases CSS de un HTML, resumir el historial de conversación con un modelo barato antes de llamar al modelo pesado.</p>
           </div>
         </div>
       </div>
@@ -87,39 +84,60 @@
     <!-- Slide 3: Validación -->
     <div class="slide" [class.active]="currentSlide() === 2">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 03: Context Engineering
+        </div>
         <h1>La Promesa Vacía</h1>
         <p class="subtitle">La realidad de la inferencia</p>
       </div>
 
       <div class="slide-content">
-        <div class="warning-box" style="margin-top: 1.5rem; background: #fffbeb; border-left-color: #f59e0b;">
+        <div class="warning-box">
           <strong>Concepto de Ingeniería:</strong> Un contexto perfectamente seleccionado, ensamblado, priorizado y comprimido <strong>NO garantiza</strong> una respuesta correcta.
         </div>
 
-        <p style="margin-top: 2rem;">Simplemente hace que el sistema probabilístico tenga las <strong>mejores condiciones matemáticas posibles</strong> para producirla. La validación del Context Payload te asegura que no fallaste por falta de información. Si el LLM falla con un contexto perfecto, el problema está en las capacidades del modelo (Model) o en sus reglas (Instruction).</p>
+        <p style="margin-top: 24px;">Simplemente hace que el sistema probabilístico tenga las <strong>mejores condiciones matemáticas posibles</strong> para producirla. La validación del Context Payload te asegura que no fallaste por falta de información. Si el LLM falla con un contexto perfecto, el problema está en las capacidades del modelo (Model) o en sus reglas (Instruction).</p>
       </div>
     </div>
 
-    <!-- Slide 4: Next Steps -->
+    <!-- Slide 4: Conclusion -->
     <div class="slide" [class.active]="currentSlide() === 3">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 03: Context Engineering
+        </div>
         <h1>Del Concepto a la Práctica</h1>
         <p class="subtitle">Es hora de construir el contexto</p>
       </div>
 
       <div class="slide-content">
-        <div class="theory-card blue">
-          <div class="theory-icon">🧪</div>
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-meta">Lab 03</div>
+          <div class="tech-icon" style="color: #6366f1;">🧪</div>
           <h3>Laboratorio: Engineer the Context</h3>
-          <p>En el siguiente laboratorio tienes un Budget estricto de Tokens (70%). Se te presentarán múltiples fuentes de contexto (Estado del Usuario, Datos de Herramientas, Basura Histórica). Tu objetivo es seleccionar únicamente el Contexto Útil necesario para la tarea sin exceder el presupuesto y sin dejar fuera información crítica.</p>
+          <p>En el siguiente laboratorio tienes un Budget estricto de Tokens (70%). Se te presentarán múltiples fuentes de contexto (Estado del Usuario, Datos de Herramientas, Basura Histórica).</p>
+          <p style="margin-top: 16px;">Tu objetivo es seleccionar únicamente el Contexto Útil necesario para la tarea sin exceder el presupuesto y sin dejar fuera información crítica.</p>
         </div>
         
-        <div style="margin-top: 3rem; text-align: center;">
-          <a routerLink="/labs/engineer-context" class="control-btn" style="background: #a855f7; color: white; border: none; padding: 1rem 2rem; font-size: 1.2rem;">
+        <div style="text-align: center;">
+          <a routerLink="/labs/engineer-context" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
             🔬 Entrar al Lab 03 &rarr;
           </a>
         </div>
       </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
     </div>
 
   </div>
