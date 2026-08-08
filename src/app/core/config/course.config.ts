@@ -132,11 +132,64 @@ export const COURSE_CONFIG: CourseConfig = {
       id: 'm3',
       title: '03. Context Engineering',
       order: 3,
-      state: 'LOCKED',
-      duration: 'TBD',
-      icon: '🪟',
-      description: 'Gestión avanzada, ensamblado y compresión de contexto',
-      lessons: []
+      state: 'LIVE',
+      duration: '4 lecciones',
+      icon: '🧠',
+      description: 'Diseño e inyección de contexto dinámico (El modelo recibe lo que seleccionas, no la app entera)',
+      lessons: [
+        {
+          id: 'c7',
+          title: 'Lesson 01 — Anatomy of Context',
+          order: 1,
+          duration: '30 min',
+          difficulty: 'INTERMEDIATE',
+          icon: 'L1',
+          tags: ['State', 'Context Sources'],
+          prerequisites: ['l2'],
+          path: '/academy/modules/m03-context-engineering/lesson-01-anatomy',
+          objectives: ['Identificar las 6 fuentes de contexto y distinguir útil vs disponible'],
+          resources: []
+        },
+        {
+          id: 'c8',
+          title: 'Lesson 02 — Assembly & Prioritization',
+          order: 2,
+          duration: '30 min',
+          difficulty: 'ADVANCED',
+          icon: 'L2',
+          tags: ['Assembly', 'Priority'],
+          prerequisites: ['c7'],
+          path: '/academy/modules/m03-context-engineering/lesson-02-assembly',
+          objectives: ['Priorizar contexto por relevancia, recencia y redundancia'],
+          resources: []
+        },
+        {
+          id: 'c9',
+          title: 'Lesson 03 — Compression & Validation',
+          order: 3,
+          duration: '30 min',
+          difficulty: 'ADVANCED',
+          icon: 'L3',
+          tags: ['Compression', 'Budget'],
+          prerequisites: ['c8'],
+          path: '/academy/modules/m03-context-engineering/lesson-03-compression',
+          objectives: ['Comprimir contexto preservando densidad de información'],
+          resources: []
+        },
+        {
+          id: 'l3',
+          title: 'Lab 03 — Engineer the Context',
+          order: 4,
+          duration: '60 min',
+          difficulty: 'ADVANCED',
+          icon: '🔬',
+          tags: ['Lab', 'Practice'],
+          prerequisites: ['c9'],
+          path: '/labs/engineer-context',
+          objectives: ['Seleccionar un payload de contexto mínimo viable bajo un budget estricto'],
+          resources: []
+        }
+      ]
     },
     {
       id: 'm4',

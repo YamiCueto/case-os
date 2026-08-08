@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-context-budget',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './context-budget.html',
-  styleUrl: './context-budget.css',
+  styleUrls: ['../../../shared-presentation.css']
 })
 export class ContextBudget {}

@@ -1,1 +1,127 @@
-<p>lesson-02-assembly works!</p>
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Academy
+    </a>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+      &larr; Anterior
+    </button>
+    <div class="slide-counter">
+      {{ currentSlide() + 1 }} / {{ totalSlides }}
+    </div>
+    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+      Siguiente &rarr;
+    </button>
+  </div>
+
+  <div class="slide-wrapper">
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <span class="workshop-badge">Módulo 03: Context Engineering</span>
+        <h1>Assembly & Prioritization</h1>
+        <p class="subtitle">No todo cabe. No todo importa. No todo debe enviarse.</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>El problema de la concatenación ingenua</h2>
+        <p>Cuando un desarrollador empieza con IA, construye el contexto así: `context = history + user + search_results`. A medida que la aplicación crece, esto revienta la ventana de contexto, aumenta la latencia y degrada la atención del modelo (Attention Collapse).</p>
+        
+        <div class="theory-card orange mt-4">
+          <div class="theory-icon">📉</div>
+          <h3>Lost in the Middle</h3>
+          <p>Los LLMs sufren un fenómeno donde prestan mucha atención al principio del prompt (instrucciones) y al final (input reciente), pero "olvidan" o ignoran los datos amontonados en el medio. <strong>Más contexto no significa mayor inteligencia. Significa mayor distracción.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Priorización -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <h1>Criterios de Selección</h1>
+        <p class="subtitle">Decidiendo qué pasa a la inferencia</p>
+      </div>
+
+      <div class="slide-content">
+        <p>El Assembly es el proceso de construir el <strong>Context Payload</strong> de forma deliberada usando 3 reglas:</p>
+        
+        <ul style="margin-top: 1.5rem; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem;">
+          <li style="background: white; padding: 1rem; border-left: 4px solid #3b82f6; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <strong>1. Relevancia (Relevance)</strong>
+            <p style="margin: 0.5rem 0 0 0; color: #475569; font-size: 0.9rem;">Si el usuario pregunta por el clima, descartar inmediatamente los resultados de RAG sobre políticas de la empresa.</p>
+          </li>
+          <li style="background: white; padding: 1rem; border-left: 4px solid #8b5cf6; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <strong>2. Recencia (Recency)</strong>
+            <p style="margin: 0.5rem 0 0 0; color: #475569; font-size: 0.9rem;">En el historial de chat (Conversation Context), los últimos 3 mensajes valen más que el mensaje 45 de hace dos horas.</p>
+          </li>
+          <li style="background: white; padding: 1rem; border-left: 4px solid #ef4444; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <strong>3. Redundancia (Redundancy)</strong>
+            <p style="margin: 0.5rem 0 0 0; color: #475569; font-size: 0.9rem;">No envíes la biografía completa del usuario en cada petición si la tarea es solo "corregir ortografía".</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Slide 3: Assembly Template -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <h1>Assembly Template</h1>
+        <p class="subtitle">Estructurando el Payload Final</p>
+      </div>
+
+      <div class="slide-content">
+        <p>Una vez priorizada la información, debe inyectarse utilizando marcas sintácticas claras (Markdown o XML Tags). Un payload ensamblado debe verse como un documento técnico estructurado, no como un chat.</p>
+        
+        <div class="good-prompt mt-4" style="font-family: monospace; font-size: 0.85rem;">
+          <div class="prompt-text">
+&lt;system_instructions&gt;
+Eres un agente de soporte nivel 2...
+&lt;/system_instructions&gt;
+
+&lt;application_state current_page="/billing"&gt;
+user_plan: "premium"
+outstanding_invoices: 0
+&lt;/application_state&gt;
+
+&lt;knowledge_context&gt;
+[Snippet 1: Política de reembolsos (Score: 0.92)]
+[Snippet 2: Tiempos de cancelación (Score: 0.88)]
+&lt;/knowledge_context&gt;
+
+&lt;user_input&gt;
+Quiero cancelar mi suscripción.
+&lt;/user_input&gt;
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Next Steps -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <h1>Conclusión</h1>
+        <p class="subtitle">Hacia la compresión</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="theory-card green">
+          <div class="theory-icon">📐</div>
+          <h3>Budget de Tokens</h3>
+          <p>Incluso con Assembly y Prioritization, es posible que el payload final exceda el presupuesto técnico (la ventana de tokens) o el presupuesto económico (lo que estás dispuesto a pagar por inferencia).</p>
+          <p>Ahí entra el último paso de la ingeniería del contexto: La Compresión.</p>
+        </div>
+        
+        <div style="margin-top: 3rem; text-align: center;">
+          <a routerLink="/academy/modules/m03-context-engineering/lesson-03-compression" class="control-btn" style="background: #4f46e5; color: white;">
+            Siguiente Lección: Compression & Validation &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

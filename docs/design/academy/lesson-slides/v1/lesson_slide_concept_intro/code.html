@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CASE Academy - Lesson 01: De Código a Probabilidad</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-secondary-fixed": "#002113",
+                      "secondary": "#4edea3",
+                      "secondary-fixed": "#6ffbbe",
+                      "inverse-surface": "#e4e1ed",
+                      "primary-fixed": "#e1e0ff",
+                      "surface-container": "#1f1f27",
+                      "on-primary-fixed": "#07006c",
+                      "tertiary": "#ffb95f",
+                      "inverse-primary": "#494bd6",
+                      "surface-container-high": "#292932",
+                      "outline-variant": "#464554",
+                      "surface-container-lowest": "#0d0d15",
+                      "on-background": "#e4e1ed",
+                      "surface-tint": "#c0c1ff",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "surface-container-highest": "#34343d",
+                      "error-container": "#93000a",
+                      "on-primary-container": "#0d0096",
+                      "on-surface-variant": "#c7c4d7",
+                      "primary-container": "#8083ff",
+                      "background": "#13131b",
+                      "on-surface": "#e4e1ed",
+                      "tertiary-fixed": "#ffddb8",
+                      "on-primary": "#1000a9",
+                      "on-error-container": "#ffdad6",
+                      "inverse-on-surface": "#303038",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "surface-dim": "#13131b",
+                      "on-secondary-container": "#00311f",
+                      "surface": "#13131b",
+                      "surface-bright": "#393841",
+                      "on-error": "#690005",
+                      "on-tertiary": "#472a00",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "tertiary-container": "#ca8100",
+                      "on-secondary-fixed-variant": "#005236",
+                      "primary": "#c0c1ff",
+                      "secondary-container": "#00a572",
+                      "outline": "#908fa0",
+                      "on-secondary": "#003824",
+                      "secondary-fixed-dim": "#4edea3",
+                      "error": "#ffb4ab",
+                      "surface-variant": "#34343d",
+                      "on-tertiary-container": "#3e2400",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "surface-container-low": "#1b1b23"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-lg": "32px",
+                      "gutter": "24px",
+                      "container-max": "1200px",
+                      "margin-page": "32px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "content-padding": "40px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "mono-label": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "mono-data": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "mono-label": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-xl": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.03em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "mono-data": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #e4e1ed;
+        }
+        .canvas-container {
+            background-color: #0A0A0A;
+            border-left: 1px solid #1F1F1F;
+        }
+        .tech-card {
+            background-color: #0F0F0F;
+            border: 1px solid #1F1F1F;
+        }
+        .tech-card-active {
+            background-color: #121212;
+            border: 1px solid #6366f1; /* Case Purple */
+        }
+        .nav-button-ghost {
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .nav-button-ghost:hover {
+            background-color: #1A1A1A;
+            border-color: #1F1F1F;
+        }
+      </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar -->
+<nav aria-label="Sidebar Navigation" class="hidden md:flex flex-col h-full w-64 border-r border-border-muted bg-surface-container-lowest dark:bg-surface-container-lowest shrink-0 transition-all duration-200 ease-in-out border-r border-surface-container-high">
+<!-- Header -->
+<div class="p-6 border-b border-surface-container-high">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary dark:text-primary" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<span class="font-display text-display text-on-surface font-bold tracking-tight">CASE Academy</span>
+</div>
+<p class="font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider">Engineering Workspace</p>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto py-4">
+<div class="px-4 mb-4">
+<span class="font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider mb-2 block px-2">01. AI Foundations</span>
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-primary border-l-2 border-primary bg-surface-container-low font-label-caps text-label-caps rounded-r-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">article</span>
+<span class="truncate">Lesson 01 — De Código a Probabilidad</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface rounded-r-sm border-l-2 border-transparent transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">article</span>
+<span class="truncate">Lesson 02 — Anatomía de la Inf...</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface rounded-r-sm border-l-2 border-transparent transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">article</span>
+<span class="truncate">Lesson 03 — Modelos vs Siste...</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface rounded-r-sm border-l-2 border-transparent transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">science</span>
+<span class="truncate">Lab 01 — Token Playground</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="px-4 mb-4">
+<span class="font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider mb-2 block px-2">02. Prompt Engineering</span>
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface rounded-r-sm border-l-2 border-transparent transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">article</span>
+<span class="truncate">Lesson 01 — Reliable Behavior</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="px-4 mt-8">
+<ul class="space-y-1 border-t border-surface-container-high pt-4">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface rounded-r-sm border-l-2 border-transparent transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span class="truncate">Overview</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface rounded-r-sm border-l-2 border-transparent transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span class="truncate">Resources</span>
+</a>
+</li>
+</ul>
+</div>
+</div>
+<!-- Footer Fixed -->
+<div class="p-4 border-t border-surface-container-high mt-auto">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface rounded-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span>Settings</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface rounded-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span>Help</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full relative canvas-container overflow-hidden">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-margin-page h-12 w-full backdrop-blur-md bg-opacity-80 bg-background dark:bg-background border-b border-surface-container-high sticky top-0 z-30 transition-colors">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors text-[20px]" title="Menu">menu</span>
+<div class="flex items-center gap-2 font-mono-label text-mono-label">
+<span class="bg-surface-container-high text-on-surface px-2 py-0.5 rounded-sm">M01</span>
+<span class="text-on-surface-variant">/</span>
+<span class="text-primary font-bold">Lesson: System Design</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer text-[20px]" title="Account">account_circle</span>
+</div>
+</header>
+<!-- Slide Canvas -->
+<div class="flex-1 overflow-y-auto w-full relative custom-scrollbar">
+<!-- Progress Bar (Subtle) -->
+<div class="absolute top-0 left-0 w-full h-[2px] bg-surface-container-high z-20">
+<div class="h-full bg-primary" style="width: 25%;"></div>
+</div>
+<div class="max-w-[1200px] mx-auto px-content-padding py-stack-lg min-h-full flex flex-col">
+<!-- Slide Header -->
+<div class="mb-stack-lg animate-fade-in-up">
+<div class="inline-flex items-center gap-2 bg-[#1A1A1A] px-3 py-1 rounded-[2px] mb-6 border border-[#2A2A2A]">
+<span class="material-symbols-outlined text-primary text-[14px]">memory</span>
+<span class="font-mono-label text-mono-label text-on-surface uppercase tracking-wider">Módulo 01: AI Foundations</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-4">De Código a Probabilidad</h1>
+<h2 class="font-headline-lg text-headline-lg text-on-surface-variant font-normal">Entendiendo el cambio de paradigma en Ingeniería de Software</h2>
+</div>
+<!-- Slide Body / Content -->
+<div class="flex-1 flex flex-col justify-center">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mb-stack-lg">
+<!-- Deterministic Side (Old) -->
+<div class="tech-card rounded-lg p-8 relative flex flex-col group">
+<div class="absolute top-4 right-4">
+<span class="bg-[#1A1A1A] text-on-surface-variant font-mono-label text-[10px] px-2 py-1 rounded-[2px] uppercase border border-[#2A2A2A]">Tradicional</span>
+</div>
+<div class="w-12 h-12 bg-surface-container-highest rounded-md flex items-center justify-center mb-6 border border-surface-container-high">
+<span class="material-symbols-outlined text-on-surface-variant text-[24px]">settings_applications</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-4">Software Determinista</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-1">
+                                En el software tradicional, escribimos reglas explícitas. Si `A` entonces `B`. Para la misma entrada, el sistema siempre produce exactamente la misma salida.
+                            </p>
+<ul class="space-y-3 font-mono-data text-mono-data text-on-surface-variant">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#4edea3] text-[16px] mt-0.5">check</span>
+<span>Reglas creadas por humanos</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#4edea3] text-[16px] mt-0.5">check</span>
+<span>Lógica explícita (if/else)</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#4edea3] text-[16px] mt-0.5">check</span>
+<span>Resultados 100% predecibles</span>
+</li>
+</ul>
+</div>
+<!-- Probabilistic Side (New) -->
+<div class="tech-card-active rounded-lg p-8 relative flex flex-col group shadow-[0_0_30px_rgba(99,102,241,0.05)]">
+<div class="absolute top-4 right-4">
+<span class="bg-[#1A1A1A] text-primary font-mono-label text-[10px] px-2 py-1 rounded-[2px] uppercase border border-primary">Nuevo Paradigma</span>
+</div>
+<div class="w-12 h-12 bg-[#1A1A2A] rounded-md flex items-center justify-center mb-6 border border-[#2A2A4A]">
+<span class="material-symbols-outlined text-primary text-[24px]">casino</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-4">Modelos Probabilísticos (LLMs)</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-1">
+                                Un LLM no ejecuta reglas; ejecuta probabilidades. No sabe qué es cierto, solo sabe qué token (palabra) es el más probable que siga al contexto actual.
+                            </p>
+<ul class="space-y-3 font-mono-data text-mono-data text-on-surface-variant">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[16px] mt-0.5">check</span>
+<span class="text-on-surface">Reglas inferidas de los datos</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[16px] mt-0.5">check</span>
+<span class="text-on-surface">Lógica probabilística (pesos)</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[16px] mt-0.5">check</span>
+<span class="text-on-surface">Resultados no deterministas</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer / Navigation -->
+<footer class="flex justify-between items-center px-content-padding w-full h-16 border-t border-surface-container-high bg-[#0A0A0A] shrink-0 z-40">
+<button class="nav-button-ghost flex items-center gap-2 px-4 py-2 rounded-sm text-on-surface-variant font-mono-label text-mono-label uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Anterior</span>
+</button>
+<div class="font-mono-label text-mono-label text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-[2px] border border-surface-container-highest">
+                1 / 4
+            </div>
+<button class="nav-button-ghost flex items-center gap-2 px-4 py-2 rounded-sm text-on-surface font-mono-label text-mono-label uppercase tracking-wider group">
+<span>Siguiente</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</footer>
+</main>
+</body></html>

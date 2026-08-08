@@ -1,1 +1,70 @@
-<p>context-template works!</p>
+<div class="presentation-container" style="overflow-y: auto;">
+  <div class="slide-wrapper" style="padding-top: 2rem; max-width: 900px; margin: 0 auto;">
+    <div class="slide-title">
+      <span class="workshop-badge" style="background: #a855f7;">CASE Library</span>
+      <h1 style="font-size: 2rem; margin-top: 0.5rem; color: white;">Context Assembly Template</h1>
+      <p class="subtitle">Estructura base para ensamblar payloads de contexto inyectado</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="template-container" style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+        <div class="template-header" style="background: #1e293b; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="color: #38bdf8; margin: 0;">context-assembly.template.xml</h3>
+          <span style="color: #94a3b8; font-size: 0.8rem; font-family: monospace;">Role: SYSTEM</span>
+        </div>
+        <div style="padding: 2rem; background: #f8fafc;">
+          <pre style="white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #334155; line-height: 1.5; margin: 0;">
+&lt;!-- ========================================== --&gt;
+&lt;!-- STATIC CONTEXT (Instrucciones Inmutables)  --&gt;
+&lt;!-- ========================================== --&gt;
+&lt;system_instructions&gt;
+You are a highly capable agent assisting the user.
+Your behavior must be concise, technical, and accurate.
+&lt;/system_instructions&gt;
+
+&lt;!-- ========================================== --&gt;
+&lt;!-- DYNAMIC CONTEXT (Estado de la Aplicación)  --&gt;
+&lt;!-- ========================================== --&gt;
+&lt;application_context&gt;
+  &lt;user_info id="u_8829" role="admin" /&gt;
+  &lt;current_route path="/dashboard/billing/invoices/552" /&gt;
+  &lt;page_data&gt;
+    {{ '{' }}"invoiceId": "552", "status": "unpaid", "amount": 1500{{ '}' }}
+  &lt;/page_data&gt;
+&lt;/application_context&gt;
+
+&lt;!-- ========================================== --&gt;
+&lt;!-- RETRIEVED KNOWLEDGE (RAG)                  --&gt;
+&lt;!-- ========================================== --&gt;
+&lt;retrieved_knowledge query="how to cancel invoice"&gt;
+  &lt;document source="docs/billing.md" score="0.95"&gt;
+    To cancel an unpaid invoice, admins can use the /api/invoices/:id/cancel endpoint.
+  &lt;/document&gt;
+&lt;/retrieved_knowledge&gt;
+
+&lt;!-- ========================================== --&gt;
+&lt;!-- CONVERSATION HISTORY (Compreso)            --&gt;
+&lt;!-- ========================================== --&gt;
+&lt;conversation_history&gt;
+  &lt;message role="user"&gt;Hi, I need help with an invoice.&lt;/message&gt;
+  &lt;message role="assistant"&gt;I can help with that. Which invoice?&lt;/message&gt;
+&lt;/conversation_history&gt;
+
+&lt;!-- ========================================== --&gt;
+&lt;!-- RECENT USER INTENT                         --&gt;
+&lt;!-- ========================================== --&gt;
+&lt;user_input&gt;
+  Can I cancel this one?
+&lt;/user_input&gt;
+          </pre>
+        </div>
+      </div>
+
+      <div class="theory-card green" style="margin-top: 2rem;">
+        <div class="theory-icon">🏗️</div>
+        <h3>Patrón de Diseño</h3>
+        <p>Este template usa XML tags explícitos para compartimentar el conocimiento. Esto evita que el LLM confunda una directiva del sistema con un dato de la base de datos o con una instrucción maliciosa del usuario (Prompt Injection).</p>
+      </div>
+    </div>
+  </div>
+</div>

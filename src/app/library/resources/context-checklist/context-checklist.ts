@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-context-checklist',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './context-checklist.html',
-  styleUrl: './context-checklist.css',
+  styleUrls: ['../../../shared-presentation.css']
 })
 export class ContextChecklist {}

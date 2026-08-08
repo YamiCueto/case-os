@@ -1,1 +1,52 @@
-<p>context-checklist works!</p>
+<div class="presentation-container" style="overflow-y: auto;">
+  <div class="slide-wrapper" style="padding-top: 2rem; max-width: 900px; margin: 0 auto;">
+    <div class="slide-title">
+      <span class="workshop-badge" style="background: #a855f7;">CASE Library</span>
+      <h1 style="font-size: 2rem; margin-top: 0.5rem; color: white;">Context Engineering Checklist</h1>
+      <p class="subtitle">Validación arquitectónica antes de inferencia</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="theory-card orange">
+        <div class="theory-icon">📋</div>
+        <h3>Checklist de Pre-Ensamblado</h3>
+        
+        <ul style="list-style: none; padding: 0; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <li style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; align-items: flex-start;">
+            <input type="checkbox" style="margin-top: 0.3rem; transform: scale(1.2);">
+            <div>
+              <strong style="color: #1e293b; display: block;">1. Relevancia (Relevance)</strong>
+              <span style="color: #64748b; font-size: 0.9rem;">¿La información incluida es estrictamente necesaria para responder al intent actual? ¿Se filtró el ruido (ej. menús, footers de HTML, datos no relacionados)?</span>
+            </div>
+          </li>
+          
+          <li style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; align-items: flex-start;">
+            <input type="checkbox" style="margin-top: 0.3rem; transform: scale(1.2);">
+            <div>
+              <strong style="color: #1e293b; display: block;">2. Recencia (Recency)</strong>
+              <span style="color: #64748b; font-size: 0.9rem;">En datos secuenciales (conversaciones, logs), ¿estamos priorizando lo más reciente y truncando o resumiendo lo antiguo?</span>
+            </div>
+          </li>
+
+          <li style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; align-items: flex-start;">
+            <input type="checkbox" style="margin-top: 0.3rem; transform: scale(1.2);">
+            <div>
+              <strong style="color: #1e293b; display: block;">3. Redundancia (Redundancy)</strong>
+              <span style="color: #64748b; font-size: 0.9rem;">¿Estamos repitiendo los mismos system prompts o el estado estático en cada petición de un hilo de conversación? (Considerar caché de contexto).</span>
+            </div>
+          </li>
+
+          <li style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; align-items: flex-start;">
+            <input type="checkbox" style="margin-top: 0.3rem; transform: scale(1.2);">
+            <div>
+              <strong style="color: #1e293b; display: block;">4. Presupuesto (Budget)</strong>
+              <span style="color: #64748b; font-size: 0.9rem;">¿El payload final respeta el límite duro de tokens? ¿Hay margen para que el modelo devuelva la respuesta (Output Tokens)?</span>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

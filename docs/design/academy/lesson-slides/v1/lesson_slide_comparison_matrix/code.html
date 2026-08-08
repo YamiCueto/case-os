@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CASE Academy - Lesson 01</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-secondary-fixed": "#002113",
+                        "secondary": "#4edea3",
+                        "secondary-fixed": "#6ffbbe",
+                        "inverse-surface": "#e4e1ed",
+                        "primary-fixed": "#e1e0ff",
+                        "surface-container": "#1f1f27",
+                        "on-primary-fixed": "#07006c",
+                        "tertiary": "#ffb95f",
+                        "inverse-primary": "#494bd6",
+                        "surface-container-high": "#292932",
+                        "outline-variant": "#464554",
+                        "surface-container-lowest": "#0d0d15",
+                        "on-background": "#e4e1ed",
+                        "surface-tint": "#c0c1ff",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-container-highest": "#34343d",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#0d0096",
+                        "on-surface-variant": "#c7c4d7",
+                        "primary-container": "#8083ff",
+                        "background": "#13131b",
+                        "on-surface": "#e4e1ed",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-primary": "#1000a9",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#303038",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-dim": "#13131b",
+                        "on-secondary-container": "#00311f",
+                        "surface": "#13131b",
+                        "surface-bright": "#393841",
+                        "on-error": "#690005",
+                        "on-tertiary": "#472a00",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "tertiary-container": "#ca8100",
+                        "on-secondary-fixed-variant": "#005236",
+                        "primary": "#c0c1ff",
+                        "secondary-container": "#00a572",
+                        "outline": "#908fa0",
+                        "on-secondary": "#003824",
+                        "secondary-fixed-dim": "#4edea3",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#34343d",
+                        "on-tertiary-container": "#3e2400",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-container-low": "#1b1b23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "gutter": "24px",
+                        "container-max": "1200px",
+                        "margin-page": "32px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "content-padding": "40px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "headline-xl": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "mono-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-xl": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "mono-data": ["14px", { "lineHeight": "20px", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hairline-border {
+            border: 1px solid #1F1F1F;
+        }
+        .module-card {
+            background-color: #0F0F0F;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col m-0 p-0 overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-margin-page h-12 w-full backdrop-blur-md bg-opacity-80 bg-background border-b border-border-muted sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-[20px] text-primary uppercase tracking-tighter font-bold">CASE Academy</span>
+<span class="text-on-surface-variant">/</span>
+<span class="text-on-surface-variant font-mono-label">M01</span>
+<span class="text-on-surface-variant">/</span>
+<span class="text-primary font-bold">Lesson: System Design</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low p-2 rounded-DEFAULT transition-colors">
+<span class="material-symbols-outlined icon-fill" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 relative">
+<!-- SideNavBar -->
+<nav class="flex flex-col h-[calc(100vh-3rem)] w-64 border-r border-border-muted bg-surface-container-lowest fixed left-0 top-12 z-40 hidden md:flex">
+<div class="p-6 border-b border-border-muted">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface" data-icon="school">school</span>
+</div>
+<div>
+<h2 class="font-headline-lg text-[16px] text-on-surface">CASE Academy</h2>
+<p class="font-mono-label text-on-surface-variant text-[10px]">Engineering Workspace</p>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-4">
+<ul class="space-y-1 px-3">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out rounded-DEFAULT font-mono-label" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="dashboard">dashboard</span>
+<span>Overview</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-primary border-l-2 border-primary bg-surface-container-low transition-all duration-200 ease-in-out rounded-r-DEFAULT font-mono-label" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="inventory_2">inventory_2</span>
+<span>Modules</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out rounded-DEFAULT font-mono-label" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="terminal">terminal</span>
+<span>Exercises</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out rounded-DEFAULT font-mono-label" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="menu_book">menu_book</span>
+<span>Resources</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out rounded-DEFAULT font-mono-label" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="p-4 border-t border-border-muted">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out rounded-DEFAULT font-mono-label" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help">help</span>
+<span>Help</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out rounded-DEFAULT font-mono-label" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-64 p-margin-page pb-24 relative bg-[#0A0A0A] min-h-[calc(100vh-3rem)]">
+<div class="max-w-container-max mx-auto px-content-padding">
+<!-- Slide Header -->
+<div class="mb-stack-lg text-center pt-8">
+<div class="inline-block px-3 py-1 bg-surface-container-high text-primary font-mono-label uppercase tracking-widest text-[10px] rounded-DEFAULT mb-4 hairline-border">
+                        Módulo 01: AI Foundations
+                    </div>
+<h1 class="font-display-lg text-on-surface mb-4">De Código a Probabilidad</h1>
+<p class="font-body-lg text-on-surface-variant text-center max-w-2xl mx-auto">
+                        Entendiendo el cambio de paradigma en Ingeniería de Software
+                    </p>
+</div>
+<!-- Section Divider -->
+<div class="w-full h-px bg-surface-container-high my-stack-lg relative">
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#0A0A0A] px-4">
+<h2 class="font-headline-lg text-on-surface">El Software Tradicional vs Modelos de IA</h2>
+</div>
+</div>
+<!-- Comparison Grid -->
+<div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-gutter items-stretch mt-stack-lg">
+<!-- Left: Deterministic -->
+<div class="module-card hairline-border rounded-none p-8 flex flex-col relative">
+<div class="absolute top-4 right-4 bg-[#1A1A1A] text-on-surface font-mono-label text-[10px] uppercase px-2 py-1 rounded-DEFAULT hairline-border">
+                            TYPE: DETERMINISTIC
+                        </div>
+<div class="mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant text-[28px]" data-icon="settings">settings</span>
+<h3 class="font-headline-lg text-on-surface m-0">Software Determinista</h3>
+</div>
+<p class="text-on-surface-variant font-body-md mb-6 leading-relaxed flex-1">
+                            En el software tradicional, escribimos reglas explícitas. Si `A` entonces `B`. Para la misma entrada, el sistema **siempre** produce exactamente la misma salida.
+                        </p>
+<div class="space-y-4 font-mono-data text-on-surface-variant text-sm p-4 bg-surface-container-lowest hairline-border">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="check">check</span>
+<span>Reglas creadas por humanos</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="check">check</span>
+<span>Lógica explícita (if/else)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="check">check</span>
+<span>Resultado 100% predecible</span>
+</div>
+</div>
+<div class="mt-6 border-t border-[#1F1F1F] pt-4 font-mono-label text-[11px] text-on-surface-variant flex justify-between">
+<span>INPUT -&gt; LOGIC -&gt; OUTPUT</span>
+</div>
+</div>
+<!-- Center Divider -->
+<div class="hidden md:flex flex-col items-center justify-center py-8">
+<div class="w-px bg-[#1F1F1F] flex-1"></div>
+<div class="my-4 bg-surface-container-high rounded-full w-8 h-8 flex items-center justify-center hairline-border text-on-surface-variant font-mono-label text-[10px]">VS</div>
+<div class="w-px bg-[#1F1F1F] flex-1"></div>
+</div>
+<!-- Right: Probabilistic -->
+<div class="module-card hairline-border border-l-primary rounded-none p-8 flex flex-col relative border-l-2">
+<div class="absolute top-4 right-4 bg-[#1A1A1A] text-on-surface font-mono-label text-[10px] uppercase px-2 py-1 rounded-DEFAULT hairline-border">
+                            TYPE: PROBABILISTIC
+                        </div>
+<div class="mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="casino">casino</span>
+<h3 class="font-headline-lg text-primary m-0">Modelos Probabilísticos</h3>
+</div>
+<p class="text-on-surface-variant font-body-md mb-6 leading-relaxed flex-1">
+                            Un LLM no ejecuta reglas; ejecuta **probabilidades**. No sabe qué es cierto, solo sabe qué token (palabra) es el más probable que siga al contexto actual.
+                        </p>
+<div class="space-y-4 font-mono-data text-on-surface-variant text-sm p-4 bg-surface-container-lowest hairline-border">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="check">check</span>
+<span>Reglas inferidas de los datos</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="check">check</span>
+<span>Lógica probabilística (pesos)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="check">check</span>
+<span>Resultado no determinista</span>
+</div>
+</div>
+<div class="mt-6 border-t border-[#1F1F1F] pt-4 font-mono-label text-[11px] text-primary flex justify-between">
+<span>INPUT -&gt; WEIGHTS -&gt; DISTRIBUTION</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer / Slide Navigation -->
+<footer class="fixed bottom-0 right-0 left-0 md:left-64 h-16 bg-surface-container-lowest flex justify-between items-center px-gutter w-auto z-40 border-t border-[#1F1F1F]">
+<button class="px-4 py-2 text-on-surface-variant border border-transparent hover:bg-[#1A1A1A] hover:border-[#1F1F1F] rounded-DEFAULT font-mono-label transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_back">arrow_back</span>
+            Anterior
+        </button>
+<div class="flex items-center gap-2 font-mono-label text-on-surface-variant text-[12px]">
+<span>Slide 1 / 4</span>
+</div>
+<div class="flex gap-4 items-center">
+<button class="px-4 py-2 text-on-surface-variant border border-transparent hover:bg-[#1A1A1A] hover:border-[#1F1F1F] rounded-DEFAULT font-mono-label transition-colors hidden md:block">
+                 Volver a Academy
+            </button>
+<button class="px-4 py-2 bg-transparent border border-[#1F1F1F] text-on-surface hover:bg-[#1A1A1A] rounded-DEFAULT font-mono-label transition-colors flex items-center gap-2">
+                Siguiente
+                <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</footer>
+</body></html>

@@ -1,1 +1,130 @@
-<p>lesson-01-anatomy works!</p>
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Academy
+    </a>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+      &larr; Anterior
+    </button>
+    <div class="slide-counter">
+      {{ currentSlide() + 1 }} / {{ totalSlides }}
+    </div>
+    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+      Siguiente &rarr;
+    </button>
+  </div>
+
+  <div class="slide-wrapper">
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <span class="workshop-badge">Módulo 03: Context Engineering</span>
+        <h1>Anatomy of Context</h1>
+        <p class="subtitle">El modelo no ve tu aplicación. Solo ve lo que tú decides enviarle.</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>La ilusión de omnisciencia</h2>
+        <p>Como humanos, al interactuar con una interfaz asumimos que el modelo "sabe" qué página estamos viendo, qué usuario somos o qué datos acabamos de guardar. <strong>Esto es falso.</strong> Un LLM en producción es una API <em>stateless</em> (sin memoria). Cada inferencia arranca desde cero.</p>
+        
+        <div class="warning-box" style="margin-top: 1.5rem; background: #f0fdf4; border-left-color: #22c55e;">
+          <strong>Paradigma Base:</strong> Context Engineering no es "escribir párrafos largos en el prompt". Es el proceso arquitectónico de capturar el estado dinámico de tu aplicación y transformarlo en texto estructurado <em>antes</em> de tocar la API del LLM.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Fuentes de Contexto -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <h1>Las Seis Fuentes de Verdad</h1>
+        <p class="subtitle">El origen de la información</p>
+      </div>
+
+      <div class="slide-content">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="theory-card" style="padding: 1rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #4f46e5;">1. Static Context</h4>
+            <p style="font-size: 0.9rem; margin: 0; color: #475569;">Reglas de negocio fijas, directivas del sistema (System Prompts). No cambian entre peticiones.</p>
+          </div>
+          <div class="theory-card" style="padding: 1rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #4f46e5;">2. User Context</h4>
+            <p style="font-size: 0.9rem; margin: 0; color: #475569;">Perfil, permisos, preferencias o ubicación del usuario ejecutando la acción.</p>
+          </div>
+          <div class="theory-card" style="padding: 1rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #4f46e5;">3. Application State</h4>
+            <p style="font-size: 0.9rem; margin: 0; color: #475569;">Datos de la pantalla actual: "El usuario está viendo la factura #1024".</p>
+          </div>
+          <div class="theory-card" style="padding: 1rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #4f46e5;">4. Retrieved Context</h4>
+            <p style="font-size: 0.9rem; margin: 0; color: #475569;">Conocimiento dinámico inyectado desde bases vectoriales (RAG) o búsquedas tradicionales.</p>
+          </div>
+          <div class="theory-card" style="padding: 1rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #4f46e5;">5. Tool Context</h4>
+            <p style="font-size: 0.9rem; margin: 0; color: #475569;">Resultados de funciones que el modelo acaba de ejecutar en el background.</p>
+          </div>
+          <div class="theory-card" style="padding: 1rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #4f46e5;">6. Conversation Context</h4>
+            <p style="font-size: 0.9rem; margin: 0; color: #475569;">El historial de mensajes previos. (Que a menudo es el que más basura acumula).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Disponible vs Útil -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <h1>Disponible vs. Útil</h1>
+        <p class="subtitle">El síndrome de Diógenes en el Prompt</p>
+      </div>
+
+      <div class="slide-content">
+        <p>El error de ingeniería más común es concatenar las seis fuentes de contexto sin discriminar y enviarlas al LLM.</p>
+        
+        <div class="theory-grid mt-4">
+          <div class="theory-card orange">
+            <div class="theory-icon">🚨</div>
+            <h3>Contexto Disponible</h3>
+            <p>Toda la información a la que tu backend tiene acceso (El perfil completo de BD del usuario, los 50 mensajes previos, todo el contenido de la página actual).</p>
+          </div>
+          
+          <div class="theory-card blue">
+            <div class="theory-icon">🎯</div>
+            <h3>Contexto Útil</h3>
+            <p><strong>¿Qué información necesita realmente el modelo para resolver ESTA tarea?</strong> Si la tarea es resumir un ticket, no necesitas su historial de compras de hace 2 años.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Next Steps -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <h1>Conclusión</h1>
+        <p class="subtitle">Ingeniería del conocimiento</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="theory-card green">
+          <div class="theory-icon">🧠</div>
+          <h3>La Pregunta Fundamental</h3>
+          <p>Antes de pasar a la siguiente lección, recuerda esto:</p>
+          <p style="font-weight: bold; font-size: 1.2rem; color: #1e293b; margin-top: 1rem;">
+            "Si le dieras esta misma información (y nada más) a un colega humano recién contratado... ¿podría resolver el problema?"
+          </p>
+          <p>Si la respuesta es no, te falta contexto útil. Si la respuesta es "se confundiría con tanta información", tienes demasiada basura disponible.</p>
+        </div>
+        
+        <div style="margin-top: 3rem; text-align: center;">
+          <a routerLink="/academy/modules/m03-context-engineering/lesson-02-assembly" class="control-btn" style="background: #4f46e5; color: white;">
+            Siguiente Lección: Assembly & Prioritization &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

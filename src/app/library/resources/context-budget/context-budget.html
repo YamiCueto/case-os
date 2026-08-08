@@ -1,1 +1,74 @@
-<p>context-budget works!</p>
+<div class="presentation-container" style="overflow-y: auto;">
+  <div class="slide-wrapper" style="padding-top: 2rem; max-width: 900px; margin: 0 auto;">
+    <div class="slide-title">
+      <span class="workshop-badge" style="background: #a855f7;">CASE Library</span>
+      <h1 style="font-size: 2rem; margin-top: 0.5rem; color: white;">Context Budget Utility</h1>
+      <p class="subtitle">Snippet para truncado y estimación de tokens en tiempo de ejecución</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="template-container" style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+        <div class="template-header" style="background: #1e293b; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="color: #38bdf8; margin: 0;">context-budget.utils.ts</h3>
+          <span style="color: #94a3b8; font-size: 0.8rem; font-family: monospace;">Role: UTILITY</span>
+        </div>
+        <div style="padding: 2rem; background: #f8fafc;">
+          <pre style="white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #334155; line-height: 1.5; margin: 0;">
+/**
+ * Utility para gestionar el presupuesto de tokens (Estimación rápida de 4 chars por token)
+ * Útil para truncar historiales o payloads antes de enviarlos al LLM.
+ */
+
+export class ContextBudgetManager {{ '{' }}
+  private readonly MAX_TOKENS: number;
+  private readonly SYSTEM_RESERVE: number; // Tokens reservados para System Prompt y Schema
+
+  constructor(maxTokens: number = 8000, systemReserve: number = 1500) {{ '{' }}
+    this.MAX_TOKENS = maxTokens;
+    this.SYSTEM_RESERVE = systemReserve;
+  {{ '}' }}
+
+  // Estimación aproximada (Rápida, no exacta como TikToken)
+  public estimateTokens(text: string): number {{ '{' }}
+    return Math.ceil(text.length / 4);
+  {{ '}' }}
+
+  public getAvailableBudget(): number {{ '{' }}
+    return this.MAX_TOKENS - this.SYSTEM_RESERVE;
+  {{ '}' }}
+
+  /**
+   * Recibe un array de mensajes históricos y devuelve solo los más recientes
+   * que caben en el presupuesto proporcionado.
+   */
+  public compressHistory(messages: {{ '{' }}role: string, content: string{{ '}' }}[], budget: number = 2000): any[] {{ '{' }}
+    let currentUsage = 0;
+    const compressed = [];
+
+    // Iteramos de atrás hacia adelante (más reciente primero)
+    for (let i = messages.length - 1; i &gt;= 0; i--) {{ '{' }}
+      const msgTokens = this.estimateTokens(messages[i].content);
+      
+      if (currentUsage + msgTokens &lt;= budget) {{ '{' }}
+        compressed.unshift(messages[i]);
+        currentUsage += msgTokens;
+      {{ '}' }} else {{ '{' }}
+        // Se acabó el presupuesto
+        break;
+      {{ '}' }}
+    {{ '}' }}
+    return compressed;
+  {{ '}' }}
+{{ '}' }}
+          </pre>
+        </div>
+      </div>
+
+      <div class="theory-card blue" style="margin-top: 2rem;">
+        <div class="theory-icon">⚖️</div>
+        <h3>Estrategia Defensiva</h3>
+        <p>Este snippet es una defensa de Nivel 1. Estima a la baja dividiendo por 4 (promedio en inglés) e iterando el historial de abajo hacia arriba (Recency). Así asegura que el Contexto nunca rompa el límite duro de la API del LLM, descartando primero la información más antigua (Truncation controlado).</p>
+      </div>
+    </div>
+  </div>
+</div>

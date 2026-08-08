@@ -43,6 +43,18 @@ export const routes: Routes = [
         loadComponent: () => import('./library/resources/prompt-checklist/prompt-checklist').then(m => m.PromptChecklist)
       },
       {
+        path: 'library/resources/context-checklist',
+        loadComponent: () => import('./library/resources/context-checklist/context-checklist').then(m => m.ContextChecklist)
+      },
+      {
+        path: 'library/resources/context-template',
+        loadComponent: () => import('./library/resources/context-template/context-template').then(m => m.ContextTemplate)
+      },
+      {
+        path: 'library/resources/context-budget',
+        loadComponent: () => import('./library/resources/context-budget/context-budget').then(m => m.ContextBudget)
+      },
+      {
         path: 'labs',
         loadComponent: () => import('./labs/pages/labs-home/labs-home.component').then(m => m.LabsHomeComponent)
       },
@@ -57,6 +69,10 @@ export const routes: Routes = [
       {
         path: 'labs/engineer-instruction',
         loadComponent: () => import('./labs/engineer-instruction/engineer-instruction').then(m => m.EngineerInstructionLab)
+      },
+      {
+        path: 'labs/engineer-context',
+        loadComponent: () => import('./labs/engineer-context/engineer-context').then(m => m.EngineerContextLab)
       },
       {
         path: 'framework',
@@ -165,6 +181,18 @@ export const routes: Routes = [
           {
             path: 'academy/modules/m02-prompt-engineering/lesson-03-structured-outputs',
             loadComponent: () => import('./academy/modules/m02-prompt-engineering/lesson-03-structured-outputs/lesson-03-structured-outputs').then(m => m.Lesson03StructuredOutputs)
+          },
+          {
+            path: 'academy/modules/m03-context-engineering/lesson-01-anatomy',
+            loadComponent: () => import('./academy/modules/m03-context-engineering/lesson-01-anatomy/lesson-01-anatomy').then(m => m.Lesson01Anatomy)
+          },
+          {
+            path: 'academy/modules/m03-context-engineering/lesson-02-assembly',
+            loadComponent: () => import('./academy/modules/m03-context-engineering/lesson-02-assembly/lesson-02-assembly').then(m => m.Lesson02Assembly)
+          },
+          {
+            path: 'academy/modules/m03-context-engineering/lesson-03-compression',
+            loadComponent: () => import('./academy/modules/m03-context-engineering/lesson-03-compression/lesson-03-compression').then(m => m.Lesson03Compression)
           }
         ]
       }
