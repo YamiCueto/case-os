@@ -309,6 +309,20 @@ export class WorkspaceRegistryService {
                   icon: 'terminal',
                   depth: 1,
                 },
+                {
+                  id: 'lab-02',
+                  label: 'Lab 02 — Engineer an AI Instruction Contract',
+                  path: '/academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract',
+                  icon: 'terminal',
+                  depth: 1,
+                },
+                {
+                  id: 'lab-03',
+                  label: 'Lab 03 — Build the Minimum Useful Context',
+                  path: '/academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context',
+                  icon: 'terminal',
+                  depth: 1,
+                },
               ],
             },
           ]
@@ -317,6 +331,8 @@ export class WorkspaceRegistryService {
       breadcrumbResolver: () => {
         const url = this.currentUrl();
         const isLab01 = url.startsWith('/academy/modules/m01-ai-foundations/lab-01-legacy-routine');
+        const isLab02 = url.startsWith('/academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract');
+        const isLab03 = url.startsWith('/academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context');
 
         const crumbs: BreadcrumbItem[] = [
           { label: 'Labs', path: '/labs', icon: 'science' }
@@ -324,6 +340,10 @@ export class WorkspaceRegistryService {
 
         if (isLab01) {
           crumbs.push({ label: 'Lab 01 — Analyze a Legacy Routine', path: url });
+        } else if (isLab02) {
+          crumbs.push({ label: 'Lab 02 — Engineer an AI Instruction Contract', path: url });
+        } else if (isLab03) {
+          crumbs.push({ label: 'Lab 03 — Build the Minimum Useful Context', path: url });
         }
         return crumbs;
       }

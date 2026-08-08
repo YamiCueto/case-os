@@ -129,16 +129,31 @@ export const COURSE_CONFIG: CourseConfig = {
           resources: []
         },
         {
-          id: 'l2',
-          title: 'Lab 02 — Engineer the Instruction',
+          id: 'd2',
+          title: 'Demo 02 — Engineer the Instruction',
           order: 4,
+          duration: '15 min',
+          difficulty: 'INTERMEDIATE',
+          icon: '🎮',
+          tags: ['Demo', 'Interactive'],
+          type: 'DEMO',
+          prerequisites: ['c6'],
+          path: '/academy/modules/m02-prompt-engineering/demo-engineer-instruction',
+          objectives: ['Observar la diferencia entre instrucciones ambiguas y acorraladas en un pipeline'],
+          resources: []
+        },
+        {
+          id: 'l2',
+          title: 'Lab 02 — Engineer an AI Instruction Contract',
+          order: 5,
           duration: '60 min',
           difficulty: 'INTERMEDIATE',
           icon: '🔬',
-          tags: ['Lab', 'Practice'],
-          prerequisites: ['c6'],
-          path: '/labs/engineer-instruction',
-          objectives: ['Iterar una instrucción para asegurar el parsing de JSON'],
+          tags: ['Lab', 'Real Engineering'],
+          type: 'LAB',
+          prerequisites: ['d2'],
+          path: '/academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract',
+          objectives: ['Construir un contrato de instrucciones determinista para una tarea de modernización real'],
           resources: []
         }
       ]
@@ -192,16 +207,31 @@ export const COURSE_CONFIG: CourseConfig = {
           resources: []
         },
         {
-          id: 'l3',
-          title: 'Lab 03 — Engineer the Context',
+          id: 'd3',
+          title: 'Demo 03 — Engineer the Context',
           order: 4,
+          duration: '15 min',
+          difficulty: 'ADVANCED',
+          icon: '🎮',
+          tags: ['Demo', 'Interactive'],
+          type: 'DEMO',
+          prerequisites: ['c9'],
+          path: '/academy/modules/m03-context-engineering/demo-engineer-context',
+          objectives: ['Experimentar con presupuestos de tokens, ruido e información indispensable'],
+          resources: []
+        },
+        {
+          id: 'l3',
+          title: 'Lab 03 — Build the Minimum Useful Context',
+          order: 5,
           duration: '60 min',
           difficulty: 'ADVANCED',
           icon: '🔬',
-          tags: ['Lab', 'Practice'],
-          prerequisites: ['c9'],
-          path: '/labs/engineer-context',
-          objectives: ['Seleccionar un payload de contexto mínimo viable bajo un budget estricto'],
+          tags: ['Lab', 'Real Engineering'],
+          type: 'LAB',
+          prerequisites: ['d3'],
+          path: '/academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context',
+          objectives: ['Construir un Context Manifest justificado para una tarea real de modernización corporativa'],
           resources: []
         }
       ]

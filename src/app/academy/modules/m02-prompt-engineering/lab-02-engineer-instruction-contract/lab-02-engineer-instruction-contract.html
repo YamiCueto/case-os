@@ -1,0 +1,234 @@
+﻿<div class="presentation-container pb-32">
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
+
+    <!-- Context Chips -->
+    <div class="lab-context-chips" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 28px;">
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6366f1; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); padding: 3px 10px; border-radius: 4px;">LAB 02 · REAL ENGINEERING</span>
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; background: #0f172a; border: 1px solid #1e293b; padding: 3px 10px; border-radius: 4px;">Module 02 · Prompt Engineering</span>
+      <span style="color: #334155; font-size: 10px;">·</span>
+      <span style="font-size: 12px; color: #64748b;">⏱️ 60 min</span>
+      <span style="font-size: 12px; color: #64748b;">· Intermediate</span>
+      <span style="font-size: 12px; color: #64748b;">· Real-world instruction contract</span>
+    </div>
+
+    <!-- Security Boundary Alert -->
+    <div style="background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.25); border-left: 3px solid #dc2626; border-radius: 8px; padding: 18px 20px; margin-bottom: 36px; display: flex; gap: 14px; align-items: flex-start;">
+      <span class="material-symbols-outlined" style="color: #f87171; font-size: 20px; flex-shrink: 0; margin-top: 1px;">warning</span>
+      <div>
+        <h4 style="color: #f87171; font-size: 13px; font-weight: 700; margin: 0 0 6px 0; letter-spacing: 0.02em;">Security Boundary</h4>
+        <p style="color: #fca5a5; font-size: 13px; line-height: 1.6; margin: 0;">
+          <strong>Nunca subas código propietario, credenciales, secretos, PII o información confidencial</strong> a una herramienta de IA no autorizada por tu organización.
+          CASE Academy no requiere ni almacena tu código. Este laboratorio es un playbook técnico que ejecutas localmente en tu propio entorno y repositorio con tus herramientas autorizadas.
+        </p>
+      </div>
+    </div>
+
+    <div class="slide-content" style="display: flex; flex-direction: column; gap: 40px;">
+
+      <!-- 01 — Context -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">01 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Context: La fragilidad del lenguaje natural</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0;">
+          Los modelos de lenguaje no ejecutan código; infieren continuaciones probabilísticas. Cuando pasas una instrucción ambigua a un LLM en un pipeline automatizado, cualquier variación en temperatura, versión de modelo o reformulación del usuario puede destruir tu integración. Para que la IA sea confiable en ingeniería, no escribimos "prompts decorativos": <strong style="color: #e4e1ed;">diseñamos contratos de instrucción deterministas y acorralados</strong>.
+        </p>
+      </section>
+
+      <!-- 02 — Target Selection (Real Modernization Task) -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">02 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Selección del Objetivo Real</h2>
+        </div>
+        <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 20px 24px;">
+          <p style="color: #a5b4fc; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 10px 0;">Desafío de Modernización Corporativa</p>
+          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+            No trabajaremos con proyectos de juguete. Elige <strong>una necesidad real de tu repositorio o proyecto corporativo actual</strong> que requiera análisis o transformación automatizada. Por ejemplo:
+          </p>
+          <ul style="color: #94a3b8; font-size: 13px; line-height: 1.8; margin: 0; padding-left: 20px;">
+            <li>Una rutina, servicio o <em>stored procedure</em> legacy sin documentación ni pruebas unitarias.</li>
+            <li>Un endpoint cuyo payload requiere extracción estructurada de campos de auditoría.</li>
+            <li>Una clase monolítica que requiere identificación de riesgos antes de una migración.</li>
+            <li>Un log extenso de errores que requiere clasificación determinista de severidad y causa raíz.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 03 — Architecture of an AI Instruction Contract -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">03 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Estructura del AI Instruction Contract</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 20px 0;">
+          Tu contrato de instrucciones debe componerse de los siguientes 6 bloques esenciales:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #6366f1; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #818cf8;">01 · INTENT & ROLE</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Define el rol especializado del modelo y el objetivo exacto sin rodeos ni conversación informal.</p>
+          </div>
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #6366f1; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #818cf8;">02 · CONSTRAINTS (NEGATIVE)</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Reglas explícitas de lo que el modelo NUNCA debe hacer (no inventar, no usar markdown, no asumir).</p>
+          </div>
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #6366f1; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #818cf8;">03 · INPUT CONTRACT</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Delimitadores claros para separar las instrucciones del contenido/código a analizar.</p>
+          </div>
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #6366f1; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #818cf8;">04 · OUTPUT SCHEMA</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Esquema JSON/YAML estricto con especificación de tipos de datos y campos requeridos.</p>
+          </div>
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #6366f1; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #818cf8;">05 · FAILURE CONDITIONS</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Comportamiento esperado cuando falte contexto o el input viole precondiciones.</p>
+          </div>
+          <div style="background: #090d16; border: 1px solid #1e293b; border-left: 2px solid #6366f1; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #818cf8;">06 · VALIDATION PROTOCOL</span>
+            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Criterios de verificación determinista para automatizar o auditar el resultado.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 — Playbook: Execution Steps -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">04 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Playbook de Ejecución Paso a Paso</h2>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+
+          <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 18px 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1; background: rgba(99,102,241,0.1); padding: 2px 8px; border-radius: 4px;">PASO 1</span>
+              <strong style="color: #f1f5f9; font-size: 14px;">Identificar el componente y abstraer sensibles</strong>
+            </div>
+            <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">
+              Selecciona el código o datos de tu proyecto real. Reemplaza IPs, contraseñas, nombres de clientes o datos PII por placeholders tipo <code>[CLIENT_ID]</code>, <code>[API_KEY_PLACEHOLDER]</code>.
+            </p>
+          </div>
+
+          <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 18px 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1; background: rgba(99,102,241,0.1); padding: 2px 8px; border-radius: 4px;">PASO 2</span>
+              <strong style="color: #f1f5f9; font-size: 14px;">Diseñar la primera versión del AI Instruction Contract</strong>
+            </div>
+            <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">
+              Abre tu IDE o editor. Redacta el contrato usando delimitadores Markdown (ej. <code>&lt;context&gt;</code>, <code>&lt;constraints&gt;</code>, <code>&lt;schema&gt;</code>). Especifica explícitamente que la salida debe ser parseable por código sin intervención manual.
+            </p>
+          </div>
+
+          <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 18px 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1; background: rgba(99,102,241,0.1); padding: 2px 8px; border-radius: 4px;">PASO 3</span>
+              <strong style="color: #f1f5f9; font-size: 14px;">Probar el contrato contra el Primer Caso Real (Caso Base)</strong>
+            </div>
+            <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">
+              Ejecuta el contrato en tu herramienta de IA autorizada (GitHub Copilot, Cursor, Claude, ChatGPT Enterprise). Copia el output y verifica si pasa un <code>JSON.parse()</code> o validador equivalente.
+            </p>
+          </div>
+
+          <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 18px 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1; background: rgba(99,102,241,0.1); padding: 2px 8px; border-radius: 4px;">PASO 4</span>
+              <strong style="color: #f1f5f9; font-size: 14px;">Someter a la prueba de estrés (Segundo Caso o Caso Borde)</strong>
+            </div>
+            <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">
+              Prueba la misma instrucción exactamente igual pero con un código incompleto, con errores de sintaxis o con campos faltantes. <strong style="color: #e4e1ed;">¿El modelo respetó las Failure Conditions o inventó datos?</strong> Refina los Constraints.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 05 — Authorized AI Tools & Environment -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">05 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Entorno y Herramientas Autorizadas</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+          Este laboratorio es 100% agnóstico del proveedor de IA. Puedes ejecutar tu contrato en cualquiera de estas herramientas autorizadas por tu organización:
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; background: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px;">GitHub Copilot Chat / CLI</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; background: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px;">Cursor IDE</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; background: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px;">Claude Enterprise / Workspaces</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; background: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px;">ChatGPT Team / Enterprise</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; background: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px;">Google Gemini Corporate</span>
+        </div>
+      </section>
+
+      <!-- 06 — Human Verification Protocol -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">06 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Protocolo de Verificación Humana</h2>
+        </div>
+        <div style="background: #050505; border: 1px solid #1e293b; border-radius: 8px; padding: 20px;">
+          <p style="color: #e4e1ed; font-size: 13px; font-weight: 600; margin: 0 0 12px 0;">Checklist de Validación antes de aprobar el contrato:</p>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; color: #94a3b8; font-size: 13px; line-height: 1.5; cursor: pointer;">
+              <input type="checkbox" style="accent-color: #6366f1; margin-top: 2px;">
+              <span><strong>Sin basura Conversacional:</strong> El modelo responde SOLO con el esquema solicitado, sin introducciones ni despedidas.</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 10px; color: #94a3b8; font-size: 13px; line-height: 1.5; cursor: pointer;">
+              <input type="checkbox" style="accent-color: #6366f1; margin-top: 2px;">
+              <span><strong>Parsing estricto:</strong> La salida pasa una validación sintáctica (JSON parseable, XML bien formado, etc.).</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 10px; color: #94a3b8; font-size: 13px; line-height: 1.5; cursor: pointer;">
+              <input type="checkbox" style="accent-color: #6366f1; margin-top: 2px;">
+              <span><strong>Respeto a Constraints Negativos:</strong> No inventó librerías inexistentes ni asumió dependencias no especificadas.</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 10px; color: #94a3b8; font-size: 13px; line-height: 1.5; cursor: pointer;">
+              <input type="checkbox" style="accent-color: #6366f1; margin-top: 2px;">
+              <span><strong>Comportamiento ante fallo:</strong> Ante un input incompleto, emitió la estructura de error predefinida en lugar de alucinar.</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 10px; color: #94a3b8; font-size: 13px; line-height: 1.5; cursor: pointer;">
+              <input type="checkbox" style="accent-color: #6366f1; margin-top: 2px;">
+              <span><strong>Reutilizabilidad:</strong> Un compañero de equipo podría tomar este contrato y ejecutarlo sobre otra rutina con el mismo resultado.</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 — Acceptance Criteria -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">07 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Criterios de Aceptación del Laboratorio</h2>
+        </div>
+        <div style="background: rgba(99,102,241,0.05); border: 1px solid rgba(99,102,241,0.2); border-radius: 8px; padding: 20px 24px;">
+          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7; margin: 0;">
+            Este laboratorio se considera <strong style="color: #818cf8;">Completado</strong> cuando hayas documentado en tu entorno personal/corporativo:
+          </p>
+          <ol style="color: #94a3b8; font-size: 13px; line-height: 1.8; margin: 12px 0 0 0; padding-left: 20px;">
+            <li>El AI Instruction Contract completo redactado para tu necesidad real.</li>
+            <li>El resultado del análisis anonimizado sobre el primer caso de prueba.</li>
+            <li>El resultado del análisis sobre el segundo caso (caso borde o fallo).</li>
+            <li>La lista de iteraciones realizadas entre la versión v1 (ambigua) y la versión final (determinista).</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Navigation & Closure -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid #1e293b; margin-top: 12px;">
+        <a routerLink="/academy/modules/m02-prompt-engineering/demo-engineer-instruction" class="control-btn" style="border-color: #1e293b; color: #94a3b8; font-size: 12px;">
+          ← Volver a Demo 02
+        </a>
+        <a routerLink="/labs" class="control-btn primary" style="font-size: 12px;">
+          Ver Real Engineering Labs →
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

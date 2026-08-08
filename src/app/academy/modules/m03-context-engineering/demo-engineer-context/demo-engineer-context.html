@@ -1,0 +1,154 @@
+﻿<div class="presentation-container pb-32">
+  <div class="back-to-menu">
+    <a routerLink="/academy/modules/m03-context-engineering/lesson-03-compression" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a la Leccion
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 1100px; margin: 0 auto; padding: 32px 40px;">
+
+    <div class="slide-title">
+      <span class="workshop-badge">
+        <span class="icon">◈</span>
+        Demo 03 · Context Engineering
+      </span>
+      <h1>Engineer the Context</h1>
+      <p class="subtitle">Selección, presupuesto y priorización de fuentes de contexto en tiempo real</p>
+    </div>
+
+    <div class="slide-content">
+
+      <!-- Intro Block -->
+      <div style="background:#0A0A0A; border:1px solid #1F1F1F; border-left:2px solid #6366f1; border-radius:6px; padding:20px 24px; margin-bottom:2rem; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div>
+          <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin:0 0 10px 0;">Agent Task</p>
+          <p style="font-size:14px; color:#c7c4d7; line-height:1.7; margin:0;">
+            El usuario escribe en el chat: <strong style="color:#e4e1ed;">"¿Puedo cancelar esta?"</strong> estando en la pantalla de la Factura #552.
+          </p>
+        </div>
+        <div>
+          <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin:0 0 10px 0;">Try it</p>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; gap:12px; align-items:baseline;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#4b5563; flex-shrink:0; width:16px;">01</span>
+              <span style="font-size:13px; color:#94a3b8;">Selecciona las fuentes en el panel izquierdo.</span>
+            </div>
+            <div style="display:flex; gap:12px; align-items:baseline;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#4b5563; flex-shrink:0; width:16px;">02</span>
+              <span style="font-size:13px; color:#94a3b8;">Observa cómo consume tu presupuesto de 100 TU.</span>
+            </div>
+            <div style="display:flex; gap:12px; align-items:baseline;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#4b5563; flex-shrink:0; width:16px;">03</span>
+              <span style="font-size:13px; color:#e4e1ed; font-weight:500;">Encuentra el Minimum Useful Context (sin ruido ni exceso).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Interactive Grid -->
+      <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:1.5rem;">
+
+        <!-- Left: Sources -->
+        <div class="template-container" style="display:flex; flex-direction:column;">
+          <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+            <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">Fuentes de Contexto Disponibles</h3>
+          </div>
+          <div style="padding:1rem; background:#050505; flex:1; display:flex; flex-direction:column; gap:0.75rem;">
+
+            <div *ngFor="let item of items()"
+                 (click)="toggleSelection(item)"
+                 [style.borderColor]="item.selected ? '#6366f1' : '#1F1F1F'"
+                 [style.background]="item.selected ? 'rgba(99,102,241,0.08)' : '#0A0A0A'"
+                 style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border:1px solid #1F1F1F; border-radius:6px; cursor:pointer; transition:all 0.2s;">
+              <div style="display:flex; gap:12px; align-items:center;">
+                <input type="checkbox" [checked]="item.selected" style="accent-color:#6366f1; pointer-events:none;">
+                <div>
+                  <h4 style="margin:0; font-size:13px; color:#f8fafc; font-weight:600;">{{ item.label }}</h4>
+                  <p style="margin:4px 0 0 0; font-size:12px; color:#94a3b8;">{{ item.description }}</p>
+                </div>
+              </div>
+              <span [style.color]="item.selected ? '#818cf8' : '#4b5563'" style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;">
+                {{ item.size }} TU
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right: Budget & Validation -->
+        <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
+          <!-- Budget Bar -->
+          <div class="template-container" style="display:flex; flex-direction:column;">
+            <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+              <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">Context Budget</h3>
+            </div>
+            <div style="padding:1.25rem; background:#050505; border-bottom-left-radius:8px; border-bottom-right-radius:8px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-family:'JetBrains Mono',monospace; font-size:12px;">
+                <span [style.color]="budgetExceeded() ? '#ef4444' : '#94a3b8'">Token Usage</span>
+                <span [style.color]="budgetExceeded() ? '#ef4444' : '#e4e1ed'" style="font-weight:600;">{{ currentUsage() }} / {{ maxBudget }} TU</span>
+              </div>
+              <div style="width:100%; height:12px; background:#1e293b; border-radius:6px; overflow:hidden; border:1px solid #1F1F1F;">
+                <div [style.width]="progressWidth() + '%'"
+                     [style.backgroundColor]="budgetExceeded() ? '#ef4444' : '#6366f1'"
+                     style="height:100%; transition:width 0.3s ease, background-color 0.3s ease;">
+                </div>
+              </div>
+
+              <p *ngIf="budgetExceeded()" style="color:#fca5a5; font-size:12px; margin:10px 0 0 0; font-family:'JetBrains Mono',monospace; text-align:center;">
+                ⚠ PRESUPUESTO EXCEDIDO — El contexto sobrante degrada la atención y consume presupuesto innecesariamente.
+              </p>
+            </div>
+          </div>
+
+          <!-- Live Validation Status -->
+          <div class="template-container" style="display:flex; flex-direction:column; flex:1;">
+            <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+              <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">Evaluación del Context Engine</h3>
+            </div>
+            <div style="padding:1.5rem; background:#050505; flex:1; display:flex; align-items:center; justify-content:center; text-align:center;">
+
+              <div *ngIf="isSuccess()">
+                <p style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#22c55e; font-weight:700; margin:0 0 6px 0;">PASS — Minimum Useful Context</p>
+                <p style="color:#c7c4d7; font-size:13px; line-height:1.6; margin:0;">
+                  Seleccionaste exactamente la información necesaria sin ruido histórico ni desborde de tokens. El modelo responderá con precisión máxima.
+                </p>
+              </div>
+
+              <div *ngIf="!isSuccess() && !budgetExceeded()">
+                <p style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#64748b; font-weight:600; margin:0 0 6px 0;">BUILDING CONTEXT PAYLOAD...</p>
+                <p style="color:#94a3b8; font-size:13px; line-height:1.6; margin:0;">
+                  Selecciona las fuentes. Recuerda: incluye solo lo indispensable para resolver el intent y descarta el ruido promocional o histórico redundante.
+                </p>
+              </div>
+
+              <div *ngIf="budgetExceeded()">
+                <p style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#ef4444; font-weight:600; margin:0 0 6px 0;">FAIL — Noise / Overflow</p>
+                <p style="color:#fca5a5; font-size:13px; line-height:1.6; margin:0;">
+                  Desombra fuentes no esenciales (ej. historial entero de 50 msgs o promociones) para volver dentro del presupuesto.
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Takeaway Box -->
+      <div class="warning-box" style="border-left-color:#6366f1; background:#0d0d1a; margin-top:2rem;">
+        <h4 style="color:#818cf8; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem;">◈ Concepto para llevar</h4>
+        <p style="color:#c7c4d7; font-size:14px; line-height:1.7; margin-bottom:1rem;">
+          El principio en ingeniería de contexto no es simplemente "menos contexto", sino <strong style="color:#e4e1ed;">Minimum Useful Context</strong>: proveer todo lo estrictamente necesario sin introducir ruido que diluya la atención del modelo.
+        </p>
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a routerLink="/library/resources/context-checklist" class="control-btn primary" style="font-size:11px;">Context Engineering Checklist</a>
+          <a routerLink="/library/resources/context-template" class="control-btn" style="border-color:#1F1F1F; font-size:11px;">Context Assembly Template</a>
+          <a routerLink="/academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context" class="control-btn" style="border-color:#6366f1; color:#818cf8; font-size:11px;">Ir al Lab 03 →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

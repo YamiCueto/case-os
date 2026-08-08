@@ -92,14 +92,6 @@ export const routes: Routes = [
         loadComponent: () => import('./labs/token-playground/token-playground').then(m => m.TokenPlayground)
       },
       {
-        path: 'labs/engineer-instruction',
-        loadComponent: () => import('./labs/engineer-instruction/engineer-instruction').then(m => m.EngineerInstructionLab)
-      },
-      {
-        path: 'labs/engineer-context',
-        loadComponent: () => import('./labs/engineer-context/engineer-context').then(m => m.EngineerContextLab)
-      },
-      {
         path: 'labs/build-retrieval',
         loadComponent: () => import('./labs/build-retrieval/build-retrieval').then(m => m.BuildRetrievalLab)
       },
@@ -236,6 +228,14 @@ export const routes: Routes = [
             loadComponent: () => import('./academy/modules/m02-prompt-engineering/lesson-03-structured-outputs/lesson-03-structured-outputs').then(m => m.Lesson03StructuredOutputs)
           },
           {
+            path: 'academy/modules/m02-prompt-engineering/demo-engineer-instruction',
+            loadComponent: () => import('./academy/modules/m02-prompt-engineering/demo-engineer-instruction/demo-engineer-instruction').then(m => m.DemoEngineerInstruction)
+          },
+          {
+            path: 'academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract',
+            loadComponent: () => import('./academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract/lab-02-engineer-instruction-contract').then(m => m.Lab02EngineerInstructionContract)
+          },
+          {
             path: 'academy/modules/m03-context-engineering/lesson-01-anatomy',
             loadComponent: () => import('./academy/modules/m03-context-engineering/lesson-01-anatomy/lesson-01-anatomy').then(m => m.Lesson01Anatomy)
           },
@@ -246,6 +246,14 @@ export const routes: Routes = [
           {
             path: 'academy/modules/m03-context-engineering/lesson-03-compression',
             loadComponent: () => import('./academy/modules/m03-context-engineering/lesson-03-compression/lesson-03-compression').then(m => m.Lesson03Compression)
+          },
+          {
+            path: 'academy/modules/m03-context-engineering/demo-engineer-context',
+            loadComponent: () => import('./academy/modules/m03-context-engineering/demo-engineer-context/demo-engineer-context').then(m => m.DemoEngineerContext)
+          },
+          {
+            path: 'academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context',
+            loadComponent: () => import('./academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context/lab-03-build-minimum-useful-context').then(m => m.Lab03BuildMinimumUsefulContext)
           },
           {
             path: 'academy/modules/m04-retrieval-rag/lesson-01-embeddings',

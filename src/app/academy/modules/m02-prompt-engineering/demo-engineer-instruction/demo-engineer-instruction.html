@@ -1,0 +1,126 @@
+﻿<div class="presentation-container pb-32">
+  <div class="back-to-menu">
+    <a routerLink="/academy/modules/m02-prompt-engineering/lesson-03-structured-outputs" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a la Leccion
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 1100px; margin: 0 auto; padding: 32px 40px;">
+
+    <div class="slide-title">
+      <span class="workshop-badge">
+        <span class="icon">◈</span>
+        Demo 02 · Prompt Engineering
+      </span>
+      <h1>Engineer the Instruction</h1>
+      <p class="subtitle">Observa como la precision de una instruccion determina si el pipeline sobrevive o colapsa</p>
+    </div>
+
+    <div class="slide-content">
+
+      <div style="background:#0A0A0A; border:1px solid #1F1F1F; border-left:2px solid #6366f1; border-radius:6px; padding:20px 24px; margin-bottom:2rem; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div>
+          <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin:0 0 10px 0;">Scenario</p>
+          <p style="font-size:14px; color:#c7c4d7; line-height:1.7; margin:0;">Tu backend procesa codigo defectuoso y necesita que el LLM devuelva un <strong style="color:#e4e1ed;">JSON estricto</strong>. Si el modelo agrega texto extra, el parser hace crash.</p>
+        </div>
+        <div>
+          <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin:0 0 10px 0;">Try it</p>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; gap:12px; align-items:baseline;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#4b5563; flex-shrink:0; width:16px;">01</span>
+              <span style="font-size:13px; color:#94a3b8;">Escribe una instruccion y ejecuta el prompt.</span>
+            </div>
+            <div style="display:flex; gap:12px; align-items:baseline;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#4b5563; flex-shrink:0; width:16px;">02</span>
+              <span style="font-size:13px; color:#94a3b8;">Observa si el pipeline valida o colapsa.</span>
+            </div>
+            <div style="display:flex; gap:12px; align-items:baseline;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#4b5563; flex-shrink:0; width:16px;">03</span>
+              <span style="font-size:13px; color:#e4e1ed; font-weight:500;">Agrega constraints y un schema estricto hasta superar la validacion.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:1.5rem;">
+
+        <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
+          <div class="template-container" style="display:flex; flex-direction:column;">
+            <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+              <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">01 · Snippet defectuoso (contexto)</h3>
+            </div>
+            <div style="padding:1rem; background:#050505; border-bottom-left-radius:8px; border-bottom-right-radius:8px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#38bdf8; white-space:pre-wrap; line-height:1.6;">{{ codeSnippet }}</div>
+          </div>
+
+          <div class="template-container" style="display:flex; flex-direction:column; flex-grow:1;">
+            <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+              <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">02 · Tu system prompt (la instruccion)</h3>
+            </div>
+            <div style="padding:1rem; flex:1; display:flex; flex-direction:column; gap:0.75rem;">
+              <textarea
+                [(ngModel)]="instructionInput"
+                rows="8"
+                style="width:100%; padding:12px 14px; border-radius:6px; border:1px solid #1F1F1F; background:#050505; color:#c7c4d7; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.6; resize:vertical; outline:none; transition:border-color 0.2s; box-sizing:border-box;"
+                onfocus="this.style.borderColor='#6366f1'"
+                onblur="this.style.borderColor='#1F1F1F'"
+                placeholder="Escribe instrucciones estrictas para analizar el codigo y devolver JSON..."></textarea>
+              <button class="control-btn primary" style="width:100%; justify-content:center;" (click)="runTest()">
+                ▶ Ejecutar Prompt
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="template-container" style="display:flex; flex-direction:column;">
+          <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+            <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">03 · Backend pipeline (validacion)</h3>
+          </div>
+          <div style="padding:1.5rem; flex:1; min-height:350px; display:flex; flex-direction:column;">
+
+            <div *ngIf="!testResult()" style="flex:1; display:flex; align-items:center; justify-content:center;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#4b5563;">Esperando ejecucion...</span>
+            </div>
+
+            <div *ngIf="testResult()" style="display:flex; flex-direction:column; gap:1.25rem;">
+              <div>
+                <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#4b5563; margin:0 0 8px 0;">1. Raw LLM Output</p>
+                <pre style="background:#050505; border:1px solid #1F1F1F; padding:12px 14px; border-radius:6px; font-size:11px; color:#c7c4d7; white-space:pre-wrap; margin:0; font-family:'JetBrains Mono',monospace; line-height:1.5;">{{ testResult()?.rawOutput }}</pre>
+              </div>
+
+              <div>
+                <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#4b5563; margin:0 0 8px 0;">2. Backend Validation (JSON.parse)</p>
+
+                <div *ngIf="testResult()?.isValidJson" style="background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.25); border-left:2px solid #22c55e; padding:12px 16px; border-radius:6px;">
+                  <p style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#22c55e; margin:0 0 8px 0;">PASS — Parseo Exitoso</p>
+                  <pre style="font-size:11px; color:#86efac; margin:0; font-family:'JetBrains Mono',monospace; line-height:1.5;">{{ testResult()?.parsedData | json }}</pre>
+                </div>
+
+                <div *ngIf="!testResult()?.isValidJson" style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-left:2px solid #ef4444; padding:12px 16px; border-radius:6px;">
+                  <p style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#ef4444; margin:0 0 8px 0;">FAIL — System Crash</p>
+                  <p style="font-size:11px; color:#fca5a5; margin:0; font-family:'JetBrains Mono',monospace; line-height:1.5;">{{ testResult()?.errorMsg }}</p>
+                  <p style="font-size:11px; color:#94a3b8; margin-top:8px; font-style:italic;">Itera tu instruccion: obliga al modelo a responder SOLO con el objeto JSON y nada mas.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="warning-box" style="border-left-color:#6366f1; background:#0d0d1a; margin-top:2rem;">
+        <h4 style="color:#818cf8; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem;">◈ Concepto para llevar</h4>
+        <p style="color:#c7c4d7; font-size:14px; line-height:1.7; margin-bottom:1rem;">Una instruccion sin schema produce output impredecible. Los <strong style="color:#e4e1ed;">Negative Constraints</strong> y los <strong style="color:#e4e1ed;">Output Schemas</strong> no son detalles — son la diferencia entre un sistema que funciona y uno que hace crash en produccion.</p>
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a routerLink="/library/resources/prompt-checklist" class="control-btn primary" style="font-size:11px;">Prompt Design Checklist</a>
+          <a routerLink="/library/resources/json-extraction-prompt" class="control-btn" style="border-color:#1F1F1F; font-size:11px;">JSON Extraction Prompt</a>
+          <a routerLink="/academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract" class="control-btn" style="border-color:#6366f1; color:#818cf8; font-size:11px;">Ir al Lab 02 →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
