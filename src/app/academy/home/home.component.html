@@ -1,71 +1,152 @@
-<div class="space-y-8">
-  <header class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+﻿<div class="max-w-6xl mx-auto space-y-8">
+  <!-- Header / Hero -->
+  <div class="flex flex-col gap-4">
     <div>
-      <h1 class="text-3xl font-extrabold text-white tracking-tight">CASE Academy</h1>
-      <p class="text-slate-400 mt-2 text-lg">AI Engineering education for Software Engineers.</p>
+      <div class="font-label-mono text-[10px] text-slate-400 mb-2 tracking-wider flex items-center gap-2">
+        <span class="text-indigo-400">AI ENGINEERING PROGRAM</span>
+        <span class="text-slate-600">|</span>
+        <span>09 MODULES</span>
+        <span class="text-slate-600">|</span>
+        <span>FOUNDATIONS &rarr; ARCHITECTURE</span>
+      </div>
+      <h1 class="font-display text-3xl font-semibold text-white mb-2 tracking-tight">CASE Academy</h1>
+      <p class="font-body-base text-sm text-slate-400">AI Engineering education for Software Engineers.</p>
     </div>
     
-    <div *ngIf="progress() as prog" class="bg-slate-800/50 rounded-xl p-4 min-w-[250px] border border-slate-700">
+    <!-- Progress Overview Widget -->
+    <div *ngIf="progress() as prog" class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-4 w-full md:w-[320px]">
       <div class="flex justify-between items-center mb-2">
-        <span class="text-sm font-semibold text-slate-300">Tu Progreso Global</span>
-        <span class="text-sm font-bold text-indigo-400">{{ prog.completionPercentage }}%</span>
+        <span class="font-label-mono text-xs text-slate-400 uppercase">Your Progress</span>
+        <span class="font-label-mono text-[10px] text-white bg-[#1F1F1F] px-1.5 py-0.5 rounded-[2px]">
+          {{ prog.completedLessons.length }} lessons
+        </span>
       </div>
-      <div class="w-full bg-slate-900 rounded-full h-2">
-        <div class="bg-indigo-500 h-2 rounded-full" [style.width.%]="prog.completionPercentage"></div>
+      <div class="flex items-center gap-2 mb-1">
+        <div class="flex-1 h-1 bg-[#1F1F1F] rounded-full overflow-hidden">
+          <div class="h-full bg-indigo-500 transition-all duration-500" [style.width.%]="prog.completionPercentage"></div>
+        </div>
+        <span class="font-code-sm text-[10px] text-white">{{ prog.completionPercentage }}%</span>
       </div>
-    </div>
-  </header>
-
-  <!-- CTA Block -->
-  <section class="bg-gradient-to-r from-indigo-900/40 to-slate-900 border border-indigo-500/20 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
-    <!-- User without progress -->
-    <ng-container *ngIf="!progress()?.lastVisitedLessonPath">
-      <div>
-        <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">Nuevo Usuario</div>
-        <h2 class="text-xl font-bold text-white">Empezar Academy</h2>
-        <p class="text-slate-400 text-sm mt-1">Comienza tu recorrido con AI Foundations</p>
-      </div>
-      <a routerLink="/academy/modules/m01-ai-foundations/lesson-01-probabilidad" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-colors shrink-0 shadow-lg shadow-indigo-500/25">
-        Comenzar Curso →
-      </a>
-    </ng-container>
-
-    <!-- User with progress -->
-    <ng-container *ngIf="progress()?.lastVisitedLessonPath as lastPath">
-      <div>
-        <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">Continuar Aprendiendo</div>
-        <h2 class="text-xl font-bold text-white">{{ progress()?.lastVisitedLessonTitle }}</h2>
-      </div>
-      <a [routerLink]="lastPath" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-colors shrink-0 shadow-lg shadow-indigo-500/25">
-        Retomar Clase →
-      </a>
-    </ng-container>
-  </section>
-
-  <section>
-    <h2 class="text-xl font-bold text-slate-200 mb-6 flex items-center gap-2">
-      <span class="text-2xl">📚</span> Programa de Formación
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div *ngFor="let mod of modules" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden flex flex-col h-full hover:border-slate-700 transition-colors">
-      <div *ngIf="mod.state === 'LOCKED'" class="absolute top-4 right-4 bg-slate-800 text-slate-400 text-xs font-bold px-2 py-1 rounded uppercase">
-        Bloqueado
-      </div>
-      <div *ngIf="mod.state === 'LIVE'" class="absolute top-4 right-4 bg-indigo-500/20 text-indigo-400 text-xs font-bold px-2 py-1 rounded uppercase">
-        Activo
-      </div>
-      
-      <div class="text-4xl mb-4">{{ mod.icon }}</div>
-      <h3 class="text-xl font-bold text-white mb-2">{{ mod.title }}</h3>
-      <p class="text-sm text-slate-400 mb-6 flex-1">{{ mod.description }}</p>
-      
-      <div class="flex items-center justify-between text-sm">
-        <span class="text-slate-500">{{ mod.duration }}</span>
-        <a *ngIf="mod.state === 'LIVE' && mod.lessons?.length" [routerLink]="mod.lessons[0].path" class="text-indigo-400 font-semibold hover:text-indigo-300">
-          Entrar →
-        </a>
+      <div class="flex justify-between font-code-sm text-[10px] text-slate-500 mt-2">
+        <span>FOUNDATIONS</span>
+        <span>ARCHITECTURE</span>
       </div>
     </div>
+  </div>
+
+  <!-- Continue Learning Hero -->
+  <div *ngIf="progress()?.lastVisitedLessonPath" class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-6 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-indigo-500 transition-colors">
+    <div class="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
+    <div class="relative z-10 flex-1">
+      <div class="font-label-mono text-[10px] text-indigo-400 uppercase mb-2 tracking-wider">Continue Learning</div>
+      <h2 class="font-headline-md text-xl font-medium text-white mb-1">{{ lastModuleTitle() || 'CASE Academy' }}</h2>
+      <p class="font-code-sm text-[13px] text-slate-400">{{ progress()?.lastVisitedLessonTitle }}</p>
     </div>
-  </section>
+    <a [routerLink]="progress()?.lastVisitedLessonPath" class="relative z-10 bg-indigo-600 text-white font-body-sm text-sm px-6 py-2.5 rounded-[2px] flex items-center justify-center gap-2 hover:bg-indigo-500 transition-colors whitespace-nowrap self-start md:self-center">
+      Resume Session
+      <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+    </a>
+  </div>
+
+  <div *ngIf="!progress()?.lastVisitedLessonPath" class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-6 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-indigo-500 transition-colors">
+    <div class="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
+    <div class="relative z-10 flex-1">
+      <div class="font-label-mono text-[10px] text-indigo-400 uppercase mb-2 tracking-wider">Nuevo Usuario</div>
+      <h2 class="font-headline-md text-xl font-medium text-white mb-1">Empezar Academy</h2>
+      <p class="font-code-sm text-[13px] text-slate-400">Comienza tu recorrido con AI Foundations</p>
+    </div>
+    <a routerLink="/academy/modules/m01-ai-foundations/lesson-01-probabilidad" class="relative z-10 bg-indigo-600 text-white font-body-sm text-sm px-6 py-2.5 rounded-[2px] flex items-center justify-center gap-2 hover:bg-indigo-500 transition-colors whitespace-nowrap self-start md:self-center">
+      Comenzar Curso
+      <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+    </a>
+  </div>
+
+  <!-- Curriculum Roadmap & Grid -->
+  <div>
+    <h3 class="font-label-mono text-[11px] text-slate-400 uppercase tracking-wider mb-6 flex items-center gap-2">
+      <span class="material-symbols-outlined text-[14px]">route</span>
+      Learning Path Progression
+    </h3>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let mod of viewModules()" 
+           class="rounded-[2px] p-5 flex flex-col h-full relative overflow-hidden transition-all group"
+           [ngClass]="{
+             'bg-[#0A0A0A] border border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.15)]': mod.uiState === 'CURRENT',
+             'bg-[#0A0A0A] border border-[#1F1F1F] hover:border-[#333]': mod.uiState === 'COMPLETED' || mod.uiState === 'NEXT',
+             'bg-[#050505] border border-[#1F1F1F] opacity-60': mod.uiState === 'LOCKED'
+           }">
+        
+        <div *ngIf="mod.uiState === 'CURRENT'" class="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
+        
+        <div class="flex justify-between items-start mb-4 relative z-10">
+          <span class="font-label-mono text-[24px] font-bold transition-colors"
+                [ngClass]="{
+                  'text-white': mod.uiState === 'CURRENT',
+                  'text-[#353534] group-hover:text-[#454747]': mod.uiState === 'COMPLETED' || mod.uiState === 'NEXT',
+                  'text-[#1F1F1F]': mod.uiState === 'LOCKED'
+                }">
+            {{ mod.formattedOrder }}
+          </span>
+          
+          <!-- Badges based on state -->
+          <span *ngIf="mod.uiState === 'COMPLETED'" class="font-label-mono text-[10px] text-[#22c55e] bg-[#22c55e]/10 px-2 py-1 rounded-[2px] border border-[#22c55e]/20 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[10px]">check</span> COMPLETED
+          </span>
+          <span *ngIf="mod.uiState === 'CURRENT'" class="font-label-mono text-[10px] text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded-[2px] border border-indigo-500/30 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[10px]">radio_button_checked</span> CURRENT
+          </span>
+          <span *ngIf="mod.uiState === 'NEXT'" class="font-label-mono text-[10px] text-white bg-[#1F1F1F] px-2 py-1 rounded-[2px] border border-[#353534] flex items-center gap-1">
+            <span class="material-symbols-outlined text-[10px]">arrow_forward</span> NEXT
+          </span>
+          <span *ngIf="mod.uiState === 'LOCKED'" class="font-label-mono text-[10px] text-slate-500 bg-transparent border border-[#1F1F1F] px-2 py-1 rounded-[2px] flex items-center gap-1">
+            <span class="material-symbols-outlined text-[10px]">lock</span> LOCKED
+          </span>
+        </div>
+        
+        <h4 class="font-headline-md text-[16px] mb-2 font-medium flex items-center gap-2 relative z-10"
+            [ngClass]="mod.uiState === 'LOCKED' ? 'text-slate-400' : 'text-white'">
+          <span class="material-symbols-outlined text-[16px]"
+                [ngClass]="mod.uiState === 'CURRENT' ? 'text-indigo-400' : (mod.uiState === 'LOCKED' ? 'text-[#353534]' : 'text-slate-400')">
+            {{ mod.uiState === 'LOCKED' ? 'lock' : 'folder' }}
+          </span>
+          {{ mod.title }}
+        </h4>
+        
+        <p class="font-body-sm text-sm mb-6 flex-1 relative z-10"
+           [ngClass]="mod.uiState === 'LOCKED' ? 'text-[#454747]' : 'text-slate-400'">
+          {{ mod.description }}
+        </p>
+        
+        <div class="mt-auto border-t border-[#1F1F1F] pt-4 relative z-10">
+          <ng-container *ngIf="mod.uiState !== 'LOCKED'">
+            <div class="font-label-mono text-[10px] text-slate-400 flex flex-col gap-1 mb-4">
+              <div class="flex justify-between"><span>Lessons:</span><span class="text-white">{{ mod.lessonCount }}</span></div>
+              <div class="flex justify-between"><span>Demos:</span><span class="text-white">{{ mod.demoCount }}</span></div>
+              <div class="flex justify-between"><span>Labs:</span><span class="text-white">{{ mod.labCount }}</span></div>
+            </div>
+            
+            <a *ngIf="mod.uiState === 'CURRENT'" [routerLink]="mod.lessons?.[0]?.path" class="w-full font-label-mono text-[11px] text-white bg-indigo-600 py-2 rounded-[2px] hover:bg-indigo-500 transition-colors flex items-center justify-center gap-2 cursor-pointer">
+              Continue Learning <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+            </a>
+            
+            <a *ngIf="mod.uiState === 'NEXT'" [routerLink]="mod.lessons?.[0]?.path" class="w-full font-label-mono text-[11px] text-white bg-transparent border border-[#1F1F1F] py-2 rounded-[2px] hover:bg-[#1F1F1F] transition-colors flex items-center justify-center gap-2 cursor-pointer">
+              Start Module
+            </a>
+            
+            <a *ngIf="mod.uiState === 'COMPLETED'" [routerLink]="mod.lessons?.[0]?.path" class="w-full font-label-mono text-[11px] text-white bg-[#1F1F1F] py-2 rounded-[2px] hover:bg-[#2a2a2a] transition-colors flex items-center justify-center gap-2 cursor-pointer">
+              Review Content
+            </a>
+          </ng-container>
+          
+          <ng-container *ngIf="mod.uiState === 'LOCKED'">
+            <div class="font-label-mono text-[10px] text-[#353534] flex flex-col gap-1">
+              <div class="flex justify-between"><span>Status:</span><span>Prerequisite Required</span></div>
+            </div>
+          </ng-container>
+        </div>
+        
+      </div>
+    </div>
+  </div>
 </div>
