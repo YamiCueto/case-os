@@ -1,0 +1,144 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 07: MCP
+        </div>
+        <h1>MCP Architecture</h1>
+        <p class="subtitle">Host, Client y Server</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>La Topología Oficial</h2>
+        <p>MCP se basa en una topología estricta. Es vital entender la diferencia entre quién pide información y quién la provee. Nunca debes confundir al <em>Host</em> con el <em>Client</em>.</p>
+        
+        <div class="tech-card active" style="margin-top: 24px;">
+          <pre style="margin: 0; background: #0A0A0A; padding: 16px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #10b981;">Host
+ ├── MCP Client
+ │      │
+ │      │ MCP (Transport)
+ │      ↓
+ │   MCP Server
+ │      ├── Tools
+ │      ├── Resources
+ │      └── Prompts</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Definiciones -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 07: MCP
+        </div>
+        <h1>Las Tres Capas</h1>
+        <p class="subtitle">Desglosando la arquitectura</p>
+      </div>
+
+      <div class="slide-content">
+        <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 24px;">
+          
+          <div style="background: rgba(255, 255, 255, 0.05); border-left: 3px solid #3b82f6; padding: 16px; border-radius: 4px;">
+            <h3 style="color: #3b82f6; margin: 0 0 8px 0;">Host</h3>
+            <p style="margin: 0; font-size: 14px; color: #c7c4d7;">Es la aplicación principal donde el usuario interactúa (ej. Claude Desktop, Cursor IDE). Un Host puede instanciar <strong>múltiples Clientes MCP</strong> para conectarse a diferentes servidores simultáneamente.</p>
+          </div>
+          
+          <div style="background: rgba(255, 255, 255, 0.05); border-left: 3px solid #a855f7; padding: 16px; border-radius: 4px;">
+            <h3 style="color: #a855f7; margin: 0 0 8px 0;">MCP Client</h3>
+            <p style="margin: 0; font-size: 14px; color: #c7c4d7;">Es el módulo dentro del Host que mantiene la conexión 1 a 1 con un Servidor MCP mediante el protocolo estándar. Negocia la conexión y transfiere peticiones.</p>
+          </div>
+          
+          <div style="background: rgba(255, 255, 255, 0.05); border-left: 3px solid #10b981; padding: 16px; border-radius: 4px;">
+            <h3 style="color: #10b981; margin: 0 0 8px 0;">MCP Server</h3>
+            <p style="margin: 0; font-size: 14px; color: #c7c4d7;">Es el programa externo (ligero y sin estado) que expone el acceso a los sistemas locales o remotos (ej. PostgreSQL, Jira). Responde a las peticiones del Cliente mostrando qué capacidades tiene (Tools, Resources).</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Transportes -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 07: MCP
+        </div>
+        <h1>Transportes Modernos</h1>
+        <p class="subtitle">Especificación 2026-07-28</p>
+      </div>
+
+      <div class="slide-content">
+        <p>¿Cómo se comunican el Cliente y el Servidor físicamente? La especificación actual define dos transportes principales estandarizados (notar que HTTP+SSE es considerado legacy/deprecado):</p>
+        
+        <div class="tech-grid" style="margin-top: 32px;">
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #a855f7;">💻</div>
+            <h3>STDIO</h3>
+            <p>Usado para <strong>integraciones locales</strong>. El Host inicia el proceso del Servidor (ej. `npx mi-servidor-mcp`) y se comunican enviando JSON-RPC a través de los streams estándar (Standard Input / Standard Output).</p>
+          </div>
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #3b82f6;">🌐</div>
+            <h3>Streamable HTTP</h3>
+            <p>Usado para <strong>integraciones remotas</strong> corporativas o en la nube. Permite flujos bidireccionales eficientes sin las limitaciones históricas de SSE, adaptándose mejor a firewalls empresariales.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 07: MCP
+        </div>
+        <h1>Stateless & Capabilities</h1>
+        <p class="subtitle">Principios de diseño</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #f59e0b;">🧩</div>
+          <h3>El núcleo Stateless y el Descubrimiento</h3>
+          <p>Un cambio clave en las especificaciones recientes es el núcleo <em>stateless</em> de MCP. Los servidores no recuerdan el estado de la conversación. En su lugar, cuando el Cliente se conecta, el Servidor declara explícitamente sus <strong>Capabilities</strong> (qué puede hacer).</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 24px; border-radius: 4px; margin-top: 16px;">
+            <p style="margin: 0; color: #c7c4d7; font-size: 14px;">Estas <em>Capabilities</em> se dividen en tres primitivas fundamentales. Descubrirlas dinámicamente es la magia que elimina la necesidad de escribir código de integración manual.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m07-mcp/lesson-03-primitives" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            Siguiente Lección: Las Primitivas (Resources & Tools) &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

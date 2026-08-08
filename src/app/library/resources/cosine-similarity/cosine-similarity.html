@@ -1,0 +1,57 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/library" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Library
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding-top: 40px;">
+    
+    <div class="slide-title">
+      <div class="workshop-badge">
+        <span class="icon">📚</span> Library
+      </div>
+      <h1>Cosine Similarity Function</h1>
+      <p class="subtitle">La matemática detrás de la búsqueda semántica</p>
+    </div>
+
+    <div class="slide-content">
+      <p>La similitud del coseno (Cosine Similarity) es la métrica estándar para determinar qué tan similares son dos embeddings. En lugar de medir la distancia euclidiana entre dos puntos, mide el <strong>ángulo</strong> entre dos vectores.</p>
+      
+      <ul style="color: #c7c4d7; font-size: 14px; margin-top: 16px;">
+        <li><strong>Score 1.0:</strong> Vectores apuntan en la misma dirección (Significado idéntico).</li>
+        <li><strong>Score 0.0:</strong> Vectores ortogonales (Significados no relacionados).</li>
+        <li><strong>Score -1.0:</strong> Vectores opuestos (Significados completamente contrarios).</li>
+      </ul>
+
+      <div class="template-container" style="border-radius: 8px; border: 1px solid #1F1F1F; margin-top: 32px;">
+        <div class="template-header" style="background: #1A1A1A; padding: 12px 24px; color: #e4e1ed;">
+          <h3 style="font-size: 14px; margin: 0; font-family: 'JetBrains Mono', monospace; color: #3b82f6;">// cosine-similarity.ts</h3>
+        </div>
+        <div style="padding: 24px; background: #0A0A0A;">
+          <div class="prompt-text" style="margin: 0; white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #e4e1ed;">
+<span style="color: #a855f7;">export function</span> <span style="color: #3b82f6;">cosineSimilarity</span>(vecA: <span style="color: #10b981;">number</span>[], vecB: <span style="color: #10b981;">number</span>[]): <span style="color: #10b981;">number</span> {{ '{' }}
+  <span style="color: #a855f7;">let</span> dotProduct = <span style="color: #f59e0b;">0</span>;
+  <span style="color: #a855f7;">let</span> normA = <span style="color: #f59e0b;">0</span>;
+  <span style="color: #a855f7;">let</span> normB = <span style="color: #f59e0b;">0</span>;
+
+  <span style="color: #a855f7;">for</span> (<span style="color: #a855f7;">let</span> i = <span style="color: #f59e0b;">0</span>; i &lt; vecA.length; i++) {{ '{' }}
+    dotProduct += vecA[i] * vecB[i];
+    normA += vecA[i] * vecA[i];
+    normB += vecB[i] * vecB[i];
+  {{ '}' }}
+
+  <span style="color: #a855f7;">if</span> (normA === <span style="color: #f59e0b;">0</span> || normB === <span style="color: #f59e0b;">0</span>) <span style="color: #a855f7;">return</span> <span style="color: #f59e0b;">0</span>;
+  <span style="color: #a855f7;">return</span> dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+{{ '}' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="warning-box" style="margin-top: 24px;">
+        <strong>Nota de Producción:</strong> En un entorno real (ej. PostgreSQL con pgvector), esta función no se ejecuta en Node.js o el Frontend. Se ejecuta directamente en el motor de base de datos usando instrucciones SIMD del procesador para comparar contra millones de filas en milisegundos.
+      </div>
+    </div>
+  </div>
+</div>

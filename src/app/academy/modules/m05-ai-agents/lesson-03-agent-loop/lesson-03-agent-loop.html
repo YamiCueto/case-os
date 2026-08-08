@@ -1,0 +1,145 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>The Agent Loop</h1>
+        <p class="subtitle">Action &rarr; Observation &rarr; State</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>El Corazón del Agente</h2>
+        <p>Un agente no es un LLM súper-inteligente. Un agente es simplemente un modelo metido dentro de un bucle (Loop) en tu código. Este bucle operacional se conoce frecuentemente por el patrón ReAct (Reason + Act), pero lo crucial no es el "Thought" interno, sino la capacidad de actuar y observar las consecuencias.</p>
+        
+        <div class="tech-card active" style="margin-top: 24px;">
+          <div class="tech-icon" style="color: #6366f1;">🔄</div>
+          <h3>El Bucle Operacional</h3>
+          <p>El código le da un objetivo al LLM. El LLM propone una <strong>Acción</strong>. El código la ejecuta y le devuelve la <strong>Observación</strong>. Con esta nueva información, el LLM propone la siguiente acción, hasta que decide que tiene suficiente información para dar la <strong>Respuesta Final</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: El Flujo -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>El Ciclo en Acción</h1>
+        <p class="subtitle">Resolviendo problemas complejos</p>
+      </div>
+
+      <div class="slide-content">
+        <p style="margin-bottom: 24px;"><strong>User Request:</strong> "¿Qué clima hace hoy en Madrid? Mándale el reporte a Juan."</p>
+
+        <div style="display: flex; flex-direction: column; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px;">
+          <div style="padding: 12px; background: rgba(99, 102, 241, 0.1); border-left: 2px solid #6366f1; color: #e4e1ed;">
+            <strong>LLM Action:</strong> <span style="color: #10b981;">call getWeather(city="Madrid")</span>
+          </div>
+          <div style="padding: 12px; background: rgba(255, 255, 255, 0.05); border-left: 2px solid #a19fb0; color: #a19fb0; margin-left: 24px;">
+            <strong>Code Observation:</strong> "24 grados, parcialmente nublado"
+          </div>
+          <div style="padding: 12px; background: rgba(99, 102, 241, 0.1); border-left: 2px solid #6366f1; color: #e4e1ed;">
+            <strong>LLM Action:</strong> <span style="color: #10b981;">call searchKnowledge(query="email de Juan")</span>
+          </div>
+          <div style="padding: 12px; background: rgba(255, 255, 255, 0.05); border-left: 2px solid #a19fb0; color: #a19fb0; margin-left: 24px;">
+            <strong>Code Observation:</strong> "juan@empresa.com"
+          </div>
+          <div style="padding: 12px; background: rgba(99, 102, 241, 0.1); border-left: 2px solid #6366f1; color: #e4e1ed;">
+            <strong>LLM Action:</strong> <span style="color: #10b981;">call sendEmail(to="juan@empresa.com", body="En Madrid hace...")</span>
+          </div>
+          <div style="padding: 12px; background: rgba(255, 255, 255, 0.05); border-left: 2px solid #a19fb0; color: #a19fb0; margin-left: 24px;">
+            <strong>Code Observation:</strong> "Success: Email sent"
+          </div>
+          <div style="padding: 12px; background: rgba(168, 85, 247, 0.1); border-left: 2px solid #a855f7; color: #e4e1ed;">
+            <strong>LLM Action:</strong> <span style="color: #a855f7;">Return Final Answer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Límites Operacionales -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>Guardrails Operacionales</h1>
+        <p class="subtitle">Previniendo el desastre</p>
+      </div>
+
+      <div class="slide-content">
+        <p>Los Agent Loops son potentes, pero si una herramienta falla o el LLM se confunde, pueden entrar en un loop infinito (ej. intentar llamar a `search()` repetidamente con el mismo error).</p>
+        
+        <div class="tech-grid" style="margin-top: 24px;">
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #ef4444;">🛑</div>
+            <h3>Max Iterations</h3>
+            <p>El código DEBE forzar un límite duro (ej. `max_steps = 10`). Si el agente no ha terminado en 10 ciclos, se aborta y se devuelve un error al usuario.</p>
+          </div>
+          
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #f59e0b;">💸</div>
+            <h3>Cost Control</h3>
+            <p>Cada iteración del loop consume tokens. Se debe monitorear el crecimiento acumulativo del contexto y su impacto en latencia y costos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>Práctica: The Agent Loop</h1>
+        <p class="subtitle">Orquestando la autonomía</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-meta">Lab 05</div>
+          <div class="tech-icon" style="color: #6366f1;">🧪</div>
+          <h3>Simulador del Bucle</h3>
+          <p>En el siguiente Lab, harás de orquestador para un Agent Loop. Verás la intención del agente simulado y decidirás qué herramienta ejecutar para proveerle una "Observación".</p>
+          <p style="margin-top: 16px;">Experimentarás con herramientas que fallan y verás cómo el límite de iteraciones (Max Iterations) previene que el sistema se quede atascado. También notarás la conexión con M04: <strong>Un agente no necesita saber cómo funciona el Retrieval interno, solo necesita tener una herramienta de `searchKnowledge()` a su disposición.</strong></p>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/labs/agent-loop" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            🔬 Entrar al Lab 05 &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

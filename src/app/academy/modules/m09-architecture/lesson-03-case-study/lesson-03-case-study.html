@@ -1,0 +1,130 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>CASE OS: Un Caso de Estudio</h1>
+        <p class="subtitle">Evaluando Trade-offs Arquitectónicos</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>No es la "Única Arquitectura"</h2>
+        <p>CASE OS no es la plataforma definitiva. Es <strong>una posible implementación</strong> de los principios de diseño modular que hemos aprendido. Lo más valioso de estudiar CASE OS no es ver qué código tiene, sino entender <em>por qué</em> se tomaron ciertas decisiones.</p>
+        
+        <div class="warning-box" style="margin-top: 24px; border-left-color: #6366f1;">
+          <strong>Principio de Evaluación:</strong> Una buena arquitectura se define tanto por lo que construye como por lo que elige explícitamente <strong>NO construir</strong>.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Lo que construimos -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>Lo que SÍ construimos</h1>
+        <p class="subtitle">Decisiones de acoplamiento</p>
+      </div>
+
+      <div class="slide-content">
+        <p>En CASE OS decidimos aislar tres componentes críticos para proteger la aplicación principal del <em>Vendor Lock-in</em>:</p>
+        
+        <div class="tech-grid" style="margin-top: 32px;">
+          <div class="tech-card" style="border-left: 2px solid #10b981;">
+            <h3 style="color: #10b981; margin: 0 0 8px 0;">Engines (Ruteo de Modelos)</h3>
+            <p style="margin: 0; font-size: 13px; color: #c7c4d7;">Abstrajimos las llamadas al LLM. Si OpenAI cambia su API mañana, solo actualizamos el <em>Engine</em> de OpenAI; el resto del sistema ni se entera.</p>
+          </div>
+          <div class="tech-card" style="border-left: 2px solid #3b82f6;">
+            <h3 style="color: #3b82f6; margin: 0 0 8px 0;">Registries (Herramientas)</h3>
+            <p style="margin: 0; font-size: 13px; color: #c7c4d7;">Separamos las definiciones de <em>Tools</em> en un registro global independiente del modelo.</p>
+          </div>
+          <div class="tech-card" style="border-left: 2px solid #a855f7;">
+            <h3 style="color: #a855f7; margin: 0 0 8px 0;">Context Builders (Memoria)</h3>
+            <p style="margin: 0; font-size: 13px; color: #c7c4d7;">El pipeline de ensamblaje de contexto (RAG) funciona como un middleware inyector puro.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Lo que NO construimos -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>Lo que NO construimos</h1>
+        <p class="subtitle">Trade-offs y Restricciones</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="border-left: 4px solid #f59e0b; margin-bottom: 24px;">
+          <h3 style="color: #f59e0b; margin: 0 0 12px 0;">"Architecture on Demand"</h3>
+          <ul style="font-size: 14px; color: #c7c4d7; margin: 0; padding-left: 20px; line-height: 1.6;">
+            <li><strong>NO construimos un CMS:</strong> Porque el contenido actual (Markdown/HTML) es estático y un CMS agregaría latencia y complejidad (BBDD) innecesaria.</li>
+            <li><strong>NO implementamos MCP real:</strong> Porque nuestros laboratorios son entornos simulados sin sistemas remotos complejos; un cliente REST falso es suficiente por ahora.</li>
+            <li><strong>NO agregamos nuevos Engines (Gemini/Claude):</strong> La capa de "AI Provider" está congelada intencionalmente para evitar <em>feature creep</em> hasta que exista una necesidad de negocio real.</li>
+            <li><strong>NO construimos un Eval Registry:</strong> Lo simulamos localmente porque no tenemos un volumen de tráfico que justifique pagar métricas en vivo (Datadog/LangSmith).</li>
+          </ul>
+        </div>
+        <p style="font-size: 14px; color: #a19fb0;">Este es el núcleo de la ingeniería: resolver los requisitos actuales con la arquitectura mínima necesaria, manteniendo las fronteras limpias para poder escalar mañana si (y solo si) es necesario.</p>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>La Prueba Final</h1>
+        <p class="subtitle">The Architecture Blueprint</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #10b981;">🎓</div>
+          <h3>El rol del Arquitecto</h3>
+          <p>Has terminado la teoría de Academy. Empezaste intentando que el modelo diera buenas respuestas, y terminas siendo capaz de orquestar sistemas seguros, evaluables y modulares.</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 24px; border-radius: 4px; margin-top: 16px;">
+            <p style="margin: 0; color: #c7c4d7; font-size: 14px;"><strong>Tu prueba final (Lab 09):</strong> Recibirás Requisitos de Sistema. Tu trabajo es seleccionar ÚNICAMENTE los componentes arquitectónicos necesarios. Si añades un Agente donde basta un flujo simple, o si conectas MCP cuando no hay servicios externos, serás penalizado por introducir complejidad injustificada.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/labs/architecture-blueprint" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            🔬 Entrar al Lab 09 (Examen Final) &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

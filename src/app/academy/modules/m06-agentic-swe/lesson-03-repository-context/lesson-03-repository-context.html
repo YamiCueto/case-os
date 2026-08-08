@@ -1,0 +1,141 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 06: Agentic SWE
+        </div>
+        <h1>Repository Context</h1>
+        <p class="subtitle">Cómo un IDE construye la inteligencia</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>Más allá del RAG básico</h2>
+        <p>Un error común es asumir que un IDE simplemente hace "RAG sobre tu repositorio" al buscar palabras clave. La realidad es que los entornos modernos (como Cursor o Copilot) construyen <strong>contexto relevante</strong> utilizando múltiples estrategias simultáneamente.</p>
+        
+        <div class="warning-box" style="margin-top: 24px; border-left-color: #10b981;">
+          <strong>Concepto Clave:</strong> El código no es un texto plano. Es un grafo de dependencias estricto. El mejor contexto proviene de entender las relaciones estructurales, no solo las similitudes semánticas.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Fuentes de Contexto -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 06: Agentic SWE
+        </div>
+        <h1>Las piezas del rompecabezas</h1>
+        <p class="subtitle">Context Selection & Assembly</p>
+      </div>
+
+      <div class="slide-content">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 4px; display: flex; align-items: center;">
+            <div style="color: #6366f1; width: 160px; font-weight: 500;">Open Files</div>
+            <div style="color: #c7c4d7; font-size: 14px;">El agente da prioridad máxima a lo que estás mirando o editando.</div>
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 4px; display: flex; align-items: center;">
+            <div style="color: #3b82f6; width: 160px; font-weight: 500;">Dependencies</div>
+            <div style="color: #c7c4d7; font-size: 14px;">Importaciones y librerías utilizadas (Grafo sintáctico).</div>
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 4px; display: flex; align-items: center;">
+            <div style="color: #10b981; width: 160px; font-weight: 500;">Diagnostics</div>
+            <div style="color: #c7c4d7; font-size: 14px;">Errores del compilador (Linter, TypeScript errors).</div>
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 4px; display: flex; align-items: center;">
+            <div style="color: #f59e0b; width: 160px; font-weight: 500;">Search Results</div>
+            <div style="color: #c7c4d7; font-size: 14px;">Búsqueda Vectorial (RAG) para encontrar código similar.</div>
+          </div>
+          
+          <div style="text-align: center; color: #a855f7; font-size: 12px; margin: 12px 0;">&darr; Context Assembly &darr;</div>
+          
+          <div style="background: rgba(168, 85, 247, 0.1); border-left: 2px solid #a855f7; padding: 16px; border-radius: 4px; text-align: center;">
+            <strong style="color: #a855f7;">Coding Agent (The LLM Prompt)</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: El puente narrativo -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 06: Agentic SWE
+        </div>
+        <h1>El Problema de Integración</h1>
+        <p class="subtitle">Preparando el terreno para M07</p>
+      </div>
+
+      <div class="slide-content">
+        <p>Como desarrollador trabajando con un agente, tu trabajo principal a menudo es garantizar que el agente tenga el contexto correcto. Pero surge un desafío gigante a nivel de infraestructura:</p>
+        
+        <div class="tech-card active" style="margin-top: 24px;">
+          <div class="tech-icon" style="color: #ef4444;">🚧</div>
+          <h3>La fragmentación</h3>
+          <p>Para que un agente construya ese contexto, necesita saber cómo leer archivos locales, cómo consultar tu base de datos de tickets de JIRA, cómo hacer fetch a la documentación de AWS, etc. <strong>Cada integración es diferente</strong>. Si un asistente (como Claude) necesita interactuar con tus herramientas locales, ¿cómo lo hace de forma estandarizada?</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 16px; border-radius: 4px; margin-top: 16px;">
+            <p style="margin: 0; color: #c7c4d7; font-size: 14px;">Esta pregunta es exactamente lo que resuelve <strong>Model Context Protocol (MCP)</strong>, que veremos en el Módulo 07.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 06: Agentic SWE
+        </div>
+        <h1>Práctica: The Context-Aware Coder</h1>
+        <p class="subtitle">La relevancia lo es todo</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-meta">Lab 06</div>
+          <div class="tech-icon" style="color: #10b981;">🧪</div>
+          <h3>Simulando al Agente</h3>
+          <p>En el Lab 06, experimentarás directamente el impacto de la selección de contexto. Te enfrentarás a un bug en un componente simulado.</p>
+          <ul style="font-size: 14px; color: #c7c4d7; margin-top: 16px; padding-left: 20px;">
+            <li>Si omites el archivo esencial, el agente <strong>alucinará</strong> un parche incorrecto.</li>
+            <li>Si provees demasiado contexto irrelevante, observarás que más archivos no significa mejor rendimiento.</li>
+            <li>Si provees el contexto perfecto, el agente generará el parche ideal, que luego pasará a <strong>Verificación (Tests)</strong> y finalmente requerirá tu <strong>Human Approval</strong>.</li>
+          </ul>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/labs/ai-coder" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            🔬 Entrar al Lab 06 &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

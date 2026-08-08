@@ -1,0 +1,111 @@
+<div class="lab-container">
+  <div class="lab-header">
+    <div class="back-link">
+      <a routerLink="/academy/home">&larr; Volver a Academy</a>
+    </div>
+    <h1>Lab 07: The Universal Connector</h1>
+    <p>Interoperabilidad, Descubrimiento y Permisos</p>
+  </div>
+
+  <div class="mode-selector">
+    <div class="mode-btn" [class.active]="architectureMode() === 'LEGACY'" (click)="setMode('LEGACY')">
+      Legacy (N &times; M)
+    </div>
+    <div class="mode-btn" [class.active]="architectureMode() === 'MCP'" (click)="setMode('MCP')">
+      Modern (MCP Standard)
+    </div>
+  </div>
+
+  <div class="warning-box legacy" *ngIf="architectureMode() === 'LEGACY'" style="margin-bottom: 24px;">
+    <strong>Legacy Mode:</strong> Tienes 1 Agente. Para darle acceso a GitHub, Jira y BD, debes escribir 3 integraciones customizadas con código específico (REST APIs, SDKs diferentes, manejo de Auth). Si tuvieras 5 agentes distintos, serían 15 integraciones. Intenta conectar un servidor abajo.
+  </div>
+  
+  <div class="warning-box mcp" *ngIf="architectureMode() === 'MCP'" style="margin-bottom: 24px;">
+    <strong>MCP Mode:</strong> El Agente implementa el estándar MCP Client. Al conectar a un servidor compatible, ocurre un <em>Handshake</em> y el Agente descubre sus capacidades (Resources/Tools) dinámicamente con 0 líneas de código custom.
+  </div>
+
+  <div class="lab-grid">
+    <!-- Panel Izquierdo: El Host / Agente -->
+    <div class="panel host-panel">
+      <h2>🤖 Host (El Agente AI)</h2>
+      <p class="helper-text">Capacidades inyectadas dinámicamente</p>
+      
+      <div class="capabilities-section">
+        <h3>📄 Available Resources (Context)</h3>
+        <div class="empty-state" *ngIf="availableResources.length === 0">Sin acceso a datos externos</div>
+        <div class="capability-item resource" *ngFor="let res of availableResources">
+          <div class="cap-header">
+            <span class="cap-name">{{ res.name }}</span>
+            <span class="cap-server badge">{{ res.server }}</span>
+          </div>
+          <div class="cap-desc">{{ res.description }}</div>
+        </div>
+      </div>
+
+      <div class="capabilities-section" style="margin-top: 24px;">
+        <h3>🛠️ Available Tools (Actions)</h3>
+        <div class="empty-state" *ngIf="availableTools.length === 0">Sin herramientas ejecutables</div>
+        <div class="capability-item tool" *ngFor="let tool of availableTools">
+          <div class="cap-header">
+            <span class="cap-name">{{ tool.name }}</span>
+            <span class="cap-server badge">{{ tool.server }}</span>
+          </div>
+          <div class="cap-desc">{{ tool.description }}</div>
+          <div class="permission-tag" *ngIf="tool.permissionRequired">⚠️ Requiere Aprobación (HitL)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Derecho: Servidores Corporativos -->
+    <div class="panel servers-panel">
+      <h2>🔌 Directorio de Sistemas (Servidores)</h2>
+      <p class="helper-text">Fuentes de datos corporativas</p>
+      
+      <div class="server-card" *ngFor="let srv of servers()" [class.connected]="srv.connected">
+        <div class="srv-info">
+          <div class="srv-icon">{{ srv.icon }}</div>
+          <div>
+            <h4>{{ srv.name }}</h4>
+            <div class="srv-url">{{ srv.url }}</div>
+          </div>
+        </div>
+        
+        <button class="connect-btn" *ngIf="!srv.connected" (click)="initiateConnection(srv)">
+          {{ architectureMode() === 'LEGACY' ? 'Write Integration' : 'MCP Connect' }}
+        </button>
+        <div class="status-badge connected" *ngIf="srv.connected">
+          Connected (Capabilities Synced)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Handshake MCP -->
+  <div class="modal-overlay" *ngIf="pendingConnection()">
+    <div class="modal-content">
+      <h2>MCP Handshake: {{ pendingConnection()?.name }}</h2>
+      <p>El servidor <code>{{ pendingConnection()?.url }}</code> declara las siguientes capacidades (Capability Discovery). <strong>Conectar un servidor no otorga acceso irrestricto; el Host evalúa las capacidades antes de aceptarlas.</strong></p>
+      
+      <div class="discovery-list">
+        <div class="disc-item" *ngFor="let cap of pendingConnection()?.capabilities">
+          <div class="disc-type" [class.resource]="cap.type === 'RESOURCE'" [class.tool]="cap.type === 'TOOL'">
+            {{ cap.type }}
+          </div>
+          <div class="disc-details">
+            <div style="font-family: 'JetBrains Mono'; font-size: 13px;">{{ cap.name }}</div>
+            <div style="font-size: 12px; color: #a19fb0;">{{ cap.description }}</div>
+            <div *ngIf="cap.permissionRequired" style="color: #ef4444; font-size: 11px; margin-top: 4px; font-weight: bold;">
+              * Esta herramienta muta estado. El Host deberá interceptar su ejecución.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="action-btn" (click)="cancelConnection()">Rechazar</button>
+        <button class="action-btn success" (click)="approveConnection()">Aprobar e Inyectar Capacidades</button>
+      </div>
+    </div>
+  </div>
+
+</div>

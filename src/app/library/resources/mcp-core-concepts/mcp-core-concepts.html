@@ -1,0 +1,72 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/library" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Library
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding-top: 40px;">
+    
+    <div class="slide-title">
+      <div class="workshop-badge">
+        <span class="icon">📚</span> Library
+      </div>
+      <h1>MCP Core Concepts</h1>
+      <p class="subtitle">Reference Cheat Sheet (Spec 2026-07-28)</p>
+    </div>
+
+    <div class="slide-content">
+      <p>Model Context Protocol (MCP) es un estándar abierto de interoperabilidad para conectar asistentes de IA (Clientes) con fuentes de datos (Servidores). A continuación, las definiciones clave.</p>
+
+      <h2 style="color: #fff; margin-top: 48px; border-bottom: 1px solid #1F1F1F; padding-bottom: 8px;">1. Topología de Red</h2>
+      <div class="tech-grid" style="margin-top: 24px;">
+        <div class="tech-card">
+          <h3 style="color: #3b82f6;">Host</h3>
+          <p>La aplicación principal (ej. Claude Desktop, Cursor). Un Host puede iniciar múltiples Clientes MCP para conectarse a diferentes servidores simultáneamente. Maneja la UI y las interacciones con el modelo (LLM).</p>
+        </div>
+        <div class="tech-card">
+          <h3 style="color: #a855f7;">Client</h3>
+          <p>Mantiene la conexión (protocolo 1 a 1) con un Servidor MCP específico. Transfiere peticiones desde el Host hacia el Servidor y maneja las respuestas.</p>
+        </div>
+        <div class="tech-card">
+          <h3 style="color: #10b981;">Server</h3>
+          <p>Un proceso ligero y <em>stateless</em> que expone el acceso a sistemas externos (BDs, APIs locales). Al conectarse, declara sus capacidades (Capability Discovery).</p>
+        </div>
+      </div>
+
+      <h2 style="color: #fff; margin-top: 48px; border-bottom: 1px solid #1F1F1F; padding-bottom: 8px;">2. Transportes (Conectividad)</h2>
+      <div class="tech-grid" style="margin-top: 24px;">
+        <div class="tech-card">
+          <h3 style="color: #f59e0b;">STDIO</h3>
+          <p>El estándar para integraciones <strong>locales</strong>. El Host levanta el proceso del Servidor como un subproceso y se comunican enviando JSON-RPC bidireccional por Standard Input y Standard Output.</p>
+        </div>
+        <div class="tech-card">
+          <h3 style="color: #6366f1;">Streamable HTTP</h3>
+          <p>El estándar para integraciones <strong>remotas</strong> (Nube, Corporativas). Supera las limitaciones del antiguo HTTP+SSE, permitiendo flujos persistentes compatibles con proxies y firewalls modernos.</p>
+        </div>
+      </div>
+
+      <h2 style="color: #fff; margin-top: 48px; border-bottom: 1px solid #1F1F1F; padding-bottom: 8px;">3. Primitivas (Capacidades)</h2>
+      <div class="tech-grid" style="margin-top: 24px;">
+        <div class="tech-card" style="grid-column: span 2; border-left: 3px solid #3b82f6;">
+          <h3 style="color: #3b82f6;">Resources (Datos / Contexto)</h3>
+          <p>Representan datos Read-Only controlados por el Servidor. Se identifican mediante URIs (ej. <code>file:///...</code>, <code>postgres://...</code>). El agente o el usuario "leen" este contexto.</p>
+        </div>
+        <div class="tech-card" style="grid-column: span 2; border-left: 3px solid #ef4444;">
+          <h3 style="color: #ef4444;">Tools (Acciones / Mutaciones)</h3>
+          <p>Operaciones ejecutables (Read/Write) controladas activamente por el Modelo de IA (LLM). Requieren que el Host solicite aprobación (Human in the Loop) ya que pueden alterar el estado de sistemas externos.</p>
+        </div>
+        <div class="tech-card" style="grid-column: span 2; border-left: 3px solid #a855f7;">
+          <h3 style="color: #a855f7;">Prompts (Templates)</h3>
+          <p>Plantillas de texto parametrizadas definidas por el Servidor para interactuar de forma estándar con el dominio (ej. un prompt estructurado para hacer code-review de un Pull Request específico).</p>
+        </div>
+      </div>
+
+      <div class="warning-box" style="margin-top: 32px; border-left-color: #10b981;">
+        <strong>Capability Discovery:</strong> MCP es un protocolo sin estado. Al iniciar la conexión, el Cliente realiza un <em>Handshake</em> y el Servidor envía la lista completa de Resources, Tools y Prompts que tiene disponibles. Esto elimina la necesidad de pre-configurar manualmente cada integración.
+      </div>
+      
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>Decoupled Capabilities</h1>
+        <p class="subtitle">Architecture on Demand</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>Diseño impulsado por Requisitos</h2>
+        <p>Un error común es asumir que todo sistema moderno <strong>debe</strong> tener RAG, Agentes, MCP y Grafos de Conocimiento. La arquitectura real debe surgir exclusivamente de los requisitos del problema.</p>
+        
+        <div class="tech-card active" style="margin-top: 24px;">
+          <pre style="margin: 0; background: #0A0A0A; padding: 16px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #34d399;">Requirements
+      ↓
+Capabilities
+      ↓
+Boundaries
+      ↓
+Interfaces
+      ↓
+Implementation</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: No todo es un Agente -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>Least Autonomy Necessary</h1>
+        <p class="subtitle">Recuperando el Principio de M05</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="border-left: 4px solid #f59e0b;">
+          <div class="tech-icon" style="color: #f59e0b;">⚖️</div>
+          <h3>Úsalo solo si lo necesitas</h3>
+          <p>Como vimos en el Módulo 05, la autonomía introduce imprevisibilidad y riesgo.</p>
+          <ul style="font-size: 14px; color: #c7c4d7; margin-top: 16px; padding-left: 20px;">
+            <li>Si el flujo es determinista, <strong>no uses un Agente</strong>.</li>
+            <li>Si los datos cambian poco, <strong>usa caché, no RAG dinámico</strong>.</li>
+            <li>Si integras un solo sistema estático, <strong>no necesitas MCP</strong>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Capacidades como Bloques -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>Construyendo el Puzzle</h1>
+        <p class="subtitle">Componentes Independientes</p>
+      </div>
+
+      <div class="slide-content">
+        <p>Cuando un requerimiento exige una capacidad, esta debe diseñarse como un componente aislado, protegido por fronteras (Boundaries):</p>
+        
+        <div class="tech-grid" style="margin-top: 32px;">
+          <div class="tech-card">
+            <h3 style="color: #3b82f6;">Memoria (Context)</h3>
+            <p>Bases vectoriales o APIs de búsqueda. Debe exponer una interfaz estándar (ej. <code>search()</code>) independiente de si usas Pinecone o PostgreSQL.</p>
+          </div>
+          <div class="tech-card">
+            <h3 style="color: #ef4444;">Acción (Tools)</h3>
+            <p>Herramientas locales o Servidores MCP. Protegidas por un <em>Tool Boundary</em> que exige validación (HitL) antes de mutar el estado externo.</p>
+          </div>
+          <div class="tech-card">
+            <h3 style="color: #10b981;">Evaluación (Security)</h3>
+            <p>El Pipeline de CI/CD para prompts y respuestas. Funciona como un middleware de entrada/salida que enmascara PII y frena alucinaciones.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>Hacia el Caso de Estudio</h1>
+        <p class="subtitle">Implementaciones Reales</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #a855f7;">🔍</div>
+          <h3>De la Teoría a la Práctica</h3>
+          <p>Hemos definido qué debe hacer una arquitectura GenAI moderna: abstraer al proveedor, instanciar capacidades solo si los requisitos lo piden, y proteger las ejecuciones con fronteras seguras.</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 24px; border-radius: 4px; margin-top: 16px;">
+            <p style="margin: 0; color: #c7c4d7; font-size: 14px;">En la siguiente lección, analizaremos cómo nosotros mismos construimos la plataforma <strong>CASE OS Academy</strong> utilizando (y omitiendo deliberadamente) estas estrategias como un caso de estudio real.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m09-architecture/lesson-03-case-study" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            Siguiente Lección: CASE OS Case Study &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>The Monolith Trap</h1>
+        <p class="subtitle">El modelo es una dependencia, no la arquitectura</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>La evolución de la complejidad</h2>
+        <p>A lo largo de Academy hemos visto cómo una simple llamada a un LLM (M01) creció hasta incorporar RAG, Tools, Agentes y Seguridad. El error de arquitectura más común en equipos nuevos es construir todo este sistema alrededor del SDK de un proveedor específico (ej. <em>OpenAI Assistants API</em>).</p>
+      </div>
+    </div>
+
+    <!-- Slide 2: El Monolito -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>El Problema del Acoplamiento</h1>
+        <p class="subtitle">Todo mezclado</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="border-left: 4px solid #ef4444; margin-top: 24px;">
+          <pre style="margin: 0; background: #0A0A0A; padding: 16px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171;">Model
+ + Tools
+ + Context
+ + Retrieval
+ + Evaluation
+ + Security
+ + UI
+----------------
+= EVERYTHING COUPLED</pre>
+        </div>
+        <p style="margin-top: 16px; font-size: 14px; color: #c7c4d7;">Cuando todas las capacidades están acopladas directamente al proveedor del modelo, el sistema se vuelve difícil de cambiar, difícil de testear y difícil de operar. Si sale un mejor modelo de la competencia, estás atrapado.</p>
+      </div>
+    </div>
+
+    <!-- Slide 3: El Modelo como Commodity -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>El Modelo como Dependencia</h1>
+        <p class="subtitle">Invirtiendo la jerarquía</p>
+      </div>
+
+      <div class="slide-content">
+        <p>Para construir sistemas resilientes, debemos invertir nuestra forma de pensar:</p>
+        
+        <div class="tech-grid" style="margin-top: 32px;">
+          <div class="tech-card" style="opacity: 0.7;">
+            <div class="tech-meta">Mentalidad Principiante</div>
+            <p style="margin: 0; font-size: 14px; color: #ef4444;">"Mi aplicación <strong>es</strong> un wrapper alrededor de GPT-4."</p>
+          </div>
+          <div class="tech-card" style="border-left: 2px solid #10b981;">
+            <div class="tech-meta">Mentalidad Empresarial</div>
+            <p style="margin: 0; font-size: 14px; color: #10b981;">"Mi aplicación <strong>tiene</strong> un motor de razonamiento intercambiable que actualmente usa GPT-4."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 09: AI Architecture
+        </div>
+        <h1>Separation of Concerns</h1>
+        <p class="subtitle">Diseño basado en Componentes</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #3b82f6;">🧩</div>
+          <h3>La Plataforma Abstraída</h3>
+          <p>Un sistema de IA moderno debe tratar al Modelo (LLM), la Memoria (RAG), la Acción (Tools) y la Seguridad (Evaluation) como servicios independientes con fronteras claras.</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 24px; border-radius: 4px; margin-top: 16px;">
+            <p style="margin: 0; color: #c7c4d7; font-size: 14px;">El <strong>Vendor Lock-in</strong> es solo una de las consecuencias negativas de no hacer esto. La imposibilidad de hacer Unit Tests y de escalar la plataforma es el verdadero asesino de proyectos.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m09-architecture/lesson-02-capabilities" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            Siguiente Lección: Decoupled Capabilities &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

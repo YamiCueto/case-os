@@ -1,0 +1,72 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/library" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Library
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding-top: 40px;">
+    
+    <div class="slide-title">
+      <div class="workshop-badge">
+        <span class="icon">📚</span> Library
+      </div>
+      <h1>Agentic Code Review Checklist</h1>
+      <p class="subtitle">Guía de verificación para código generado por agentes</p>
+    </div>
+
+    <div class="slide-content">
+      <p>Cuando trabajas con agentes autónomos o AI Coding Assistants, el código se genera rápido, pero la responsabilidad de que funcione de manera segura y eficiente recae en ti (Human in the Loop). Utiliza este checklist antes de aprobar cualquier Pull Request (PR) o Patch generado por IA.</p>
+
+      <div class="tech-grid" style="margin-top: 32px;">
+        
+        <!-- Criterio 1 -->
+        <div class="tech-card active" style="grid-column: span 2;">
+          <div class="tech-meta" style="color: #3b82f6;">Pre-Generación</div>
+          <h3>1. Context Completeness & Specification</h3>
+          <ul style="font-size: 14px; color: #c7c4d7; margin-top: 12px; padding-left: 20px;">
+            <li>¿Se le proveyó al agente el contexto adecuado (archivos, dependencias, tipos) sin exceso de ruido?</li>
+            <li>¿El requerimiento de negocio o la descripción del bug estaban claros y libres de ambigüedad?</li>
+          </ul>
+        </div>
+
+        <!-- Criterio 2 -->
+        <div class="tech-card active" style="grid-column: span 2;">
+          <div class="tech-meta" style="color: #10b981;">Ejecución</div>
+          <h3>2. Tests & Verification</h3>
+          <ul style="font-size: 14px; color: #c7c4d7; margin-top: 12px; padding-left: 20px;">
+            <li>¿El código incluye pruebas automatizadas (Unit/Integration tests) para validar el comportamiento esperado?</li>
+            <li>¿Se ejecutó la suite de tests existente y todo pasó exitosamente?</li>
+          </ul>
+        </div>
+
+        <!-- Criterio 3 -->
+        <div class="tech-card active" style="grid-column: span 2;">
+          <div class="tech-meta" style="color: #f59e0b;">Impacto</div>
+          <h3>3. Regression Risk & Architecture</h3>
+          <ul style="font-size: 14px; color: #c7c4d7; margin-top: 12px; padding-left: 20px;">
+            <li>¿El agente reinventó la rueda en lugar de utilizar servicios/utilidades ya existentes en el codebase?</li>
+            <li>¿Existen refactorizaciones innecesarias (ej. cambio de sintaxis o librerías) en áreas no relacionadas al requerimiento original?</li>
+          </ul>
+        </div>
+
+        <!-- Criterio 4 -->
+        <div class="tech-card active" style="grid-column: span 2;">
+          <div class="tech-meta" style="color: #ef4444;">Protección</div>
+          <h3>4. Security Considerations</h3>
+          <ul style="font-size: 14px; color: #c7c4d7; margin-top: 12px; padding-left: 20px;">
+            <li>¿El agente alucinó dependencias inexistentes (vulnerabilidad de <em>Dependency Confusion</em>)?</li>
+            <li>¿Se están sanitizando los inputs y protegiendo datos sensibles antes de interactuar con APIs de terceros o bases de datos?</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="warning-box" style="margin-top: 32px; border-left-color: #6366f1;">
+        <strong>Conclusión de Aprobación Humana:</strong> Solo aprueba el código generado si puedes afirmar que tú mismo lo habrías escrito o diseñado de esa manera tras una revisión exhaustiva.
+      </div>
+      
+    </div>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="lab-container">
+  <div class="lab-header">
+    <div class="back-link">
+      <a routerLink="/academy/home">&larr; Volver a Academy</a>
+    </div>
+    <h1>Lab 09: The Architecture Blueprint (Examen Final)</h1>
+    <p>Diseño basado en requerimientos y Trade-offs</p>
+  </div>
+
+  <div class="requirements-box">
+    <h3>📋 Requisitos del Sistema a Construir:</h3>
+    <ul>
+      <li>Debe generar resúmenes con un formato estructurado siempre (Flujo Determinista).</li>
+      <li>Debe responder basándose en un manual interno privado de 500 páginas.</li>
+      <li>NO requiere interactuar con sistemas de tickets ni bases de datos externas.</li>
+      <li>Debe operar en producción con un presupuesto muy estricto (Baja Latencia / Bajo Costo).</li>
+    </ul>
+    <p style="margin-top: 12px; font-size: 13px; color: #a19fb0;">Instrucción: Activa ÚNICAMENTE los componentes arquitectónicos necesarios para cumplir los requisitos. Serás penalizado si omites piezas críticas o si añades complejidad excesiva ("Architecture on Demand").</p>
+  </div>
+
+  <div class="lab-grid">
+    <!-- Panel Izquierdo: Selección -->
+    <div class="panel selection-panel">
+      <h2>🧩 Capabilities (Catálogo)</h2>
+      
+      <div class="components-list">
+        <div class="component-item" *ngFor="let comp of components()" (click)="toggleComponent(comp.id)" [class.selected]="comp.selected" [class.locked]="comp.id === 'provider'">
+          <div class="comp-icon">{{ comp.icon }}</div>
+          <div class="comp-info">
+            <div class="comp-name">{{ comp.name }}</div>
+            <div class="comp-desc">{{ comp.description }}</div>
+            <div class="comp-impact">
+              <span class="impact-badge cost">Costo: {{ comp.costImpact }}</span>
+              <span class="impact-badge latency">Latencia: {{ comp.latencyImpact }}</span>
+            </div>
+          </div>
+          <div class="checkbox">
+            <span *ngIf="comp.selected">✓</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="evaluate-btn" (click)="evaluateArchitecture()">Validar Arquitectura</button>
+    </div>
+
+    <!-- Panel Derecho: Diagrama y Resultado -->
+    <div class="panel diagram-panel">
+      <h2>🏗️ System Architecture</h2>
+      
+      <div class="diagram-canvas">
+        <div class="diagram-box base" *ngIf="components()[0].selected">
+          {{ components()[0].name }}
+        </div>
+        
+        <div class="diagram-box rag" *ngIf="components()[1].selected">
+          {{ components()[1].name }}
+        </div>
+        
+        <div class="diagram-box eval" *ngIf="components()[4].selected">
+          {{ components()[4].name }}
+        </div>
+        
+        <div class="diagram-box warning" *ngIf="components()[2].selected">
+          {{ components()[2].name }} (Alto Riesgo/Costo)
+        </div>
+        
+        <div class="diagram-box warning" *ngIf="components()[3].selected">
+          {{ components()[3].name }} (Integración Externa)
+        </div>
+      </div>
+
+      <div class="eval-result-box" *ngIf="evalResult() !== 'PENDING'" [ngClass]="evalResult()">
+        <h3>Resultado de la Revisión Arquitectónica</h3>
+        <p>{{ feedbackMessage() }}</p>
+        
+        <div *ngIf="evalResult() === 'SUCCESS'" style="margin-top: 24px; text-align: center;">
+          <a routerLink="/academy/home" class="finish-btn">🏆 Finalizar CASE OS Academy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

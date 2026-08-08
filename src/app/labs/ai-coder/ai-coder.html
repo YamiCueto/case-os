@@ -1,0 +1,106 @@
+<div class="lab-container">
+  <div class="lab-header">
+    <div class="back-link">
+      <a routerLink="/academy/home">&larr; Volver a Academy</a>
+    </div>
+    <h1>Lab 06: The Context-Aware Coder</h1>
+    <p>Contexto, Generación y Aprobación Humana</p>
+  </div>
+
+  <div class="warning-box" style="margin-bottom: 24px; border-left-color: #ef4444;">
+    <strong>Bug Report:</strong> "El Login devuelve error 500 cuando el email del usuario contiene el símbolo '+' (ej. juan+test@empresa.com)". El error ocurre al enviar el payload al backend.
+  </div>
+
+  <div class="lab-grid">
+    <!-- Panel Izquierdo: IDE Tree Context -->
+    <div class="panel context-panel">
+      <h2>1. Repository Context</h2>
+      <p class="helper-text">Selecciona qué archivos incluir en el prompt del agente.</p>
+      
+      <div class="file-tree">
+        <div class="file-node" 
+             *ngFor="let file of files(); let i = index" 
+             [class.selected]="file.selected"
+             (click)="toggleFile(i)"
+             [style.pointer-events]="status() === 'SELECTING' ? 'auto' : 'none'">
+          <div class="checkbox">{{ file.selected ? '☑' : '☐' }}</div>
+          <div class="file-icon">📄</div>
+          <div class="file-name">{{ file.name }}</div>
+        </div>
+      </div>
+
+      <button class="action-btn primary" 
+              [disabled]="status() !== 'SELECTING'" 
+              (click)="generatePatch()"
+              style="margin-top: 24px;">
+        Generar Patch (Agentic Code)
+      </button>
+    </div>
+
+    <!-- Panel Derecho: Agente y Verificación -->
+    <div class="panel agent-panel">
+      <h2>2. Agent & Verification</h2>
+      
+      <div class="agent-console" *ngIf="status() !== 'SELECTING'">
+        
+        <!-- Fase Generación -->
+        <div class="console-step" *ngIf="status() === 'GENERATING'">
+          <span class="spinner">⚙️</span> Analizando contexto y generando parche...
+        </div>
+
+        <!-- Fase Verificación -->
+        <div class="console-step" *ngIf="status() === 'VERIFYING' || status() === 'REVIEWING' || status() === 'SUCCESS'">
+          <div class="patch-box">
+            <strong>Proposed Patch:</strong>
+            <p>{{ patchMessage() }}</p>
+          </div>
+          
+          <button class="action-btn warning" 
+                  *ngIf="status() === 'VERIFYING' && testResult() === 'PENDING'"
+                  (click)="runTests()">
+            ▶️ Run Automated Tests
+          </button>
+
+          <div class="test-result fail" *ngIf="testResult() === 'FAIL'">
+            ❌ <strong>TESTS FAILED:</strong> El bug persiste. El agente no tuvo el contexto adecuado para corregir la raíz del problema. (Reiniciando en 3s...)
+          </div>
+
+          <div class="test-result pass" *ngIf="testResult() === 'PASS'">
+            ✅ <strong>TESTS PASSED:</strong> El código compila y la suite de pruebas es verde.
+          </div>
+        </div>
+
+        <!-- Fase Aprobación Humana -->
+        <div class="console-step" *ngIf="status() === 'REVIEWING' || status() === 'SUCCESS'">
+          <div class="human-review-box" *ngIf="status() === 'REVIEWING'">
+            <h3>Human Review Required</h3>
+            <p>Los tests pasaron, pero como humano debes revisar el impacto arquitectónico.</p>
+            <div class="review-actions">
+              <button class="action-btn success" (click)="approve()">Approve & Merge</button>
+              <button class="action-btn danger" (click)="reject()">Reject & Try Again</button>
+            </div>
+          </div>
+
+          <div class="success-box" *ngIf="status() === 'SUCCESS'">
+            <h3>🎉 Human Approved</h3>
+            <div class="reflection-box">
+              <h4 style="color: #10b981; margin: 0 0 12px 0;">REFLEXIÓN PEDAGÓGICA</h4>
+              <p *ngIf="contextType() === 'CORRECT'" style="font-size: 14px; color: #e4e1ed;">
+                Elegiste el contexto perfecto (`auth.component.ts` y `auth.service.ts`). Le diste al agente exactamente lo que necesitaba para entender la UI y la llamada HTTP, sin distraerlo con ruido.
+              </p>
+              <p *ngIf="contextType() === 'EXCESSIVE'" style="font-size: 14px; color: #f59e0b;">
+                Aprobaste un parche con <strong>Exceso de Contexto</strong>. El agente se distrajo reescribiendo dependencias. Aunque los tests pasaron, la revisión humana debió rechazar este parche por <em>Regression Risk</em>. Más contexto no siempre es mejor contexto.
+              </p>
+            </div>
+            <button class="reset-btn" (click)="resetLab()" style="margin-top: 16px;">↻ Volver a intentar</button>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="empty-state" *ngIf="status() === 'SELECTING'">
+        <p style="color: #a19fb0; text-align: center; font-size: 14px;">El agente está esperando que construyas el contexto (Paso 1) y generes un parche.</p>
+      </div>
+    </div>
+  </div>
+</div>

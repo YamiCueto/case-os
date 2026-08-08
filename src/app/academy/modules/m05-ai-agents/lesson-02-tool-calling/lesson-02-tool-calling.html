@@ -1,0 +1,151 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>Tool Calling & Contracts</h1>
+        <p class="subtitle">El modelo propone. El software ejecuta.</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>Desmitificando el "Uso de Herramientas"</h2>
+        <p>Un error común es creer que el LLM mágicamente "ejecuta" código o hace peticiones HTTP a la web. En realidad, un LLM es solo un motor de texto. <strong>Nunca toca el mundo exterior.</strong></p>
+        
+        <div class="tech-card active" style="margin-top: 24px;">
+          <div class="tech-icon" style="color: #6366f1;">🤝</div>
+          <h3>El Contrato</h3>
+          <p>Tool Calling (o Function Calling) es simplemente un acuerdo de comunicación estructurada entre el modelo probabilístico y tu código determinista.</p>
+          <ul style="font-size: 14px; color: #c7c4d7; margin-top: 12px; padding-left: 20px;">
+            <li>Le pasas al LLM una lista de funciones que tu código puede hacer.</li>
+            <li>Si el LLM cree que necesita usar una, pausa la generación de texto y devuelve un <strong>JSON</strong> pidiendo ejecutarla.</li>
+            <li>Tu código recibe el JSON, lo valida, ejecuta la función real, y le devuelve el resultado al LLM.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Workflow de Tool Calling -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>El Flujo Operacional</h1>
+        <p class="subtitle">Cómo se ve en la práctica</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #3b82f6; padding: 24px; border-radius: 4px;">
+            <strong style="color: #3b82f6; font-family: 'Inter', sans-serif; font-size: 14px;">1. User Intent & Tool Schemas -> Model</strong>
+            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 13px;">El usuario pide: "¿Qué clima hace en Madrid?". Tú envías esto al LLM junto con la definición (JSON Schema) de la herramienta `getWeather(city)`.</p>
+          </div>
+          <div style="text-align: center; color: #6366f1;">&darr;</div>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #a855f7; padding: 24px; border-radius: 4px;">
+            <strong style="color: #a855f7; font-family: 'Inter', sans-serif; font-size: 14px;">2. Tool Call Proposal -> Application</strong>
+            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 13px;">El LLM responde con un mensaje especial indicando: "Propongo llamar a getWeather con el parámetro city='Madrid'".</p>
+          </div>
+          <div style="text-align: center; color: #6366f1;">&darr;</div>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #10b981; padding: 24px; border-radius: 4px;">
+            <strong style="color: #10b981; font-family: 'Inter', sans-serif; font-size: 14px;">3. Validation & Execution -> Observation</strong>
+            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 13px;">Tu aplicación (TypeScript/Python) intercepta esta propuesta, ejecuta la llamada HTTP a la API del clima, y devuelve la respuesta ("24 grados, soleado") al modelo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Conexión con Structured Outputs -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>Conexión con M02</h1>
+        <p class="subtitle">JSON Schemas al rescate</p>
+      </div>
+
+      <div class="slide-content">
+        <p>¿Recuerdas cómo en el Módulo 02 forzábamos salidas estructuradas? Tool Calling es exactamente la misma tecnología aplicada a la invocación de funciones.</p>
+        
+        <div class="template-container" style="border-radius: 8px; border: 1px solid #1F1F1F; margin-top: 24px;">
+          <div class="template-header" style="background: #1A1A1A; padding: 12px 24px; color: #e4e1ed;">
+            <h3 style="font-size: 14px; margin: 0; font-family: 'JetBrains Mono', monospace; color: #3b82f6;">// Tool Definition Schema</h3>
+          </div>
+          <div style="padding: 24px; background: #0A0A0A;">
+            <div class="prompt-text" style="margin: 0; white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #e4e1ed;">{{ '{' }}
+  "name": "sendEmail",
+  "description": "Envía un correo electrónico. Úsalo cuando el usuario solicite notificar a alguien.",
+  "parameters": {{ '{' }}
+    "type": "object",
+    "properties": {{ '{' }}
+      "to": {{ '{' }} "type": "string", "description": "Email del destinatario" {{ '}' }},
+      "body": {{ '{' }} "type": "string", "description": "Cuerpo del mensaje" {{ '}' }}
+    {{ '}' }},
+    "required": ["to", "body"]
+  {{ '}' }}
+{{ '}' }}</div>
+          </div>
+        </div>
+        
+        <p style="margin-top: 16px; font-size: 14px;">El modelo usa este contrato para construir la propuesta. Si tu código necesita un `email` válido y el modelo propone un nombre, <strong>tu código debe capturar el error y devolverlo al modelo como observación</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>Conclusión</h1>
+        <p class="subtitle">De Tool-Calling al Loop</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #a855f7;">🔁</div>
+          <h3>El nacimiento del Agente</h3>
+          <p>Un flujo de "Tool-Calling" simple ejecuta <strong>una</strong> herramienta y termina. Pero, ¿qué pasa si la tarea del usuario es compleja?</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 24px; border-radius: 4px; margin-top: 16px;">
+            <p style="margin: 0; color: #c7c4d7; font-size: 14px;">"Analiza las ventas de Q1 usando `getSales()`, luego busca la causa de la caída en el repositorio de conocimiento usando `searchKnowledge()`, y envía un reporte por correo usando `sendEmail()`".</p>
+          </div>
+          <p style="margin-top: 16px;">Para lograr esto, necesitamos encadenar múltiples peticiones de Tool Calling de forma dinámica. Aquí es donde introducimos el <strong>Agent Loop</strong>.</p>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m05-ai-agents/lesson-03-agent-loop" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            Siguiente Lección: The Agent Loop &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

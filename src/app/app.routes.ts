@@ -55,6 +55,34 @@ export const routes: Routes = [
         loadComponent: () => import('./library/resources/context-budget/context-budget').then(m => m.ContextBudget)
       },
       {
+        path: 'library/resources/cosine-similarity',
+        loadComponent: () => import('./library/resources/cosine-similarity/cosine-similarity').then(m => m.CosineSimilarity)
+      },
+      {
+        path: 'library/resources/rag-metrics',
+        loadComponent: () => import('./library/resources/rag-metrics/rag-metrics').then(m => m.RagMetrics)
+      },
+      {
+        path: 'library/resources/tool-schema',
+        loadComponent: () => import('./library/resources/tool-schema/tool-schema').then(m => m.ToolSchema)
+      },
+      {
+        path: 'library/resources/agentic-code-review',
+        loadComponent: () => import('./library/resources/agentic-code-review/agentic-code-review').then(m => m.AgenticCodeReview)
+      },
+      {
+        path: 'library/resources/mcp-core-concepts',
+        loadComponent: () => import('./library/resources/mcp-core-concepts/mcp-core-concepts').then(m => m.McpCoreConcepts)
+      },
+      {
+        path: 'library/resources/production-checklist',
+        loadComponent: () => import('./library/resources/production-checklist/production-checklist').then(m => m.ProductionChecklist)
+      },
+      {
+        path: 'library/resources/ai-architecture-patterns',
+        loadComponent: () => import('./library/resources/ai-architecture-patterns/ai-architecture-patterns').then(m => m.AiArchitecturePatterns)
+      },
+      {
         path: 'labs',
         loadComponent: () => import('./labs/pages/labs-home/labs-home.component').then(m => m.LabsHomeComponent)
       },
@@ -73,6 +101,30 @@ export const routes: Routes = [
       {
         path: 'labs/engineer-context',
         loadComponent: () => import('./labs/engineer-context/engineer-context').then(m => m.EngineerContextLab)
+      },
+      {
+        path: 'labs/build-retrieval',
+        loadComponent: () => import('./labs/build-retrieval/build-retrieval').then(m => m.BuildRetrievalLab)
+      },
+      {
+        path: 'labs/agent-loop',
+        loadComponent: () => import('./labs/agent-loop/agent-loop').then(m => m.AgentLoopLab)
+      },
+      {
+        path: 'labs/ai-coder',
+        loadComponent: () => import('./labs/ai-coder/ai-coder').then(m => m.AiCoderLab)
+      },
+      {
+        path: 'labs/mcp-connector',
+        loadComponent: () => import('./labs/mcp-connector/mcp-connector').then(m => m.McpConnectorLab)
+      },
+      {
+        path: 'labs/eval-pipeline',
+        loadComponent: () => import('./labs/eval-pipeline/eval-pipeline').then(m => m.EvalPipelineLab)
+      },
+      {
+        path: 'labs/architecture-blueprint',
+        loadComponent: () => import('./labs/architecture-blueprint/architecture-blueprint').then(m => m.ArchitectureBlueprintLab)
       },
       {
         path: 'framework',
@@ -193,6 +245,78 @@ export const routes: Routes = [
           {
             path: 'academy/modules/m03-context-engineering/lesson-03-compression',
             loadComponent: () => import('./academy/modules/m03-context-engineering/lesson-03-compression/lesson-03-compression').then(m => m.Lesson03Compression)
+          },
+          {
+            path: 'academy/modules/m04-retrieval-rag/lesson-01-embeddings',
+            loadComponent: () => import('./academy/modules/m04-retrieval-rag/lesson-01-embeddings/lesson-01-embeddings').then(m => m.Lesson01Embeddings)
+          },
+          {
+            path: 'academy/modules/m04-retrieval-rag/lesson-02-pipeline',
+            loadComponent: () => import('./academy/modules/m04-retrieval-rag/lesson-02-pipeline/lesson-02-pipeline').then(m => m.Lesson02Pipeline)
+          },
+          {
+            path: 'academy/modules/m04-retrieval-rag/lesson-03-evaluation',
+            loadComponent: () => import('./academy/modules/m04-retrieval-rag/lesson-03-evaluation/lesson-03-evaluation').then(m => m.Lesson03Evaluation)
+          },
+          {
+            path: 'academy/modules/m05-ai-agents/lesson-01-workflows',
+            loadComponent: () => import('./academy/modules/m05-ai-agents/lesson-01-workflows/lesson-01-workflows').then(m => m.Lesson01Workflows)
+          },
+          {
+            path: 'academy/modules/m05-ai-agents/lesson-02-tool-calling',
+            loadComponent: () => import('./academy/modules/m05-ai-agents/lesson-02-tool-calling/lesson-02-tool-calling').then(m => m.Lesson02ToolCalling)
+          },
+          {
+            path: 'academy/modules/m05-ai-agents/lesson-03-agent-loop',
+            loadComponent: () => import('./academy/modules/m05-ai-agents/lesson-03-agent-loop/lesson-03-agent-loop').then(m => m.Lesson03AgentLoop)
+          },
+          {
+            path: 'academy/modules/m06-agentic-swe/lesson-01-agentic-coding',
+            loadComponent: () => import('./academy/modules/m06-agentic-swe/lesson-01-agentic-coding/lesson-01-agentic-coding').then(m => m.Lesson01AgenticCoding)
+          },
+          {
+            path: 'academy/modules/m06-agentic-swe/lesson-02-human-collaboration',
+            loadComponent: () => import('./academy/modules/m06-agentic-swe/lesson-02-human-collaboration/lesson-02-human-collaboration').then(m => m.Lesson02HumanCollaboration)
+          },
+          {
+            path: 'academy/modules/m06-agentic-swe/lesson-03-repository-context',
+            loadComponent: () => import('./academy/modules/m06-agentic-swe/lesson-03-repository-context/lesson-03-repository-context').then(m => m.Lesson03RepositoryContext)
+          },
+          {
+            path: 'academy/modules/m07-mcp/lesson-01-nxm-problem',
+            loadComponent: () => import('./academy/modules/m07-mcp/lesson-01-nxm-problem/lesson-01-nxm-problem').then(m => m.Lesson01NxMProblem)
+          },
+          {
+            path: 'academy/modules/m07-mcp/lesson-02-architecture',
+            loadComponent: () => import('./academy/modules/m07-mcp/lesson-02-architecture/lesson-02-architecture').then(m => m.Lesson02Architecture)
+          },
+          {
+            path: 'academy/modules/m07-mcp/lesson-03-primitives',
+            loadComponent: () => import('./academy/modules/m07-mcp/lesson-03-primitives/lesson-03-primitives').then(m => m.Lesson03Primitives)
+          },
+          {
+            path: 'academy/modules/m08-production/lesson-01-production-gap',
+            loadComponent: () => import('./academy/modules/m08-production/lesson-01-production-gap/lesson-01-production-gap').then(m => m.Lesson01ProductionGap)
+          },
+          {
+            path: 'academy/modules/m08-production/lesson-02-evaluation',
+            loadComponent: () => import('./academy/modules/m08-production/lesson-02-evaluation/lesson-02-evaluation').then(m => m.Lesson02Evaluation)
+          },
+          {
+            path: 'academy/modules/m08-production/lesson-03-security',
+            loadComponent: () => import('./academy/modules/m08-production/lesson-03-security/lesson-03-security').then(m => m.Lesson03Security)
+          },
+          {
+            path: 'academy/modules/m09-architecture/lesson-01-monolith',
+            loadComponent: () => import('./academy/modules/m09-architecture/lesson-01-monolith/lesson-01-monolith').then(m => m.Lesson01Monolith)
+          },
+          {
+            path: 'academy/modules/m09-architecture/lesson-02-capabilities',
+            loadComponent: () => import('./academy/modules/m09-architecture/lesson-02-capabilities/lesson-02-capabilities').then(m => m.Lesson02Capabilities)
+          },
+          {
+            path: 'academy/modules/m09-architecture/lesson-03-case-study',
+            loadComponent: () => import('./academy/modules/m09-architecture/lesson-03-case-study/lesson-03-case-study').then(m => m.Lesson03CaseStudy)
           }
         ]
       }

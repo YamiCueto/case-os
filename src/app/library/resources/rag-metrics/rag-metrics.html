@@ -1,0 +1,58 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/library" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Library
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding-top: 40px;">
+    
+    <div class="slide-title">
+      <div class="workshop-badge">
+        <span class="icon">📚</span> Library
+      </div>
+      <h1>RAG Evaluation Metrics</h1>
+      <p class="subtitle">Cheat Sheet de Evaluación</p>
+    </div>
+
+    <div class="slide-content">
+      <p>Evaluar un motor RAG se divide en dos fases: evaluar la Recuperación (Retrieval) y evaluar la Generación (LLM). Este documento se centra exclusivamente en las métricas de Recuperación aprendidas en el Módulo 04.</p>
+
+      <div class="tech-grid" style="margin-top: 32px;">
+        <!-- Precision -->
+        <div class="tech-card active" style="grid-column: span 2;">
+          <div class="tech-meta" style="color: #6366f1;">Calidad del Top-K</div>
+          <h3>1. Precision@K (Precisión)</h3>
+          <p>Mide qué porcentaje de los documentos recuperados eran relevantes para la consulta.</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 16px; border-radius: 4px; margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px; text-align: center; color: #10b981;">
+            Precision = (Documentos Relevantes Recuperados) / (Total de Documentos Recuperados)
+          </div>
+          <p style="margin-top: 12px; font-size: 13px; color: #a19fb0;"><strong>Ejemplo:</strong> Pides Top-5. Traes 5 documentos, pero solo 2 hablan del tema. Precision = 2/5 = 40%.</p>
+        </div>
+
+        <!-- Recall -->
+        <div class="tech-card active" style="grid-column: span 2;">
+          <div class="tech-meta" style="color: #f59e0b;">Cobertura del Sistema</div>
+          <h3>2. Recall@K (Exhaustividad)</h3>
+          <p>Mide qué porcentaje de TODOS los documentos relevantes posibles lograste encontrar.</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 16px; border-radius: 4px; margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px; text-align: center; color: #f59e0b;">
+            Recall = (Documentos Relevantes Recuperados) / (Total de Documentos Relevantes en BD)
+          </div>
+          <p style="margin-top: 12px; font-size: 13px; color: #a19fb0;"><strong>Ejemplo:</strong> Existen 10 políticas de vacaciones en la BD. Tu búsqueda Top-5 trae 4 de ellas. Recall = 4/10 = 40%.</p>
+        </div>
+
+        <!-- Hit Rate -->
+        <div class="tech-card active" style="grid-column: span 2;">
+          <div class="tech-meta" style="color: #a855f7;">Métrica Binaria</div>
+          <h3>3. Hit Rate (Tasa de Acierto)</h3>
+          <p>Métrica simplificada: ¿Apareció AL MENOS UN documento relevante en el Top-K?</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 16px; border-radius: 4px; margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px; text-align: center; color: #a855f7;">
+            Hit Rate = 1 si (Relevantes > 0) else 0
+          </div>
+          <p style="margin-top: 12px; font-size: 13px; color: #a19fb0;"><strong>Ejemplo:</strong> Se usa para evaluar sistemas completos sobre sets de prueba (ej. "Tuvimos un 92% de Hit Rate en las 1000 preguntas de prueba").</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>Least Autonomy Necessary</h1>
+        <p class="subtitle">No todo problema necesita un agente</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>La Escalera de la Autonomía</h2>
+        <p>En ingeniería de software con IA, la autonomía no es un objetivo, es un costo. Mientras más autonomía otorgas a un modelo, menor es tu control sobre la ejecución, la latencia y los costos económicos.</p>
+        
+        <div class="warning-box" style="margin-top: 24px; border-left-color: #10b981;">
+          <strong>Regla Arquitectónica:</strong> Construye utilizando siempre el nivel más bajo de autonomía que resuelva tu caso de uso.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Workflow Determinista -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>1. Deterministic Workflow</h1>
+        <p class="subtitle">Cero autonomía, control absoluto</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-grid">
+          <div class="tech-card active">
+            <div class="tech-icon" style="color: #3b82f6;">⚙️</div>
+            <h3>Pipeline Estático</h3>
+            <p>El código dicta la secuencia. El LLM es solo una función dentro del pipeline.</p>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #10b981; margin-top: 16px;">
+              User -> Code -> LLM -> Code
+            </div>
+          </div>
+          
+          <div class="tech-card">
+            <h3>Características</h3>
+            <ul style="font-size: 14px; color: #c7c4d7; padding-left: 16px;">
+              <li><strong>Predictibilidad:</strong> Máxima (100%).</li>
+              <li><strong>Costo y Latencia:</strong> Mínima (1 sola llamada al LLM).</li>
+              <li><strong>Uso:</strong> Clasificación, Extracción RAG, Traducción, Resúmenes.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Tool-Using vs Agent Loop -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>2. Tools vs 3. Agent Loop</h1>
+        <p class="subtitle">Otorgando capacidad de decisión</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-grid">
+          <div class="tech-card active">
+            <div class="tech-icon" style="color: #f59e0b;">🛠️</div>
+            <h3>Tool-Using Workflow</h3>
+            <p>El LLM recibe una petición y una lista de herramientas. Decide <strong>qué herramienta usar</strong> y propone los parámetros, pero <strong>NO orquesta</strong> el ciclo. El código ejecuta la herramienta y termina.</p>
+            <p style="font-size: 13px; color: #c7c4d7; margin-top: 12px;">Útil para: Interfaces de búsqueda, ejecución de un solo comando (ej. "Apaga las luces").</p>
+          </div>
+          
+          <div class="tech-card active">
+            <div class="tech-icon" style="color: #a855f7;">🔄</div>
+            <h3>Agent Loop (ReAct)</h3>
+            <p>El LLM decide usar una herramienta, el sistema la ejecuta y <strong>devuelve el resultado al LLM</strong> para que decida el siguiente paso, repitiendo hasta llegar a un objetivo.</p>
+            <p style="font-size: 13px; color: #c7c4d7; margin-top: 12px;">Útil para: Tareas donde los pasos dependen del resultado anterior (Research, Debugging).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 05: AI Agents
+        </div>
+        <h1>4. Autonomous Agent</h1>
+        <p class="subtitle">El extremo de la escalera</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #ef4444;">⚠️</div>
+          <h3>La caja negra total</h3>
+          <p>Un agente verdaderamente autónomo recibe un objetivo general ("Maximiza las ventas") y decide por sí mismo qué workflows iniciar, qué herramientas descubrir y cuándo detenerse, a menudo ejecutándose en background por horas.</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #ef4444; padding: 24px; border-radius: 4px; margin-top: 16px;">
+            <p style="margin: 0; color: #c7c4d7; font-size: 14px;">Son impredecibles y difíciles de evaluar. La mayoría de los sistemas empresariales se benefician de mantener la autonomía acotada y utilizar workflows deterministas siempre que sea suficiente.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m05-ai-agents/lesson-02-tool-calling" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            Siguiente Lección: Tool Calling & Contracts &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,144 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 06: Agentic SWE
+        </div>
+        <h1>From Completion to Agents</h1>
+        <p class="subtitle">La evolución de la asistencia generativa</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>No es "Magia" Programadora</h2>
+        <p>Los modelos no se convirtieron súbitamente en "mejores programadores" por arte de magia. La transición hacia el <em>Agentic Coding</em> ocurre porque aprendimos a rodear a estos modelos probabilísticos con infraestructuras deterministas robustas.</p>
+        
+        <div class="warning-box" style="margin-top: 24px; border-left-color: #3b82f6;">
+          <strong>Concepto Clave:</strong> El código no es más que lógica altamente estructurada. Los LLMs son excelentes en esto, pero su verdadero poder destructivo surge cuando los conectamos a <strong>contexto, herramientas y ciclos de feedback</strong>.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: La Evolución -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 06: Agentic SWE
+        </div>
+        <h1>El Salto Evolutivo</h1>
+        <p class="subtitle">Cómo llegamos aquí</p>
+      </div>
+
+      <div class="slide-content">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 16px; border-radius: 4px; display: flex; align-items: center; gap: 16px;">
+            <div style="color: #6366f1; font-weight: 600; width: 140px;">Code Completion</div>
+            <div style="color: #a19fb0; font-size: 14px;">El modelo predice las siguientes 10 líneas basado en el archivo actual. (Ej. Copilot inicial).</div>
+          </div>
+          <div style="text-align: center; color: #6366f1;">&darr;</div>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 16px; border-radius: 4px; display: flex; align-items: center; gap: 16px;">
+            <div style="color: #a855f7; font-weight: 600; width: 140px;">Code Generation</div>
+            <div style="color: #a19fb0; font-size: 14px;">El modelo genera un componente completo a partir de un prompt. (Ej. ChatGPT).</div>
+          </div>
+          <div style="text-align: center; color: #6366f1;">&darr;</div>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 16px; border-radius: 4px; display: flex; align-items: center; gap: 16px;">
+            <div style="color: #f59e0b; font-weight: 600; width: 140px;">Codebase Context</div>
+            <div style="color: #a19fb0; font-size: 14px;">El prompt se inyecta con RAG sobre todo el repositorio. Genera código respetando convenciones.</div>
+          </div>
+          <div style="text-align: center; color: #6366f1;">&darr;</div>
+          <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid #2A2A2A; border-left: 3px solid #10b981; padding: 16px; border-radius: 4px; display: flex; align-items: center; gap: 16px;">
+            <div style="color: #10b981; font-weight: 600; width: 140px;">Agentic Coding</div>
+            <div style="color: #e4e1ed; font-size: 14px;">El modelo busca contexto activamente (Tool Use), propone código, ejecuta tests, lee errores y se corrige a sí mismo en un Agent Loop.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Conexión con los módulos previos -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 06: Agentic SWE
+        </div>
+        <h1>Es la suma de sus partes</h1>
+        <p class="subtitle">Agentic SWE = M03 + M04 + M05</p>
+      </div>
+
+      <div class="slide-content">
+        <p>Un Asistente Agentic (como Cursor o Devin) no es un "modelo especial". Es la orquestación perfecta de las piezas que ya aprendiste:</p>
+        
+        <div class="tech-grid" style="margin-top: 32px;">
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #3b82f6;">🧠</div>
+            <h3>Context (M03)</h3>
+            <p>El sistema decide qué archivos, librerías y dependencias incluir en el prompt.</p>
+          </div>
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #10b981;">🔍</div>
+            <h3>Retrieval (M04)</h3>
+            <p>El sistema busca fragmentos de código similares mediante embeddings para guiar la sintaxis.</p>
+          </div>
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #a855f7;">🔄</div>
+            <h3>Agent Loop (M05)</h3>
+            <p>El sistema propone un parche (Action), corre el test (Tool), lee el stacktrace (Observation) e itera.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 06: Agentic SWE
+        </div>
+        <h1>El Rol del Humano</h1>
+        <p class="subtitle">Si el agente programa, ¿qué hacemos nosotros?</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #f59e0b;">👤</div>
+          <h3>El desplazamiento del trabajo</h3>
+          <p>Al igual que los compiladores nos liberaron de escribir código máquina, el <em>Agentic Coding</em> nos está liberando de la sintaxis repetitiva.</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 24px; border-radius: 4px; margin-top: 16px;">
+            <p style="margin: 0; color: #c7c4d7; font-size: 14px;">Pero el modelo sigue siendo probabilístico. No "entiende" los objetivos de negocio ni la arquitectura global. Requiere especificación estricta y, sobre todo, verificación rigurosa.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m06-agentic-swe/lesson-02-human-collaboration" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            Siguiente Lección: Human-Agent Collaboration &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

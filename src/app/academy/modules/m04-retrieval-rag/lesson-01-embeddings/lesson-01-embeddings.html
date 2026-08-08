@@ -1,0 +1,148 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 04: Retrieval & RAG
+        </div>
+        <h1>Embeddings & Vector Databases</h1>
+        <p class="subtitle">Representando conocimiento matemático</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>Lexical vs Semantic Search</h2>
+        <p>Durante décadas buscamos información por coincidencia de palabras clave (Búsqueda Léxica). Si buscas "perro", el sistema busca la palabra exacta "perro". Pero si buscas "cachorro", no encuentra el documento.</p>
+        
+        <div class="tech-grid" style="margin-top: 24px;">
+          <div class="tech-card">
+            <div class="tech-icon" style="color: #c7c4d7;">🔎</div>
+            <h3>Lexical Search</h3>
+            <p><strong>Mecanismo:</strong> TF-IDF, BM25, Inverted Index.</p>
+            <p><strong>Falla en:</strong> Sinónimos, errores ortográficos, entendimiento del concepto general.</p>
+          </div>
+          
+          <div class="tech-card active">
+            <div class="tech-icon" style="color: #10b981;">🧠</div>
+            <h3>Semantic Search</h3>
+            <p><strong>Mecanismo:</strong> Embeddings, Vector Databases.</p>
+            <p><strong>Éxito en:</strong> Entender que "perro" y "cachorro" apuntan al mismo concepto geométrico.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Embeddings -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 04: Retrieval & RAG
+        </div>
+        <h1>¿Qué es un Embedding?</h1>
+        <p class="subtitle">Traduciendo significado a geometría</p>
+      </div>
+
+      <div class="slide-content">
+        <p>Un Embedding es una lista de números (un vector) que representa el <strong>significado</strong> de un texto en un espacio multidimensional.</p>
+        
+        <div class="template-container" style="border-radius: 8px; border: 1px solid #1F1F1F; margin-top: 24px;">
+          <div class="template-header" style="background: #1A1A1A; padding: 12px 24px; color: #e4e1ed;">
+            <h3 style="font-size: 14px; margin: 0; font-family: 'JetBrains Mono', monospace; color: #6366f1;">// Vector Representation</h3>
+          </div>
+          <div style="padding: 24px; background: #0A0A0A;">
+            <div class="prompt-text" style="margin: 0; white-space: pre-wrap;">"El banco central subió las tasas" 
+-> [0.012, -0.453, 0.892, ..., 0.111]
+
+"La reserva federal incrementó el interés" 
+-> [0.014, -0.450, 0.890, ..., 0.110]
+
+"Me senté en el banco del parque"
+-> [-0.881, 0.221, -0.104, ..., 0.992]</div>
+          </div>
+        </div>
+        
+        <div class="warning-box">
+          <strong>Concepto Clave:</strong> Textos con significados similares tendrán vectores con números muy similares, sin importar las palabras específicas que usaron. En sistemas reales, los embeddings son generados por modelos especializados con cientos o miles de dimensiones.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Similitud y Bases Vectoriales -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 04: Retrieval & RAG
+        </div>
+        <h1>Similarity & Vector Databases</h1>
+        <p class="subtitle">Encontrando la aguja en el pajar</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 24px;">
+          <div class="tech-icon" style="color: #6366f1;">📐</div>
+          <h3>Cosine Similarity</h3>
+          <p>Es la operación matemática más utilizada para comparar qué tan "cerca" apuntan dos vectores. El resultado es un Score de <code>-1.0</code> a <code>1.0</code>. Mientras más cerca a 1.0, mayor es la similitud semántica.</p>
+        </div>
+        
+        <div class="tech-card" style="margin-bottom: 24px;">
+          <div class="tech-icon" style="color: #10b981;">🗄️</div>
+          <h3>Vector Databases</h3>
+          <p>Calcular la similitud entre tu Query y millones de documentos tomaría horas. Las bases de datos vectoriales (ej. Pinecone, Weaviate, pgvector) utilizan índices especiales (HNSW) para encontrar los vectores más cercanos en milisegundos.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 04: Retrieval & RAG
+        </div>
+        <h1>Hybrid Search</h1>
+        <p class="subtitle">Lo mejor de ambos mundos</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-icon" style="color: #f59e0b;">⚖️</div>
+          <h3>El problema de la Búsqueda Semántica Pura</h3>
+          <p>La búsqueda semántica (embeddings) es mala buscando nombres exactos, IDs, o números de factura. Un Vector Database no sabrá que "Factura #10024" es completamente distinta a "Factura #10025".</p>
+          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #10b981; padding: 24px; border-radius: 4px; margin-top: 16px;">
+            <p style="margin: 0; color: #c7c4d7; font-size: 14px;"><strong>Solución Híbrida:</strong> Ejecutar BM25 (Léxico) + Embeddings (Semántico) al mismo tiempo, y fusionar los resultados usando un algoritmo como Reciprocal Rank Fusion (RRF).</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m04-retrieval-rag/lesson-02-pipeline" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            Siguiente Lección: The RAG Pipeline &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

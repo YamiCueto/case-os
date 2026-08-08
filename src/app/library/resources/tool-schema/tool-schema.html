@@ -1,0 +1,64 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/library" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Library
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding-top: 40px;">
+    
+    <div class="slide-title">
+      <div class="workshop-badge">
+        <span class="icon">📚</span> Library
+      </div>
+      <h1>Tool Definition Schema</h1>
+      <p class="subtitle">JSON Schema Pattern para Tool Calling</p>
+    </div>
+
+    <div class="slide-content">
+      <p>Para que un LLM (OpenAI, Anthropic, Gemini, etc.) pueda utilizar herramientas, debes enviarle una definición estricta de qué hace la herramienta y qué parámetros acepta. El estándar de facto en la industria para esto es el <strong>JSON Schema</strong>.</p>
+
+      <div class="template-container" style="border-radius: 8px; border: 1px solid #1F1F1F; margin-top: 32px;">
+        <div class="template-header" style="background: #1A1A1A; padding: 12px 24px; color: #e4e1ed;">
+          <h3 style="font-size: 14px; margin: 0; font-family: 'JetBrains Mono', monospace; color: #3b82f6;">// get_current_weather.json</h3>
+        </div>
+        <div style="padding: 24px; background: #0A0A0A;">
+          <div class="prompt-text" style="margin: 0; white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #e4e1ed;">{{ '{' }}
+  <span style="color: #6366f1;">"name"</span>: "get_current_weather",
+  <span style="color: #6366f1;">"description"</span>: "Obtiene el clima actual para una ubicación dada.",
+  <span style="color: #6366f1;">"parameters"</span>: {{ '{' }}
+    <span style="color: #6366f1;">"type"</span>: "object",
+    <span style="color: #6366f1;">"properties"</span>: {{ '{' }}
+      <span style="color: #6366f1;">"location"</span>: {{ '{' }}
+        <span style="color: #6366f1;">"type"</span>: "string",
+        <span style="color: #6366f1;">"description"</span>: "La ciudad y el estado, ej. San Francisco, CA"
+      {{ '}' }},
+      <span style="color: #6366f1;">"unit"</span>: {{ '{' }}
+        <span style="color: #6366f1;">"type"</span>: "string",
+        <span style="color: #6366f1;">"enum"</span>: ["celsius", "fahrenheit"],
+        <span style="color: #6366f1;">"description"</span>: "La unidad de temperatura a devolver"
+      {{ '}' }}
+    {{ '}' }},
+    <span style="color: #6366f1;">"required"</span>: ["location"]
+  {{ '}' }}
+{{ '}' }}</div>
+        </div>
+      </div>
+
+      <div class="tech-grid" style="margin-top: 32px;">
+        <div class="tech-card">
+          <div class="tech-meta">Metadata</div>
+          <h3>name & description</h3>
+          <p>El LLM usa el `name` para llamar a la función, pero usa la `description` para decidir <strong>cuándo</strong> llamarla. Escribir buenas descripciones es clave para el éxito del agente.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-meta">Data Types</div>
+          <h3>parameters & properties</h3>
+          <p>Define los tipos de datos (string, integer, boolean). Puedes usar `enum` para forzar al modelo a elegir de una lista cerrada de opciones, previniendo alucinaciones.</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>

@@ -1,0 +1,128 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Anterior
+    </a>
+  </div>
+
+  <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 07: MCP
+        </div>
+        <h1>Las Primitivas del Protocolo</h1>
+        <p class="subtitle">Resources, Tools y Prompts</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>El Lenguaje de la Interoperabilidad</h2>
+        <p>Cuando un <em>Client</em> se conecta a un <em>Server</em>, el servidor le envía un manifiesto (JSON) con lo que puede ofrecer. Esta oferta se agrupa estrictamente en tres categorías fundamentales.</p>
+        
+        <div class="warning-box" style="margin-top: 24px; border-left-color: #3b82f6;">
+          <strong>Regla de Oro:</strong> Confundir un Resource con una Tool es el error más común al diseñar servidores MCP. Comprender esta diferencia es crucial para escalar el ecosistema.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Resources -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 07: MCP
+        </div>
+        <h1>1. Resources</h1>
+        <p class="subtitle">Datos controlados por el Servidor</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="border-left: 4px solid #3b82f6;">
+          <div class="tech-icon" style="color: #3b82f6;">📄</div>
+          <h3>"Acceder a Información"</h3>
+          <p>Un Resource representa datos o contexto que el servidor expone (ej. un archivo local, un ticket de base de datos, un log). Se identifican mediante URIs, similares a `file:///...` o `postgres://...`.</p>
+          <ul style="font-size: 14px; color: #c7c4d7; margin-top: 16px; padding-left: 20px;">
+            <li>El usuario o el Host suelen inyectarlos al contexto <strong>antes</strong> o durante la generación.</li>
+            <li>Son operaciones seguras, de solo lectura (Read-Only).</li>
+            <li>El agente no está "ejecutando" nada; simplemente está "leyendo" un documento proveído por el Servidor.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Tools -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 07: MCP
+        </div>
+        <h1>2. Tools</h1>
+        <p class="subtitle">Acciones controladas por el Modelo</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card active" style="border-left: 4px solid #ef4444;">
+          <div class="tech-icon" style="color: #ef4444;">🛠️</div>
+          <h3>"Pedir que ocurra una operación"</h3>
+          <p>Una Tool es una función ejecutable (mutación o búsqueda compleja). El Servidor expone el JSON Schema de la herramienta, y el LLM decide <strong>cuándo</strong> y con qué <strong>parámetros</strong> llamarla (como vimos en M05).</p>
+          <ul style="font-size: 14px; color: #c7c4d7; margin-top: 16px; padding-left: 20px;">
+            <li>El modelo (agente) es quien invoca activamente la herramienta durante su loop.</li>
+            <li>Pueden tener efectos secundarios (ej. `github_create_pr`, `execute_sql_query`).</li>
+            <li>Debido a que el modelo las controla, <strong>requieren validación, permisos y en muchos casos, aprobación humana (HitL)</strong>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Conclusion -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 07: MCP
+        </div>
+        <h1>3. Prompts & Práctica</h1>
+        <p class="subtitle">El Universal Connector</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="tech-card" style="margin-bottom: 24px; border-left: 4px solid #a855f7;">
+          <div class="tech-icon" style="color: #a855f7;">✨</div>
+          <h3>Prompts (Templates)</h3>
+          <p>La tercera primitiva son plantillas reutilizables predefinidas por el Servidor. Facilitan al usuario interactuar de manera estandarizada con un dominio (ej. un prompt de "Analizar este ticket de Jira" que automáticamente vincula los Resources correctos).</p>
+        </div>
+        
+        <div class="tech-card active" style="margin-bottom: 32px;">
+          <div class="tech-meta">Lab 07</div>
+          <div class="tech-icon" style="color: #10b981;">🧪</div>
+          <h3>Experimentando la Interoperabilidad</h3>
+          <p>En este laboratorio te pondrás en el lugar de un Host MCP. En lugar de codificar integraciones para Jira, GitHub y Bases de Datos (el problema N x M), simularemos la conexión a Servidores MCP y observaremos cómo el Agente "descubre" (Capability Discovery) estas primitivas instantáneamente, así como la importancia de los Permisos.</p>
+        </div>
+        
+        <div style="text-align: center;">
+          <a routerLink="/labs/mcp-connector" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
+            🔬 Entrar al Lab 07 &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
+    </div>
+
+  </div>
+</div>

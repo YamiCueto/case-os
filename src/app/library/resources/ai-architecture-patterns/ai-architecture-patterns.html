@@ -1,0 +1,84 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/library" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Library
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding-top: 40px;">
+    
+    <div class="slide-title">
+      <div class="workshop-badge">
+        <span class="icon">📚</span> Library
+      </div>
+      <h1>AI Architecture Patterns</h1>
+      <p class="subtitle">Catálogo de Patrones de Diseño GenAI</p>
+    </div>
+
+    <div class="slide-content">
+      <p>Un catálogo de los principales patrones arquitectónicos para sistemas generativos. Diseñado con un enfoque estricto en <strong>Trade-offs</strong>: saber cuándo NO usar un patrón es tan importante como saber implementarlo.</p>
+
+      <!-- 1. Provider Abstraction -->
+      <div class="checklist-section" style="margin-top: 40px; background: #0A0A0A; padding: 24px; border-radius: 8px; border: 1px solid #1F1F1F;">
+        <h2 style="color: #6366f1; margin-top: 0;">1. Provider Abstraction (Engines)</h2>
+        <div style="font-size: 14px; color: #c7c4d7; display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+          <div><strong>Problem:</strong> Atarse al SDK de OpenAI o Anthropic impide cambiar de modelo fácilmente.</div>
+          <div><strong>Pattern:</strong> Crear una interfaz `ModelEngine` genérica. El resto del código llama a `generate(prompt)`, y por debajo, una implementación específica (ej. `OpenAIEngine`) traduce la solicitud.</div>
+          <div style="color: #10b981;"><strong>When to use:</strong> Siempre. Es una buena práctica fundamental en sistemas de producción.</div>
+          <div style="color: #ef4444;"><strong>When NOT to use:</strong> En prototipos de 1 hora.</div>
+          <div style="color: #f59e0b;"><strong>Trade-offs:</strong> Pierdes acceso rápido a características experimentales únicas de un proveedor (ej. funciones beta muy específicas) hasta que las abstraes.</div>
+        </div>
+      </div>
+
+      <!-- 2. Model Routing -->
+      <div class="checklist-section" style="margin-top: 24px; background: #0A0A0A; padding: 24px; border-radius: 8px; border: 1px solid #1F1F1F;">
+        <h2 style="color: #6366f1; margin-top: 0;">2. Model Routing</h2>
+        <div style="font-size: 14px; color: #c7c4d7; display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+          <div><strong>Problem:</strong> Usar GPT-4 o Claude 3.5 Sonnet para cada tarea trivial arruina tu presupuesto y aumenta la latencia.</div>
+          <div><strong>Pattern:</strong> Un Router evalúa la complejidad del prompt entrante y lo envía a un modelo "Barato/Rápido" (ej. Haiku/GPT-4o-mini) o a uno "Caro/Lento" (Opus/GPT-4o).</div>
+          <div style="color: #10b981;"><strong>When to use:</strong> Cuando el sistema maneja millones de requests heterogéneos y el costo es una restricción severa.</div>
+          <div style="color: #ef4444;"><strong>When NOT to use:</strong> Si tu volumen es bajo, el costo de desarrollar el Router supera el ahorro en tokens.</div>
+          <div style="color: #f59e0b;"><strong>Trade-offs:</strong> Introduce latencia inicial (el router toma tiempo en decidir). Si el router se equivoca, una tarea difícil se procesa con un modelo débil, devolviendo un error.</div>
+        </div>
+      </div>
+
+      <!-- 3. Retrieval / RAG -->
+      <div class="checklist-section" style="margin-top: 24px; background: #0A0A0A; padding: 24px; border-radius: 8px; border: 1px solid #1F1F1F;">
+        <h2 style="color: #6366f1; margin-top: 0;">3. Retrieval / RAG (Context Boundary)</h2>
+        <div style="font-size: 14px; color: #c7c4d7; display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+          <div><strong>Problem:</strong> El modelo alucina porque no tiene acceso a datos privados o actualizados de la empresa.</div>
+          <div><strong>Pattern:</strong> Inyectar una fase de búsqueda (Vector Database) ANTES de llamar al modelo. El resultado se añade al prompt como "Contexto".</div>
+          <div style="color: #10b981;"><strong>When to use:</strong> Cuando los datos son demasiado grandes para caber en el contexto estático o cambian frecuentemente.</div>
+          <div style="color: #ef4444;"><strong>When NOT to use:</strong> Si tu manual solo tiene 30 páginas, mételo entero en el prompt. No diseñes RAG para datos estáticos pequeños.</div>
+          <div style="color: #f59e0b;"><strong>Trade-offs:</strong> La calidad de respuesta queda atada a la calidad de la búsqueda (Si el motor de búsqueda falla, el LLM fallará). Costos de infraestructura por BBDD Vectorial.</div>
+        </div>
+      </div>
+
+      <!-- 4. Tool / MCP Boundary -->
+      <div class="checklist-section" style="margin-top: 24px; background: #0A0A0A; padding: 24px; border-radius: 8px; border: 1px solid #1F1F1F;">
+        <h2 style="color: #6366f1; margin-top: 0;">4. Tool / MCP Boundary</h2>
+        <div style="font-size: 14px; color: #c7c4d7; display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+          <div><strong>Problem:</strong> Acoplar funciones locales a la lógica del Agente impide que el agente viva en la nube y los datos/APIs en infraestructura On-Premise.</div>
+          <div><strong>Pattern:</strong> Separar las "Acciones" en un servidor independiente usando el protocolo MCP. El LLM decide "Qué hacer", pero el MCP Server decide "Cómo hacerlo y si tiene permisos".</div>
+          <div style="color: #10b981;"><strong>When to use:</strong> Cuando necesitas ejecutar acciones en sistemas externos corporativos, o conectar el mismo set de Tools a múltiples agentes/IDEs (Problema N x M).</div>
+          <div style="color: #ef4444;"><strong>When NOT to use:</strong> Si solo necesitas una calculadora local o una herramienta trivial que vive en el mismo servidor web.</div>
+          <div style="color: #f59e0b;"><strong>Trade-offs:</strong> Mayor complejidad de red (DNS, SSL, Autenticación entre cliente MCP y Servidor).</div>
+        </div>
+      </div>
+
+      <!-- 5. Evaluation Pipeline -->
+      <div class="checklist-section" style="margin-top: 24px; background: #0A0A0A; padding: 24px; border-radius: 8px; border: 1px solid #1F1F1F;">
+        <h2 style="color: #6366f1; margin-top: 0;">5. Evaluation Pipeline (Gatekeeper)</h2>
+        <div style="font-size: 14px; color: #c7c4d7; display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+          <div><strong>Problem:</strong> Actualizar un prompt rompe casos de uso que antes funcionaban (Regresiones silenciosas).</div>
+          <div><strong>Pattern:</strong> Correr un "Golden Dataset" a través de una jerarquía de evaluación (Regex -> Semantic -> LLM Judge) antes de cualquier pase a producción.</div>
+          <div style="color: #10b981;"><strong>When to use:</strong> Obligatorio para cualquier sistema GenAI desplegado a clientes reales.</div>
+          <div style="color: #ef4444;"><strong>When NOT to use:</strong> No hay excusa válida en producción, pero es excesivo para uso personal o scripts internos (Vibes-based evaluation es aceptable ahí).</div>
+          <div style="color: #f59e0b;"><strong>Trade-offs:</strong> Mantener la rúbrica y los Golden Datasets es costoso. Riesgo de False Passes si el LLM-Judge es débil.</div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>

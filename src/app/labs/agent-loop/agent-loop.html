@@ -1,0 +1,102 @@
+<div class="lab-container">
+  <div class="lab-header">
+    <div class="back-link">
+      <a routerLink="/academy/home">&larr; Volver a Academy</a>
+    </div>
+    <h1>Lab 05: The Agent Loop</h1>
+    <p>Simulador de orquestación (ReAct Pattern)</p>
+  </div>
+
+  <div class="warning-box" style="margin-bottom: 24px; border-left-color: #6366f1;">
+    <strong>Misión:</strong> Eres el Orquestador (el código) controlando a un Agente. El usuario solicitó: <em>"Busca la política de reembolso de viajes y envíale un resumen a manager@empresa.com"</em>. Lee la intención actual del Agente y selecciona la herramienta correcta para que reciba su Observación.
+  </div>
+
+  <div class="lab-grid">
+    <!-- Panel Izquierdo: Agent Context & History -->
+    <div class="panel context-panel">
+      <div class="panel-header">
+        <h2>Agent Execution Context</h2>
+        <div class="status-badge" 
+             [class.running]="status() === 'RUNNING'" 
+             [class.success]="status() === 'SUCCESS'" 
+             [class.failed]="status() === 'FAILED'">
+          {{ status() }} ({{ currentStep() }}/{{ maxIterations }})
+        </div>
+      </div>
+      
+      <div class="history-list">
+        <div class="iteration-card" *ngFor="let it of history()">
+          <div class="it-header">ITERATION {{ it.step }}</div>
+          
+          <div class="it-intent">
+            <strong>Agent Intent:</strong> {{ it.intent }}
+          </div>
+          
+          <div class="it-action" *ngIf="it.actionTaken">
+            <span class="tag">Action</span>
+            <code>{{ it.actionTaken }}</code>
+          </div>
+          
+          <div class="it-observation" *ngIf="it.observation">
+            <span class="tag">Observation</span>
+            <p [class.error]="it.observation.includes('Error')">{{ it.observation }}</p>
+          </div>
+        </div>
+        
+        <!-- Reflection on Success -->
+        <div class="iteration-card" *ngIf="status() === 'SUCCESS'" style="border-left-color: #10b981; background: rgba(16, 185, 129, 0.05);">
+          <div class="it-header" style="color: #10b981;">REFLEXIÓN PEDAGÓGICA</div>
+          <div class="it-intent">
+            <ul style="font-size: 13px; color: #c7c4d7; margin: 0; padding-left: 16px;">
+              <li style="margin-bottom: 8px;">¿Qué herramienta necesitó utilizar el agente para resolver el query inicial?</li>
+              <li style="margin-bottom: 8px;">¿Qué información necesitaba antes de ejecutar la acción de envío de email?</li>
+              <li>¿Qué habría ocurrido en un sistema real sin el límite de <code>Max Iterations</code> ante repetidos errores?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Derecho: Tool Registry (Tus acciones) -->
+    <div class="panel tools-panel">
+      <h2>Available Tools (Software Environment)</h2>
+      <p class="helper-text">Selecciona la herramienta que el Agente "solicitó" ejecutar basado en su Intent actual.</p>
+      
+      <div class="tools-list">
+        <button class="tool-btn" (click)="executeSearch()" [disabled]="status() !== 'RUNNING'">
+          <div class="tool-icon">🔍</div>
+          <div class="tool-info">
+            <h4>searchKnowledge(query)</h4>
+            <p>Conecta con el sistema RAG (M04) para buscar en la base vectorial corporativa.</p>
+          </div>
+        </button>
+
+        <button class="tool-btn" (click)="executeMath()" [disabled]="status() !== 'RUNNING'">
+          <div class="tool-icon">🧮</div>
+          <div class="tool-info">
+            <h4>calculateMath(expression)</h4>
+            <p>Calculadora segura usando eval().</p>
+          </div>
+        </button>
+
+        <button class="tool-btn" (click)="executeEmail()" [disabled]="status() !== 'RUNNING'">
+          <div class="tool-icon">📧</div>
+          <div class="tool-info">
+            <h4>sendEmail(to, body)</h4>
+            <p>Envía un email vía SMTP. Valida que el body tenga contenido relevante.</p>
+          </div>
+        </button>
+      </div>
+
+      <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #1F1F1F;">
+        <button class="finish-btn" (click)="finishLoop()" [disabled]="status() !== 'RUNNING'">
+          🏁 Devolver Respuesta Final (Terminar Loop)
+        </button>
+        
+        <button class="reset-btn" (click)="resetLab()" *ngIf="status() !== 'RUNNING'">
+          ↻ Reiniciar Simulador
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

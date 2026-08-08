@@ -1,0 +1,66 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/library" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Library
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding-top: 40px;">
+    
+    <div class="slide-title">
+      <div class="workshop-badge">
+        <span class="icon">📚</span> Library
+      </div>
+      <h1>Production AI Checklist</h1>
+      <p class="subtitle">Guía de Readiness para Modelos en Producción</p>
+    </div>
+
+    <div class="slide-content">
+      <p>Antes de exponer un modelo generativo a usuarios reales o conectarlo a sistemas corporativos, tu equipo debe poder marcar cada uno de estos requisitos arquitectónicos y operativos.</p>
+
+      <div class="checklist-section" style="margin-top: 40px;">
+        <h2 style="color: #3b82f6; border-bottom: 1px solid #1F1F1F; padding-bottom: 8px;">1. Evaluation & Regression</h2>
+        <ul style="list-style: none; padding: 0; margin-top: 16px;">
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Golden Dataset:</strong> Existe un set de 50+ casos de prueba representativos con su comportamiento esperado.</li>
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Automated Eval:</strong> Se ejecuta una evaluación semántica o <em>LLM-as-a-judge</em> en cada PR o cambio de prompt.</li>
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>False Positives Check:</strong> La rúbrica de evaluación ha sido probada inyectando respuestas intencionalmente malas para verificar que el evaluador falla correctamente.</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section" style="margin-top: 40px;">
+        <h2 style="color: #ef4444; border-bottom: 1px solid #1F1F1F; padding-bottom: 8px;">2. Security & Boundaries</h2>
+        <ul style="list-style: none; padding: 0; margin-top: 16px;">
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Prompt Injection Defenses:</strong> El input del usuario está acotado (Boundaries) y no se confía ciegamente en él.</li>
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>PII Masking:</strong> Existe un filtro determinista (Regex/Spacy) antes de que el texto viaje al proveedor del LLM.</li>
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Tool Sandboxing:</strong> Las herramientas que el agente puede ejecutar tienen permisos de infraestructura limitados (Principio de menor privilegio).</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section" style="margin-top: 40px;">
+        <h2 style="color: #f59e0b; border-bottom: 1px solid #1F1F1F; padding-bottom: 8px;">3. Reliability & Fallbacks</h2>
+        <ul style="list-style: none; padding: 0; margin-top: 16px;">
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Multi-Provider Routing:</strong> El sistema puede enrutar automáticamente a un modelo de respaldo si la API principal se cae.</li>
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Graceful Degradation:</strong> Si el LLM falla, el usuario recibe un flujo determinista (ej. botones estándar) en lugar de un error genérico.</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section" style="margin-top: 40px;">
+        <h2 style="color: #a855f7; border-bottom: 1px solid #1F1F1F; padding-bottom: 8px;">4. Observability, Cost & Latency</h2>
+        <ul style="list-style: none; padding: 0; margin-top: 16px;">
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Token Tracking:</strong> Cada inferencia taggea el costo y el uso de tokens por usuario/tenant.</li>
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Traceability:</strong> Se registran los pasos internos del agente (qué tools llamó, qué prompts usó) para depurar alucinaciones.</li>
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Latency Budgets:</strong> Las tareas triviales usan modelos rápidos (pequeños), reservando los modelos grandes para tareas complejas.</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section" style="margin-top: 40px;">
+        <h2 style="color: #10b981; border-bottom: 1px solid #1F1F1F; padding-bottom: 8px;">5. Human Review (HitL)</h2>
+        <ul style="list-style: none; padding: 0; margin-top: 16px;">
+          <li style="margin-bottom: 12px; display: flex; gap: 12px;"><span style="color: #10b981;">[ ]</span> <strong>Mutation Risk Approval:</strong> Ninguna herramienta de escritura/borrado se ejecuta sin aprobación asíncrona de un humano (Human-in-the-Loop).</li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
