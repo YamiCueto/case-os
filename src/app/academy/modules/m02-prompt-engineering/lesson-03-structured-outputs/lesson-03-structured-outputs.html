@@ -111,7 +111,8 @@ WARNING: Return ONLY valid JSON. No markdown backticks.
             <h3>Defensas de Software</h3>
             <ul>
               <li><strong>Pre-procesamiento:</strong> Usa un regex para buscar la primera {{ '{' }} y la última {{ '}' }} antes de hacer <code>JSON.parse()</code>.</li>
-              <li><strong>Validación estricta:</strong> Usa librerías como Zod o Pydantic para validar la estructura parseada. Si falla, <strong>rechaza la respuesta</strong>.</li>
+              <li><strong>Parseable ≠ Valid:</strong> Un JSON que hace parse correctamente puede no cumplir el contrato de tu aplicación. <strong>El LLM produce una propuesta; el software decide si es válida.</strong></li>
+              <li><strong>Validación estricta:</strong> Usa librerías como Zod o Pydantic para validar la estructura parseada contra un Schema. Si falla, <strong>rechaza la respuesta</strong>.</li>
             </ul>
           </div>
         </div>

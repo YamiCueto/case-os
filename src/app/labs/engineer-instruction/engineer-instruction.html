@@ -22,9 +22,9 @@
         <h4 style="margin-top: 1rem;">Objetivo:</h4>
         <ol style="margin-left: 1.5rem; color: #0c4a6e;">
           <li>Diseña una instrucción para analizar el código de abajo.</li>
-          <li>Haz clic en "Ejecutar Prompt".</li>
-          <li>Observa cómo falla el parseo (JSON.parse).</li>
-          <li><strong>Itera:</strong> Añade palabras clave como "JSON", "schema {{ '{' }}{{ '}' }}", "ONLY" o "sin markdown" para acorralar al modelo.</li>
+          <li>Observa el <strong>Nivel 1 de Fallo: Unparseable</strong> (Texto basura rompe `JSON.parse`).</li>
+          <li>Añade constraints ("ONLY JSON"). Observa el <strong>Nivel 2 de Fallo: Parseable but Invalid</strong> (Es JSON válido, pero inventa propiedades).</li>
+          <li><strong>Itera:</strong> Añade un Schema exacto (vulnerability, severity, fix) para superar la validación.</li>
         </ol>
       </div>
 

@@ -28,21 +28,21 @@
       </div>
 
       <div class="slide-content">
-        <h2>El problema del razonamiento implícito</h2>
-        <p>Un LLM predice el siguiente token basándose en el contexto previo. Si le pides una respuesta compleja directamente (Zero-Shot), debe generar la respuesta final de inmediato sin espacio para "pensar". Esto suele causar alucinaciones o respuestas superficiales.</p>
+        <h2>Structured Problem Solving</h2>
+        <p>Un LLM predice el siguiente token basándose en el contexto previo. Si le pides una respuesta compleja directamente (Zero-Shot), debe generar la respuesta final de inmediato sin espacio para descomponer la lógica. Esto suele causar alucinaciones o respuestas superficiales.</p>
         
         <div class="theory-grid" style="margin-top: 2rem;">
           <div class="theory-card orange">
             <div class="theory-icon">❌</div>
-            <h3>Razonamiento Implícito (Malo)</h3>
+            <h3>Petición Directa (Frágil)</h3>
             <p><strong>Input:</strong> "¿Es este código seguro? [Código de 500 líneas]"</p>
             <p><strong>Output:</strong> "Sí, parece seguro." (El modelo adivina sin desglosar el problema).</p>
           </div>
           
           <div class="theory-card green">
             <div class="theory-icon">✅</div>
-            <h3>Razonamiento Explícito (Bueno)</h3>
-            <p>Obligar al modelo a escribir sus pasos lógicos <strong>en el contexto visible</strong> antes de dar la respuesta final. El output intermedio actúa como "scratchpad" (borrador).</p>
+            <h3>Descomposición Estructurada</h3>
+            <p>El flujo debe ser: <strong>Decomposition &rarr; Intermediate structure &rarr; Verification &rarr; Final answer</strong>. El alumno debe aprender a forzar al modelo a seguir pasos lógicos explícitos.</p>
           </div>
         </div>
       </div>
