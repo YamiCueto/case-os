@@ -62,12 +62,7 @@ import { UserStatsService } from '../../services/user-stats.service';
             <span *ngIf="!isCollapsed()">Roadmap</span>
           </a>
           
-          <a routerLink="/plan-dev-detallado" routerLinkActive="bg-indigo-900/40 text-indigo-300 border-indigo-500/50" 
-             class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent transition-colors font-medium text-sm group"
-             [title]="isCollapsed() ? 'Temario Detallado' : ''">
-            <span class="text-lg">📚</span> 
-            <span *ngIf="!isCollapsed()">Temario Detallado</span>
-          </a>
+
 
           <div class="pt-4 pb-1" *ngIf="!isCollapsed()">
             <p class="px-3 text-xs font-bold uppercase tracking-wider text-slate-500 truncate">Recursos</p>
