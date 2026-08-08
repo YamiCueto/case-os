@@ -519,16 +519,31 @@ export const COURSE_CONFIG: CourseConfig = {
           resources: []
         },
         {
-          id: 'l7',
-          title: 'Lab 07 — The Universal Connector',
+          id: 'd7',
+          title: 'Demo 07 — The Universal Connector',
           order: 4,
-          duration: '60 min',
+          duration: '15 min',
+          difficulty: 'ADVANCED',
+          icon: '🎮',
+          tags: ['Demo', 'Interactive'],
+          type: 'DEMO',
+          prerequisites: ['c21'],
+          path: '/academy/modules/m07-mcp/demo-mcp-connector',
+          objectives: ['Experimentar el descubrimiento de capacidades MCP y Least Privilege'],
+          resources: []
+        },
+        {
+          id: 'l7',
+          title: 'Lab 07 — Map a Legacy Integration to MCP',
+          order: 5,
+          duration: '90 min',
           difficulty: 'ADVANCED',
           icon: '🔬',
-          tags: ['Lab', 'Practice'],
-          prerequisites: ['c21'],
-          path: '/labs/mcp-connector',
-          objectives: ['Experimentar el descubrimiento de capacidades MCP'],
+          tags: ['Lab', 'Real Engineering'],
+          type: 'LAB',
+          prerequisites: ['d7'],
+          path: '/academy/modules/m07-mcp/lab-07-map-integration-to-mcp',
+          objectives: ['Diseñar una especificación MCP segura (Resources, Tools, Least Privilege, HITL) sobre una base de datos real'],
           resources: []
         }
       ]

@@ -1,0 +1,147 @@
+﻿<div class="presentation-container pb-32">
+
+  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
+
+    <!-- Context Chips -->
+    <div class="lab-context-chips" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 28px;">
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #10b981; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); padding: 3px 10px; border-radius: 4px;">LAB 07 · REAL ENGINEERING</span>
+      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; background: #0f172a; border: 1px solid #1e293b; padding: 3px 10px; border-radius: 4px;">Module 07 · MCP</span>
+      <span style="color: #334155; font-size: 10px;">·</span>
+      <span style="font-size: 12px; color: #64748b;">⏱️ 90 min</span>
+      <span style="font-size: 12px; color: #64748b;">· Advanced</span>
+      <span style="font-size: 12px; color: #64748b;">· Design Specification</span>
+    </div>
+
+    <div class="slide-content" style="display: flex; flex-direction: column; gap: 40px;">
+
+      <!-- Intro -->
+      <section>
+        <p style="color: #cbd5e1; font-size: 16px; line-height: 1.7; margin: 0;">
+          Para este Lab, trabajarás sobre una base <strong>MySQL local de la CFA</strong> (o una integración equivalente en tu entorno). Tu objetivo no es programar la conexión real a la plataforma, sino diseñar la <strong>MCP Integration Specification</strong>: un contrato arquitectónico que determina cómo exponer esas capacidades a un Agente de IA manteniendo la seguridad y limitando la superficie de ataque.
+        </p>
+      </section>
+
+      <!-- 01 — Understand the Existing Integration -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">01 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Understand the Existing Integration</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
+          Antes de diseñar MCP, documenta qué existe actualmente. Identifica las tablas involucradas, datos sensibles, operaciones de escritura/lectura y los efectos secundarios de interactuar con el sistema legacy.
+        </p>
+      </section>
+
+      <!-- 02 — Tool or Resource? -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">02 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Tool or Resource?</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Clasifica cada capacidad deseada en una de las dos primitivas principales de MCP.
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8;">RESOURCE (Read-Only)</span>
+            <ul style="font-size: 12px; color: #94a3b8; margin: 8px 0 0 16px; padding: 0;">
+              <li><code style="color: #cbd5e1; background: transparent;">mysql://localhost/cfa/schema</code></li>
+              <li>Información contextual que el agente puede leer para entender el entorno.</li>
+            </ul>
+          </div>
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #fbbf24;">TOOL (Executable)</span>
+            <ul style="font-size: 12px; color: #94a3b8; margin: 8px 0 0 16px; padding: 0;">
+              <li><code style="color: #cbd5e1; background: transparent;">search_orders(customer_id)</code></li>
+              <li>Operaciones que reciben argumentos y ejecutan lógicas de negocio o side-effects.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 & 04 — The Contract & Least Privilege -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">03 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">The Contract & Least Privilege</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Diseña el esquema formal (Name, Inputs, Outputs). No expongas métodos genéricos y peligrosos. Reduce la superficie utilizando una matriz de decisión:
+        </p>
+
+        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 0; overflow: hidden;">
+          <table style="width: 100%; text-align: left; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12px;">
+            <thead style="background: #0f172a; border-bottom: 1px solid #1e293b; color: #cbd5e1;">
+              <tr>
+                <th style="padding: 12px 16px;">Capacidad</th>
+                <th style="padding: 12px 16px;">Decisión</th>
+                <th style="padding: 12px 16px;">Justificación</th>
+              </tr>
+            </thead>
+            <tbody style="color: #94a3b8;">
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0;">Consultar cliente</td>
+                <td style="padding: 12px 16px; color: #10b981; font-weight: bold;">EXPOSE</td>
+                <td style="padding: 12px 16px;">Read-only y acotado</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0;">Ejecutar SQL arbitrario</td>
+                <td style="padding: 12px 16px; color: #ef4444; font-weight: bold;">DO NOT EXPOSE</td>
+                <td style="padding: 12px 16px;">Superficie excesiva / Inyección</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #e2e8f0;">Actualizar estado orden</td>
+                <td style="padding: 12px 16px; color: #f59e0b; font-weight: bold;">RESTRICT (HITL)</td>
+                <td style="padding: 12px 16px;">Side-effect (Requiere validación)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 05 & 06 — Security, HITL & Observability -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">04 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Security, HITL & Audit</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          Establece explícitamente cuándo una acción es `AUTO`, `AUDIT` o `HUMAN APPROVAL`. Todo contrato debe incluir trazabilidad: ¿Quién la llama? ¿Cuándo? ¿Con qué parámetros?
+        </p>
+      </section>
+
+      <!-- 07 — Failure & Recovery -->
+      <section>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #10b981;">05 —</span>
+          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Failure & Recovery</h2>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
+          ¿Qué ocurre si MySQL falla? ¿Cómo debe reaccionar el Agente? En el contrato debes anticipar fallos como <code>DATABASE_UNAVAILABLE</code> para que el LLM no invente resultados, no haga retries infinitos y escale el error al usuario humano.
+        </p>
+      </section>
+
+      <!-- Bridge to M08 -->
+      <section>
+        <div style="background: #1e1b4b; border: 1px solid #3730a3; border-radius: 8px; padding: 24px; text-align: center;">
+          <p style="color: #a5b4fc; font-family: 'JetBrains Mono', monospace; font-size: 14px; margin: 0;">
+            Has expuesto tus capacidades de forma segura (M07). Pero, ¿cómo evaluamos si el Agente realmente usa estas herramientas de manera confiable antes de enviarlo a Producción? Esa es la responsabilidad de <strong>M08 — Production AI</strong>.
+          </p>
+        </div>
+      </section>
+
+      <!-- Navigation & Closure -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid #1e293b; margin-top: 12px;">
+        <a routerLink="/academy/modules/m07-mcp/demo-mcp-connector" class="control-btn" style="border-color: #1e293b; color: #94a3b8; font-size: 12px;">
+          ← Volver a Demo 07
+        </a>
+        <a routerLink="/labs" class="control-btn primary" style="font-size: 12px;">
+          Ver Real Engineering Labs →
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

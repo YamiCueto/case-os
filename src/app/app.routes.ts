@@ -93,10 +93,7 @@ export const routes: Routes = [
       },
 
 
-      {
-        path: 'labs/mcp-connector',
-        loadComponent: () => import('./labs/mcp-connector/mcp-connector').then(m => m.McpConnectorLab)
-      },
+
       {
         path: 'labs/eval-pipeline',
         loadComponent: () => import('./labs/eval-pipeline/eval-pipeline').then(m => m.EvalPipelineLab)
@@ -316,6 +313,14 @@ export const routes: Routes = [
           {
             path: 'academy/modules/m07-mcp/lesson-03-primitives',
             loadComponent: () => import('./academy/modules/m07-mcp/lesson-03-primitives/lesson-03-primitives').then(m => m.Lesson03Primitives)
+          },
+          {
+            path: 'academy/modules/m07-mcp/demo-mcp-connector',
+            loadComponent: () => import('./academy/modules/m07-mcp/demo-mcp-connector/demo-mcp-connector').then(m => m.DemoMcpConnector)
+          },
+          {
+            path: 'academy/modules/m07-mcp/lab-07-map-integration-to-mcp',
+            loadComponent: () => import('./academy/modules/m07-mcp/lab-07-map-integration-to-mcp/lab-07-map-integration-to-mcp').then(m => m.Lab07MapIntegrationToMcp)
           },
           {
             path: 'academy/modules/m08-production/lesson-01-production-gap',

@@ -1,0 +1,143 @@
+﻿<div class="presentation-container pb-32">
+  <div class="back-to-menu">
+    <a routerLink="/academy/modules/m07-mcp/lesson-03-primitives" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a la Leccion
+    </a>
+  </div>
+
+  <div class="slide-wrapper" style="max-width: 1000px; margin: 0 auto; padding: 32px 40px;">
+    <div class="slide-title">
+      <span class="workshop-badge">
+        <span class="icon">◈</span>
+        Demo 07 · Model Context Protocol
+      </span>
+      <h1>The Universal Connector</h1>
+      <p class="subtitle">Estandarizando el acceso del Agente a sistemas internos</p>
+    </div>
+
+    <!-- Mode Selector -->
+    <div style="display: flex; gap: 16px; margin-bottom: 32px; justify-content: center;">
+      <button (click)="setMode('LEGACY')" class="control-btn" [ngClass]="{'primary': architectureMode() === 'LEGACY'}">
+        Arquitectura LEGACY
+      </button>
+      <button (click)="setMode('MCP')" class="control-btn" [ngClass]="{'primary': architectureMode() === 'MCP'}">
+        Arquitectura MCP
+      </button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 320px 1fr; gap: 24px;">
+      
+      <!-- Internal Systems -->
+      <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 20px;">
+        <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #cbd5e1; margin: 0 0 16px 0;">Sistemas Internos</h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div *ngFor="let srv of servers()" 
+               style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 24px;">{{ srv.icon }}</span>
+              <div>
+                <div style="font-size: 14px; font-weight: 600; color: #f8fafc;">{{ srv.name }}</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b;">{{ srv.url }}</div>
+              </div>
+            </div>
+            
+            <button (click)="initiateConnection(srv)" 
+                    *ngIf="!srv.connected"
+                    class="control-btn" style="font-size: 11px; padding: 4px 8px;">
+              Connect
+            </button>
+            <span *ngIf="srv.connected" style="color: #10b981; font-size: 18px;" class="material-symbols-outlined">link</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent / Client View -->
+      <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 20px;">
+        
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #cbd5e1; margin: 0;">Vista del Agente (MCP Client)</h3>
+          <span *ngIf="architectureMode() === 'LEGACY'" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #ef4444; background: rgba(239,68,68,0.1); padding: 4px 8px; border-radius: 4px;">CUSTOM INTEGRATIONS REQUIRED</span>
+          <span *ngIf="architectureMode() === 'MCP'" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #10b981; background: rgba(16,185,129,0.1); padding: 4px 8px; border-radius: 4px;">STANDARDIZED PROTOCOL</span>
+        </div>
+
+        <div *ngIf="architectureMode() === 'LEGACY'" style="color: #94a3b8; font-size: 13px; line-height: 1.6; padding: 20px; text-align: center; border: 1px dashed #334155; border-radius: 8px;">
+          En arquitectura Legacy, el agente no entiende qué capacidades tienen los sistemas. Tienes que escribir código a medida (API clients, auth, data parsing) para cada herramienta que quieras darle al LLM. Intenta conectar un sistema para ver el error.
+        </div>
+
+        <div *ngIf="architectureMode() === 'MCP'" style="display: flex; flex-direction: column; gap: 20px;">
+          
+          <div *ngIf="availableResources.length === 0 && availableTools.length === 0" style="color: #64748b; font-size: 13px; text-align: center; padding: 20px; font-family: 'JetBrains Mono', monospace;">
+            Esperando conexión con MCP Servers...
+          </div>
+
+          <!-- RESOURCES -->
+          <div *ngIf="availableResources.length > 0">
+            <h4 style="color: #818cf8; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin: 0 0 12px 0;">RESOURCES (Read-Only Data)</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div *ngFor="let res of availableResources" style="background: rgba(15,23,42,0.6); border: 1px solid #1e293b; padding: 10px 12px; border-radius: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #e2e8f0; word-break: break-all;">{{ res.name }}</span>
+                  <span style="font-size: 10px; color: #94a3b8; background: #0f172a; padding: 2px 6px; border-radius: 4px;">{{ res.server }}</span>
+                </div>
+                <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">{{ res.description }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOOLS -->
+          <div *ngIf="availableTools.length > 0">
+            <h4 style="color: #fbbf24; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin: 0 0 12px 0;">TOOLS (Executable Actions)</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div *ngFor="let tool of availableTools" 
+                   style="background: rgba(15,23,42,0.6); border: 1px solid #1e293b; padding: 10px 12px; border-radius: 4px;"
+                   [ngClass]="{
+                     'opacity-50': tool.status === 'HIDDEN',
+                     'border-red-900 bg-red-900/10': tool.isDangerous && tool.status !== 'HIDDEN'
+                   }">
+                
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #e2e8f0;">{{ tool.name }}</span>
+                  <div style="display: flex; gap: 6px;">
+                    <span *ngIf="tool.status === 'RESTRICTED'" style="font-size: 9px; color: #f87171; background: rgba(248,113,113,0.1); border: 1px solid #f87171; padding: 2px 4px; border-radius: 3px;">HITL REQ</span>
+                    <span *ngIf="tool.status === 'HIDDEN'" style="font-size: 9px; color: #94a3b8; background: #1e293b; padding: 2px 4px; border-radius: 3px;">NOT EXPOSED</span>
+                    <span style="font-size: 10px; color: #94a3b8; background: #0f172a; padding: 2px 6px; border-radius: 4px;">{{ tool.server }}</span>
+                  </div>
+                </div>
+                <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
+                  {{ tool.description }}
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Takeaway Box -->
+    <div class="warning-box" style="border-left-color: #6366f1; background: #0d0d1a; margin-top: 2rem;">
+      <h4 style="color: #818cf8; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;">◈ Takeaway</h4>
+      <p style="color: #c7c4d7; font-size: 14px; line-height: 1.7; margin-bottom: 1rem;">
+        Nota cómo en MySQL exponemos <code>get_customer_status</code> en lugar de un genérico <code>execute_sql</code>. MCP nos permite aplicar el principio de <strong>Least Privilege</strong>: el agente solo ve y puede ejecutar aquello que explícitamente decidimos exponer (Resources y Tools) y bajo qué reglas de autorización (HITL).
+      </p>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a routerLink="/academy/modules/m07-mcp/lab-07-map-integration-to-mcp" class="control-btn" style="border-color: #6366f1; color: #818cf8; font-size: 11px;">Ir al Lab 07 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Conexión -->
+<div *ngIf="pendingConnection()" class="modal-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 100;">
+  <div style="background: #0a0a0a; border: 1px solid #1f293d; border-radius: 8px; padding: 24px; max-width: 400px; width: 100%;">
+    <h3 style="color: #f8fafc; margin: 0 0 16px 0; font-size: 16px;">Conectar Servidor MCP</h3>
+    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px;">¿Permitir que el Agente negocie el contrato de integración con <strong>{{ pendingConnection()?.name }}</strong>?</p>
+    <div style="display: flex; justify-content: flex-end; gap: 12px;">
+      <button (click)="cancelConnection()" class="control-btn" style="border-color: #334155; color: #cbd5e1;">Cancelar</button>
+      <button (click)="approveConnection()" class="control-btn primary">Aprobar Conexión</button>
+    </div>
+  </div>
+</div>
