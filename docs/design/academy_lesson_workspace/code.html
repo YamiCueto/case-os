@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CASE Engineering Hub - Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#e5e2e1",
+                        "on-tertiary": "#2a303e",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-container": "#0A0A0A",
+                        "tertiary-fixed": "#dde2f4",
+                        "on-error-container": "#ffdad6",
+                        "border-muted": "#1F1F1F",
+                        "surface-container-high": "#2a2a2a",
+                        "on-primary-fixed-variant": "#004493",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "secondary": "#c6c6c7",
+                        "surface-variant": "#353534",
+                        "surface-tint": "#adc6ff",
+                        "secondary-container": "#454747",
+                        "surface-dim": "#131313",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container-highest": "#353534",
+                        "outline": "#8b90a0",
+                        "surface-container-low": "#1c1b1b",
+                        "on-secondary": "#2f3131",
+                        "on-primary-fixed": "#001a41",
+                        "text-on-surface": "#E5E2E1",
+                        "error": "#ffb4ab",
+                        "on-secondary-container": "#b4b5b5",
+                        "primary-fixed-dim": "#adc6ff",
+                        "lang-ts": "#3178C6",
+                        "text-muted": "#C1C6D7",
+                        "tertiary": "#c1c6d7",
+                        "on-secondary-fixed-variant": "#454747",
+                        "primary": "#adc6ff",
+                        "lang-go": "#00ADD8",
+                        "surface-bright": "#3a3939",
+                        "on-tertiary-container": "#242a37",
+                        "on-tertiary-fixed-variant": "#414755",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-surface-variant": "#c1c6d7",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "primary-container": "#4b8eff",
+                        "surface-lowest": "#0E0E0E",
+                        "on-primary-container": "#00285c",
+                        "on-tertiary-fixed": "#151c28",
+                        "inverse-on-surface": "#313030",
+                        "on-primary": "#002e69",
+                        "on-background": "#e5e2e1",
+                        "tertiary-container": "#8b91a1",
+                        "error-container": "#93000a",
+                        "outline-variant": "#414755",
+                        "tertiary-fixed-dim": "#c1c6d7",
+                        "inverse-primary": "#005bc1",
+                        "surface": "#131313",
+                        "background": "#131313"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "16px",
+                        "md": "1rem",
+                        "gutter": "12px",
+                        "xl": "2rem",
+                        "lg": "1.5rem",
+                        "xs": "0.25rem",
+                        "sm": "0.5rem"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "code-sm": ["JetBrains Mono"],
+                        "label-mono": ["JetBrains Mono"],
+                        "label-caps": ["Inter"],
+                        "display": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "code-sm": ["10px", { "lineHeight": "14px", "fontWeight": "400" }],
+                        "label-mono": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .electric-glow:focus-within {
+            box-shadow: 0 0 8px #4b8eff;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface h-screen w-full flex overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- LEVEL 1: Main Sidebar (Shared Component JSON injected) -->
+<nav class="w-64 h-full fixed left-0 top-0 border-r border-border-muted flex flex-col h-screen w-64 bg-surface dark:bg-surface z-40">
+<div class="p-md border-b border-border-muted shrink-0">
+<h1 class="font-display text-display text-on-surface truncate" title="CASE Engineering Hub">CASE Engineering Hub</h1>
+<p class="font-label-mono text-label-mono text-on-surface-variant mt-xs">v1.0.42</p>
+</div>
+<div class="flex-1 overflow-y-auto py-sm">
+<a class="flex items-center gap-3 px-md py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>Dashboard
+            </a>
+<a class="flex items-center gap-3 px-md py-sm font-label-mono text-label-mono text-primary border-l-2 border-primary bg-surface-container-low active:scale-95" href="#">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">school</span>Academy
+            </a>
+<a class="flex items-center gap-3 px-md py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95" href="#">
+<span class="material-symbols-outlined text-[18px]">local_library</span>Library
+            </a>
+<a class="flex items-center gap-3 px-md py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95" href="#">
+<span class="material-symbols-outlined text-[18px]">biotech</span>Labs
+            </a>
+<a class="flex items-center gap-3 px-md py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95" href="#">
+<span class="material-symbols-outlined text-[18px]">architecture</span>Framework
+            </a>
+<a class="flex items-center gap-3 px-md py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95" href="#">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>Agents
+            </a>
+<a class="flex items-center gap-3 px-md py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95" href="#">
+<span class="material-symbols-outlined text-[18px]">terminal</span>Projects
+            </a>
+</div>
+<div class="p-md border-t border-border-muted shrink-0 flex items-center gap-3">
+<img alt="User profile" class="w-8 h-8 rounded-full border border-border-muted" data-alt="A small circular avatar of a user profile in a digital workspace context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpAky6p5BJZUktEnCXIWTRKSvMMNKDBqHglVS2Ik4x11Ic0oRs0LgF4mfPhnuy1z9mUqQHfLlj122TufQHr9mgxgCVtaiXCAALCr4Ppj5hef42jwvo02g_NKfNZiajLrdKtRKUz2Rk2vF61TvZtCjCLR1FqkP5x3Pks0vDzWWEhhnWCkQxUTKB5BsR-7p6Kfn0kk7zE-M-SW9MUdItf1wuWnwszaVV_KW4aXzP5HXi2_DVpcr3HB5i"/>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">Developer</span>
+<span class="font-code-sm text-code-sm text-text-muted">ID: 0x8f2a1c</span>
+</div>
+</div>
+</nav>
+<!-- Main Application Container -->
+<div class="flex flex-col flex-1 ml-64 relative">
+<!-- TopAppBar (Shared Component JSON injected) -->
+<header class="h-12 w-full sticky top-0 z-50 border-b border-border-muted bg-surface/80 dark:bg-surface/80 backdrop-blur-md flex justify-between items-center px-md w-full h-12 ml-64 (override)">
+<div class="flex items-center gap-lg">
+<span class="font-display text-headline-md font-bold text-on-surface truncate">CASE Hub</span>
+<nav class="hidden md:flex gap-6 items-center font-label-caps text-label-caps text-on-surface-variant">
+<a class="text-on-surface-variant hover:text-primary transition-colors focus-within:border-primary" href="#">Explorer</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors focus-within:border-primary" href="#">Console</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors focus-within:border-primary" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- LEVEL 2 & 3: Workspace Flex Container -->
+<main class="flex-1 flex overflow-hidden">
+<!-- LEVEL 2: Explorer Sidebar -->
+<aside class="w-64 border-r border-border-muted bg-surface-lowest flex flex-col shrink-0">
+<div class="px-md py-sm border-b border-border-muted flex items-center justify-between">
+<h2 class="font-label-mono text-label-mono text-on-surface font-semibold tracking-wide">MODULE 1</h2>
+<span class="font-code-sm text-code-sm text-text-muted bg-surface-container-high px-1 rounded border border-border-muted">AI GEN</span>
+</div>
+<div class="flex-1 overflow-y-auto py-sm px-2">
+<!-- Tree Node Completed -->
+<div class="flex items-start gap-2 py-1.5 px-2 rounded hover:bg-surface-container-high cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-[16px] text-tertiary mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant group-hover:text-on-surface">1. Introduction to AI</span>
+<span class="font-code-sm text-code-sm text-text-muted">5 min</span>
+</div>
+</div>
+<!-- Tree Node Completed -->
+<div class="flex items-start gap-2 py-1.5 px-2 rounded hover:bg-surface-container-high cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-[16px] text-tertiary mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant group-hover:text-on-surface">2. Generative Trees</span>
+<span class="font-code-sm text-code-sm text-text-muted">15 min</span>
+</div>
+</div>
+<!-- Tree Node Active -->
+<div class="flex items-start gap-2 py-1.5 px-2 rounded bg-surface-container-high border-l-2 border-primary cursor-pointer mt-1 mb-1">
+<span class="material-symbols-outlined text-[16px] text-primary mt-0.5" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-primary font-medium">3. Building a React Component</span>
+<span class="font-code-sm text-code-sm text-primary">20 min • In Progress</span>
+</div>
+</div>
+<!-- Tree Node Locked -->
+<div class="flex items-start gap-2 py-1.5 px-2 rounded hover:bg-surface-container-high cursor-not-allowed transition-colors opacity-60">
+<span class="material-symbols-outlined text-[16px] text-text-muted mt-0.5">lock</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-text-muted">4. Lab Integration</span>
+<span class="font-code-sm text-code-sm text-text-muted">Requires Lesson 3</span>
+</div>
+</div>
+<!-- Tree Node Locked -->
+<div class="flex items-start gap-2 py-1.5 px-2 rounded hover:bg-surface-container-high cursor-not-allowed transition-colors opacity-60">
+<span class="material-symbols-outlined text-[16px] text-text-muted mt-0.5">lock</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-text-muted">Module Assessment</span>
+<span class="font-code-sm text-code-sm text-text-muted">Quiz</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- LEVEL 3: Main Workspace ("Living Documentation") -->
+<section class="flex-1 overflow-y-auto bg-background p-xl relative">
+<!-- Breadcrumbs & Meta -->
+<nav class="flex items-center gap-2 font-label-mono text-label-mono text-text-muted mb-6">
+<a class="hover:text-primary transition-colors" href="#">Academy</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Module 1</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface">Lesson 3</span>
+</nav>
+<div class="flex justify-between items-start mb-8">
+<div>
+<h1 class="font-display text-display text-on-surface mb-4">Building a React Component</h1>
+<div class="flex gap-3">
+<span class="flex items-center gap-1.5 bg-surface-container-high border border-border-muted px-2 py-1 rounded font-label-mono text-label-mono text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 20 min
+                            </span>
+<span class="flex items-center gap-1.5 bg-surface-container-high border border-border-muted px-2 py-1 rounded font-label-mono text-label-mono text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">bar_chart</span> Intermediate
+                            </span>
+<span class="flex items-center gap-1.5 bg-[#3178C6]/10 border border-[#3178C6]/30 px-2 py-1 rounded font-label-mono text-label-mono text-lang-ts">
+<span class="material-symbols-outlined text-[14px]">code</span> React
+                            </span>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-[2px] font-label-caps text-label-caps hover:bg-primary transition-colors flex items-center gap-2 shadow-[0_0_8px_rgba(75,142,255,0.3)] hover:shadow-[0_0_12px_rgba(75,142,255,0.5)]">
+                        Open in Lab <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+<!-- Markdown Content Canvas -->
+<article class="max-w-4xl font-body-base text-body-base text-on-surface-variant leading-relaxed space-y-6 pb-20">
+<p>
+                        In this lesson, we will construct a high-performance, generative React component that integrates with the CASE architecture. You will learn how to structure internal state, map UI nodes to generative models, and handle complex asynchronous rendering cycles.
+                    </p>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold pt-4 border-b border-border-muted pb-2">Component Architecture</h2>
+<p>
+                        A generative node component must strictly separate layout logic from data hydration. We leverage <code class="bg-surface-container-high border border-border-muted px-1.5 py-0.5 rounded font-code-sm text-code-sm text-on-surface">React.Suspense</code> alongside tailored context providers to achieve this.
+                    </p>
+<!-- Code Block -->
+<div class="border border-border-muted rounded bg-surface-container overflow-hidden mt-6 shadow-sm">
+<div class="flex items-center justify-between px-4 py-2 bg-surface-container-high border-b border-border-muted">
+<span class="font-label-mono text-label-mono text-text-muted">GenerativeNode.tsx</span>
+<button class="text-text-muted hover:text-on-surface transition-colors" title="Copy code">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</div>
+<pre class="p-4 overflow-x-auto"><code class="font-code-sm text-code-sm text-on-surface"><span class="text-primary">import</span> React, { useState, useEffect } <span class="text-primary">from</span> <span class="text-lang-ts">'react'</span>;
+<span class="text-primary">import</span> { useGenerativeModel } <span class="text-primary">from</span> <span class="text-lang-ts">'@case/core'</span>;
+
+<span class="text-primary">interface</span> <span class="text-[#4b8eff]">NodeProps</span> {
+  nodeId: <span class="text-primary">string</span>;
+  schemaVersion: <span class="text-primary">number</span>;
+}
+
+<span class="text-primary">export const</span> <span class="text-[#4b8eff]">GenerativeNode</span>: React.FC&lt;<span class="text-[#4b8eff]">NodeProps</span>&gt; = ({ nodeId, schemaVersion }) =&gt; {
+  <span class="text-primary">const</span> { hydrate, isProcessing } = useGenerativeModel(nodeId);
+  <span class="text-primary">const</span> [canvasState, setCanvasState] = useState&lt;<span class="text-primary">any</span>&gt;(<span class="text-primary">null</span>);
+
+  useEffect(() =&gt; {
+    <span class="text-text-muted">// Initiate model hydration sequence</span>
+    <span class="text-primary">const</span> load = <span class="text-primary">async</span> () =&gt; {
+      <span class="text-primary">const</span> data = <span class="text-primary">await</span> hydrate({ version: schemaVersion });
+      setCanvasState(data);
+    };
+    load();
+  }, [nodeId, schemaVersion]);
+
+  <span class="text-primary">if</span> (isProcessing) <span class="text-primary">return</span> &lt;<span class="text-primary">div</span> <span class="text-[#4b8eff]">className</span>=<span class="text-lang-ts">"loading-shimmer"</span> /&gt;;
+
+  <span class="text-primary">return</span> (
+    &lt;<span class="text-primary">div</span> <span class="text-[#4b8eff]">className</span>=<span class="text-lang-ts">"node-canvas border border-border-muted rounded"</span>&gt;
+      {<span class="text-text-muted">/* Render derived state here */</span>}
+      &lt;<span class="text-[#4b8eff]">CanvasRenderer</span> data={canvasState} /&gt;
+    &lt;/<span class="text-primary">div</span>&gt;
+  );
+};</code></pre>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold pt-6 border-b border-border-muted pb-2">Next Steps</h2>
+<p>
+                        Once you have reviewed the architecture above, proceed to the Lab environment. You will be tasked with modifying the <code class="bg-surface-container-high border border-border-muted px-1.5 py-0.5 rounded font-code-sm text-code-sm text-on-surface">CanvasRenderer</code> to support multi-threaded state updates.
+                    </p>
+<!-- Footer Action -->
+<div class="mt-12 p-6 border border-border-muted bg-surface-container-lowest rounded flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-text-muted mb-1">UP NEXT</span>
+<span class="font-body-base text-body-base text-on-surface font-medium">4. Lab Integration</span>
+</div>
+<button class="flex items-center gap-2 border border-border-muted text-on-surface px-4 py-2 rounded-[2px] font-label-caps text-label-caps hover:bg-surface-container-high transition-colors disabled:opacity-50 cursor-not-allowed">
+                            Locked <span class="material-symbols-outlined text-[16px]">lock</span>
+</button>
+</div>
+</article>
+</section>
+</main>
+</div>
+</body></html>

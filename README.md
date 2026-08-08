@@ -44,6 +44,18 @@
 
 ---
 
+## 🎨 Academy Visual Design (Lesson Slides v1)
+
+El entorno de aprendizaje está impulsado por un sistema de diseño nativo basado puramente en CSS, optimizado para lectura y alta retención técnica.
+
+<div align="center">
+  <img src="docs/design/academy/lesson-slides/v1/lesson_slide_concept_intro/screen.png" alt="Concept Intro Slide" width="32%" />
+  <img src="docs/design/academy/lesson-slides/v1/lesson_slide_code_implementation/screen.png" alt="Code Implementation Slide" width="32%" />
+  <img src="docs/design/academy/lesson-slides/v1/lesson_slide_comparison_matrix/screen.png" alt="Comparison Matrix Slide" width="32%" />
+</div>
+
+---
+
 ## ⚙️ Arquitectura de Motores (Engines)
 
 CASE OS no es una aplicación tradicional. Es un sistema operativo construido sobre 4 pilares fundamentales totalmente desacoplados:

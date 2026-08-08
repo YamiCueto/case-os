@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CASE Engineering Hub - Design Guidelines</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface": "#e5e2e1",
+                      "on-tertiary": "#2a303e",
+                      "inverse-surface": "#e5e2e1",
+                      "surface-container": "#0A0A0A",
+                      "tertiary-fixed": "#dde2f4",
+                      "on-error-container": "#ffdad6",
+                      "border-muted": "#1F1F1F",
+                      "surface-container-high": "#2a2a2a",
+                      "on-primary-fixed-variant": "#004493",
+                      "on-error": "#690005",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "secondary": "#c6c6c7",
+                      "surface-variant": "#353534",
+                      "surface-tint": "#adc6ff",
+                      "secondary-container": "#454747",
+                      "surface-dim": "#131313",
+                      "surface-container-lowest": "#0e0e0e",
+                      "surface-container-highest": "#353534",
+                      "outline": "#8b90a0",
+                      "surface-container-low": "#1c1b1b",
+                      "on-secondary": "#2f3131",
+                      "on-primary-fixed": "#001a41",
+                      "text-on-surface": "#E5E2E1",
+                      "error": "#ffb4ab",
+                      "on-secondary-container": "#b4b5b5",
+                      "primary-fixed-dim": "#adc6ff",
+                      "lang-ts": "#3178C6",
+                      "text-muted": "#C1C6D7",
+                      "tertiary": "#c1c6d7",
+                      "on-secondary-fixed-variant": "#454747",
+                      "primary": "#adc6ff",
+                      "lang-go": "#00ADD8",
+                      "surface-bright": "#3a3939",
+                      "on-tertiary-container": "#242a37",
+                      "on-tertiary-fixed-variant": "#414755",
+                      "primary-fixed": "#d8e2ff",
+                      "secondary-fixed": "#e2e2e2",
+                      "on-surface-variant": "#c1c6d7",
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "primary-container": "#4b8eff",
+                      "surface-lowest": "#0E0E0E",
+                      "on-primary-container": "#00285c",
+                      "on-tertiary-fixed": "#151c28",
+                      "inverse-on-surface": "#313030",
+                      "on-primary": "#002e69",
+                      "on-background": "#e5e2e1",
+                      "tertiary-container": "#8b91a1",
+                      "error-container": "#93000a",
+                      "outline-variant": "#414755",
+                      "tertiary-fixed-dim": "#c1c6d7",
+                      "inverse-primary": "#005bc1",
+                      "surface": "#131313",
+                      "background": "#131313"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin": "16px",
+                      "md": "1rem",
+                      "gutter": "12px",
+                      "xl": "2rem",
+                      "lg": "1.5rem",
+                      "xs": "0.25rem",
+                      "sm": "0.5rem"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "code-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "label-mono": [
+                              "JetBrains Mono"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "body-base": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "code-sm": [
+                              "10px",
+                              {
+                                      "lineHeight": "14px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-mono": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-base": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            background-color: #050505;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-surface font-body-base antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="w-64 h-full fixed left-0 top-0 bg-surface dark:bg-surface border-r border-border-muted flex flex-col h-screen w-64 z-40 hidden md:flex">
+<div class="p-xl border-b border-border-muted flex items-center justify-between">
+<div>
+<h1 class="font-display text-display text-on-surface leading-none">CASE</h1>
+<p class="font-label-mono text-label-mono text-on-surface-variant mt-1">v1.0.42</p>
+</div>
+<img class="w-8 h-8 rounded-full border border-border-muted object-cover" data-alt="A small, stylized profile avatar of a developer in a technical, minimalist dark mode environment, focusing on clean geometry and subtle blue accents. The image serves as a user profile indicator, maintaining the strict Brutalist-Lite aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEnyk-hgyk0GfGIOk6o95YV19C0ELmE4dkLkLWkY8JMavJSNZUclqmgc28c3DdLcRblILb4Gn2TZ8Uer0C4mQxYfOw-KuzhIFVgAcKhTMgwJVxGKpvv1l9Wd8c0fnZfZRpgQH-W4Ye7xFfEGziIacxVHOUd63F5aOSuS3wsMkbwcwZrP3Z3kYz0-4jgv02SUqsw01SKk2kN5w5Nm7MMsM5358N2P1_3izhqVqQWTSUNuLX0Uh0PZ4m"/>
+</div>
+<div class="flex-1 overflow-y-auto py-md">
+<a class="flex items-center px-lg py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px] text-on-surface-variant group-hover:text-primary transition-colors">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center px-lg py-sm font-label-mono text-label-mono text-primary border-l-2 border-primary bg-surface-container-low active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px] text-primary" data-weight="fill">school</span>
+                Academy
+            </a>
+<a class="flex items-center px-lg py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px] text-on-surface-variant group-hover:text-primary transition-colors">local_library</span>
+                Library
+            </a>
+<a class="flex items-center px-lg py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px] text-on-surface-variant group-hover:text-primary transition-colors">biotech</span>
+                Labs
+            </a>
+<a class="flex items-center px-lg py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px] text-on-surface-variant group-hover:text-primary transition-colors">architecture</span>
+                Framework
+            </a>
+<a class="flex items-center px-lg py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px] text-on-surface-variant group-hover:text-primary transition-colors">smart_toy</span>
+                Agents
+            </a>
+<a class="flex items-center px-lg py-sm font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px] text-on-surface-variant group-hover:text-primary transition-colors">terminal</span>
+                Projects
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col ml-0 md:ml-64 h-screen">
+<!-- TopAppBar -->
+<header class="h-12 w-full sticky top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-border-muted flex justify-between items-center px-md w-full h-12 ml-64 focus-within:border-primary transition-colors">
+<div class="flex items-center space-x-xl h-full">
+<span class="font-display text-headline-md font-bold text-on-surface mr-xl">CASE Hub</span>
+<nav class="hidden md:flex h-full items-center space-x-lg">
+<a class="h-full flex items-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase" href="#">Explorer</a>
+<a class="h-full flex items-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase" href="#">Console</a>
+<a class="h-full flex items-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center space-x-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Document Canvas -->
+<main class="flex-1 overflow-y-auto p-xl relative">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-xl">
+<!-- Left Panel: Table of Contents / Nav -->
+<aside class="w-full lg:w-64 flex-shrink-0 lg:sticky lg:top-xl self-start">
+<div class="bg-surface-container border border-border-muted rounded-DEFAULT p-md">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-md border-b border-border-muted pb-xs uppercase">On this page</h3>
+<ul class="space-y-sm">
+<li><a class="block font-body-sm text-body-sm text-on-surface hover:text-primary transition-colors" href="#color">1. Color Palette</a></li>
+<li><a class="block font-body-sm text-body-sm text-on-surface hover:text-primary transition-colors" href="#typography">2. Typography</a></li>
+<li><a class="block font-body-sm text-body-sm text-on-surface hover:text-primary transition-colors" href="#grid">3. Grid &amp; Spacing</a></li>
+<li><a class="block font-body-sm text-body-sm text-on-surface hover:text-primary transition-colors" href="#components">4. Component Library</a></li>
+</ul>
+</div>
+</aside>
+<!-- Right Panel: Main Content -->
+<article class="flex-1 min-w-0">
+<div class="mb-xl pb-md border-b border-border-muted">
+<span class="inline-block px-2 py-1 bg-[#201F1F] border border-border-muted text-on-surface font-code-sm text-code-sm rounded-sm mb-md">DOC-ID: GUIDELINES-01</span>
+<h2 class="font-display text-display text-on-surface mb-sm">CASE Academy Design Guidelines</h2>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-3xl">Comprehensive design tokens and structural patterns for the CASE Engineering Hub. Adhere strictly to these values for consistent application rendering.</p>
+</div>
+<!-- Section: Color -->
+<section class="mb-xl pt-md scroll-mt-24" id="color">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-md">1. Color Palette</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-lg">The system uses a Brutalist-Lite approach with high-contrast dark mode and selective digital blue accents.</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-md">
+<!-- Color Swatch -->
+<div class="border border-border-muted bg-surface-container rounded-DEFAULT p-sm">
+<div class="h-16 w-full rounded-sm mb-sm border border-border-muted" style="background-color: #050505;"></div>
+<div class="font-label-mono text-label-mono text-on-surface mb-xs">Level 0 (Canvas)</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant">HEX: #050505</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant mt-xs">Tailwind: bg-background</div>
+</div>
+<div class="border border-border-muted bg-surface-container rounded-DEFAULT p-sm">
+<div class="h-16 w-full rounded-sm mb-sm border border-border-muted" style="background-color: #0A0A0A;"></div>
+<div class="font-label-mono text-label-mono text-on-surface mb-xs">Level 1 (Surface)</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant">HEX: #0A0A0A</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant mt-xs">Tailwind: bg-surface-container</div>
+</div>
+<div class="border border-border-muted bg-surface-container rounded-DEFAULT p-sm">
+<div class="h-16 w-full rounded-sm mb-sm border border-border-muted" style="background-color: #1F1F1F;"></div>
+<div class="font-label-mono text-label-mono text-on-surface mb-xs">Dividers</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant">HEX: #1F1F1F</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant mt-xs">Tailwind: border-border-muted</div>
+</div>
+<div class="border border-border-muted bg-surface-container rounded-DEFAULT p-sm relative overflow-hidden group">
+<div class="absolute inset-0 bg-[#007AFF]/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+<div class="h-16 w-full rounded-sm mb-sm shadow-[0_0_8px_#007AFF]" style="background-color: #007AFF;"></div>
+<div class="font-label-mono text-label-mono text-on-surface mb-xs">Primary Accent</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant">HEX: #007AFF</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant mt-xs">Tailwind: text-primary</div>
+</div>
+</div>
+</section>
+<!-- Section: Typography -->
+<section class="mb-xl pt-md scroll-mt-24 border-t border-border-muted" id="typography">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-md mt-lg">2. Typography</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-lg">Hierarchy defined by Inter for reading and JetBrains Mono for technical data.</p>
+<div class="bg-surface-container border border-border-muted rounded-DEFAULT overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-border-muted bg-[#131313]">
+<th class="p-md font-label-caps text-label-caps text-on-surface-variant uppercase">Token</th>
+<th class="p-md font-label-caps text-label-caps text-on-surface-variant uppercase">Family</th>
+<th class="p-md font-label-caps text-label-caps text-on-surface-variant uppercase">Size / Weight</th>
+<th class="p-md font-label-caps text-label-caps text-on-surface-variant uppercase">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-border-muted hover:bg-[#161616] transition-colors">
+<td class="p-md font-code-sm text-code-sm text-primary">display</td>
+<td class="p-md font-body-sm text-body-sm text-on-surface-variant">Inter</td>
+<td class="p-md font-code-sm text-code-sm text-on-surface-variant">32px / 600</td>
+<td class="p-md font-display text-display text-on-surface truncate max-w-[200px]">Page Headline</td>
+</tr>
+<tr class="border-b border-border-muted hover:bg-[#161616] transition-colors">
+<td class="p-md font-code-sm text-code-sm text-primary">headline-md</td>
+<td class="p-md font-body-sm text-body-sm text-on-surface-variant">Inter</td>
+<td class="p-md font-code-sm text-code-sm text-on-surface-variant">20px / 500</td>
+<td class="p-md font-headline-md text-headline-md text-on-surface truncate max-w-[200px]">Section Title</td>
+</tr>
+<tr class="border-b border-border-muted hover:bg-[#161616] transition-colors">
+<td class="p-md font-code-sm text-code-sm text-primary">body-base</td>
+<td class="p-md font-body-sm text-body-sm text-on-surface-variant">Inter</td>
+<td class="p-md font-code-sm text-code-sm text-on-surface-variant">14px / 400</td>
+<td class="p-md font-body-base text-body-base text-on-surface truncate max-w-[200px]">Standard paragraph text used for descriptions.</td>
+</tr>
+<tr class="hover:bg-[#161616] transition-colors">
+<td class="p-md font-code-sm text-code-sm text-primary">label-mono</td>
+<td class="p-md font-body-sm text-body-sm text-on-surface-variant">JetBrains Mono</td>
+<td class="p-md font-code-sm text-code-sm text-on-surface-variant">12px / 500</td>
+<td class="p-md font-label-mono text-label-mono text-on-surface truncate max-w-[200px]">0xTECHNICAL_DATA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</article>
+</div>
+</main>
+</div>
+</body></html>
