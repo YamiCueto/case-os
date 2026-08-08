@@ -2,50 +2,45 @@
   <div class="back-to-menu">
     <a routerLink="/academy/home" class="back-btn">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Volver a Academy
+      Anterior
     </a>
   </div>
 
-  <div class="controls">
-    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-      &larr; Anterior
-    </button>
-    <div class="slide-counter">
-      {{ currentSlide() + 1 }} / {{ totalSlides }}
-    </div>
-    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-      Siguiente &rarr;
-    </button>
-  </div>
-
   <div class="slide-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
+    </div>
+
     <!-- Slide 1: Tokens -->
     <div class="slide" [class.active]="currentSlide() === 0">
       <div class="slide-title">
-        <span class="workshop-badge">Módulo 01: AI Foundations</span>
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 01: AI Foundations
+        </div>
         <h1>Anatomía de la Inferencia</h1>
         <p class="subtitle">Tokens, Ventana de Contexto y Temperatura</p>
       </div>
 
       <div class="slide-content">
-        <h2>¿Qué es un Token?</h2>
-        <div class="theory-card green">
+        <div class="tech-card" style="margin-bottom: 24px;">
+          <div class="tech-icon" style="color: #10b981;">📝</div>
+          <h3>¿Qué es un Token?</h3>
           <p>Un modelo de lenguaje no lee palabras completas, lee <strong>tokens</strong>. Un token es un fragmento de texto (una sílaba, una palabra corta o un símbolo).</p>
-          <ul>
+          <ul class="tech-list" style="margin-top: 16px;">
             <li>En inglés, 1 token ≈ ¾ de una palabra (100 tokens ≈ 75 palabras).</li>
-            <li>En español o código fuente, a veces cada palabra se rompe en múltiples tokens, aumentando el costo.</li>
-            <li>El modelo convierte estos tokens en números (IDs) para poder procesarlos matemáticamente.</li>
+            <li>En español o código fuente, cada palabra se rompe en múltiples tokens, aumentando el costo.</li>
+            <li>El modelo convierte estos tokens en IDs para poder procesarlos matemáticamente.</li>
           </ul>
         </div>
         
-        <div class="example-card" style="margin-top: 1.5rem;">
-          <div class="example-header">
-            <h3>Ejemplo de Tokenización</h3>
+        <div class="template-container" style="border-radius: 8px; border: 1px solid #1F1F1F;">
+          <div class="template-header" style="background: #1A1A1A; padding: 12px 24px; color: #e4e1ed;">
+            <h3 style="font-size: 14px; margin: 0; font-family: 'JetBrains Mono', monospace;">Ejemplo de Tokenización</h3>
           </div>
-          <div class="example-content">
-            <p>La frase "Ingeniería de software" podría dividirse así:</p>
+          <div style="padding: 24px; background: #0A0A0A;">
+            <p style="color: #c7c4d7; margin-bottom: 16px;">La frase "Ingeniería de software" podría dividirse así:</p>
             <div class="prompt-text">["Ingen", "ier", "ía", " de", " software"]</div>
-            <p>Por eso los LLMs son malos para contar letras o resolver anagramas: ¡ellos no ven las letras, ven fragmentos!</p>
+            <p style="color: #908fa0; font-size: 14px; margin-top: 16px;">Por eso los LLMs son malos resolviendo anagramas: ¡no ven las letras, ven fragmentos estadísticos!</p>
           </div>
         </div>
       </div>
@@ -54,25 +49,28 @@
     <!-- Slide 2: Context Window -->
     <div class="slide" [class.active]="currentSlide() === 1">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 01: AI Foundations
+        </div>
         <h1>La Ventana de Contexto</h1>
         <p class="subtitle">La memoria a corto plazo del modelo</p>
       </div>
 
       <div class="slide-content">
-        <div class="theory-grid">
-          <div class="theory-card orange">
-            <div class="theory-icon">🪟</div>
-            <h3>Context Window Limit</h3>
-            <p>Todo modelo tiene un límite máximo de tokens que puede "ver" a la vez. Este límite incluye <strong>el prompt de entrada + la respuesta generada</strong>.</p>
-            <ul>
-              <li>GPT-3 tenía 4K tokens.</li>
-              <li>Claude 3 / GPT-4o tienen 128K - 200K tokens.</li>
-              <li>Gemini 1.5 Pro tiene hasta 2 Millones de tokens.</li>
-            </ul>
-          </div>
+        <div class="tech-card active" style="margin-bottom: 24px;">
+          <div class="tech-meta">Arquitectura</div>
+          <div class="tech-icon" style="color: #6366f1;">🪟</div>
+          <h3>Context Window Limit</h3>
+          <p>Todo modelo tiene un límite máximo de tokens que puede "ver" a la vez. Este límite incluye <strong>el prompt de entrada + la respuesta generada</strong>.</p>
+          <ul class="tech-list" style="margin-top: 16px;">
+            <li>GPT-3: 4K tokens.</li>
+            <li>Claude 3 / GPT-4o: 128K - 200K tokens.</li>
+            <li>Gemini 1.5 Pro: Hasta 2 Millones de tokens.</li>
+          </ul>
         </div>
+
         <div class="warning-box">
-          <strong>El problema de la latencia y el costo:</strong> Meter 128K tokens de contexto en cada petición cuesta dinero y tiempo. "Context Engineering" se trata de mandar <em>solo lo estrictamente necesario</em> para resolver la tarea.
+          <strong>Restricción de Ingeniería:</strong> Meter 128K tokens de contexto en cada petición cuesta dinero y tiempo. "Context Engineering" se trata de mandar <em>solo lo estrictamente necesario</em> para resolver la tarea.
         </div>
       </div>
     </div>
@@ -80,33 +78,34 @@
     <!-- Slide 3: Temperatura -->
     <div class="slide" [class.active]="currentSlide() === 2">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 01: AI Foundations
+        </div>
         <h1>Temperatura y Sampling</h1>
         <p class="subtitle">Controlando el "Caos" Matemático</p>
       </div>
 
       <div class="slide-content">
-        <p>Al predecir el siguiente token, el LLM calcula una distribución de probabilidad para todos los tokens posibles. La <strong>Temperatura</strong> manipula esas probabilidades.</p>
+        <p style="margin-bottom: 32px;">Al predecir el siguiente token, el LLM calcula una distribución de probabilidad para todos los tokens posibles. La <strong>Temperatura</strong> manipula esas probabilidades en tiempo de ejecución.</p>
         
-        <div class="challenges-grid">
-          <div class="challenge-card blue">
-            <div class="challenge-header">
-              <span class="difficulty-badge Fácil">Temperatura 0.0</span>
-              <h3>Extracción y Código</h3>
-            </div>
-            <div class="challenge-content">
-              <p>El modelo casi siempre elegirá el token más probable. Las respuestas son deterministas y repetitivas.</p>
-              <p><em>Ideal para: RAG, código, JSON, extracción de datos.</em></p>
+        <div class="tech-grid">
+          <!-- Temp 0 -->
+          <div class="tech-card">
+            <div class="tech-meta">Temp: 0.0</div>
+            <h3>Extracción y Código</h3>
+            <p>El modelo casi siempre elegirá el token más probable. Las respuestas son deterministas, repetitivas y precisas.</p>
+            <div style="margin-top: auto; padding-top: 24px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #10b981;">Ideal para: RAG, código, JSON</span>
             </div>
           </div>
           
-          <div class="challenge-card orange">
-            <div class="challenge-header">
-              <span class="difficulty-badge Avanzado">Temperatura 0.8+</span>
-              <h3>Creatividad</h3>
-            </div>
-            <div class="challenge-content">
-              <p>Se achatan las probabilidades, permitiendo que tokens menos probables sean elegidos. Las respuestas son variadas y creativas.</p>
-              <p><em>Ideal para: Lluvia de ideas, redacción, marketing.</em></p>
+          <!-- Temp High -->
+          <div class="tech-card">
+            <div class="tech-meta" style="color: #f59e0b; border-color: #f59e0b;">Temp: 0.8+</div>
+            <h3>Creatividad</h3>
+            <p>Se achatan las probabilidades, permitiendo que tokens menos probables sean elegidos. Respuestas variadas.</p>
+            <div style="margin-top: auto; padding-top: 24px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #f59e0b;">Ideal para: Lluvia de ideas, redacción</span>
             </div>
           </div>
         </div>
@@ -116,28 +115,45 @@
     <!-- Slide 4: Costos -->
     <div class="slide" [class.active]="currentSlide() === 3">
       <div class="slide-title">
+        <div class="workshop-badge">
+          <span class="icon">●</span> Módulo 01: AI Foundations
+        </div>
         <h1>Economía de la Inferencia</h1>
         <p class="subtitle">Entendiendo cómo pagamos por usar la IA</p>
       </div>
 
       <div class="slide-content">
-        <div class="theory-card green">
-          <div class="theory-icon">💸</div>
+        <div class="tech-card active" style="margin-bottom: 48px;">
+          <div class="tech-meta">FinOps</div>
+          <div class="tech-icon" style="color: #6366f1;">💸</div>
           <h3>Tokens de Entrada vs Salida</h3>
-          <p>En el uso de APIs comerciales (OpenAI, Anthropic, Bedrock), el costo se divide en dos:</p>
-          <ul>
-            <li><strong>Input Tokens (Prompt):</strong> Generalmente son más baratos de procesar.</li>
-            <li><strong>Output Tokens (Generación):</strong> Suelen costar entre el triple y cinco veces más, ya que generar toma más ciclos de cómputo.</li>
+          <p>En el uso de APIs comerciales, el costo se divide en dos factores principales de computación:</p>
+          <ul class="tech-list" style="margin-top: 16px;">
+            <li><strong>Input Tokens (Prompt):</strong> Procesamiento en paralelo, más rápidos y baratos.</li>
+            <li><strong>Output Tokens (Generación):</strong> Procesamiento secuencial (auto-regresivo). Suelen costar entre 3x y 5x más.</li>
           </ul>
-          <p><em>Diseñar prompts que devuelvan respuestas concisas (JSON estricto) no solo ahorra tiempo, sino mucho dinero en producción.</em></p>
+          <p style="margin-top: 24px; color: #908fa0; font-family: 'JetBrains Mono', monospace; font-size: 12px;">/* Diseñar prompts que devuelvan respuestas concisas (JSON estricto) no solo ahorra latencia, ahorra dinero */</p>
         </div>
 
-        <div style="margin-top: 3rem; text-align: center;">
-          <a routerLink="/academy/modules/m01-ai-foundations/lesson-03-sistemas" class="control-btn" style="background: #4f46e5; color: white;">
+        <div style="text-align: center;">
+          <a routerLink="/academy/modules/m01-ai-foundations/lesson-03-sistemas" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
             Siguiente Lección: Modelos vs Sistemas &rarr;
           </a>
         </div>
       </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls">
+      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+        &larr; Anterior
+      </button>
+      <div class="slide-counter">
+        {{ currentSlide() + 1 }} / {{ totalSlides }}
+      </div>
+      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+        Siguiente &rarr;
+      </button>
     </div>
 
   </div>
