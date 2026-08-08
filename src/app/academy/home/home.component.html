@@ -61,7 +61,7 @@
       
       <div class="flex items-center justify-between text-sm">
         <span class="text-slate-500">{{ mod.duration }}</span>
-        <a *ngIf="mod.state === 'LIVE'" routerLink="/plan-dev-detallado" class="text-indigo-400 font-semibold hover:text-indigo-300">
+        <a *ngIf="mod.state === 'LIVE' && mod.lessons?.length" [routerLink]="mod.lessons[0].path" class="text-indigo-400 font-semibold hover:text-indigo-300">
           Entrar →
         </a>
       </div>
