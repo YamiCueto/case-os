@@ -1,0 +1,53 @@
+<div class="presentation-container">
+  <div class="slide-wrapper" style="max-width: 1000px; margin: 0 auto;">
+    <div class="slide active">
+      <div class="slide-title">
+        <span class="workshop-badge" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);">Library Resource</span>
+        <h1>AI Terminology for Engineers</h1>
+        <p class="subtitle">Glosario de supervivencia en la era de los LLMs</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="examples-container">
+          
+          <div class="example-card">
+            <div class="example-header">
+              <h3>LLM (Large Language Model)</h3>
+            </div>
+            <div class="example-content">
+              <p>Modelo probabilístico entrenado con cantidades masivas de texto. Su única función matemática es predecir cuál es el token más probable que debe seguir a la secuencia actual.</p>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>Token</h3>
+            </div>
+            <div class="example-content">
+              <p>Unidad mínima de procesamiento (aprox. 4 caracteres en inglés). Los LLMs no operan con letras ni palabras, operan con IDs de tokens.</p>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>Context Window (Ventana de Contexto)</h3>
+            </div>
+            <div class="example-content">
+              <p>Límite máximo de tokens que el modelo puede "recordar" o procesar en una sola interacción (Input + Output). Superar este límite recorta el inicio del contexto.</p>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>Temperature (Temperatura)</h3>
+            </div>
+            <div class="example-content">
+              <p>Parámetro que aplana o agudiza la distribución de probabilidad antes de muestrear el siguiente token. <code>0.0</code> hace que el modelo casi siempre elija el token más probable (comportamiento estricto/predecible), mientras que <code>1.0+</code> permite elegir tokens menos probables (comportamiento "creativo").</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

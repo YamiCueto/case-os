@@ -1,0 +1,110 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Academy
+    </a>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+      &larr; Anterior
+    </button>
+    <div class="slide-counter">
+      {{ currentSlide() + 1 }} / {{ totalSlides }}
+    </div>
+    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+      Siguiente &rarr;
+    </button>
+  </div>
+
+  <div class="slide-wrapper">
+    <!-- Slide 1: Modelo vs Sistema -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <span class="workshop-badge">Módulo 01: AI Foundations</span>
+        <h1>Modelos vs Sistemas</h1>
+        <p class="subtitle">Especialización, Límites y Alucinaciones</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>Un LLM desnudo es inútil</h2>
+        <div class="theory-grid">
+          <div class="theory-card blue">
+            <div class="theory-icon">🤖</div>
+            <h3>Capacidad del Modelo (Model)</h3>
+            <p>Es la inteligencia "cruda". Lo que el modelo sabe o deduce únicamente basándose en sus pesos y entrenamiento.</p>
+            <ul>
+              <li>Sabe hablar perfectamente.</li>
+              <li>Sabe programar (hasta su fecha de corte).</li>
+              <li><strong>NO</strong> sabe la hora actual ni tiene datos privados de tu empresa.</li>
+            </ul>
+          </div>
+          
+          <div class="theory-card green">
+            <div class="theory-icon">⚙️</div>
+            <h3>Capacidad del Sistema (System)</h3>
+            <p>Es el modelo "vestido" por código determinista (CASE OS). El sistema orquesta la recuperación de datos, las herramientas y las protecciones.</p>
+            <ul>
+              <li>Busca información fresca (RAG).</li>
+              <li>Usa calculadoras para no fallar en mates.</li>
+              <li>Es el sistema que diseñamos los Ingenieros.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Alucinaciones -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <h1>Alucinaciones</h1>
+        <p class="subtitle">¿Por qué mienten los LLMs?</p>
+      </div>
+
+      <div class="slide-content">
+        <p>Una "alucinación" no es un bug del modelo, es una *característica* estadística. Como su único trabajo es predecir la siguiente palabra, si no sabe la respuesta real, predecirá la palabra que suene más plausible (aunque sea mentira).</p>
+        
+        <div class="examples-container">
+          <div class="example-card">
+            <div class="example-header">
+              <span class="accordion-icon">🛡️</span>
+              <h3>¿Cómo evitamos que alucine?</h3>
+            </div>
+            <div class="example-content">
+              <ul class="output-list">
+                <li><strong>Contexto Duro:</strong> Inyectar en el prompt la respuesta correcta antes de que hable (RAG).</li>
+                <li><strong>Grounding:</strong> Forzarle a citar las fuentes desde donde extrajo la información.</li>
+                <li><strong>System Prompts:</strong> Instruirle estrictamente: "Si no sabes la respuesta basándote en el contexto proveído, di 'No lo sé'."</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Siguiente Paso -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <h1>Preparándonos para la Práctica</h1>
+        <p class="subtitle">Hora de ensuciarse las manos</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="theory-card orange">
+          <div class="theory-icon">🧪</div>
+          <h3>De la Teoría al Laboratorio</h3>
+          <p>Ya hemos entendido que los modelos operan con Tokens y Probabilidades. Es momento de dejar de teorizar y ver cómo funciona esto en código.</p>
+          <p>En el <strong>Lab 01</strong>, vamos a construir una herramienta para entender visualmente los tokens. Esta herramienta se quedará en nuestra <strong>Library</strong> y la usaremos como pieza de infraestructura para optimizar costos en futuros laboratorios.</p>
+        </div>
+
+        <div style="margin-top: 3rem; text-align: center;">
+          <a routerLink="/labs/token-playground" class="control-btn" style="background: #22c55e; color: white; padding: 1rem 2rem; font-size: 1.25rem;">
+            Ir al Lab 01: Token Playground &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

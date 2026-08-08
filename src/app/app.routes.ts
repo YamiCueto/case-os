@@ -23,12 +23,40 @@ export const routes: Routes = [
         loadComponent: () => import('./library/pages/resource-detail/resource-detail.component').then(m => m.ResourceDetailComponent)
       },
       {
+        path: 'library/resources/ai-glossary',
+        loadComponent: () => import('./library/resources/ai-glossary/ai-glossary').then(m => m.AiGlossary)
+      },
+      {
+        path: 'library/resources/token-estimator',
+        loadComponent: () => import('./library/resources/token-estimator/token-estimator').then(m => m.TokenEstimator)
+      },
+      {
+        path: 'library/resources/json-extraction-prompt',
+        loadComponent: () => import('./library/resources/json-extraction-prompt/json-extraction-prompt').then(m => m.JsonExtractionPrompt)
+      },
+      {
+        path: 'library/resources/code-review-prompt',
+        loadComponent: () => import('./library/resources/code-review-prompt/code-review-prompt').then(m => m.CodeReviewPrompt)
+      },
+      {
+        path: 'library/resources/prompt-checklist',
+        loadComponent: () => import('./library/resources/prompt-checklist/prompt-checklist').then(m => m.PromptChecklist)
+      },
+      {
         path: 'labs',
         loadComponent: () => import('./labs/pages/labs-home/labs-home.component').then(m => m.LabsHomeComponent)
       },
       {
         path: 'labs/:slug',
         loadComponent: () => import('./labs/pages/lab-workspace/lab-workspace.component').then(m => m.LabWorkspaceComponent)
+      },
+      {
+        path: 'labs/token-playground',
+        loadComponent: () => import('./labs/token-playground/token-playground').then(m => m.TokenPlayground)
+      },
+      {
+        path: 'labs/engineer-instruction',
+        loadComponent: () => import('./labs/engineer-instruction/engineer-instruction').then(m => m.EngineerInstructionLab)
       },
       {
         path: 'framework',
@@ -113,6 +141,30 @@ export const routes: Routes = [
           {
             path: 'academy/certifications',
             loadComponent: () => import('./academy/certifications/certifications.component').then(m => m.CertificationsComponent)
+          },
+          {
+            path: 'academy/modules/m01-ai-foundations/lesson-01-probabilidad',
+            loadComponent: () => import('./academy/modules/m01-ai-foundations/lesson-01-probabilidad/lesson-01-probabilidad').then(m => m.Lesson01Probabilidad)
+          },
+          {
+            path: 'academy/modules/m01-ai-foundations/lesson-02-inferencia',
+            loadComponent: () => import('./academy/modules/m01-ai-foundations/lesson-02-inferencia/lesson-02-inferencia').then(m => m.Lesson02Inferencia)
+          },
+          {
+            path: 'academy/modules/m01-ai-foundations/lesson-03-sistemas',
+            loadComponent: () => import('./academy/modules/m01-ai-foundations/lesson-03-sistemas/lesson-03-sistemas').then(m => m.Lesson03Sistemas)
+          },
+          {
+            path: 'academy/modules/m02-prompt-engineering/lesson-01-reliable-behavior',
+            loadComponent: () => import('./academy/modules/m02-prompt-engineering/lesson-01-reliable-behavior/lesson-01-reliable-behavior').then(m => m.Lesson01ReliableBehavior)
+          },
+          {
+            path: 'academy/modules/m02-prompt-engineering/lesson-02-reasoning-patterns',
+            loadComponent: () => import('./academy/modules/m02-prompt-engineering/lesson-02-reasoning-patterns/lesson-02-reasoning-patterns').then(m => m.Lesson02ReasoningPatterns)
+          },
+          {
+            path: 'academy/modules/m02-prompt-engineering/lesson-03-structured-outputs',
+            loadComponent: () => import('./academy/modules/m02-prompt-engineering/lesson-03-structured-outputs/lesson-03-structured-outputs').then(m => m.Lesson03StructuredOutputs)
           }
         ]
       }

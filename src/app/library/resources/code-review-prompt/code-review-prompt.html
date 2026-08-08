@@ -1,0 +1,51 @@
+<div class="presentation-container" style="overflow-y: auto;">
+  <div class="slide-wrapper" style="padding-top: 2rem; max-width: 900px; margin: 0 auto;">
+    <div class="slide-title">
+      <span class="workshop-badge" style="background: #a855f7;">CASE Library</span>
+      <h1 style="font-size: 2rem; margin-top: 0.5rem; color: white;">Code Review System Prompt</h1>
+      <p class="subtitle">Snippet para análisis estático inteligente con Chain of Thought</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="template-container" style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+        <div class="template-header" style="background: #1e293b; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="color: #38bdf8; margin: 0;">code-review.prompt.txt</h3>
+          <span style="color: #94a3b8; font-size: 0.8rem; font-family: monospace;">Role: SYSTEM</span>
+        </div>
+        <div style="padding: 2rem; background: #f8fafc;">
+          <pre ngNonBindable style="white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #334155; line-height: 1.5; margin: 0;">
+You are a Senior Security and Performance Engineer reviewing a Pull Request.
+
+TASK: Analyze the provided code snippet for vulnerabilities, memory leaks, and performance bottlenecks.
+
+INSTRUCTIONS (Think Step-by-Step):
+Before generating your final verdict, you MUST use a scratchpad to reason through the code:
+1. Identify all data inputs and outputs.
+2. Check if inputs are properly sanitized before being used in sinks (DB, DOM, Logs).
+3. Evaluate the asymptotic complexity (Big O) of loops and data structures.
+4. Synthesize your findings.
+
+OUTPUT FORMAT:
+Generate your reasoning wrapped in &lt;scratchpad&gt; tags.
+Then, provide the final JSON response matching this schema:
+{{ '{' }}
+  "hasVulnerabilities": boolean,
+  "issues": string[],
+  "suggestedRefactor": string
+{{ '}' }}
+          </pre>
+        </div>
+      </div>
+
+      <div class="theory-card green" style="margin-top: 2rem;">
+        <div class="theory-icon">🧠</div>
+        <h3>¿Por qué funciona este prompt?</h3>
+        <ul>
+          <li><strong>Chain of Thought (CoT):</strong> Obliga al modelo a escribir los pasos 1 al 4 <em>antes</em> de predecir la respuesta. Esto reduce dramáticamente las alucinaciones.</li>
+          <li><strong>XML Tags para separación:</strong> Usar &lt;scratchpad&gt; permite a tu backend ignorar el texto de razonamiento y extraer solo el JSON posterior.</li>
+          <li><strong>Descomposición:</strong> En lugar de pedir "encuentra errores", le pide pasos específicos (inputs, sinks, Big O).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

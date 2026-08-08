@@ -1,0 +1,46 @@
+<div class="presentation-container" style="overflow-y: auto;">
+  <div class="slide-wrapper" style="padding-top: 2rem; max-width: 900px; margin: 0 auto;">
+    <div class="slide-title">
+      <span class="workshop-badge" style="background: #a855f7;">CASE Library</span>
+      <h1 style="font-size: 2rem; margin-top: 0.5rem; color: white;">JSON Extraction System Prompt</h1>
+      <p class="subtitle">Snippet reutilizable para garantizar respuestas estructuradas</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="template-container" style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+        <div class="template-header" style="background: #1e293b; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="color: #38bdf8; margin: 0;">json-extractor.prompt.txt</h3>
+          <span style="color: #94a3b8; font-size: 0.8rem; font-family: monospace;">Role: SYSTEM</span>
+        </div>
+        <div style="padding: 2rem; background: #f8fafc;">
+          <pre ngNonBindable style="white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #334155; line-height: 1.5; margin: 0;">
+You are a specialized data extraction system.
+Your ONLY purpose is to analyze the user's input and extract the requested entities into a strict JSON format.
+
+RULES:
+1. You MUST output ONLY valid JSON.
+2. Do NOT wrap the JSON in markdown code blocks (no ```json).
+3. Do NOT include greetings, explanations, or any conversational text.
+4. If you cannot extract the data, return an empty array [] or a JSON with null values, but NEVER return plain text.
+
+SCHEMA:
+[Insert your TypeScript interface or JSON schema here]
+
+Failure to follow these rules will cause a catastrophic system crash in the downstream pipeline.
+          </pre>
+        </div>
+      </div>
+
+      <div class="theory-card blue" style="margin-top: 2rem;">
+        <div class="theory-icon">💡</div>
+        <h3>¿Por qué funciona este prompt?</h3>
+        <ul>
+          <li><strong>Role Designation:</strong> Establece el rol ("data extraction system") para evitar personalidad conversacional.</li>
+          <li><strong>Negative Constraints:</strong> Específica explícitamente lo que NO debe hacer (sin markdown, sin saludos).</li>
+          <li><strong>Fallback claro:</strong> Instruye qué hacer si falla (JSON vacío) en lugar de quejarse en lenguaje natural.</li>
+          <li><strong>Threatening:</strong> Mencionar un "system crash" empuja psicológicamente al modelo (en su espacio latente) a obedecer reglas estrictas de API.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

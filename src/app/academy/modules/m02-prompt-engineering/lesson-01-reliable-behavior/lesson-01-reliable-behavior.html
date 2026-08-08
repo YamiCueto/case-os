@@ -1,0 +1,152 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Academy
+    </a>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+      &larr; Anterior
+    </button>
+    <div class="slide-counter">
+      {{ currentSlide() + 1 }} / {{ totalSlides }}
+    </div>
+    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+      Siguiente &rarr;
+    </button>
+  </div>
+
+  <div class="slide-wrapper">
+    <!-- Slide 1: Intro -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <span class="workshop-badge">Módulo 02: Prompt Engineering</span>
+        <h1>Reliable Behavior</h1>
+        <p class="subtitle">Ingeniería para el control, no magia para el determinismo</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>El mito del "Prompt Perfecto"</h2>
+        <div class="theory-grid">
+          <div class="theory-card orange">
+            <div class="theory-icon">❌</div>
+            <h3>Determinismo Absoluto</h3>
+            <p>Pensar que si encuentras las "palabras mágicas", el LLM se convertirá en una función matemática determinista. <strong>Falso.</strong> Es un motor estadístico; siempre habrá varianza.</p>
+          </div>
+          
+          <div class="theory-card green">
+            <div class="theory-icon">✅</div>
+            <h3>Comportamiento Reproducible</h3>
+            <p>Aceptar la variabilidad y diseñar <strong>restricciones (constraints)</strong> que acorralen al modelo para que cualquier variación semántica caiga dentro de tu caso de uso aceptable.</p>
+          </div>
+        </div>
+        <div class="warning-box">
+          <strong>Regla de Ingeniería:</strong> El Prompt Engineering no busca eliminar la probabilidad, busca reducir su desviación estándar. Queremos resultados <em>confiables, restringidos y reproducibles</em>.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Zero-Shot vs Few-Shot -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <h1>Zero-Shot vs Few-Shot</h1>
+        <p class="subtitle">Mostrando en lugar de explicando</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="examples-container">
+          <div class="example-card">
+            <div class="example-header">
+              <span class="accordion-icon">1️⃣</span>
+              <h3>Zero-Shot Prompting</h3>
+            </div>
+            <div class="example-content">
+              <p>Pedirle algo al modelo sin ejemplos. Funciona bien para tareas universales, pero fracasa espectacularmente cuando necesitas formatos estrictos o lenguajes de dominio específicos.</p>
+              <div class="bad-prompt">
+                <h4>Ejemplo Zero-Shot (Frágil):</h4>
+                <div class="prompt-text">Extrae las entidades de este texto y devuélvelas en formato JSON.</div>
+                <p>El LLM puede responder: <em>"¡Claro! Aquí tienes el JSON: {{ '{' }} ... {{ '}' }}"</em> (rompiendo tu parser de código que esperaba SOLO el JSON).</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <span class="accordion-icon">3️⃣</span>
+              <h3>Few-Shot Prompting</h3>
+            </div>
+            <div class="example-content">
+              <p>Dar ejemplos del comportamiento deseado <strong>dentro del prompt</strong>. Es la técnica más poderosa para "alinear" temporalmente los pesos del modelo hacia tu tarea.</p>
+              <div class="good-prompt">
+                <h4>Ejemplo Few-Shot (Robusto):</h4>
+                <div class="prompt-text">Input: "Compré manzanas"
+Output: ["manzanas"]
+
+Input: "El cliente canceló la tarjeta VISA"
+Output: ["tarjeta VISA"]
+
+Input: "Se cayó el servidor AWS"
+Output:</div>
+                <p>Al ver el patrón, el modelo completará `["servidor AWS"]` sin añadir charla innecesaria.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Restricciones -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <h1>Negative Constraints</h1>
+        <p class="subtitle">Lo que NO debe hacer es tan importante como lo que SÍ</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="theory-card blue">
+          <div class="theory-icon">🛡️</div>
+          <h3>Protegiendo los bordes</h3>
+          <p>Los LLMs sufren de complacencia (sycophancy). Tienden a querer ayudar demasiado o justificar sus respuestas. Para un flujo de ingeniería automatizado, necesitamos cortar eso de raíz.</p>
+          
+          <ul style="margin-top: 1.5rem; list-style: none; padding: 0;">
+            <li style="margin-bottom: 1rem; padding: 1rem; background: white; border-left: 4px solid #ef4444; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+              <strong>NO USAR:</strong> "Intenta no incluir texto antes del JSON." (El modelo lee "incluir texto" y lo toma como sugerencia).
+            </li>
+            <li style="padding: 1rem; background: white; border-left: 4px solid #22c55e; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+              <strong>SÍ USAR:</strong> "WARNING: Return ONLY valid JSON. Do not include markdown formatting, greetings, or explanations. Any text outside the JSON structure will cause a system crash."
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Next Steps -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <h1>Conclusión</h1>
+        <p class="subtitle">Hacia un comportamiento de sistema</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="theory-card green">
+          <div class="theory-icon">🎯</div>
+          <h3>Resumen de la Ingeniería:</h3>
+          <ul>
+            <li>Abandona la ilusión de convertir un modelo probabilístico en una función matemática pura.</li>
+            <li><strong>Reduce la desviación estándar</strong> mediante reglas explícitas (System Prompt) y ejemplos (Few-Shot).</li>
+            <li>Usa restricciones negativas estrictas ("Return ONLY...") para proteger tu código.</li>
+          </ul>
+        </div>
+        
+        <div style="margin-top: 3rem; text-align: center;">
+          <a routerLink="/academy/modules/m02-prompt-engineering/lesson-02-reasoning-patterns" class="control-btn" style="background: #4f46e5; color: white;">
+            Siguiente Lección: Reasoning Patterns &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

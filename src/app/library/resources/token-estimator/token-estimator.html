@@ -1,0 +1,42 @@
+<div class="presentation-container">
+  <div class="slide-wrapper" style="max-width: 1000px; margin: 0 auto;">
+    <div class="slide active">
+      <div class="slide-title">
+        <span class="workshop-badge" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);">Library Snippet</span>
+        <h1>Token Estimator</h1>
+        <p class="subtitle">Heurística rápida (TypeScript)</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="hu-box">
+          <h4>¿Para qué sirve?</h4>
+          <p>Este snippet es una función de utilidad ligera para pre-estimar el tamaño del contexto antes de enviarlo a un LLM. Si necesitas precisión exacta, usa la librería oficial <code>tiktoken</code> (OpenAI).</p>
+        </div>
+
+        <div class="template-container">
+          <div class="template-header">
+            <h3>token-utils.ts</h3>
+          </div>
+          <pre class="template-code">
+export function estimateTokens(text: string): number {{ '{' }}
+  if (!text) return 0;
+  
+  // 1. Separar por palabras, signos de puntuación y camelCase
+  const rawPieces = text.match(/([a-zA-ZáéíóúÁÉÍÓÚñÑ]+|[0-9]+|[^\s\w]+|\s+)/g) || [];
+  
+  // 2. Multiplicar por un factor conservador (el español/código suele usar más tokens)
+  const baseTokens = rawPieces.length;
+  
+  // Retornamos un 10% adicional por seguridad en la estimación
+  return Math.ceil(baseTokens * 1.1);
+{{ '}' }}
+
+export function estimateCost(tokens: number, ratePerMillion: number = 0.15): number {{ '{' }}
+  return (tokens / 1_000_000) * ratePerMillion;
+{{ '}' }}
+          </pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

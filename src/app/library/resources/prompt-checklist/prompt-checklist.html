@@ -1,0 +1,62 @@
+<div class="presentation-container" style="overflow-y: auto;">
+  <div class="slide-wrapper" style="padding-top: 2rem; max-width: 900px; margin: 0 auto;">
+    <div class="slide-title">
+      <span class="workshop-badge" style="background: #a855f7;">CASE Library</span>
+      <h1 style="font-size: 2rem; margin-top: 0.5rem; color: white;">Prompt Design Checklist</h1>
+      <p class="subtitle">Guía de validación para paso a producción</p>
+    </div>
+
+    <div class="slide-content">
+      
+      <div class="theory-card orange">
+        <div class="theory-icon">📋</div>
+        <h3>Checklist de Ingeniería</h3>
+        
+        <ul style="list-style: none; padding: 0; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <li style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; align-items: flex-start;">
+            <input type="checkbox" style="margin-top: 0.3rem; transform: scale(1.2);">
+            <div>
+              <strong style="color: #1e293b; display: block;">1. Contexto Delimitado</strong>
+              <span style="color: #64748b; font-size: 0.9rem;">¿Están los datos del usuario claramente separados de las instrucciones usando delimitadores como XML tags (ej. <code>&lt;user_input&gt;</code>)?</span>
+            </div>
+          </li>
+          
+          <li style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; align-items: flex-start;">
+            <input type="checkbox" style="margin-top: 0.3rem; transform: scale(1.2);">
+            <div>
+              <strong style="color: #1e293b; display: block;">2. Zero-Shot vs Few-Shot</strong>
+              <span style="color: #64748b; font-size: 0.9rem;">Si el formato es estricto, ¿has incluido al menos 2 ejemplos representativos (Input/Output) dentro del prompt?</span>
+            </div>
+          </li>
+
+          <li style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; align-items: flex-start;">
+            <input type="checkbox" style="margin-top: 0.3rem; transform: scale(1.2);">
+            <div>
+              <strong style="color: #1e293b; display: block;">3. Negative Constraints</strong>
+              <span style="color: #64748b; font-size: 0.9rem;">¿Hay instrucciones claras sobre lo que el modelo <strong>NO</strong> debe hacer? (ej. "NO incluyas markdown", "NO inventes datos").</span>
+            </div>
+          </li>
+
+          <li style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; align-items: flex-start;">
+            <input type="checkbox" style="margin-top: 0.3rem; transform: scale(1.2);">
+            <div>
+              <strong style="color: #1e293b; display: block;">4. Fallback Behavior</strong>
+              <span style="color: #64748b; font-size: 0.9rem;">¿Sabe el modelo cómo responder si no puede completar la tarea? (ej. devolver un JSON vacío o un error tipado).</span>
+            </div>
+          </li>
+
+          <li style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; align-items: flex-start;">
+            <input type="checkbox" style="margin-top: 0.3rem; transform: scale(1.2);">
+            <div>
+              <strong style="color: #1e293b; display: block;">5. Chain of Thought</strong>
+              <span style="color: #64748b; font-size: 0.9rem;">Si la tarea requiere análisis, ¿le pediste que evalúe y "piense paso a paso" antes de generar el output final?</span>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>

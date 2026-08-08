@@ -15,11 +15,11 @@ export class UserProgressService {
   // Inicialmente devuelve datos mock, pero su diseño reactivo con signals
   // permite sustituirlo fácilmente por IndexedDB o una API en el futuro sin modificar componentes.
   private progress = signal<UserProgress>({
-    completionPercentage: 25,
-    lastVisitedLessonId: 'c3',
-    lastVisitedLessonTitle: 'Migración VB6 Legacy',
-    lastVisitedLessonPath: '/clase3-dev-migracion-legacy',
-    completedLessons: ['c1', 'c2']
+    completionPercentage: 0,
+    lastVisitedLessonId: undefined,
+    lastVisitedLessonTitle: undefined,
+    lastVisitedLessonPath: undefined,
+    completedLessons: []
   });
 
   getProgress() {

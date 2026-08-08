@@ -1,0 +1,144 @@
+<div class="presentation-container">
+  <div class="back-to-menu">
+    <a routerLink="/academy/home" class="back-btn">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver a Academy
+    </a>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
+      &larr; Anterior
+    </button>
+    <div class="slide-counter">
+      {{ currentSlide() + 1 }} / {{ totalSlides }}
+    </div>
+    <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
+      Siguiente &rarr;
+    </button>
+  </div>
+
+  <div class="slide-wrapper">
+    <!-- Slide 1: Tokens -->
+    <div class="slide" [class.active]="currentSlide() === 0">
+      <div class="slide-title">
+        <span class="workshop-badge">Módulo 01: AI Foundations</span>
+        <h1>Anatomía de la Inferencia</h1>
+        <p class="subtitle">Tokens, Ventana de Contexto y Temperatura</p>
+      </div>
+
+      <div class="slide-content">
+        <h2>¿Qué es un Token?</h2>
+        <div class="theory-card green">
+          <p>Un modelo de lenguaje no lee palabras completas, lee <strong>tokens</strong>. Un token es un fragmento de texto (una sílaba, una palabra corta o un símbolo).</p>
+          <ul>
+            <li>En inglés, 1 token ≈ ¾ de una palabra (100 tokens ≈ 75 palabras).</li>
+            <li>En español o código fuente, a veces cada palabra se rompe en múltiples tokens, aumentando el costo.</li>
+            <li>El modelo convierte estos tokens en números (IDs) para poder procesarlos matemáticamente.</li>
+          </ul>
+        </div>
+        
+        <div class="example-card" style="margin-top: 1.5rem;">
+          <div class="example-header">
+            <h3>Ejemplo de Tokenización</h3>
+          </div>
+          <div class="example-content">
+            <p>La frase "Ingeniería de software" podría dividirse así:</p>
+            <div class="prompt-text">["Ingen", "ier", "ía", " de", " software"]</div>
+            <p>Por eso los LLMs son malos para contar letras o resolver anagramas: ¡ellos no ven las letras, ven fragmentos!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Context Window -->
+    <div class="slide" [class.active]="currentSlide() === 1">
+      <div class="slide-title">
+        <h1>La Ventana de Contexto</h1>
+        <p class="subtitle">La memoria a corto plazo del modelo</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="theory-grid">
+          <div class="theory-card orange">
+            <div class="theory-icon">🪟</div>
+            <h3>Context Window Limit</h3>
+            <p>Todo modelo tiene un límite máximo de tokens que puede "ver" a la vez. Este límite incluye <strong>el prompt de entrada + la respuesta generada</strong>.</p>
+            <ul>
+              <li>GPT-3 tenía 4K tokens.</li>
+              <li>Claude 3 / GPT-4o tienen 128K - 200K tokens.</li>
+              <li>Gemini 1.5 Pro tiene hasta 2 Millones de tokens.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="warning-box">
+          <strong>El problema de la latencia y el costo:</strong> Meter 128K tokens de contexto en cada petición cuesta dinero y tiempo. "Context Engineering" se trata de mandar <em>solo lo estrictamente necesario</em> para resolver la tarea.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Temperatura -->
+    <div class="slide" [class.active]="currentSlide() === 2">
+      <div class="slide-title">
+        <h1>Temperatura y Sampling</h1>
+        <p class="subtitle">Controlando el "Caos" Matemático</p>
+      </div>
+
+      <div class="slide-content">
+        <p>Al predecir el siguiente token, el LLM calcula una distribución de probabilidad para todos los tokens posibles. La <strong>Temperatura</strong> manipula esas probabilidades.</p>
+        
+        <div class="challenges-grid">
+          <div class="challenge-card blue">
+            <div class="challenge-header">
+              <span class="difficulty-badge Fácil">Temperatura 0.0</span>
+              <h3>Extracción y Código</h3>
+            </div>
+            <div class="challenge-content">
+              <p>El modelo casi siempre elegirá el token más probable. Las respuestas son deterministas y repetitivas.</p>
+              <p><em>Ideal para: RAG, código, JSON, extracción de datos.</em></p>
+            </div>
+          </div>
+          
+          <div class="challenge-card orange">
+            <div class="challenge-header">
+              <span class="difficulty-badge Avanzado">Temperatura 0.8+</span>
+              <h3>Creatividad</h3>
+            </div>
+            <div class="challenge-content">
+              <p>Se achatan las probabilidades, permitiendo que tokens menos probables sean elegidos. Las respuestas son variadas y creativas.</p>
+              <p><em>Ideal para: Lluvia de ideas, redacción, marketing.</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Costos -->
+    <div class="slide" [class.active]="currentSlide() === 3">
+      <div class="slide-title">
+        <h1>Economía de la Inferencia</h1>
+        <p class="subtitle">Entendiendo cómo pagamos por usar la IA</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="theory-card green">
+          <div class="theory-icon">💸</div>
+          <h3>Tokens de Entrada vs Salida</h3>
+          <p>En el uso de APIs comerciales (OpenAI, Anthropic, Bedrock), el costo se divide en dos:</p>
+          <ul>
+            <li><strong>Input Tokens (Prompt):</strong> Generalmente son más baratos de procesar.</li>
+            <li><strong>Output Tokens (Generación):</strong> Suelen costar entre el triple y cinco veces más, ya que generar toma más ciclos de cómputo.</li>
+          </ul>
+          <p><em>Diseñar prompts que devuelvan respuestas concisas (JSON estricto) no solo ahorra tiempo, sino mucho dinero en producción.</em></p>
+        </div>
+
+        <div style="margin-top: 3rem; text-align: center;">
+          <a routerLink="/academy/modules/m01-ai-foundations/lesson-03-sistemas" class="control-btn" style="background: #4f46e5; color: white;">
+            Siguiente Lección: Modelos vs Sistemas &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
