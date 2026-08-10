@@ -1,6 +1,6 @@
 <div align="center">
   <h1>CASE OS</h1>
-  <p><strong>The Engineering Operating System</strong></p>
+  <p><strong>The Engineering Operating System & AI Academy</strong></p>
   <p><em>Learn. Build. Experiment. Ship.</em></p>
   <br />
   
@@ -8,105 +8,76 @@
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![Signals](https://img.shields.io/badge/Signals-Reactive-009688?style=for-the-badge&logo=angular&logoColor=white)]()
   [![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-Automated-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/features/actions)
-  [![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-Deployed-222222?style=for-the-badge&logo=github&logoColor=white)]()
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 </div>
 
 <br />
 
-## 🌌 Why CASE OS?
+## 🌌 Visión General
 
 > Modern software engineers no solo consumen contenido. Investigan, experimentan, documentan, automatizan y construyen.
 >
-> CASE OS unifica esas actividades dentro de un único Engineering Workspace, eliminando la fragmentación entre cursos, documentación, laboratorios y herramientas de productividad.
-
-<br />
+> **CASE OS** unifica estas actividades dentro de un único Engineering Workspace, eliminando la fragmentación entre cursos, documentación, laboratorios y herramientas de productividad. Es el hogar de **CASE Academy**, el programa definitivo de *Agentic Software Engineering*.
 
 <div align="center">
-  <!-- TODO: Guarda la captura real del Dashboard en docs/assets/case-os-hero.png -->
   <img src="docs/assets/case-os-hero.png" alt="CASE OS Dashboard" width="100%" />
 </div>
 
 ---
 
-## ✨ Features
+## 🏛️ Los Dos Pilares de CASE OS
 
-- **Engineering Workspace:** El hub central de operaciones.
-- **Academy:** Currículum y módulos de aprendizaje integrados.
-- **Library:** Recursos y documentación de ingeniería curados.
-- **Labs:** Entornos experimentales para código y arquitectura.
+CASE OS se divide en dos componentes masivos que interactúan de forma nativa: La **Plataforma Tecnológica** (El Sistema Operativo) y el **Currículum** (La Academia).
+
+### Pilar 1: La Plataforma (CASE OS)
+
+- **Engineering Workspace:** El hub central de operaciones y dashboards interactivos.
+- **Library:** Una biblioteca de recursos de ingeniería de IA listos para usar (Token Estimators, Context Budgets, Prompt Checklists, Arquitecturas MCP).
+- **Labs:** Entornos experimentales interactivos (`Token Playground`, `Classification Routines`).
 - **Command Palette:** Búsqueda global y ejecución ultra rápida (`Ctrl+K`).
 - **Keyboard First:** Diseñado para power users, totalmente accesible por atajos.
-- **Design System:** Tokens de CSS puros, arquitectura escalable sin frameworks.
-- **Declarative Architecture:** Plataforma basada en motores sin acoplamiento horizontal.
-- **Angular Signals:** Reactividad moderna de última generación.
-- **GitHub Pages Deployment:** Pipeline automatizado de despliegue continuo.
+- **Design System:** Tokens de CSS puros, arquitectura escalable sin librerías de componentes UI pesadas.
+
+### Pilar 2: El Currículum (CASE Academy)
+
+CASE Academy es el programa maestro que transforma ingenieros de software tradicionales en **Ingenieros de Sistemas Probabilísticos**. Abandona el "prompting mágico" para enfocarse en la arquitectura, seguridad y evaluación de sistemas de IA generativa en producción.
+
+**Módulos del Currículum Core (Instructor Guide):**
+- **M01 AI Foundations:** Entender que la IA es un motor probabilístico, no una base de datos determinista.
+- **M02 Prompt Engineering:** Controlar el comportamiento mediante *Instruction Contracts* y esquemas de salida estrictos.
+- **M03 Context Engineering:** Ensamblar el contexto mínimo útil (*Context Manifest*). Relevante ≠ Necesario.
+- **M04 Retrieval (RAG):** Construir pipelines de recuperación de candidatos y evaluar métricas de recall/precisión.
+- **M05 AI Agents:** Implementar el principio de *Least Autonomy Necessary* mediante *Tool Calling* y ciclos de decisión.
+- **M06 Agentic SWE:** Protocolos de colaboración humano-agente. El ingeniero diseña el qué; el agente tipea; el ingeniero verifica.
+- **M07 Model Context Protocol (MCP):** Estandarización de capacidades corporativas. Exponer BDs asumiendo *Assume Breach* y *Never Trust the Client*.
+- **M08 Production:** Cruzar la brecha a Producción. Jerarquía de Evaluación (`Determinista → LLM-as-a-Judge → Human Review`) sobre un *Golden Dataset*.
+- **M09 Architecture:** Transición de arquitecturas monolíticas hacia sistemas distribuidos basados en capacidades.
+
+> **Regla de Oro del Currículum:** *La IA puede producir el cambio; la responsabilidad de evaluar, auditar y aceptar el cambio pertenece al proceso de ingeniería (Deployment Gate).*
 
 ---
 
-## 🎨 Academy Visual Design (Lesson Slides v1)
+## ⚙️ Arquitectura Interna (Core Engines)
 
-El entorno de aprendizaje está impulsado por un sistema de diseño nativo basado puramente en CSS, optimizado para lectura y alta retención técnica.
-
-<div align="center">
-  <img src="docs/design/academy/lesson-slides/v1/lesson_slide_concept_intro/screen.png" alt="Concept Intro Slide" width="32%" />
-  <img src="docs/design/academy/lesson-slides/v1/lesson_slide_code_implementation/screen.png" alt="Code Implementation Slide" width="32%" />
-  <img src="docs/design/academy/lesson-slides/v1/lesson_slide_comparison_matrix/screen.png" alt="Comparison Matrix Slide" width="32%" />
-</div>
-
----
-
-## ⚙️ Arquitectura de Motores (Engines)
-
-CASE OS no es una aplicación tradicional. Es un sistema operativo construido sobre 4 pilares fundamentales totalmente desacoplados:
+CASE OS no es una aplicación web tradicional. Es un sistema construido sobre pilares desacoplados (Engines):
 
 ```text
-CASE OS
-├── Design Engine         (Design Tokens & Primitives)
-├── Workspace Platform    (Declarative Manifests & Routing)
-├── Command Platform      (Keyboard Shortcuts & Dispatching)
-└── Knowledge Platform    (WIP - Search Providers & AI Context)
+src/app/core/
+├── engines/
+│   ├── context/          (Context Builder, Graph Navigator)
+│   ├── retrieval/        (Retrieval Pipeline, Strategies, Vectors)
+│   └── search-engine     (Static Search Engine)
+├── command/              (Command Palette, Registry, Dispatcher)
+├── knowledge/            (Knowledge Registry, Providers)
+└── storage/              (Local Storage Providers)
 ```
 
-### Arquitectura de Runtime
-
-Este diagrama detalla cómo se ejecuta el sistema en tiempo real, desde el Shell visual hasta la Command Palette:
-
-```text
-                 CASE OS
-
-             Workspace Shell
-                    │
-     ┌──────────────┼──────────────┐
-     │              │              │
- GlobalNav    ContextExplorer   TopBar
-     │              │              │
-     └──────────────┼──────────────┘
-                    │
-          Workspace Registry
-                    │
-        ┌───────────┼───────────┐
-        │           │           │
-     Academy     Library      Labs
-                    │
-            Knowledge Platform
-                    │
-            Command Platform
-                    │
-             Command Palette
-```
-
----
-
-## ⚖️ Architecture Principles
-
+**Principios Arquitectónicos:**
 - **✓ Declarative-first**
-- **✓ Signals over mutable state**
-- **✓ Keyboard-first UX**
-- **✓ Registry-driven architecture**
+- **✓ Angular Signals over mutable state**
+- **✓ Registry-driven architecture** (Command Registry, Workspace Registry)
 - **✓ Dumb presentation components**
 - **✓ Zero horizontal coupling**
-- **✓ Design Tokens only**
 
 ---
 
@@ -115,9 +86,9 @@ Este diagrama detalla cómo se ejecuta el sistema en tiempo real, desde el Shell
 - **Framework:** Angular 22 (Standalone Components)
 - **Reactivity:** Angular Signals (`signal`, `computed`, `effect`)
 - **Language:** TypeScript 5.5+
-- **Styling:** CSS Design Tokens & Primitives
+- **Styling:** CSS Design Tokens (`design-system.css`)
 - **Icons:** Material Symbols Outlined
-- **CI/CD:** GitHub Actions & GitHub Pages
+- **CI/CD:** GitHub Actions & GitHub Pages Automático
 
 ---
 
@@ -152,26 +123,24 @@ El despliegue está orquestado mediante **GitHub Actions**. Cualquier push a `ma
 
 ## 🛣️ CASE OS Roadmap
 
-### Phase I — Operating System
-- [x] Design Engine
-- [x] Workspace Platform
-- [x] Command Platform
-- [x] Engineering Workspace
+### Phase I — Operating System (✅ Completado)
+- Design Engine & Workspace Platform
+- Command Platform (`Ctrl+K`)
+- Engineering Workspace
 
-### Phase II — Knowledge Platform
-- [ ] Unified Search
-- [ ] AI Assistant
-- [ ] Context Engine
+### Phase II — Core Curriculum (✅ Completado)
+- Academy Layout & Architecture
+- Generative AI Engineering Modules (M01-M09)
+- Labs & Library Integration
 
-### Phase III — Collaborative Engineering
-- [ ] Projects
-- [ ] Agents
-- [ ] Framework
-- [ ] Multiplayer
+### Phase III — Collaborative Engineering (🔄 En Progreso)
+- Projects & Agents Integration
+- Multiplayer Features
+- Advanced Context Engine
 
 ---
 
-## 📖 Documentación
+## 📖 Documentación Interna
 
 El código fuente está respaldado por manifiestos arquitectónicos:
 
@@ -186,7 +155,7 @@ El código fuente está respaldado por manifiestos arquitectónicos:
 CASE OS es estricto en su arquitectura. Antes de proponer un PR:
 1. Asegúrate de que tu UI siga el principio **Dumb presentation components**.
 2. Evita introducir CSS hardcodeado; utiliza únicamente `var(--case-*)`.
-3. Todos los componentes de negocio deben registrarse vía Manifest.
+3. Todos los componentes de negocio deben registrarse vía Manifest o Registries.
 
 ---
 
