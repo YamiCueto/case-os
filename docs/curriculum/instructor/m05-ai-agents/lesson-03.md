@@ -34,6 +34,29 @@ Nuestra formulación pedagógica observable es:
 ### 3.2 Reasoning vs Intent (Lo Privado vs Lo Observable)
 El *Chain-of-Thought* (CoT) es el proceso probabilístico interno que el modelo utiliza para llegar a una conclusión. **No debemos enseñar el CoT como una interfaz predecible ni como una garantía de seguridad.** Lo que nos importa en ingeniería de software es el **INTENT** (la decisión observable): si el agente decidió que necesita llamar a la base de datos, eso es auditable. Si el modelo internamente "pensó en Shakespeare" antes de llamar a la base de datos, es irrelevante y peligroso depender de ello.
 
+### 3.3 Runtime Loop vs Model-Learning Loop
+Esta es la distinción más importante en arquitecturas avanzadas. Debemos separar la ejecución de una tarea del aprendizaje permanente del sistema.
+
+1. **Agent Runtime Loop:** Ocurre durante la ejecución de *una* tarea. El modelo toma decisiones, ejecuta acciones y observa resultados para ajustar su siguiente paso inmediato. **El modelo NO está aprendiendo (no hay actualización de pesos)**; solo está reaccionando al contexto dinámico (memoria a corto plazo).
+2. **Model-Learning Loop:** Es un proceso de ingeniería de datos y MLOps donde se recopilan miles de ejecuciones de producción, se evalúan, se genera un dataset, se re-entrena el modelo (Fine-tuning / RLHF) y se despliega una nueva versión.
+
+> **Reglas Críticas de Distinción:**
+> - Runtime adaptation ≠ Model learning.
+> - Memory (State) ≠ Training.
+> - Evaluation ≠ Training.
+> - Feedback de herramienta ≠ Automatic weight update.
+
+#### Concept Analogy: Trabajador vs. Organización
+- **Analogía cotidiana:** Un trabajador siguiendo instrucciones vs. Una empresa actualizando su manual de operaciones.
+- **Mapeo:**
+  - *Agent Runtime Loop:* El trabajador ejecuta una tarea, ve que la puerta está cerrada (Observation), y decide buscar la llave (Next Intent). Terminada la tarea, se va a casa.
+  - *Model-Learning Loop:* La organización revisa 10,000 reportes de trabajadores, nota un patrón (la puerta siempre está cerrada), sintetiza un nuevo protocolo, y publica un nuevo manual oficial (entrenamiento). A partir de mañana, todos los trabajadores llevarán la llave desde el principio.
+- **Límite de la analogía:** El agente no es una persona y no "aprende" ni acumula experiencia implícita simplemente porque recibió una *Observation*. Si lo reinicias sin pasar por un proceso explícito de Learning/Memory system, cometerá exactamente el mismo error.
+- **Traducción técnica:** Aislar el ciclo de *Inference* (Runtime) del ciclo de *Training* (MLOps).
+- **Ejemplo aplicado a SWE:**
+  - *Pregunta Pedagógica:* "Si nuestro agente falla 10,000 veces en producción resolviendo tickets, ¿el modelo necesariamente aprende de esos 10,000 errores?"
+  - *Respuesta:* **"No necesariamente."** Esos errores generan *logs*, que alimentan *evaluaciones*, que guían cambios de *prompts* o *policies*, que *podrían* convertirse en datos de *entrenamiento*. Pero sin una arquitectura que conecte eso con una actualización de *weights*, el modelo será igual de "tonto" mañana.
+
 ## 4. La Trampa de la Intuición (Intuición Equivocada)
 > **¿Qué intuición equivocada podría llevarse un ingeniero si entiende mal este concepto?**
 El ingeniero puede pensar: *"Si le digo al agente en el prompt 'Piensa paso a paso y nunca te equivoques', el agente razonará como un humano y su bucle será seguro."*
@@ -60,7 +83,7 @@ STATE UPDATE: Contador de errores = 2. *Max_Errors_Reached* -> Forzar transició
 Un agente DevOps que debe reiniciar un servicio si se cae. No le damos autonomía total. Diseñamos el Agent Loop para que, tras intentar 3 veces y recibir un OBSERVATION de fallo, el sistema escale el problema mediante un *Human-in-the-Loop* (HITL), enviando un mensaje a Slack: "Intenté X, Y, Z. El servidor sigue caído. ¿Deseas que intente purgar la base de datos de staging? (Sí/No)".
 
 ## 8. Errores conceptuales frecuentes
-- **"El Agente aprende con cada paso"**: Falso. El modelo base no aprende (no actualiza pesos). Solo se añade información al *Context Window*. Si la ventana se llena, ocurre un *Lost in the Middle* (M03) y el agente "olvida" por qué empezó la tarea.
+- **"El Agente aprende con cada paso"**: Falso. Utilizó información previa para continuar la ejecución en ese momento. Eso no demuestra aprendizaje permanente. El modelo base no aprende (no actualiza pesos). Solo se añade información al *Context Window*. Si la ventana se llena, ocurre un *Lost in the Middle* (M03) y el agente "olvida" por qué empezó la tarea.
 - **"Razonamiento visible = Inteligencia"**: Mostrar el "Thinking..." del modelo en la UI es una decisión de UX, no un mecanismo de software auditable para tomar decisiones de enrutamiento backend.
 
 ## 9. Preguntas para el grupo
@@ -76,5 +99,12 @@ Pide al grupo que esbocen (dibujo o pseudocódigo) qué ocurre en el backend si 
 ## 12. Discusión
 La autonomía es un multiplicador. Multiplica la capacidad de resolver problemas ambiguos, pero también multiplica la latencia, el costo y el riesgo. Los ingenieros de IA de verdad pasan más tiempo diseñando cómo *detener* al agente que cómo *iniciarlo*.
 
-## 13. Preparación para la siguiente clase
+## 13. Preparación para la siguiente clase y Conexión Curricular
 "Toda esta teoría abstracta sobre ciclos e intenciones se vuelve muy obvia cuando la operas con tus propias manos. En la Demo 05 y el Lab 05, vamos a jugar a ser el bucle y ustedes van a tener que justificar por qué una máquina de estados podría haber sido una mejor idea."
+
+**Progresión Conceptual (El Camino a Producción):**
+- **M04:** Retrieval encuentra los candidatos de información.
+- **M05:** El agente decide y actúa iterativamente sobre esa información (Agent Runtime Loop).
+- **M06:** Esa misma autonomía se aplica al desarrollo de software, alterando código real.
+- **M07:** Las capacidades del agente se delimitan estrictamente mediante contratos (MCP).
+- **M08:** El sistema se evalúa y controla rigurosamente antes de salir a producción, decidiendo si los logs alimentan un Model-Learning Loop.

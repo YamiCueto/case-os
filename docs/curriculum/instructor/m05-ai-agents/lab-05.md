@@ -41,8 +41,21 @@ El estudiante debe diseñar la especificación técnica del agente. Aquí no eva
 6. **Retry Policy:** ¿Qué pasa si una herramienta falla? ¿Intentar de nuevo, intentar con otra herramienta, o abortar?
 7. **Failure / Recovery (HITL):** Si el agente se rinde o alcanza el límite, ¿cómo escala la decisión a un humano (Human-in-the-Loop)?
 
+### Fase 3: Learning Boundary
+El estudiante debe añadir a su especificación una definición clara de qué pasa con la información producida, respondiendo:
+1. ¿Qué ocurre con la información producida durante la ejecución?
+2. ¿Se conserva puramente como estado (Execution State)?
+3. ¿Se almacena como memoria inter-sesión (Memory)?
+4. ¿Se registra como observabilidad (Logs)?
+5. ¿Entra en un sistema de evaluación (Evaluation Data)?
+6. ¿Puede convertirse en un dataset (Training Data)?
+7. ¿Puede alimentar posteriormente un entrenamiento de pesos (Model Weights)?
+8. ¿Qué proceso autoriza esa transición de Logs a Training Data?
+
+> **Pregunta de Diseño Obligatoria:** "¿Dónde termina el *Agent Runtime Loop* y dónde comienza, si existe, el *Model-Learning Loop* en esta arquitectura?"
+
 ## Tool Contract
-El estudiante entregará la tabla de decisión y, si procede, la especificación de diseño arquitectónico. Puede escribir pseudocódigo, pero no código ejecutable directo.
+El estudiante entregará la tabla de decisión, la especificación de diseño arquitectónico y la frontera de aprendizaje. Puede escribir pseudocódigo, pero no código ejecutable directo.
 
 ## Guardrails
 La advertencia crítica del instructor: "Si diseñan un Agente y su campo de 'Max Iterations' está vacío, o su 'Retry Policy' dice 'Dejar que el modelo decida', han introducido una vulnerabilidad crítica de denegación de servicio (DDoS financiero) en su empresa."

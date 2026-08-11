@@ -4,7 +4,7 @@ export const COURSE_CONFIG: CourseConfig = {
   modules: [
     {
       id: 'm1',
-      title: '01. AI Foundations',
+      title: '01. Fundamentos de IA',
       order: 1,
       state: 'LIVE',
       duration: '4 lecciones',
@@ -13,7 +13,7 @@ export const COURSE_CONFIG: CourseConfig = {
       lessons: [
         {
           id: 'c1',
-          title: 'Lesson 01 — De Código a Probabilidad',
+          title: 'Lección 01 — De Código a Probabilidad',
           order: 1,
           duration: '30 min',
           difficulty: 'BEGINNER',
@@ -26,7 +26,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c2',
-          title: 'Lesson 02 — Anatomía de la Inferencia',
+          title: 'Lección 02 — Anatomía de la Inferencia',
           order: 2,
           duration: '30 min',
           difficulty: 'BEGINNER',
@@ -39,7 +39,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c3',
-          title: 'Lesson 03 — Modelos vs Sistemas',
+          title: 'Lección 03 — Modelos vs Sistemas',
           order: 3,
           duration: '30 min',
           difficulty: 'BEGINNER',
@@ -66,7 +66,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l1',
-          title: 'Lab 01 — Analyze a Legacy Routine',
+          title: 'Laboratorio 01 — Analizar una Rutina Legacy',
           order: 5,
           duration: '60 min',
           difficulty: 'INTERMEDIATE',
@@ -82,7 +82,7 @@ export const COURSE_CONFIG: CourseConfig = {
     },
     {
       id: 'm2',
-      title: '02. Prompt Engineering',
+      title: '02. Ingeniería de Prompts',
       order: 2,
       state: 'LIVE',
       duration: '4 lecciones',
@@ -91,7 +91,7 @@ export const COURSE_CONFIG: CourseConfig = {
       lessons: [
         {
           id: 'c4',
-          title: 'Lesson 01 — Reliable Behavior',
+          title: 'Lección 01 — Comportamiento Confiable',
           order: 1,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -104,7 +104,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c5',
-          title: 'Lesson 02 — Reasoning Patterns',
+          title: 'Lección 02 — Patrones de Razonamiento',
           order: 2,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -117,7 +117,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c6',
-          title: 'Lesson 03 — Structured Outputs',
+          title: 'Lección 03 — Salidas Estructuradas',
           order: 3,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -130,7 +130,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'd2',
-          title: 'Demo 02 — Engineer the Instruction',
+          title: 'Demo 02 — Diseñar la Instrucción',
           order: 4,
           duration: '15 min',
           difficulty: 'INTERMEDIATE',
@@ -144,7 +144,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l2',
-          title: 'Lab 02 — Engineer an AI Instruction Contract',
+          title: 'Laboratorio 02 — Diseñar un Contrato de Instrucción para IA',
           order: 5,
           duration: '60 min',
           difficulty: 'INTERMEDIATE',
@@ -160,7 +160,7 @@ export const COURSE_CONFIG: CourseConfig = {
     },
     {
       id: 'm3',
-      title: '03. Context Engineering',
+      title: '03. Ingeniería de Contexto',
       order: 3,
       state: 'LIVE',
       duration: '4 lecciones',
@@ -169,7 +169,7 @@ export const COURSE_CONFIG: CourseConfig = {
       lessons: [
         {
           id: 'c7',
-          title: 'Lesson 01 — Anatomy of Context',
+          title: 'Lección 01 — Anatomía del Contexto',
           order: 1,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -182,7 +182,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c8',
-          title: 'Lesson 02 — Assembly & Prioritization',
+          title: 'Lección 02 — Ensamblaje y Priorización',
           order: 2,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -195,7 +195,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c9',
-          title: 'Lesson 03 — Compression & Validation',
+          title: 'Lección 03 — Compresión y Validación',
           order: 3,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -208,7 +208,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'd3',
-          title: 'Demo 03 — Engineer the Context',
+          title: 'Demo 03 — Diseñar el Contexto',
           order: 4,
           duration: '15 min',
           difficulty: 'ADVANCED',
@@ -222,7 +222,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l3',
-          title: 'Lab 03 — Build the Minimum Useful Context',
+          title: 'Laboratorio 03 — Construir el Contexto Mínimo Útil',
           order: 5,
           duration: '60 min',
           difficulty: 'ADVANCED',
@@ -238,7 +238,7 @@ export const COURSE_CONFIG: CourseConfig = {
     },
     {
       id: 'm4',
-      title: '04. Retrieval & RAG',
+      title: '04. Recuperación y RAG',
       order: 4,
       state: 'LIVE',
       duration: '4 lecciones',
@@ -247,7 +247,7 @@ export const COURSE_CONFIG: CourseConfig = {
       lessons: [
         {
           id: 'c10',
-          title: 'Lesson 01 — Embeddings & Vector Databases',
+          title: 'Lección 01 — Embeddings y Bases de Datos Vectoriales',
           order: 1,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -260,7 +260,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c11',
-          title: 'Lesson 02 — The RAG Pipeline',
+          title: 'Lección 02 — La Tubería RAG',
           order: 2,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -273,7 +273,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c12',
-          title: 'Lesson 03 — Retrieval Evaluation',
+          title: 'Lección 03 — Evaluación de la Recuperación',
           order: 3,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -286,7 +286,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'd4',
-          title: 'Demo 04 — Build Retrieval',
+          title: 'Demo 04 — Construir la Recuperación',
           order: 4,
           duration: '15 min',
           difficulty: 'ADVANCED',
@@ -300,7 +300,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l4',
-          title: 'Lab 04 — Build a Retrieval Strategy',
+          title: 'Laboratorio 04 — Diseñar una Estrategia de Recuperación',
           order: 5,
           duration: '60 min',
           difficulty: 'ADVANCED',
@@ -316,7 +316,7 @@ export const COURSE_CONFIG: CourseConfig = {
     },
     {
       id: 'm5',
-      title: '05. AI Agents',
+      title: '05. Agentes de IA',
       order: 5,
       state: 'LIVE',
       duration: '4 lecciones',
@@ -325,7 +325,7 @@ export const COURSE_CONFIG: CourseConfig = {
       lessons: [
         {
           id: 'c13',
-          title: 'Lesson 01 — Workflows vs Agents',
+          title: 'Lección 01 — Flujos de Trabajo vs Agentes',
           order: 1,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -338,7 +338,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c14',
-          title: 'Lesson 02 — Tool Calling',
+          title: 'Lección 02 — Llamada de Herramientas',
           order: 2,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -351,7 +351,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c15',
-          title: 'Lesson 03 — The Agent Loop',
+          title: 'Lección 03 — El Bucle del Agente',
           order: 3,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -364,7 +364,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'd5',
-          title: 'Demo 05 — The Agent Loop',
+          title: 'Demo 05 — El Bucle del Agente',
           order: 4,
           duration: '15 min',
           difficulty: 'ADVANCED',
@@ -378,7 +378,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l5',
-          title: 'Lab 05 — Design an Agentic Workflow',
+          title: 'Laboratorio 05 — Diseñar un Flujo de Trabajo Agéntico',
           order: 5,
           duration: '60 min',
           difficulty: 'ADVANCED',
@@ -394,7 +394,7 @@ export const COURSE_CONFIG: CourseConfig = {
     },
     {
       id: 'm6',
-      title: '06. Agentic Software Engineering',
+      title: '06. Ingeniería de Software Agéntica',
       order: 6,
       state: 'LIVE',
       duration: '4 lecciones',
@@ -403,7 +403,7 @@ export const COURSE_CONFIG: CourseConfig = {
       lessons: [
         {
           id: 'c16',
-          title: 'Lesson 01 — From Completion to Agents',
+          title: 'Lección 01 — De la Autocompletación a los Agentes',
           order: 1,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -416,7 +416,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c17',
-          title: 'Lesson 02 — Human-Agent Collaboration',
+          title: 'Lección 02 — Colaboración Humano-Agente',
           order: 2,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -429,7 +429,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c18',
-          title: 'Lesson 03 — Repository Context',
+          title: 'Lección 03 — Contexto del Repositorio',
           order: 3,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -442,7 +442,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'd6',
-          title: 'Demo 06 — The AI-Assisted Change',
+          title: 'Demo 06 — El Cambio Asistido por IA',
           order: 4,
           duration: '15 min',
           difficulty: 'ADVANCED',
@@ -456,7 +456,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l6',
-          title: 'Lab 06 — Design an Agentic SWE Protocol',
+          title: 'Laboratorio 06 — Diseñar un Protocolo de Ingeniería de Software Agéntica',
           order: 5,
           duration: '90 min',
           difficulty: 'ADVANCED',
@@ -481,7 +481,7 @@ export const COURSE_CONFIG: CourseConfig = {
       lessons: [
         {
           id: 'c19',
-          title: 'Lesson 01 — The N x M Problem',
+          title: 'Lección 01 — El Problema N × M',
           order: 1,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -494,7 +494,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c20',
-          title: 'Lesson 02 — MCP Architecture',
+          title: 'Lección 02 — Arquitectura de MCP',
           order: 2,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -507,7 +507,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c21',
-          title: 'Lesson 03 — Primitives',
+          title: 'Lección 03 — Primitivas',
           order: 3,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -520,7 +520,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'd7',
-          title: 'Demo 07 — The Universal Connector',
+          title: 'Demo 07 — El Conector Universal',
           order: 4,
           duration: '15 min',
           difficulty: 'ADVANCED',
@@ -534,7 +534,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l7',
-          title: 'Lab 07 — Map a Legacy Integration to MCP',
+          title: 'Laboratorio 07 — Mapear una Integración Legacy a MCP',
           order: 5,
           duration: '90 min',
           difficulty: 'ADVANCED',
@@ -550,7 +550,7 @@ export const COURSE_CONFIG: CourseConfig = {
     },
     {
       id: 'm8',
-      title: '08. Production AI',
+      title: '08. IA en Producción',
       order: 8,
       state: 'LIVE',
       duration: '4 lecciones',
@@ -559,7 +559,7 @@ export const COURSE_CONFIG: CourseConfig = {
       lessons: [
         {
           id: 'c22',
-          title: 'Lesson 01 — The Production Gap',
+          title: 'Lección 01 — La Brecha de Producción',
           order: 1,
           duration: '30 min',
           difficulty: 'INTERMEDIATE',
@@ -572,7 +572,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c23',
-          title: 'Lesson 02 — Evaluation Hierarchy',
+          title: 'Lección 02 — Jerarquía de Evaluación',
           order: 2,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -585,7 +585,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c24',
-          title: 'Lesson 03 — Security & Constraints',
+          title: 'Lección 03 — Seguridad y Restricciones',
           order: 3,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -598,7 +598,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'd8',
-          title: 'Demo 08 — The Eval Pipeline',
+          title: 'Demo 08 — La Tubería de Evaluación',
           order: 4,
           duration: '15 min',
           difficulty: 'ADVANCED',
@@ -612,7 +612,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l8',
-          title: 'Lab 08 — Design a Production AI Protocol',
+          title: 'Laboratorio 08 — Diseñar un Protocolo de IA en Producción',
           order: 5,
           duration: '90 min',
           difficulty: 'ADVANCED',
@@ -628,7 +628,7 @@ export const COURSE_CONFIG: CourseConfig = {
     },
     {
       id: 'm9',
-      title: '09. AI Architecture',
+      title: '09. Arquitectura de IA',
       order: 9,
       state: 'LIVE',
       duration: '4 lecciones',
@@ -637,7 +637,7 @@ export const COURSE_CONFIG: CourseConfig = {
       lessons: [
         {
           id: 'c25',
-          title: 'Lesson 01 — The Monolith Trap',
+          title: 'Lección 01 — La Trampa del Monolito',
           order: 1,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -650,7 +650,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c26',
-          title: 'Lesson 02 — Decoupled Capabilities',
+          title: 'Lección 02 — Capacidades Desacopladas',
           order: 2,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -663,7 +663,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'c27',
-          title: 'Lesson 03 — CASE OS Case Study',
+          title: 'Lección 03 — Caso de Estudio CASE OS',
           order: 3,
           duration: '30 min',
           difficulty: 'ADVANCED',
@@ -676,7 +676,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'd9',
-          title: 'Demo 09 — Architecture on Demand',
+          title: 'Demo 09 — Arquitectura bajo Demanda',
           order: 4,
           duration: '15 min',
           difficulty: 'ADVANCED',
@@ -690,7 +690,7 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l9',
-          title: 'Lab 09 — AI Modernization Architecture Blueprint',
+          title: 'Laboratorio 09 — Plano de Arquitectura de Modernización con IA',
           order: 5,
           duration: '90 min',
           difficulty: 'EXPERT',

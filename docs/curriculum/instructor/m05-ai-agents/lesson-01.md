@@ -11,24 +11,29 @@ Enseñar a los ingenieros a evitar la trampa de sobre-ingeniería de agentes. Es
 ## 3. Conceptos fundamentales
 
 ### 3.1 El Espectro de la Autonomía
-La solución técnica no es una escalera donde "Agente" es la cima evolutiva obligatoria; es un menú de decisiones de diseño.
+La solución técnica no es una escalera donde "Agente" es la cima evolutiva obligatoria; es un menú de decisiones de diseño **donde la decisión correcta depende únicamente del problema, no de la modernidad de la tecnología**.
 
-1. **Fixed Pipeline:** Ejecución lineal (Paso A → Paso B → Paso C).
-2. **State Machine (Enrutamiento condicional):** Evaluación de condiciones predefinidas para saltar de un estado a otro.
-3. **Agent:** El LLM evalúa un objetivo abierto, inspecciona las herramientas disponibles, y decide el orden de ejecución en tiempo real.
+1. **Fixed Pipeline:** La secuencia es conocida y fija. Ejecución lineal (Paso A → Paso B → Paso C). No hay decisiones dinámicas.
+2. **State Machine:** El conjunto de estados y sus transiciones es conocido y puede modelarse con anticipación. El sistema evalúa condiciones predefinidas para moverse entre estados.
+3. **Agent:** El siguiente paso no está completamente determinado de antemano. Requiere que el modelo evalúe el estado actual y tome una decisión dinámica sobre qué acción ejecutar.
 
-#### Concept Analogy: Grados de Navegación
-- **Analogía cotidiana:** Las formas de llegar a un destino.
+> **`LEAST AUTONOMY NECESSARY` — Regla de Diseño Obligatoria:**
+> - Si un *Fixed Pipeline* resuelve correctamente el problema, **no se justifica introducir una State Machine**.
+> - Si una *State Machine* resuelve correctamente el problema, **no se justifica introducir un Agente**.
+> - "Agent" no significa: más inteligente, mejor, más moderno, ni más autónomo de lo necesario.
+
+#### Concept Analogy: El Trabajador y las Instrucciones
+- **Analogía cotidiana:** Un trabajador al que le asignas distintos tipos de instrucciones según la tarea.
 - **Mapeo:**
-  - *Fixed Pipeline:* Un tren sobre rieles. Sigue una ruta predeterminada, no puede desviarse. Si hay un obstáculo, choca.
-  - *State Machine:* Un conductor humano siguiendo las instrucciones paso a paso de un mapa de papel o GPS. Si una calle está cerrada (condición), el mapa tiene una regla de desvío alternativa calculada, pero sigue un algoritmo fijo.
-  - *Agent:* Un conductor experto observando el tráfico en tiempo real, evaluando el clima, cambiando de estrategia, e incluso decidiendo estacionar el auto si la misión original ("llegar rápido") se vuelve peligrosa.
-- **Límite de la analogía:** Un agente de software no "piensa como una persona". No tiene intuición ni sentido común. Simplemente ejecuta un ciclo ciego de inferencia matemática condicionado por el estado, las herramientas proporcionadas y las restricciones del sistema. Si no le programaste una herramienta para "ver" que hay tráfico, avanzará ciegamente hacia el caos.
-- **Traducción técnica:** Transición del Control Flow clásico (`for/if/switch`) a un Control Flow dinámico orquestado por un modelo probabilístico.
-- **Ejemplo aplicado a SWE:** 
-  - *Pipeline:* Leer un PDF → Hacer resumen → Guardar en BD.
-  - *State Machine:* Leer PDF → ¿Es factura o contrato? → Si es factura, extraer monto; si es contrato, extraer firmas.
-  - *Agent:* Analizar la carpeta entera → "Dado que encontré facturas y contratos desordenados, y faltan firmas, decidiré enviar correos a los firmantes faltantes antes de intentar guardarlos".
+  - *Fixed Pipeline:* El trabajador sigue una receta de cocina al pie de la letra: mezcla, hornea, sirve. Cada paso está prescrito. No evalúa nada.
+  - *State Machine:* El trabajador sigue un procedimiento con rutas alternativas: "si el horno ya está caliente, ve al paso 4; si no, caliéntalo primero". Las bifurcaciones están documentadas por adelantado.
+  - *Agent:* El trabajador recibe únicamente un objetivo («prepara algo para cenar con estas sobras») y debe observar los ingredientes, decidir qué hacer, intentarlo, corregir si huele mal, y repetir hasta terminar. El siguiente paso **no está pre-escrito**.
+- **Límite de la analogía:** No uses esta analogía para concluir que el Agente es "un empleado digital". El Agente no tiene hambre, cansancio ni juicio moral. No sabe cuándo parar excepto que el sistema le instruya cuándo hacerlo. Si la herramienta `smell_dish` no existe en su Tool Inventory, nunca sabrá que la cena está quemada.
+- **Traducción técnica:** Transición del Control Flow clásico (`for/if/switch`) a un Control Flow dinámico donde el modelo probabilístico decide el siguiente nodo de ejecución en cada iteración.
+- **Ejemplo aplicado a SWE:**
+  - *Pipeline:* Leer un PDF → Hacer resumen → Guardar en BD. La secuencia nunca varía.
+  - *State Machine:* Leer PDF → ¿Es factura o contrato? (condición predefinida) → ejecutar rama correspondiente.
+  - *Agent:* Analizar una carpeta desconocida, inferir qué tipo de documentos hay, detectar que faltan firmas, y decidir por sí mismo enviar correos antes de archivar. El orden de pasos no se puede codificar de antemano.
 
 ### 3.2 Superficie de Fallo de la Autonomía
 > **Regla Crítica:** Cada incremento de autonomía incrementa exponencialmente la superficie de fallo.
@@ -40,8 +45,22 @@ Cuando delegas el flujo de control a un LLM:
 
 ## 4. La Trampa de la Intuición (Intuición Equivocada)
 > **¿Qué intuición equivocada podría llevarse un ingeniero si entiende mal este concepto?**
-El ingeniero puede pensar: *"Para hacer mi app inteligente, pondré un LLM en el centro (Agente) y le daré acceso a 15 funciones distintas para que él decida cómo ayudar al usuario."*
-**Consecuencia:** Creará un sistema donde una pregunta simple del usuario ("¿Cuál es mi saldo?") provocará que el Agente, de manera impredecible, intente usar la herramienta de "Actualizar Contraseña" porque alucinó la intención, generando un incidente de seguridad y una pésima experiencia, cuando un simple enrutador determinista lo habría resuelto en 50 milisegundos.
+
+**Trampa A (La más común):** *"Si puedo construir un Agente, debería construir un Agente."*
+
+Consecuencia de ingeniería directa: mayor autonomía implica una **superficie de fallo exponencialmente mayor**:
+- Más *tool calls* → más puntos de fallo de red.
+- Más estados posibles → imposible cubrir con tests tradicionales.
+- Más latencia → SLA en riesgo.
+- Más coste de API → el agente podría gastar en una iteración lo que un pipeline gasta en un mes.
+- Más *retries* y *loops* → riesgo de bucles infinitos y DDoS financiero.
+- Más efectos secundarios → un send_email en loop destruye la reputación del dominio.
+- Mayor necesidad de observabilidad → requiere tracing complejo (LangSmith, etc.).
+- Mayor complejidad de rollback → ¿cómo deshaces 50 acciones encadenadas?
+
+**Trampa B:** *"Para hacer mi app inteligente, pondré un LLM en el centro (Agente) y le daré acceso a 15 funciones para que él decida cómo ayudar."*
+
+Consecuencia: Una pregunta simple del usuario ("¿Cuál es mi saldo?") puede provocar que el Agente use la herramienta de "Actualizar Contraseña" porque alucinó la intención. Un enrutador determinista habría resuelto esto en 50 milisegundos sin riesgo alguno.
 
 ## 5. Explicación para el instructor (Intuición → Mecanismo → Consecuencia)
 - **Intuición:** Si la receta del pastel nunca cambia, sigue la receta paso a paso (Pipeline). Solo contrata a un Chef Creativo (Agente) si te piden inventar un plato con sobras misteriosas.

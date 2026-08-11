@@ -11,35 +11,59 @@ Enseñar a los estudiantes el mecanismo subyacente mediante el cual un LLM "inte
 ## 3. Conceptos fundamentales
 
 ### 3.1 El Contrato de Tool Calling
-Un LLM no puede ejecutar código ni hacer peticiones HTTP (a menos que se le conecte un intérprete, lo cual sigue siendo mediado por backend). Tool Calling es simplemente forzar al modelo a responder con un JSON estructurado que dice "Me gustaría que ejecutes la función X con los parámetros Y".
+Un LLM no puede ejecutar código ni hacer peticiones HTTP por sí mismo. Tool Calling es el mecanismo por el cual el modelo puede **solicitar** una capacidad que el sistema ha decidido exponer. Esa solicitud es simplemente un JSON estructurado que dice “Me gustaría que ejecutes la función X con los parámetros Y”. El software del backend decide si lo hace o no.
 
-#### Concept Analogy: Tool Calling
-- **Analogía cotidiana:** Un cirujano (LLM) y su instrumentista (Backend).
-- **Mapeo:** 
-  - El cirujano no busca en la bandeja de herramientas. Extiende la mano y dice: "Bisturí del número 3" (*Tool Proposal*).
-  - El instrumentista verifica que el cirujano pidió la herramienta correcta para la incisión, la toma de la bandeja y se la entrega (*Validation & Execution*).
-  - El paciente sangra (*Observation*).
-- **Límite de la analogía:** Si el cirujano humano pide una motosierra, el instrumentista humano lo detendrá por sentido común. Si el LLM alucina y pide "Borrar Base de Datos" en un JSON perfectamente formateado, un Backend mal diseñado simplemente ejecutará el comando ciegamente.
-- **Traducción técnica:** Fine-tuning de modelos generativos para detectar firmas de funciones en el input (JSON Schema) y frenar la generación de lenguaje natural a favor de escupir un objeto JSON válido.
-- **Ejemplo aplicado a SWE:** El usuario pide "¿Qué tiempo hace en Madrid?". El LLM (cirujano) responde: `{"name": "get_weather", "arguments": {"city": "Madrid"}}`. El backend (instrumentista) atrapa este JSON, detiene al LLM, ejecuta `fetch('api.weather.com?q=Madrid')`, obtiene `22°C` (Observation), y se lo inyecta de vuelta al LLM para que finalmente diga: "En Madrid hace 22 grados".
+> **Formulación correcta:** El modelo **puede solicitar** una capacidad. No la posee. No la ejecuta. No la controla.
 
-### 3.2 Proposición vs. Ejecución (La Frontera de Seguridad)
-Esta es la frontera crítica de arquitectura de sistemas:
+#### Concept Analogy: La Solicitud y la Bóveda
+- **Analogía cotidiana:** Un empleado que quiere retirar fondos de la bóveda de la empresa.
+- **Mapeo:**
+  - *Modelo (LLM):* El solicitante. Llena el formulario indicando qué necesita.
+  - *Tool Call / JSON:* El formulario de solicitud. Solo es papel; no abre nada.
+  - *Validation Layer:* El sistema que verifica si la solicitud está bien formada.
+  - *Authorization:* La política corporativa que decide si el solicitante tiene permiso para acceder a esa cantidad.
+  - *Backend:* El cajero que físicamente accede a la bóveda y ejecuta el movimiento.
+  - *Herramienta (Tool):* La capacidad controlada.
+  - *Observation:* El recibo de la operación (exitosa o rechazada).
+- **Límite de la analogía:** El empleado humano entiende el contexto moral y puede cuestionar una solicitud sospechosa. El modelo no tiene intención, solo probabilidad. Si genera un JSON perfecto para borrar una tabla, no lo hace porque “quiere” hacerlo; lo hace porque matemáticamente era el siguiente token más probable dado el input. La responsabilidad de bloquearlo recae únicamente en el sistema backend.
+- **Traducción técnica:** Fine-tuning de modelos generativos para estructurar JSON schemas cuando detectan una firma de función relevante. El output es interceptado por el framework orquestador antes de llegar a cualquier API real.
+- **Ejemplo aplicado a SWE:** El usuario pide “¿Qué tiempo hace en Madrid?”. El LLM genera `{"name": "get_weather", "arguments": {"city": "Madrid"}}`. El backend intercepta esto, valida que `get_weather` está en la allowlist, comprueba que `city` es un string válido, ejecuta `fetch('api.weather.com?q=Madrid')`, obtiene `22°C`, y se lo devuelve al LLM como Observation. El modelo nunca “tocó” la API directamente.
+
+### 3.2 La Frontera de Seguridad: Propuesta vs. Ejecución
+Esta es la frontera crítica de arquitectura. Prepara directamente M07 (MCP Contract) y M08 (Security / Production Boundaries):
+
 ```text
-LLM (Modelo de Lenguaje)
-  ↓ [Propone Acción / Genera JSON]
-Validation Layer (Código de Backend tradicional)
-  ↓ [Decide si es seguro y válido]
+LLM
+  ↓ propone una acción (genera JSON)
+Tool Call / Intent
+  ↓
+Validation (Schema, tipos, formato)
+  ↓
+Authorization (RBAC, políticas, límites)
+  ↓
 Backend Execution
-  ↓ [Ejecuta la función / BD / API]
+  ↓
+Tool Execution (API, BD, sistema de archivos)
+  ↓
 Observation
+  ↓
+Agent (nuevo ciclo o respuesta final)
 ```
-El LLM nunca ejecuta; propone.
+
+> El LLM nunca ejecuta. Solicita.
+> La ejecución requiere validación y autorización.
 
 ## 4. La Trampa de la Intuición (Intuición Equivocada)
 > **¿Qué intuición equivocada podría llevarse un ingeniero si entiende mal este concepto?**
-El ingeniero puede pensar: *"Le di al Agente la herramienta `update_database`. Ahora el Agente está directamente conectado a mi base de datos de producción."*
-**Consecuencia:** Confundirá la capacidad lingüística con los permisos de red. Escribirá prompts diciendo "Nunca borres datos" en lugar de quitarle el permiso de borrado al rol IAM de la base de datos que usa el Backend. Y cuando el modelo sea hackeado por un *Prompt Injection*, el Backend ejecutará la eliminación masiva porque el ingeniero creyó que el modelo actuaría como escudo de seguridad.
+
+**Trampa A:** *"El modelo tiene acceso a mis APIs."*
+Formulación incorrecta. El modelo **puede solicitar una capacidad que el sistema ha decidido exponer**. El acceso real lo controla el backend. Si el backend no tiene los permisos IAM para ejecutar `delete_table`, el modelo nunca podrá hacerlo sin importar cómo esté redactado el prompt.
+
+**Trampa B:** *"Si el modelo generó el JSON correcto, la acción debe ejecutarse."*
+No. El JSON correcto es una solicitud bien formada. No es autorización. La ejecución requiere pasar por la capa de Validación y la capa de Autorización. Un JSON perfecto para borrar la base de datos de producción sigue siendo una acción bloqueada si el sistema de autorización está correctamente diseñado.
+
+**Trampa C (la original):** *"Le di al Agente la herramienta `update_database`. El Agente está directamente conectado a mi BD de producción."*
+Con seguencia: Escribirá prompts diciendo “Nunca borres datos” en lugar de quitar el permiso de borrado al rol IAM. Cuando el modelo sea comprometido por Prompt Injection, el Backend ejecutará la eliminación masiva porque el prompt no es una frontera de seguridad.
 
 ## 5. Explicación para el instructor (Intuición → Mecanismo → Consecuencia)
 - **Intuición:** El modelo es un asesor que te pasa una nota de papel sugiriendo: "Creo que deberías hacer click en este botón rojo". Tú eres quien aprieta el botón.

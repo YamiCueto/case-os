@@ -40,6 +40,21 @@ Evita el antropomorfismo. Un agente no "piensa y decide" como un empleado; ejecu
 > "La autonomía es una capacidad cara y riesgosa que se justifica, no un default."
 Cada grado de libertad que le das al LLM en un bucle aumenta la probabilidad de que entre en un loop infinito, de que ejecute herramientas erróneas, y de que el coste de inferencia se dispare. Debe estar justificado por la incertidumbre intrínseca de la tarea.
 
+### Core Distinction
+**Agent Runtime Loop ≠ Model-Learning Loop**
+Es imperativo que el estudiante separe el ciclo de ejecución de un agente del ciclo de aprendizaje del modelo. La adaptación en tiempo de ejecución no modifica los pesos del modelo.
+
+### Instructor emphasis
+El instructor debe preguntar repetidamente durante las prácticas:
+**"¿Qué está cambiando aquí?"**
+- Si cambia el siguiente estado de la tarea → Es adaptación en **runtime**.
+- Si cambia la memoria de la conversación → Es un sistema de **memory**.
+- Si cambia el prompt o la policy → Es configuración del **system configuration**.
+- Si genera un dataset estructurado → Es **learning pipeline input**.
+- Solo si cambian los weights del modelo → Es **model training**.
+
+No asumas ni permitas que los estudiantes llamen "aprendizaje" a todas estas capas.
+
 **La Regla Transversal (Aplicable a cada lección)**
 > **Cada incremento de autonomía incrementa la superficie de fallo.**
 Más autonomía significa más *tool calls*, más estados posibles, mayor latencia, más dificultad de *testing*, más efectos secundarios y mayor necesidad de observabilidad (rollbacks). Convertiremos la autonomía en una decisión de ingeniería cuantificable.
@@ -50,6 +65,7 @@ Más autonomía significa más *tool calls*, más estados posibles, mayor latenc
 **Common misconceptions (Errores comunes de estudiantes)**
 - *“Un agente es inteligente porque piensa por sí solo.”* (Falso: es un bucle `while` alrededor de un LLM que escupe JSON).
 - *“El LLM llama a mi base de datos.”* (Falso: el LLM *propone* texto; tu código de backend recibe ese texto, valida si es seguro, y llama a la base de datos).
+- *“El agente aprendió porque utilizó la observation anterior.”* (Falso: Utilizó información previa para continuar la ejecución de esa tarea en particular. Eso no demuestra aprendizaje permanente del modelo).
 
 **Module transition (Hacia M06)**
 Cierre vital para el arco narrativo del curso: 

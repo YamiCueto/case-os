@@ -304,63 +304,63 @@ export class WorkspaceRegistryService {
               items: [
                 {
                   id: 'lab-01',
-                  label: 'Lab 01 — Analyze a Legacy Routine',
+                  label: 'Laboratorio 01 — Analizar una Rutina Legacy',
                   path: '/academy/modules/m01-ai-foundations/lab-01-legacy-routine',
                   icon: 'terminal',
                   depth: 1,
                 },
                 {
                   id: 'lab-02',
-                  label: 'Lab 02 — Engineer an AI Instruction Contract',
+                  label: 'Laboratorio 02 — Diseñar un Contrato de Instrucción para IA',
                   path: '/academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract',
                   icon: 'terminal',
                   depth: 1,
                 },
                 {
                   id: 'lab-03',
-                  label: 'Lab 03 — Build the Minimum Useful Context',
+                  label: 'Laboratorio 03 — Construir el Contexto Mínimo Útil',
                   path: '/academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context',
                   icon: 'terminal',
                   depth: 1,
                 },
                 {
                   id: 'lab-04',
-                  label: 'Lab 04 — Build a Retrieval Strategy',
+                  label: 'Laboratorio 04 — Diseñar una Estrategia de Recuperación',
                   path: '/academy/modules/m04-retrieval-rag/lab-04-build-retrieval-strategy',
                   icon: 'terminal',
                   depth: 1,
                 },
                 {
                   id: 'lab-05',
-                  label: 'Lab 05 — Design an Agentic Workflow',
+                  label: 'Laboratorio 05 — Diseñar un Flujo de Trabajo Agéntico',
                   path: '/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow',
                   icon: 'terminal',
                   depth: 1,
                 },
                 {
                   id: 'lab-06',
-                  label: 'Lab 06 — Design an Agentic SWE Protocol',
+                  label: 'Laboratorio 06 — Diseñar un Protocolo de Ingeniería de Software Agéntica',
                   path: '/academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol',
                   icon: 'terminal',
                   depth: 1,
                 },
                 {
                   id: 'lab-07',
-                  label: 'Lab 07 — Map a Legacy Integration to MCP',
+                  label: 'Laboratorio 07 — Mapear una Integración Legacy a MCP',
                   path: '/academy/modules/m07-mcp/lab-07-map-integration-to-mcp',
                   icon: 'terminal',
                   depth: 1,
                 },
                 {
                   id: 'lab-08',
-                  label: 'Lab 08 — Design a Production AI Protocol',
+                  label: 'Laboratorio 08 — Diseñar un Protocolo de IA en Producción',
                   path: '/academy/modules/m08-production/lab-08-production-ai-protocol',
                   icon: 'terminal',
                   depth: 1,
                 },
                 {
                   id: 'lab-09',
-                  label: 'Lab 09 — AI Modernization Architecture Blueprint',
+                  label: 'Laboratorio 09 — Plano de Arquitectura de Modernización con IA',
                   path: '/academy/modules/m09-architecture/lab-09-architecture-blueprint',
                   icon: 'terminal',
                   depth: 1,
@@ -387,23 +387,23 @@ export class WorkspaceRegistryService {
         ];
 
         if (isLab01) {
-          crumbs.push({ label: 'Lab 01 — Analyze a Legacy Routine', path: url });
+          crumbs.push({ label: 'Laboratorio 01 — Analizar una Rutina Legacy', path: url });
         } else if (isLab02) {
-          crumbs.push({ label: 'Lab 02 — Engineer an AI Instruction Contract', path: url });
+          crumbs.push({ label: 'Laboratorio 02 — Diseñar un Contrato de Instrucción para IA', path: url });
         } else if (isLab03) {
-          crumbs.push({ label: 'Lab 03 — Build the Minimum Useful Context', path: url });
+          crumbs.push({ label: 'Laboratorio 03 — Construir el Contexto Mínimo Útil', path: url });
         } else if (isLab04) {
-          crumbs.push({ label: 'Lab 04 — Build a Retrieval Strategy', path: url });
+          crumbs.push({ label: 'Laboratorio 04 — Diseñar una Estrategia de Recuperación', path: url });
         } else if (isLab05) {
-          crumbs.push({ label: 'Lab 05 — Design an Agentic Workflow', path: url });
+          crumbs.push({ label: 'Laboratorio 05 — Diseñar un Flujo de Trabajo Agéntico', path: url });
         } else if (isLab06) {
-          crumbs.push({ label: 'Lab 06 — Design an Agentic SWE Protocol', path: url });
+          crumbs.push({ label: 'Laboratorio 06 — Diseñar un Protocolo de Ingeniería de Software Agéntica', path: url });
         } else if (isLab07) {
-          crumbs.push({ label: 'Lab 07 — Map a Legacy Integration to MCP', path: url });
+          crumbs.push({ label: 'Laboratorio 07 — Mapear una Integración Legacy a MCP', path: url });
         } else if (isLab08) {
-          crumbs.push({ label: 'Lab 08 — Design a Production AI Protocol', path: url });
+          crumbs.push({ label: 'Laboratorio 08 — Diseñar un Protocolo de IA en Producción', path: url });
         } else if (isLab09) {
-          crumbs.push({ label: 'Lab 09 — AI Modernization Architecture Blueprint', path: url });
+          crumbs.push({ label: 'Laboratorio 09 — Plano de Arquitectura de Modernización con IA', path: url });
         }
         return crumbs;
       }

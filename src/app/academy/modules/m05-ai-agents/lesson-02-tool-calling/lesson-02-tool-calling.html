@@ -15,9 +15,9 @@
     <div class="slide" [class.active]="currentSlide() === 0">
       <div class="slide-title">
         <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 05: AI Agents
+          <span class="icon">●</span> Módulo 05: Agentes de IA
         </div>
-        <h1>Tool Calling & Contracts</h1>
+        <h1>Llamada de Herramientas & Contracts</h1>
         <p class="subtitle">El modelo propone. El software ejecuta.</p>
       </div>
 
@@ -28,7 +28,7 @@
         <div class="tech-card active" style="margin-top: 24px;">
           <div class="tech-icon" style="color: #6366f1;">🤝</div>
           <h3>El Contrato</h3>
-          <p>Tool Calling (o Function Calling) es simplemente un acuerdo de comunicación estructurada entre el modelo probabilístico y tu código determinista.</p>
+          <p>Llamada de Herramientas (o Function Calling) es simplemente un acuerdo de comunicación estructurada entre el modelo probabilístico y tu código determinista.</p>
           <ul style="font-size: 14px; color: #c7c4d7; margin-top: 12px; padding-left: 20px;">
             <li>Le pasas al LLM una lista de funciones que tu código puede hacer.</li>
             <li>Si el LLM cree que necesita usar una, pausa la generación de texto y devuelve un <strong>JSON</strong> pidiendo ejecutarla.</li>
@@ -38,11 +38,11 @@
       </div>
     </div>
 
-    <!-- Slide 2: Workflow de Tool Calling -->
+    <!-- Slide 2: Workflow de Llamada de Herramientas -->
     <div class="slide" [class.active]="currentSlide() === 1">
       <div class="slide-title">
         <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 05: AI Agents
+          <span class="icon">●</span> Módulo 05: Agentes de IA
         </div>
         <h1>El Flujo Operacional</h1>
         <p class="subtitle">Cómo se ve en la práctica</p>
@@ -68,18 +68,18 @@
       </div>
     </div>
 
-    <!-- Slide 3: Conexión con Structured Outputs -->
+    <!-- Slide 3: Conexión con Salidas Estructuradas -->
     <div class="slide" [class.active]="currentSlide() === 2">
       <div class="slide-title">
         <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 05: AI Agents
+          <span class="icon">●</span> Módulo 05: Agentes de IA
         </div>
         <h1>Conexión con M02</h1>
         <p class="subtitle">JSON Schemas al rescate</p>
       </div>
 
       <div class="slide-content">
-        <p>¿Recuerdas cómo en el Módulo 02 forzábamos salidas estructuradas? Tool Calling es exactamente la misma tecnología aplicada a la invocación de funciones.</p>
+        <p>¿Recuerdas cómo en el Módulo 02 forzábamos salidas estructuradas? Llamada de Herramientas es exactamente la misma tecnología aplicada a la invocación de funciones.</p>
         
         <div class="template-container" style="border-radius: 8px; border: 1px solid #1F1F1F; margin-top: 24px;">
           <div class="template-header" style="background: #1A1A1A; padding: 12px 24px; color: #e4e1ed;">
@@ -109,7 +109,7 @@
     <div class="slide" [class.active]="currentSlide() === 3">
       <div class="slide-title">
         <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 05: AI Agents
+          <span class="icon">●</span> Módulo 05: Agentes de IA
         </div>
         <h1>Conclusión</h1>
         <p class="subtitle">De Tool-Calling al Loop</p>
@@ -123,12 +123,12 @@
           <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 24px; border-radius: 4px; margin-top: 16px;">
             <p style="margin: 0; color: #c7c4d7; font-size: 14px;">"Analiza las ventas de Q1 usando `getSales()`, luego busca la causa de la caída en el repositorio de conocimiento usando `searchKnowledge()`, y envía un reporte por correo usando `sendEmail()`".</p>
           </div>
-          <p style="margin-top: 16px;">Para lograr esto, necesitamos encadenar múltiples peticiones de Tool Calling de forma dinámica. Aquí es donde introducimos el <strong>Agent Loop</strong>.</p>
+          <p style="margin-top: 16px;">Para lograr esto, necesitamos encadenar múltiples peticiones de Llamada de Herramientas de forma dinámica. Aquí es donde introducimos el <strong>Agent Loop</strong>.</p>
         </div>
         
         <div style="text-align: center;">
           <a routerLink="/academy/modules/m05-ai-agents/lesson-03-agent-loop" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
-            Siguiente Lección: The Agent Loop &rarr;
+            Siguiente Lección: El Bucle del Agente &rarr;
           </a>
         </div>
       </div>
