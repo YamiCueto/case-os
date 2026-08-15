@@ -26,11 +26,14 @@ Transición constante de "humano" a "máquina". Iniciar con prompts que parecen 
 - **Plauisibilidad (M01)**: Base para entender por qué la ambigüedad causa alucinación.
 
 **Curriculum Components**
+- 🌟 **[Master Class Script (Playbook)](./class-script.md)** *(El documento principal paso a paso para el instructor)*
+- [Demo 02: Engineer the Instruction](./demo-02.md)
+- [Lab 02: Engineer an AI Instruction Contract](./lab-02.md)
+
+**Material Complementario (Lecturas de Profundización)**
 - [Lesson 01: Reliable Behavior](./lesson-01.md)
 - [Lesson 02: Reasoning Patterns](./lesson-02.md)
 - [Lesson 03: Structured Outputs](./lesson-03.md)
-- [Demo 02: Engineer the Instruction](./demo-02.md)
-- [Lab 02: Engineer an AI Instruction Contract](./lab-02.md)
 
 ---
 
