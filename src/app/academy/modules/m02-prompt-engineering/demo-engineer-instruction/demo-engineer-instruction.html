@@ -1,8 +1,8 @@
-﻿<div class="presentation-container pb-32">
+<div class="presentation-container pb-32">
   <div class="back-to-menu">
     <a routerLink="/academy/modules/m02-prompt-engineering/lesson-03-structured-outputs" class="back-btn">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Volver a la Leccion
+      Volver a la Lección
     </a>
   </div>
 
@@ -14,113 +14,227 @@
         Demo 02 · Prompt Engineering
       </span>
       <h1>Diseñar la Instrucción</h1>
-      <p class="subtitle">Observa como la precision de una instruccion determina si el pipeline sobrevive o colapsa</p>
+      <p class="subtitle">Descubre por qué una respuesta correcta para una persona no es una respuesta válida para un programa.</p>
     </div>
 
-    <div class="slide-content">
+    <!-- Simulation Notice -->
+    <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.3); border-left: 3px solid #6366f1; border-radius: 8px; padding: 16px 20px; margin-bottom: 32px; display: flex; gap: 14px; align-items: flex-start;">
+      <span class="material-symbols-outlined" style="color: #818cf8; font-size: 20px; flex-shrink: 0; margin-top: 2px;">info</span>
+      <div>
+        <h4 style="color: #818cf8; font-size: 13px; font-weight: 700; margin: 0 0 6px 0; letter-spacing: 0.02em;">Aviso de Simulación Educativa</h4>
+        <p style="color: #c7c4d7; font-size: 13px; line-height: 1.6; margin: 0;">
+          Para garantizar la consistencia didáctica, el <strong>comportamiento probabilístico del LLM está simulado</strong> en base a las palabras clave de tu instrucción. Sin embargo, el <strong style="color: #e4e1ed;">validador es un motor real y determinista</strong> que procesará la salida simulada exactamente igual que tu código en producción.
+        </p>
+      </div>
+    </div>
 
-      <div style="background:#0A0A0A; border:1px solid #1F1F1F; border-left:2px solid #6366f1; border-radius:6px; padding:20px 24px; margin-bottom:2rem; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-        <div>
-          <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin:0 0 10px 0;">Scenario</p>
-          <p style="font-size:14px; color:#c7c4d7; line-height:1.7; margin:0;">Tu backend procesa codigo defectuoso y necesita que el LLM devuelva un <strong style="color:#e4e1ed;">JSON estricto</strong>. Si el modelo agrega texto extra, el parser hace crash.</p>
+    <!-- Experiments Header -->
+    <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+      <!-- Exp 1 -->
+      <div [ngStyle]="{
+          'flex': 1, 'padding': '16px', 'border-radius': '8px', 'border': '1px solid',
+          'border-color': experimentStatus()[1] === 'active' ? '#6366f1' : (experimentStatus()[1] === 'completed' ? '#22c55e' : '#1e293b'),
+          'background': experimentStatus()[1] === 'active' ? 'rgba(99,102,241,0.05)' : (experimentStatus()[1] === 'completed' ? 'rgba(34,197,94,0.05)' : '#050505'),
+          'opacity': experimentStatus()[1] === 'pending' ? '0.5' : '1',
+          'cursor': experimentStatus()[1] === 'pending' ? 'not-allowed' : 'pointer'
+        }"
+        (click)="setExperiment(1)">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <strong [ngStyle]="{'color': experimentStatus()[1] === 'active' ? '#818cf8' : (experimentStatus()[1] === 'completed' ? '#4ade80' : '#64748b')}">EXPERIMENTO 1</strong>
+          <span *ngIf="experimentStatus()[1] === 'completed'" class="material-symbols-outlined" style="font-size: 16px; color: #4ade80;">check_circle</span>
+          <span *ngIf="experimentStatus()[1] === 'active'" style="font-size: 10px; color: #818cf8; font-weight: bold; text-transform: uppercase;">Activo</span>
         </div>
-        <div>
-          <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin:0 0 10px 0;">Try it</p>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; gap:12px; align-items:baseline;">
-              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#4b5563; flex-shrink:0; width:16px;">01</span>
-              <span style="font-size:13px; color:#94a3b8;">Escribe una instruccion y ejecuta el prompt.</span>
-            </div>
-            <div style="display:flex; gap:12px; align-items:baseline;">
-              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#4b5563; flex-shrink:0; width:16px;">02</span>
-              <span style="font-size:13px; color:#94a3b8;">Observa si el pipeline valida o colapsa.</span>
-            </div>
-            <div style="display:flex; gap:12px; align-items:baseline;">
-              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#4b5563; flex-shrink:0; width:16px;">03</span>
-              <span style="font-size:13px; color:#e4e1ed; font-weight:500;">Agrega constraints y un schema estricto hasta superar la validacion.</span>
-            </div>
-          </div>
-        </div>
+        <span style="font-size: 13px; color: #c7c4d7;">Instrucción simple</span>
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:1.5rem;">
-
-        <div style="display:flex; flex-direction:column; gap:1.5rem;">
-
-          <div class="template-container" style="display:flex; flex-direction:column;">
-            <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
-              <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">01 · Snippet defectuoso (contexto)</h3>
-            </div>
-            <div style="padding:1rem; background:#050505; border-bottom-left-radius:8px; border-bottom-right-radius:8px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#38bdf8; white-space:pre-wrap; line-height:1.6;">{{ codeSnippet }}</div>
-          </div>
-
-          <div class="template-container" style="display:flex; flex-direction:column; flex-grow:1;">
-            <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
-              <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">02 · Tu system prompt (la instruccion)</h3>
-            </div>
-            <div style="padding:1rem; flex:1; display:flex; flex-direction:column; gap:0.75rem;">
-              <textarea
-                [(ngModel)]="instructionInput"
-                rows="8"
-                style="width:100%; padding:12px 14px; border-radius:6px; border:1px solid #1F1F1F; background:#050505; color:#c7c4d7; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.6; resize:vertical; outline:none; transition:border-color 0.2s; box-sizing:border-box;"
-                onfocus="this.style.borderColor='#6366f1'"
-                onblur="this.style.borderColor='#1F1F1F'"
-                placeholder="Escribe instrucciones estrictas para analizar el codigo y devolver JSON..."></textarea>
-              <button class="control-btn primary" style="width:100%; justify-content:center;" (click)="runTest()">
-                ▶ Ejecutar Prompt
-              </button>
-            </div>
-          </div>
-
+      <!-- Exp 2 -->
+      <div [ngStyle]="{
+          'flex': 1, 'padding': '16px', 'border-radius': '8px', 'border': '1px solid',
+          'border-color': experimentStatus()[2] === 'active' ? '#6366f1' : (experimentStatus()[2] === 'completed' ? '#22c55e' : '#1e293b'),
+          'background': experimentStatus()[2] === 'active' ? 'rgba(99,102,241,0.05)' : (experimentStatus()[2] === 'completed' ? 'rgba(34,197,94,0.05)' : '#050505'),
+          'opacity': experimentStatus()[2] === 'pending' ? '0.5' : '1',
+          'cursor': experimentStatus()[2] === 'pending' ? 'not-allowed' : 'pointer'
+        }"
+        (click)="setExperiment(2)">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <strong [ngStyle]="{'color': experimentStatus()[2] === 'active' ? '#818cf8' : (experimentStatus()[2] === 'completed' ? '#4ade80' : '#64748b')}">EXPERIMENTO 2</strong>
+          <span *ngIf="experimentStatus()[2] === 'completed'" class="material-symbols-outlined" style="font-size: 16px; color: #4ade80;">check_circle</span>
+          <span *ngIf="experimentStatus()[2] === 'available'" style="font-size: 10px; color: #cbd5e1; font-weight: bold; text-transform: uppercase;">Disponible</span>
+          <span *ngIf="experimentStatus()[2] === 'active'" style="font-size: 10px; color: #818cf8; font-weight: bold; text-transform: uppercase;">Activo</span>
         </div>
+        <span style="font-size: 13px; color: #c7c4d7;">Solicitar JSON</span>
+      </div>
 
+      <!-- Exp 3 -->
+      <div [ngStyle]="{
+          'flex': 1, 'padding': '16px', 'border-radius': '8px', 'border': '1px solid',
+          'border-color': experimentStatus()[3] === 'active' ? '#6366f1' : (experimentStatus()[3] === 'completed' ? '#22c55e' : '#1e293b'),
+          'background': experimentStatus()[3] === 'active' ? 'rgba(99,102,241,0.05)' : (experimentStatus()[3] === 'completed' ? 'rgba(34,197,94,0.05)' : '#050505'),
+          'opacity': experimentStatus()[3] === 'pending' ? '0.5' : '1',
+          'cursor': experimentStatus()[3] === 'pending' ? 'not-allowed' : 'pointer'
+        }"
+        (click)="setExperiment(3)">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <strong [ngStyle]="{'color': experimentStatus()[3] === 'active' ? '#818cf8' : (experimentStatus()[3] === 'completed' ? '#4ade80' : '#64748b')}">EXPERIMENTO 3</strong>
+          <span *ngIf="experimentStatus()[3] === 'completed'" class="material-symbols-outlined" style="font-size: 16px; color: #4ade80;">check_circle</span>
+          <span *ngIf="experimentStatus()[3] === 'available'" style="font-size: 10px; color: #cbd5e1; font-weight: bold; text-transform: uppercase;">Disponible</span>
+          <span *ngIf="experimentStatus()[3] === 'active'" style="font-size: 10px; color: #818cf8; font-weight: bold; text-transform: uppercase;">Activo</span>
+        </div>
+        <span style="font-size: 13px; color: #c7c4d7;">Restricciones + Esquema</span>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:1.5rem;">
+
+      <!-- Left Column: Input -->
+      <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
+        <!-- 01 Código -->
         <div class="template-container" style="display:flex; flex-direction:column;">
           <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
-            <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">03 · Backend pipeline (validacion)</h3>
+            <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">01 · Código que vamos a analizar</h3>
           </div>
-          <div style="padding:1.5rem; flex:1; min-height:350px; display:flex; flex-direction:column;">
+          <div style="padding:1rem; background:#050505; border-bottom-left-radius:8px; border-bottom-right-radius:8px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#38bdf8; white-space:pre-wrap; line-height:1.6;">{{ codeSnippet }}</div>
+        </div>
 
-            <div *ngIf="!testResult()" style="flex:1; display:flex; align-items:center; justify-content:center;">
-              <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#4b5563;">Esperando ejecucion...</span>
+        <div style="text-align: center; color: #4b5563; font-weight: bold;">↓</div>
+
+        <!-- 02 Instrucción -->
+        <div class="template-container" style="display:flex; flex-direction:column; flex-grow:1;">
+          <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+            <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">02 · Tu instrucción</h3>
+          </div>
+          <div style="padding:1rem; flex:1; display:flex; flex-direction:column; gap:0.75rem;">
+            
+            <!-- Contexto del experimento actual -->
+            <div *ngIf="currentExperiment() === 1" style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; margin-bottom: 8px;">
+              <p style="font-size: 12px; color: #94a3b8; margin: 0 0 4px 0;"><strong>Objetivo:</strong> observar qué ocurre cuando no defines un formato de salida.</p>
+              <p style="font-size: 12px; color: #94a3b8; margin: 0; font-style: italic;">No intentes solucionarlo todavía, solo ejecuta y observa.</p>
+            </div>
+            <div *ngIf="currentExperiment() === 2" style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; margin-bottom: 8px;">
+              <p style="font-size: 12px; color: #94a3b8; margin: 0 0 4px 0;"><strong>Objetivo:</strong> observar qué ocurre cuando solo pides "JSON" sin un esquema estricto.</p>
+              <p style="font-size: 12px; color: #94a3b8; margin: 0; font-style: italic;">Ejecuta y observa cómo el modelo formatea su respuesta.</p>
+            </div>
+            <div *ngIf="currentExperiment() === 3" style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; margin-bottom: 8px;">
+              <p style="font-size: 12px; color: #94a3b8; margin: 0 0 4px 0;"><strong>Objetivo:</strong> acorralar al modelo con restricciones y un esquema exacto.</p>
+              <p style="font-size: 12px; color: #94a3b8; margin: 0; font-style: italic;">Esta es la única forma de garantizar una integración de software segura.</p>
             </div>
 
-            <div *ngIf="testResult()" style="display:flex; flex-direction:column; gap:1.25rem;">
-              <div>
-                <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#4b5563; margin:0 0 8px 0;">1. Raw LLM Output</p>
-                <pre style="background:#050505; border:1px solid #1F1F1F; padding:12px 14px; border-radius:6px; font-size:11px; color:#c7c4d7; white-space:pre-wrap; margin:0; font-family:'JetBrains Mono',monospace; line-height:1.5;">{{ testResult()?.rawOutput }}</pre>
-              </div>
-
-              <div>
-                <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#4b5563; margin:0 0 8px 0;">2. Backend Validation (JSON.parse)</p>
-
-                <div *ngIf="testResult()?.isValidJson" style="background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.25); border-left:2px solid #22c55e; padding:12px 16px; border-radius:6px;">
-                  <p style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#22c55e; margin:0 0 8px 0;">PASS — Parseo Exitoso</p>
-                  <pre style="font-size:11px; color:#86efac; margin:0; font-family:'JetBrains Mono',monospace; line-height:1.5;">{{ testResult()?.parsedData | json }}</pre>
-                </div>
-
-                <div *ngIf="!testResult()?.isValidJson" style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-left:2px solid #ef4444; padding:12px 16px; border-radius:6px;">
-                  <p style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#ef4444; margin:0 0 8px 0;">FAIL — System Crash</p>
-                  <p style="font-size:11px; color:#fca5a5; margin:0; font-family:'JetBrains Mono',monospace; line-height:1.5;">{{ testResult()?.errorMsg }}</p>
-                  <p style="font-size:11px; color:#94a3b8; margin-top:8px; font-style:italic;">Itera tu instruccion: obliga al modelo a responder SOLO con el objeto JSON y nada mas.</p>
-                </div>
-              </div>
-            </div>
-
+            <textarea
+              [(ngModel)]="instructionInput"
+              rows="8"
+              style="width:100%; padding:12px 14px; border-radius:6px; border:1px solid #1F1F1F; background:#050505; color:#c7c4d7; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.6; resize:vertical; outline:none; transition:border-color 0.2s; box-sizing:border-box;"
+              onfocus="this.style.borderColor='#6366f1'"
+              onblur="this.style.borderColor='#1F1F1F'"></textarea>
+            
+            <button class="control-btn primary" style="width:100%; justify-content:center; padding: 12px;" (click)="runTest()">
+              Ejecutar Instrucción
+            </button>
           </div>
         </div>
 
       </div>
 
-      <div class="warning-box" style="border-left-color:#6366f1; background:#0d0d1a; margin-top:2rem;">
-        <h4 style="color:#818cf8; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem;">◈ Concepto para llevar</h4>
-        <p style="color:#c7c4d7; font-size:14px; line-height:1.7; margin-bottom:1rem;">Una instruccion sin schema produce output impredecible. Los <strong style="color:#e4e1ed;">Negative Constraints</strong> y los <strong style="color:#e4e1ed;">Output Schemas</strong> no son detalles — son la diferencia entre un sistema que funciona y uno que hace crash en produccion.</p>
-        <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-          <a routerLink="/library/resources/prompt-checklist" class="control-btn primary" style="font-size:11px;">Prompt Design Checklist</a>
-          <a routerLink="/library/resources/json-extraction-prompt" class="control-btn" style="border-color:#1F1F1F; font-size:11px;">JSON Extraction Prompt</a>
-          <a routerLink="/academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract" class="control-btn" style="border-color:#6366f1; color:#818cf8; font-size:11px;">Ir al Laboratorio 02 →</a>
+      <!-- Right Column: Output & Validation -->
+      <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
+        <!-- 03 Salida Simulada -->
+        <div class="template-container" style="display:flex; flex-direction:column;">
+          <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+            <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">03 · Salida del modelo</h3>
+          </div>
+          <div style="padding:1rem; background:#050505; border-bottom-left-radius:8px; border-bottom-right-radius:8px; min-height: 120px;">
+            <div *ngIf="!testResult()" style="display:flex; align-items:center; justify-content:center; height: 100%;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#4b5563;">Esperando ejecución...</span>
+            </div>
+            <pre *ngIf="testResult()" style="font-size:12px; color:#c7c4d7; white-space:pre-wrap; margin:0; font-family:'JetBrains Mono',monospace; line-height:1.6;">{{ testResult()?.rawOutput }}</pre>
+          </div>
         </div>
+
+        <div style="text-align: center; color: #4b5563; font-weight: bold;">↓</div>
+
+        <!-- 04 Validador -->
+        <div class="template-container" style="display:flex; flex-direction:column; flex-grow:1;">
+          <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+            <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">04 · Validación del sistema</h3>
+          </div>
+          <div style="padding:1rem; flex:1; display:flex; flex-direction:column; gap: 16px;">
+
+            <div *ngIf="!testResult()" style="flex:1; display:flex; flex-direction: column; align-items:center; justify-content:center; gap: 12px; padding: 32px 0;">
+              <span class="material-symbols-outlined" style="color: #4b5563; font-size: 32px;">account_tree</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#4b5563;">El validador se ejecutará cuando el modelo responda.</span>
+            </div>
+
+            <div *ngIf="testResult()">
+              
+              <!-- PASS -->
+              <div *ngIf="testResult()?.hasValidSchema" style="background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.25); border-left:2px solid #22c55e; padding:16px; border-radius:6px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span class="material-symbols-outlined" style="color: #22c55e; font-size: 18px;">check_circle</span>
+                  <p style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#22c55e; margin:0;">VALIDACIÓN CORRECTA</p>
+                </div>
+                
+                <p style="font-size:13px; color:#86efac; margin: 0 0 12px 0; line-height:1.5;">
+                  <strong>¿Qué aprendiste?</strong><br>
+                  La salida es un JSON válido, no contiene texto adicional y cumple con el esquema estricto de nuestra aplicación. El sistema puede consumir esta respuesta de forma segura para continuar su proceso.
+                </p>
+                
+                <pre style="background:#050505; border:1px solid #1e293b; padding:10px; border-radius:4px; font-size:11px; color:#a3e635; margin:0; font-family:'JetBrains Mono',monospace;">{{ testResult()?.parsedData | json }}</pre>
+
+                <!-- Next action button -->
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(34,197,94,0.2);">
+                  <a routerLink="/academy/modules/m02-prompt-engineering/lab-02-engineer-instruction-contract" class="control-btn" style="background: #22c55e; color: #000; font-weight: bold; font-size: 12px; border: none; width: 100%; justify-content: center; padding: 12px;">
+                    Completar demostración e ir al Lab 02 →
+                  </a>
+                </div>
+              </div>
+
+              <!-- FAIL -->
+              <div *ngIf="!testResult()?.hasValidSchema" style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-left:2px solid #ef4444; padding:16px; border-radius:6px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                  <span class="material-symbols-outlined" style="color: #ef4444; font-size: 18px;">error</span>
+                  <p style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#ef4444; margin:0;">VALIDACIÓN FALLIDA</p>
+                </div>
+                
+                <!-- Pedagogical Mini-lessons -->
+                <div *ngIf="currentExperiment() === 1" style="font-size:13px; color:#fca5a5; margin:0 0 16px 0; line-height:1.6;">
+                  <p style="margin: 0 0 8px 0;"><strong>¿Qué aprendiste?</strong></p>
+                  La instrucción permitió que el modelo respondiera en lenguaje natural. Aunque la respuesta contiene información correcta, no cumple el formato que nuestro software necesita.
+                  <br><br>
+                  El sistema esperaba únicamente un objeto JSON, pero recibió texto. Por eso <code>JSON.parse()</code> no pudo procesar la respuesta y la automatización colapsó.
+                </div>
+
+                <div *ngIf="currentExperiment() === 2" style="font-size:13px; color:#fca5a5; margin:0 0 16px 0; line-height:1.6;">
+                  <p style="margin: 0 0 8px 0;"><strong>¿Qué aprendiste?</strong></p>
+                  El modelo devolvió un JSON, pero también agregó bloques Markdown (```json) y texto adicional introductorio. 
+                  <br><br>
+                  Además, el esquema que inventó el modelo (<code>error_encontrado</code>, <code>sugerencia</code>) no coincide con lo que espera el código de tu aplicación (<code>status</code>, <code>severity</code>, <code>issue</code>). Pedir "JSON" no es suficiente para definir un contrato.
+                </div>
+
+                <div *ngIf="currentExperiment() === 3" style="font-size:13px; color:#fca5a5; margin:0 0 16px 0; line-height:1.6;">
+                  <p style="margin: 0 0 8px 0;"><strong>¿Qué salió mal?</strong></p>
+                  Has modificado la instrucción y has roto el contrato. <br><br>
+                  <strong>Motivo:</strong> {{ testResult()?.errorMsg }}
+                </div>
+
+                <!-- Next action button -->
+                <div *ngIf="currentExperiment() === 1 || currentExperiment() === 2" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(239,68,68,0.2);">
+                  <button class="control-btn" style="background: rgba(239,68,68,0.1); color: #fca5a5; font-size: 12px; border: 1px solid rgba(239,68,68,0.3); width: 100%; justify-content: center; padding: 12px;" (click)="continueToNext()">
+                    Continuar al experimento {{ currentExperiment() + 1 }} →
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
     </div>
+
   </div>
 </div>
