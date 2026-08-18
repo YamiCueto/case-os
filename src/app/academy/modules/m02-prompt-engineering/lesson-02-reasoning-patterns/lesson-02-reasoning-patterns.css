@@ -1,0 +1,176 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.living-doc {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--case-space-8) var(--case-space-6) var(--case-space-16);
+  display: flex;
+  flex-direction: column;
+  animation: case-fade-in var(--case-duration-enter) var(--case-ease-out) both;
+}
+
+/* ── Outline / Table of Contents ── */
+.living-doc__outline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-2);
+  padding: var(--case-space-3) var(--case-space-4);
+  background-color: var(--case-surface-1);
+  border: var(--case-border-width) solid var(--case-border);
+  border-radius: var(--case-radius);
+  margin-bottom: var(--case-space-8);
+}
+
+.living-doc__outline-label {
+  font-family: var(--case-font-mono);
+  font-size: 10px;
+  font-weight: var(--case-weight-semibold);
+  color: var(--case-text-muted);
+  letter-spacing: var(--case-tracking-wider);
+}
+
+.living-doc__outline-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--case-space-2);
+}
+
+.living-doc__outline-link {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-secondary);
+  text-decoration: none;
+  padding: 3px var(--case-space-2);
+  border-radius: var(--case-radius-sm);
+  background-color: var(--case-surface-2);
+  border: var(--case-border-width) solid var(--case-border);
+  transition:
+    color var(--case-transition-fast),
+    border-color var(--case-transition-fast);
+}
+
+.living-doc__outline-link:hover {
+  color: var(--case-text-primary);
+  border-color: var(--case-border-strong);
+}
+
+/* ── Sections ── */
+.living-doc__sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-10);
+}
+
+.living-doc-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-4);
+  scroll-margin-top: 60px;
+}
+
+.living-doc-section__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-1);
+  padding-bottom: var(--case-space-2);
+  border-bottom: var(--case-border-width) solid var(--case-border);
+}
+
+.living-doc-section__title {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-xl);
+  font-weight: var(--case-weight-semibold);
+  color: var(--case-text-primary);
+  letter-spacing: var(--case-tracking-tight);
+  margin: 0;
+}
+
+.living-doc-section__subtitle {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-sm);
+  color: var(--case-text-secondary);
+  margin: 0;
+}
+
+.living-doc-section__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-4);
+}
+
+/* ── Paragraph ── */
+.living-doc-paragraph {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-base);
+  color: var(--case-text-primary);
+  line-height: var(--case-leading-relaxed);
+  margin: 0;
+}
+
+.living-doc-paragraph--lead {
+  font-size: var(--case-text-md);
+  color: var(--case-text-primary);
+  font-weight: var(--case-weight-normal);
+  line-height: var(--case-leading-relaxed);
+}
+
+/* ── Key Insights Block ── */
+.living-doc-insights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-3);
+  padding: var(--case-space-5);
+  background-color: var(--case-surface-1);
+  border: var(--case-border-width) solid var(--case-border);
+  border-radius: var(--case-radius);
+  margin: var(--case-space-4) 0;
+}
+
+.living-doc-insights__header {
+  display: flex;
+  align-items: center;
+  gap: var(--case-space-2);
+}
+
+.living-doc-insights__icon {
+  font-size: var(--case-icon-sm);
+  color: var(--case-color-success);
+}
+
+.living-doc-insights__title {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  font-weight: var(--case-weight-semibold);
+  color: var(--case-text-primary);
+  text-transform: uppercase;
+  letter-spacing: var(--case-tracking-wider);
+}
+
+.living-doc-insights__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-2);
+}
+
+.living-doc-insights__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--case-space-2);
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-sm);
+  color: var(--case-text-secondary);
+  line-height: var(--case-leading-normal);
+}
+
+.living-doc-insights__check {
+  font-size: 16px;
+  color: var(--case-color-success);
+  margin-top: 1px;
+  flex-shrink: 0;
+}
