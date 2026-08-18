@@ -1,137 +1,176 @@
-<div class="presentation-container">
-  <div class="back-to-menu">
-    <a routerLink="/academy/home" class="back-btn">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Anterior
-    </a>
-  </div>
+<div class="living-doc" role="main">
+  @if (lesson) {
+    <!-- ── 1. Unified Technical Header ── -->
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      subtitle="Security & Boundaries: El modelo no es un firewall"
+    />
 
-  <div class="slide-wrapper">
-    <div class="progress-bar-container">
-      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
-    </div>
-
-    <!-- Slide 1: Intro -->
-    <div class="slide" [class.active]="currentSlide() === 0">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 08: IA en Producción
-        </div>
-        <h1>Security & Boundaries</h1>
-        <p class="subtitle">El modelo no es un firewall</p>
-      </div>
-
-      <div class="slide-content">
-        <h2>La falsa sensación de seguridad</h2>
-        <p>Es común creer que si le decimos al modelo <em>"No ejecutes comandos destructivos"</em> en el System Prompt, estamos seguros. Esto es falso. <strong>El LLM NO ES una frontera de seguridad.</strong> Es probabilístico y susceptible al Prompt Injection (ataques que engañan al modelo para ignorar sus instrucciones).</p>
-      </div>
-    </div>
-
-    <!-- Slide 2: Fronteras Reales -->
-    <div class="slide" [class.active]="currentSlide() === 1">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 08: IA en Producción
-        </div>
-        <h1>El Diseño de Fronteras</h1>
-        <p class="subtitle">Aislando al Agente</p>
-      </div>
-
-      <div class="slide-content">
-        <p>La seguridad en aplicaciones GenAI se basa en asumir que el modelo será vulnerado, y por tanto, debemos proteger sus "periferias".</p>
-        
-        <div class="tech-card active" style="margin-top: 24px;">
-          <pre style="margin: 0; background: #0A0A0A; padding: 16px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f59e0b;">Untrusted Input
-      ↓
-Context Boundary (¿El prompt inyecta PII? Lo enmascaramos)
-      ↓
-    Model (No confíes en él como firewall)
-      ↓
-Tool Boundary (Validación, Sandboxing, Human-in-the-Loop)
-      ↓
-  MCP Server
-      ↓
-Real System</pre>
-        </div>
-        <p style="margin-top: 16px; font-size: 14px; color: #ef4444; font-weight: bold;">¿Qué pasa si el modelo recibe una instrucción maliciosa y tiene una herramienta con permisos reales de escritura (Mutation Risk)? Si la <em>Tool Boundary</em> no exige Human Approval, tu base de datos será borrada.</p>
-      </div>
-    </div>
-
-    <!-- Slide 3: Dimensiones -->
-    <div class="slide" [class.active]="currentSlide() === 2">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 08: IA en Producción
-        </div>
-        <h1>Restricciones Operativas</h1>
-        <p class="subtitle">Ingeniería Multidimensional</p>
-      </div>
-
-      <div class="slide-content">
-        <p>Además de la Calidad (Evaluation) y la Seguridad (Boundaries), el ingeniero de IA debe equilibrar constantemente tres restricciones más en Producción:</p>
-        
-        <div class="tech-grid" style="margin-top: 24px;">
-          <div class="tech-card">
-            <h3 style="color: #10b981;">Latency (Latencia)</h3>
-            <p>Usar GPT-4 para cada micro-tarea produce tiempos de respuesta inaceptables. A veces un modelo más pequeño y tonto pero rápido es mejor si la tarea es sencilla.</p>
-          </div>
-          <div class="tech-card">
-            <h3 style="color: #3b82f6;">Cost (Costo)</h3>
-            <p>El tokenaje escala. Evaluar el costo por predicción es fundamental. Un <em>Golden Dataset</em> enorme corrido por un <em>LLM-as-a-judge</em> pesado te vaciará la billetera.</p>
-          </div>
-          <div class="tech-card">
-            <h3 style="color: #a855f7;">Reliability (Fiabilidad)</h3>
-            <p>¿Qué pasa si la API de Anthropic/OpenAI cae? Debes diseñar estrategias de <em>Fallback</em> (ej. enrutar temporalmente a un modelo Open Source local).</p>
-          </div>
-        </div>
-        <div class="warning-box" style="margin-top: 16px;">
-          No existe "la mejor respuesta". Existe "la mejor respuesta dentro de las restricciones del sistema" (Quality + Security + Latency + Cost + Reliability).
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 4: Conclusion -->
-    <div class="slide" [class.active]="currentSlide() === 3">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 08: IA en Producción
-        </div>
-        <h1>El Problema Arquitectónico</h1>
-        <p class="subtitle">Preparando M09</p>
-      </div>
-
-      <div class="slide-content">
-        <div class="tech-card active" style="margin-bottom: 48px;">
-          <div class="tech-icon" style="color: #6366f1;">🏗️</div>
-          <h3>La Fragmentación de Producción</h3>
-          <p>Llegamos a una conclusión compleja: Necesitas un modelo rápido para latencia, un modelo inteligente para tareas difíciles, un sistema de Retrieval (RAG), Agentes, Herramientas, MCP Servers, y una capa de Evaluación/Seguridad.</p>
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; padding: 24px; border-radius: 4px; margin-top: 16px;">
-            <p style="margin: 0; color: #c7c4d7; font-size: 15px; font-weight: bold; text-align: center;">
-              ¿Cómo diseñamos una arquitectura donde NINGUNO de estos componentes quede atado a un proveedor específico? ¿Cómo evitamos el Vendor Lock-in absoluto?
-            </p>
-          </div>
-        </div>
-        
-        <div style="text-align: center;">
-          <a routerLink="/academy/modules/m08-production/demo-eval-pipeline" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
-            🎮 Probar Demo 08 &rarr;
+    <!-- ── 2. Table of Contents / Outline Navigation ── -->
+    <nav class="living-doc__outline" aria-label="Índice de la lección">
+      <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
+      <div class="living-doc__outline-items">
+        @for (sec of doc.sections; track sec.id) {
+          <a [href]="'#' + sec.id" class="living-doc__outline-link">
+            {{ sec.title }}
           </a>
-        </div>
+        }
       </div>
+    </nav>
+
+    <!-- ── 3. Flowing Sections ── -->
+    <div class="living-doc__sections">
+      @for (sec of doc.sections; track sec.id) {
+        <section class="living-doc-section" [id]="sec.id" [attr.aria-label]="sec.title">
+          
+          <div class="living-doc-section__header">
+            <h2 class="living-doc-section__title">{{ sec.title }}</h2>
+            @if (sec.subtitle) {
+              <p class="living-doc-section__subtitle">{{ sec.subtitle }}</p>
+            }
+          </div>
+
+          <div class="living-doc-section__body">
+            @for (block of sec.blocks; track $index) {
+              
+              <!-- Paragraph Block -->
+              @if (block.type === 'PARAGRAPH') {
+                <p class="living-doc-paragraph" [class.living-doc-paragraph--lead]="block.lead">
+                  {{ block.text }}
+                </p>
+              }
+
+              <!-- Comparison Block -->
+              @else if (block.type === 'COMPARISON') {
+                <app-lesson-comparison [comparison]="block" />
+              }
+
+              <!-- Callout Block -->
+              @else if (block.type === 'CALLOUT') {
+                <case-callout
+                  [variant]="block.variant"
+                  [title]="block.title"
+                  [message]="block.message"
+                />
+              }
+
+              <!-- Code Block -->
+              @else if (block.type === 'CODE') {
+                <case-code-block
+                  [code]="block.code"
+                  [language]="block.language"
+                  [filename]="block.filename"
+                  [lineNumbers]="block.lineNumbers || false"
+                />
+              }
+
+              <!-- Example / Specification Block -->
+              @else if (block.type === 'EXAMPLE') {
+                <div class="living-doc-example">
+                  @if (block.title) {
+                    <div class="living-doc-example__header">
+                      <span class="material-symbols-outlined living-doc-example__icon" aria-hidden="true">data_object</span>
+                      <span class="living-doc-example__title">{{ block.title }}</span>
+                    </div>
+                  }
+                  <div class="living-doc-example__content">
+                    @if (block.content) {
+                      <ul class="living-doc-example__list">
+                        @for (item of (block.content); track item) {
+                          <li class="living-doc-example__item">
+                            <span class="living-doc-example__bullet">▸</span>
+                            <span>{{ item }}</span>
+                          </li>
+                        }
+                      </ul>
+                    }
+                  </div>
+                  @if (block.caption) {
+                    <div class="living-doc-example__caption">
+                      {{ block.caption }}
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Key Insights Block -->
+              @else if (block.type === 'KEY_INSIGHTS') {
+                <div class="living-doc-insights">
+                  <div class="living-doc-insights__header">
+                    <span class="material-symbols-outlined living-doc-insights__icon" aria-hidden="true">verified</span>
+                    <span class="living-doc-insights__title">{{ block.title || 'Key Insights de Ingeniería' }}</span>
+                  </div>
+                  <ul class="living-doc-insights__list">
+                    @for (item of block.items; track item) {
+                      <li class="living-doc-insights__item">
+                        <span class="material-symbols-outlined living-doc-insights__check" aria-hidden="true">check</span>
+                        <span>{{ item }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+
+              <!-- In-Flow Demo Reference -->
+              @else if (block.type === 'DEMO_REF') {
+                <div class="inflow-activity inflow-activity--demo">
+                  <div class="inflow-activity__icon-box">
+                    <span class="material-symbols-outlined inflow-activity__icon" aria-hidden="true">play_arrow</span>
+                  </div>
+                  <div class="inflow-activity__body">
+                    <div class="inflow-activity__tag">EXPERIMENTACIÓN GUIADA</div>
+                    <h3 class="inflow-activity__title">{{ block.title }}</h3>
+                    <p class="inflow-activity__desc">{{ block.description }}</p>
+                  </div>
+                  <div class="inflow-activity__action">
+                    <a [routerLink]="block.path" class="inflow-activity__link">
+                      <case-button variant="primary" size="sm" iconRight="arrow_forward">
+                        {{ block.actionLabel || 'Abrir Demo' }}
+                      </case-button>
+                    </a>
+                  </div>
+                </div>
+              }
+
+              <!-- In-Flow Lab Reference -->
+              @else if (block.type === 'LAB_REF') {
+                <div class="inflow-activity inflow-activity--lab">
+                  <div class="inflow-activity__icon-box inflow-activity__icon-box--lab">
+                    <span class="material-symbols-outlined inflow-activity__icon" aria-hidden="true">science</span>
+                  </div>
+                  <div class="inflow-activity__body">
+                    <div class="inflow-activity__tag inflow-activity__tag--lab">APLICACIÓN REAL DE INGENIERÍA</div>
+                    <h3 class="inflow-activity__title">{{ block.title }}</h3>
+                    <p class="inflow-activity__desc">{{ block.description }}</p>
+                    @if (block.duration) {
+                      <span class="inflow-activity__time">⏱️ Duración estimada: {{ block.duration }}</span>
+                    }
+                  </div>
+                  <div class="inflow-activity__action">
+                    <a [routerLink]="block.path" class="inflow-activity__link">
+                      <case-button variant="secondary" size="sm" iconRight="arrow_forward">
+                        {{ block.actionLabel || 'Iniciar Laboratorio' }}
+                      </case-button>
+                    </a>
+                  </div>
+                </div>
+              }
+
+            }
+          </div>
+
+        </section>
+      }
     </div>
 
-    <!-- Bottom Controls -->
-    <div class="controls">
-      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-        &larr; Anterior
-      </button>
-      <div class="slide-counter">
-        {{ currentSlide() + 1 }} / {{ totalSlides }}
-      </div>
-      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-        Siguiente &rarr;
-      </button>
-    </div>
-
-  </div>
+    <!-- ── 4. Technical Footer Navigation & Completion ── -->
+    <app-lesson-footer
+      [lessonId]="lesson.id"
+      [nextLesson]="adjacentLessons.next"
+      [previousLesson]="adjacentLessons.previous"
+      [relatedDemo]="relatedDemo"
+      [relatedLab]="relatedLab"
+    />
+  }
 </div>
