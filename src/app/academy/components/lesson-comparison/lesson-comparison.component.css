@@ -1,0 +1,99 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.lesson-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--case-space-4);
+  margin: var(--case-space-6) 0;
+}
+
+.comparison-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--case-space-5);
+  background-color: var(--case-surface-1);
+  border: var(--case-border-width) solid var(--case-border);
+  border-radius: var(--case-radius);
+  transition: border-color var(--case-transition-fast);
+}
+
+.comparison-card--active {
+  border-color: var(--case-accent);
+  background-color: var(--case-surface-2);
+}
+
+.comparison-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-2);
+  margin-bottom: var(--case-space-4);
+  padding-bottom: var(--case-space-3);
+  border-bottom: var(--case-border-width) solid var(--case-border);
+}
+
+.comparison-card__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--case-space-2);
+}
+
+.comparison-card__icon {
+  font-size: 20px;
+}
+
+.comparison-card__title {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-md);
+  font-weight: var(--case-weight-semibold);
+  color: var(--case-text-primary);
+  margin: 0;
+}
+
+.comparison-card__subtitle {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-secondary);
+  margin: 0;
+}
+
+.comparison-card__points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-2);
+  flex: 1;
+}
+
+.comparison-card__point-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--case-space-2);
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-sm);
+  color: var(--case-text-secondary);
+  line-height: var(--case-leading-normal);
+}
+
+.comparison-card--active .comparison-card__point-item {
+  color: var(--case-text-primary);
+}
+
+.comparison-card__bullet {
+  color: var(--case-text-muted);
+  font-size: 14px;
+}
+
+.comparison-card__bullet--accent {
+  color: var(--case-accent);
+}
+
+@media (max-width: 768px) {
+  .lesson-comparison {
+    grid-template-columns: 1fr;
+  }
+}

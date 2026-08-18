@@ -1,0 +1,35 @@
+<div class="case-code-block" role="region" [attr.aria-label]="filename ? 'Código: ' + filename : 'Bloque de código ' + language">
+  
+  <!-- Header Bar -->
+  <div class="case-code-block__header">
+    <div class="case-code-block__meta">
+      @if (filename) {
+        <span class="material-symbols-outlined case-code-block__file-icon" aria-hidden="true">description</span>
+        <span class="case-code-block__filename">{{ filename }}</span>
+      } @else {
+        <span class="case-code-block__lang">{{ language }}</span>
+      }
+    </div>
+
+    @if (copyable) {
+      <button
+        type="button"
+        (click)="copyToClipboard()"
+        class="case-code-block__copy-btn"
+        [class.case-code-block__copy-btn--copied]="copySuccess()"
+        [attr.aria-label]="copySuccess() ? 'Copiado al portapapeles' : 'Copiar código'"
+      >
+        <span class="material-symbols-outlined case-code-block__copy-icon" aria-hidden="true">
+          {{ copySuccess() ? 'check' : 'content_copy' }}
+        </span>
+        <span class="case-code-block__copy-label">
+          {{ copySuccess() ? 'Copiado' : 'Copiar' }}
+        </span>
+      </button>
+    }
+  </div>
+
+  <!-- Code Container -->
+  <pre class="case-code-block__pre"><code class="case-code-block__code" [attr.data-lang]="language">{{ code }}</code></pre>
+
+</div>

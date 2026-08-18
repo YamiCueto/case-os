@@ -1,0 +1,25 @@
+<aside
+  class="case-callout case-callout--{{ variant }}"
+  role="note"
+  [attr.aria-label]="effectiveDefaultTitle() || 'Nota técnica'"
+>
+  <div class="case-callout__icon-wrapper" aria-hidden="true">
+    <span class="material-symbols-outlined case-callout__icon">
+      {{ effectiveIcon() }}
+    </span>
+  </div>
+
+  <div class="case-callout__content">
+    @if (effectiveDefaultTitle()) {
+      <div class="case-callout__title">
+        {{ effectiveDefaultTitle() }}
+      </div>
+    }
+    <div class="case-callout__body">
+      @if (message) {
+        <p class="case-callout__message">{{ message }}</p>
+      }
+      <ng-content></ng-content>
+    </div>
+  </div>
+</aside>

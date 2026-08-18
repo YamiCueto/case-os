@@ -1,0 +1,62 @@
+<header class="lesson-header" aria-label="Cabecera técnica de la lección">
+  
+  <!-- Eyebrow -->
+  <div class="lesson-header__eyebrow">
+    @if (moduleTitle) {
+      <span class="lesson-header__eyebrow-accent">{{ moduleTitle }}</span>
+      <span class="lesson-header__eyebrow-sep" aria-hidden="true">/</span>
+    }
+    <span>LECCIÓN {{ lesson.order }}</span>
+  </div>
+
+  <!-- Title -->
+  <h1 class="lesson-header__title">{{ lesson.title }}</h1>
+  
+  @if (subtitle) {
+    <p class="lesson-header__subtitle">{{ subtitle }}</p>
+  }
+
+  <!-- Metadata Strip -->
+  <div class="lesson-header__meta-strip">
+    <div class="lesson-header__meta-group">
+      <span class="lesson-header__duration">
+        <span class="material-symbols-outlined lesson-header__meta-icon" aria-hidden="true">schedule</span>
+        {{ lesson.duration }}
+      </span>
+
+      <case-badge [variant]="difficultyVariant()" [mono]="true">
+        {{ lesson.difficulty }}
+      </case-badge>
+    </div>
+
+    <!-- Tags -->
+    @if (lesson.tags && lesson.tags.length > 0) {
+      <div class="lesson-header__tags" aria-label="Etiquetas técnicas">
+        @for (tag of lesson.tags; track tag) {
+          <case-badge variant="default" [mono]="true">
+            #{{ tag }}
+          </case-badge>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Objectives (if present) -->
+  @if (lesson.objectives && lesson.objectives.length > 0) {
+    <div class="lesson-header__objectives">
+      <div class="lesson-header__objectives-title">
+        <span class="material-symbols-outlined lesson-header__objectives-icon" aria-hidden="true">target</span>
+        Objetivos de Aprendizaje
+      </div>
+      <ul class="lesson-header__objectives-list">
+        @for (obj of lesson.objectives; track obj) {
+          <li class="lesson-header__objective-item">
+            <span class="lesson-header__objective-bullet" aria-hidden="true">▸</span>
+            <span>{{ obj }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+
+</header>

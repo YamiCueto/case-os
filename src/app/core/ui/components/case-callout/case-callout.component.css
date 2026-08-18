@@ -1,0 +1,98 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.case-callout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--case-space-3);
+  padding: var(--case-space-4);
+  border-radius: var(--case-radius);
+  border: var(--case-border-width) solid var(--case-border);
+  border-left-width: 3px;
+  background-color: var(--case-surface-1);
+  margin: var(--case-space-4) 0;
+}
+
+.case-callout__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.case-callout__icon {
+  font-size: var(--case-icon-md);
+}
+
+.case-callout__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.case-callout__title {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-sm);
+  font-weight: var(--case-weight-semibold);
+  letter-spacing: var(--case-tracking-wide);
+  line-height: var(--case-leading-tight);
+}
+
+.case-callout__body {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-sm);
+  color: var(--case-text-secondary);
+  line-height: var(--case-leading-normal);
+}
+
+.case-callout__message {
+  margin: 0;
+}
+
+/* ── Variantes Semánticas ── */
+
+/* 1. Rule (Acento Electric Blue) */
+.case-callout--rule {
+  border-left-color: var(--case-accent);
+  background-color: var(--case-accent-subtle);
+}
+.case-callout--rule .case-callout__icon,
+.case-callout--rule .case-callout__title {
+  color: var(--case-accent);
+}
+
+/* 2. Info (Azul informativo / neutral) */
+.case-callout--info {
+  border-left-color: var(--case-color-info);
+  background-color: var(--case-color-info-bg);
+}
+.case-callout--info .case-callout__icon,
+.case-callout--info .case-callout__title {
+  color: var(--case-color-info);
+}
+
+/* 3. Warning (Ámbar de advertencia) */
+.case-callout--warning {
+  border-left-color: var(--case-color-warning);
+  background-color: var(--case-color-warning-bg);
+}
+.case-callout--warning .case-callout__icon,
+.case-callout--warning .case-callout__title {
+  color: var(--case-color-warning);
+}
+
+/* 4. Caution (Rojo / Security Boundary) */
+.case-callout--caution {
+  border-left-color: var(--case-color-error);
+  background-color: var(--case-color-error-bg);
+}
+.case-callout--caution .case-callout__icon,
+.case-callout--caution .case-callout__title {
+  color: var(--case-color-error);
+}

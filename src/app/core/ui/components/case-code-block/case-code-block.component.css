@@ -1,0 +1,99 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.case-code-block {
+  width: 100%;
+  border: var(--case-border-width) solid var(--case-border);
+  border-radius: var(--case-radius);
+  background-color: var(--case-surface-1);
+  overflow: hidden;
+  margin: var(--case-space-4) 0;
+}
+
+.case-code-block__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--case-space-2) var(--case-space-4);
+  background-color: var(--case-surface-2);
+  border-bottom: var(--case-border-width) solid var(--case-border);
+  min-height: 36px;
+}
+
+.case-code-block__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--case-space-2);
+}
+
+.case-code-block__file-icon {
+  font-size: var(--case-icon-xs);
+  color: var(--case-text-muted);
+}
+
+.case-code-block__filename {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-primary);
+  font-weight: var(--case-weight-medium);
+}
+
+.case-code-block__lang {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--case-tracking-wider);
+}
+
+.case-code-block__copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--case-space-1);
+  padding: 3px var(--case-space-2);
+  background-color: transparent;
+  border: var(--case-border-width) solid var(--case-border);
+  border-radius: var(--case-radius-sm);
+  color: var(--case-text-secondary);
+  font-family: var(--case-font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition:
+    background-color var(--case-transition-fast),
+    color var(--case-transition-fast),
+    border-color var(--case-transition-fast);
+}
+
+.case-code-block__copy-btn:hover {
+  background-color: var(--case-surface-3);
+  color: var(--case-text-primary);
+  border-color: var(--case-border-strong);
+}
+
+.case-code-block__copy-btn--copied {
+  background-color: var(--case-color-success-bg);
+  border-color: var(--case-color-success);
+  color: var(--case-color-success);
+}
+
+.case-code-block__copy-icon {
+  font-size: 13px;
+}
+
+.case-code-block__pre {
+  margin: 0;
+  padding: var(--case-space-4);
+  overflow-x: auto;
+  background-color: var(--case-surface-1);
+}
+
+.case-code-block__code {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-sm);
+  color: var(--case-text-primary);
+  line-height: var(--case-leading-relaxed);
+  tab-size: 2;
+  white-space: pre;
+}

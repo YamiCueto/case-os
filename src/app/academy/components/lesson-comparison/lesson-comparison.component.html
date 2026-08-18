@@ -1,0 +1,59 @@
+<div class="lesson-comparison" role="region" aria-label="Matriz comparativa">
+  
+  <!-- Left Side (e.g. Traditional / Deterministic) -->
+  <div class="comparison-card" [class.comparison-card--active]="comparison.left.active">
+    <div class="comparison-card__header">
+      @if (comparison.left.badge) {
+        <case-badge variant="default" [mono]="true">{{ comparison.left.badge }}</case-badge>
+      }
+      <div class="comparison-card__identity">
+        @if (comparison.left.icon) {
+          <span class="comparison-card__icon" aria-hidden="true">{{ comparison.left.icon }}</span>
+        }
+        <h3 class="comparison-card__title">{{ comparison.left.title }}</h3>
+      </div>
+      @if (comparison.left.subtitle) {
+        <p class="comparison-card__subtitle">{{ comparison.left.subtitle }}</p>
+      }
+    </div>
+
+    <ul class="comparison-card__points">
+      @for (point of comparison.left.points; track point) {
+        <li class="comparison-card__point-item">
+          <span class="comparison-card__bullet" aria-hidden="true">•</span>
+          <span>{{ point }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <!-- Right Side (e.g. AI / Probabilistic) -->
+  <div class="comparison-card" [class.comparison-card--active]="comparison.right.active">
+    <div class="comparison-card__header">
+      @if (comparison.right.badge) {
+        <case-badge [variant]="comparison.right.active ? 'accent' : 'default'" [mono]="true">
+          {{ comparison.right.badge }}
+        </case-badge>
+      }
+      <div class="comparison-card__identity">
+        @if (comparison.right.icon) {
+          <span class="comparison-card__icon" aria-hidden="true">{{ comparison.right.icon }}</span>
+        }
+        <h3 class="comparison-card__title">{{ comparison.right.title }}</h3>
+      </div>
+      @if (comparison.right.subtitle) {
+        <p class="comparison-card__subtitle">{{ comparison.right.subtitle }}</p>
+      }
+    </div>
+
+    <ul class="comparison-card__points">
+      @for (point of comparison.right.points; track point) {
+        <li class="comparison-card__point-item">
+          <span class="comparison-card__bullet comparison-card__bullet--accent" aria-hidden="true">▸</span>
+          <span>{{ point }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+
+</div>

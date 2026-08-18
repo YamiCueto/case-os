@@ -1,0 +1,104 @@
+<footer class="lesson-footer" aria-label="Navegación y finalización de lección">
+
+  <!-- 1. Practical Activities (Demo / Lab) if defined -->
+  @if (relatedDemo || relatedLab) {
+    <div class="lesson-footer__activities">
+      <div class="lesson-footer__activities-title">
+        <span class="material-symbols-outlined lesson-footer__activities-icon" aria-hidden="true">science</span>
+        Actividades Prácticas del Módulo
+      </div>
+
+      <div class="lesson-footer__activities-grid">
+        @if (relatedDemo) {
+          <div class="activity-card activity-card--demo">
+            <div class="activity-card__header">
+              <span class="activity-card__tag">DEMO INTERACTIVA</span>
+              <h4 class="activity-card__title">{{ relatedDemo.title }}</h4>
+              @if (relatedDemo.description) {
+                <p class="activity-card__desc">{{ relatedDemo.description }}</p>
+              }
+            </div>
+            <a [routerLink]="relatedDemo.path" class="activity-card__link">
+              <case-button variant="secondary" size="sm" iconRight="play_arrow">
+                Abrir Demo
+              </case-button>
+            </a>
+          </div>
+        }
+
+        @if (relatedLab) {
+          <div class="activity-card activity-card--lab">
+            <div class="activity-card__header">
+              <span class="activity-card__tag activity-card__tag--lab">REAL ENGINEERING LAB</span>
+              <h4 class="activity-card__title">{{ relatedLab.title }}</h4>
+              @if (relatedLab.duration) {
+                <span class="activity-card__time">⏱️ {{ relatedLab.duration }}</span>
+              }
+            </div>
+            <a [routerLink]="relatedLab.path" class="activity-card__link">
+              <case-button variant="secondary" size="sm" iconRight="arrow_forward">
+                Ir al Laboratorio
+              </case-button>
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- 2. Completion Action Box -->
+  <div class="lesson-footer__complete-box">
+    <div class="lesson-footer__complete-status">
+      @if (isCompleted()) {
+        <case-badge variant="success" [mono]="true">
+          <span class="material-symbols-outlined" style="font-size: 13px; margin-right: 2px;">check</span>
+          LECCIÓN COMPLETADA
+        </case-badge>
+      } @else {
+        <span class="lesson-footer__complete-hint">
+          ¿Has completado la lectura y asimilado los conceptos?
+        </span>
+      }
+    </div>
+
+    @if (!isCompleted()) {
+      <case-button
+        variant="primary"
+        size="md"
+        iconRight="check"
+        (click)="markCompleted()"
+      >
+        Marcar como Completada
+      </case-button>
+    }
+  </div>
+
+  <!-- 3. Navigation Controls (Prev / Next) -->
+  <nav class="lesson-footer__nav" aria-label="Navegación entre lecciones">
+    <div class="lesson-footer__nav-col">
+      @if (previousLesson) {
+        <a [routerLink]="previousLesson.path" class="lesson-nav-btn lesson-nav-btn--prev">
+          <span class="lesson-nav-btn__eyebrow">← Lección Anterior</span>
+          <span class="lesson-nav-btn__title">{{ previousLesson.title }}</span>
+        </a>
+      }
+    </div>
+
+    <div class="lesson-footer__nav-col lesson-footer__nav-col--center">
+      <a routerLink="/academy/home" class="lesson-nav-home-btn">
+        <span class="material-symbols-outlined" style="font-size: 16px;">apps</span>
+        Volver a Academy Home
+      </a>
+    </div>
+
+    <div class="lesson-footer__nav-col lesson-footer__nav-col--next">
+      @if (nextLesson) {
+        <a [routerLink]="nextLesson.path" class="lesson-nav-btn lesson-nav-btn--next">
+          <span class="lesson-nav-btn__eyebrow">Siguiente Lección →</span>
+          <span class="lesson-nav-btn__title">{{ nextLesson.title }}</span>
+        </a>
+      }
+    </div>
+  </nav>
+
+</footer>
