@@ -1,148 +1,151 @@
-<div class="presentation-container">
-  <div class="back-to-menu">
-    <a routerLink="/academy/home" class="back-btn">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Anterior
-    </a>
-  </div>
+<div class="living-doc" role="main">
+  @if (lesson) {
+    <!-- ── 1. Unified Technical Header ── -->
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      subtitle="El modelo no ve tu aplicación. Solo ve lo que tú decides enviarle."
+    />
 
-  <div class="slide-wrapper">
-    <div class="progress-bar-container">
-      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
-    </div>
-
-    <!-- Slide 1: Intro -->
-    <div class="slide" [class.active]="currentSlide() === 0">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 03: Ingeniería de Contexto
-        </div>
-        <h1>Anatomía del Contexto</h1>
-        <p class="subtitle">El modelo no ve tu aplicación. Solo ve lo que tú decides enviarle.</p>
-      </div>
-
-      <div class="slide-content">
-        <h2>La ilusión de omnisciencia</h2>
-        <p>Como humanos, al interactuar con una interfaz asumimos que el modelo "sabe" qué página estamos viendo, qué usuario somos o qué datos acabamos de guardar. <strong>Esto es falso.</strong> Un LLM en producción es una API <em>stateless</em> (sin memoria). Cada inferencia arranca desde cero.</p>
-        
-        <div class="warning-box">
-          <strong>Paradigma Base:</strong> Ingeniería de Contexto no es "escribir párrafos largos en el prompt". Es el proceso arquitectónico de capturar el estado dinámico de tu aplicación y transformarlo en texto estructurado <em>antes</em> de tocar la API del LLM.
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 2: Fuentes de Contexto -->
-    <div class="slide" [class.active]="currentSlide() === 1">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 03: Ingeniería de Contexto
-        </div>
-        <h1>Las Seis Fuentes de Verdad</h1>
-        <p class="subtitle">El origen de la información</p>
-      </div>
-
-      <div class="slide-content">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-          <div class="tech-card" style="padding: 24px;">
-            <div class="tech-meta" style="position: static; margin-bottom: 8px;">1. Static Context</div>
-            <p style="font-size: 14px; margin: 0; color: #c7c4d7;">Reglas de negocio fijas, directivas del sistema (System Prompts). No cambian entre peticiones.</p>
-          </div>
-          <div class="tech-card" style="padding: 24px;">
-            <div class="tech-meta" style="position: static; margin-bottom: 8px;">2. User Context</div>
-            <p style="font-size: 14px; margin: 0; color: #c7c4d7;">Perfil, permisos, preferencias o ubicación del usuario ejecutando la acción.</p>
-          </div>
-          <div class="tech-card" style="padding: 24px;">
-            <div class="tech-meta" style="position: static; margin-bottom: 8px;">3. Application State</div>
-            <p style="font-size: 14px; margin: 0; color: #c7c4d7;">Datos de la pantalla actual: "El usuario está viendo la factura #1024".</p>
-          </div>
-          <div class="tech-card" style="padding: 24px;">
-            <div class="tech-meta" style="position: static; margin-bottom: 8px;">4. Retrieved Context</div>
-            <p style="font-size: 14px; margin: 0; color: #c7c4d7;">Conocimiento dinámico inyectado desde bases vectoriales (RAG) o búsquedas tradicionales.</p>
-          </div>
-          <div class="tech-card" style="padding: 24px;">
-            <div class="tech-meta" style="position: static; margin-bottom: 8px;">5. Tool Context</div>
-            <p style="font-size: 14px; margin: 0; color: #c7c4d7;">Resultados de funciones que el modelo acaba de ejecutar en el background.</p>
-          </div>
-          <div class="tech-card" style="padding: 24px;">
-            <div class="tech-meta" style="position: static; margin-bottom: 8px;">6. Conversation Context</div>
-            <p style="font-size: 14px; margin: 0; color: #c7c4d7;">El historial de mensajes previos. (Que a menudo es el que más basura acumula).</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 3: Disponible vs Útil -->
-    <div class="slide" [class.active]="currentSlide() === 2">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 03: Ingeniería de Contexto
-        </div>
-        <h1>Disponible vs. Útil</h1>
-        <p class="subtitle">El síndrome de Diógenes en el Prompt</p>
-      </div>
-
-      <div class="slide-content">
-        <p>El error de ingeniería más común es concatenar las seis fuentes de contexto sin discriminar y enviarlas al LLM.</p>
-        
-        <div class="tech-grid" style="margin-top: 24px;">
-          <div class="tech-card">
-            <div class="tech-icon" style="color: #ef4444;">🚨</div>
-            <h3>Contexto Disponible</h3>
-            <p>Toda la información a la que tu backend tiene acceso (El perfil completo de BD del usuario, los 50 mensajes previos, todo el contenido de la página actual).</p>
-          </div>
-          
-          <div class="tech-card active">
-            <div class="tech-icon" style="color: #6366f1;">🎯</div>
-            <h3>Contexto Útil</h3>
-            <p><strong>¿Qué información necesita realmente el modelo para resolver ESTA tarea?</strong> Si la tarea es resumir un ticket, no necesitas su historial de compras de hace 2 años.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 4: Conclusion -->
-    <div class="slide" [class.active]="currentSlide() === 3">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 03: Ingeniería de Contexto
-        </div>
-        <h1>Conclusión</h1>
-        <p class="subtitle">Ingeniería del conocimiento</p>
-      </div>
-
-      <div class="slide-content">
-        <div class="tech-card active" style="margin-bottom: 48px;">
-          <div class="tech-icon" style="color: #6366f1;">🧠</div>
-          <h3>La Pregunta Fundamental</h3>
-          <p>Antes de pasar a la siguiente lección, recuerda esto:</p>
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #6366f1; padding: 24px; border-radius: 4px; margin-top: 16px; margin-bottom: 16px;">
-            <p style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #e4e1ed; margin: 0;">
-              "Si le dieras esta misma información (y nada más) a un colega humano recién contratado... ¿podría resolver el problema?"
-            </p>
-          </div>
-          <p>Si la respuesta es no, te falta contexto útil. Si la respuesta es "se confundiría con tanta información", tienes demasiada basura disponible.</p>
-        </div>
-        
-        <div style="text-align: center;">
-          <a routerLink="/academy/modules/m03-context-engineering/lesson-02-assembly" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
-            Siguiente Lección: Ensamblaje y Priorización &rarr;
+    <!-- ── 2. Table of Contents / Outline Navigation ── -->
+    <nav class="living-doc__outline" aria-label="Índice de la lección">
+      <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
+      <div class="living-doc__outline-items">
+        @for (sec of doc.sections; track sec.id) {
+          <a [href]="'#' + sec.id" class="living-doc__outline-link">
+            {{ sec.title }}
           </a>
-        </div>
+        }
       </div>
+    </nav>
+
+    <!-- ── 3. Flowing Sections ── -->
+    <div class="living-doc__sections">
+      @for (sec of doc.sections; track sec.id) {
+        <section class="living-doc-section" [id]="sec.id" [attr.aria-label]="sec.title">
+          
+          <div class="living-doc-section__header">
+            <h2 class="living-doc-section__title">{{ sec.title }}</h2>
+            @if (sec.subtitle) {
+              <p class="living-doc-section__subtitle">{{ sec.subtitle }}</p>
+            }
+          </div>
+
+          <div class="living-doc-section__body">
+            @for (block of sec.blocks; track $index) {
+              
+              <!-- Paragraph Block -->
+              @if (block.type === 'PARAGRAPH') {
+                <p class="living-doc-paragraph" [class.living-doc-paragraph--lead]="block.lead">
+                  {{ block.text }}
+                </p>
+              }
+
+              <!-- Comparison Block -->
+              @else if (block.type === 'COMPARISON') {
+                <app-lesson-comparison [comparison]="block" />
+              }
+
+              <!-- Callout Block -->
+              @else if (block.type === 'CALLOUT') {
+                <case-callout
+                  [variant]="block.variant"
+                  [title]="block.title"
+                  [message]="block.message"
+                />
+              }
+
+              <!-- Code Block -->
+              @else if (block.type === 'CODE') {
+                <case-code-block
+                  [code]="block.code"
+                  [language]="block.language"
+                  [filename]="block.filename"
+                  [lineNumbers]="block.lineNumbers || false"
+                />
+              }
+
+              <!-- Example / Specification Block -->
+              @else if (block.type === 'EXAMPLE') {
+                <div class="living-doc-example">
+                  @if (block.title) {
+                    <div class="living-doc-example__header">
+                      <span class="material-symbols-outlined living-doc-example__icon" aria-hidden="true">data_object</span>
+                      <span class="living-doc-example__title">{{ block.title }}</span>
+                    </div>
+                  }
+                  <div class="living-doc-example__content">
+                    @if (block.content) {
+                      <ul class="living-doc-example__list">
+                        @for (item of (block.content); track item) {
+                          <li class="living-doc-example__item">
+                            <span class="living-doc-example__bullet">▸</span>
+                            <span>{{ item }}</span>
+                          </li>
+                        }
+                      </ul>
+                    }
+                  </div>
+                  @if (block.caption) {
+                    <div class="living-doc-example__caption">
+                      {{ block.caption }}
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Key Insights Block -->
+              @else if (block.type === 'KEY_INSIGHTS') {
+                <div class="living-doc-insights">
+                  <div class="living-doc-insights__header">
+                    <span class="material-symbols-outlined living-doc-insights__icon" aria-hidden="true">verified</span>
+                    <span class="living-doc-insights__title">{{ block.title || 'Key Insights de Ingeniería' }}</span>
+                  </div>
+                  <ul class="living-doc-insights__list">
+                    @for (item of block.items; track item) {
+                      <li class="living-doc-insights__item">
+                        <span class="material-symbols-outlined living-doc-insights__check" aria-hidden="true">check</span>
+                        <span>{{ item }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+
+              <!-- In-Flow Demo Reference -->
+              @else if (block.type === 'DEMO_REF') {
+                <div class="inflow-activity inflow-activity--demo">
+                  <div class="inflow-activity__icon-box">
+                    <span class="material-symbols-outlined inflow-activity__icon" aria-hidden="true">play_arrow</span>
+                  </div>
+                  <div class="inflow-activity__body">
+                    <div class="inflow-activity__tag">EXPERIMENTACIÓN GUIADA</div>
+                    <h3 class="inflow-activity__title">{{ block.title }}</h3>
+                    <p class="inflow-activity__desc">{{ block.description }}</p>
+                  </div>
+                  <div class="inflow-activity__action">
+                    <a [routerLink]="block.path" class="inflow-activity__link">
+                      <case-button variant="primary" size="sm" iconRight="arrow_forward">
+                        {{ block.actionLabel || 'Abrir Demo' }}
+                      </case-button>
+                    </a>
+                  </div>
+                </div>
+              }
+
+            }
+          </div>
+
+        </section>
+      }
     </div>
 
-    <!-- Bottom Controls -->
-    <div class="controls">
-      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-        &larr; Anterior
-      </button>
-      <div class="slide-counter">
-        {{ currentSlide() + 1 }} / {{ totalSlides }}
-      </div>
-      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-        Siguiente &rarr;
-      </button>
-    </div>
-
-  </div>
+    <!-- ── 4. Technical Footer Navigation & Completion ── -->
+    <app-lesson-footer
+      [lessonId]="lesson.id"
+      [nextLesson]="adjacentLessons.next"
+      [previousLesson]="adjacentLessons.previous"
+      [relatedDemo]="relatedDemo"
+    />
+  }
 </div>
