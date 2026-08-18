@@ -6,10 +6,10 @@
 .academy-home {
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--case-space-6) var(--case-space-6) var(--case-space-12);
+  padding: var(--case-space-8) var(--case-space-6) var(--case-space-16);
   display: flex;
   flex-direction: column;
-  gap: var(--case-space-6);
+  gap: var(--case-space-8);
   animation: case-fade-in var(--case-duration-enter) var(--case-ease-out) both;
 }
 
@@ -18,8 +18,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--case-space-6);
+  align-items: center;
+  gap: var(--case-space-8);
 }
 
 .academy-hero__info {
@@ -55,7 +55,7 @@
   font-weight: var(--case-weight-semibold);
   color: var(--case-text-primary);
   letter-spacing: var(--case-tracking-tight);
-  margin: 0 0 var(--case-space-1) 0;
+  margin: 0 0 var(--case-space-2) 0;
   line-height: var(--case-leading-tight);
 }
 
@@ -67,40 +67,46 @@
   margin: 0;
 }
 
-/* Progress Panel Widget */
+/* Progress Panel Widget — Enhanced Visual Presence */
 .academy-progress-panel {
-  width: 320px;
+  width: 360px;
   flex-shrink: 0;
+  border: var(--case-border-width) solid var(--case-border);
+  background-color: var(--case-surface-1);
 }
 
 .academy-progress-panel__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--case-space-3);
+  margin-bottom: var(--case-space-4);
 }
 
 .academy-progress-panel__label {
   font-family: var(--case-font-mono);
   font-size: var(--case-text-xs);
   color: var(--case-text-secondary);
-  font-weight: var(--case-weight-medium);
-  letter-spacing: var(--case-tracking-wide);
+  font-weight: var(--case-weight-semibold);
+  letter-spacing: var(--case-tracking-wider);
 }
 
 .academy-progress-panel__bar-container {
   display: flex;
   align-items: center;
-  gap: var(--case-space-3);
-  margin-bottom: var(--case-space-2);
+  gap: var(--case-space-4);
+  margin-bottom: var(--case-space-3);
+}
+
+.academy-progress-panel__bar-container case-progress-bar {
+  flex: 1;
 }
 
 .academy-progress-panel__percentage {
   font-family: var(--case-font-mono);
-  font-size: var(--case-text-xs);
+  font-size: var(--case-text-sm);
   color: var(--case-text-primary);
-  font-weight: var(--case-weight-semibold);
-  min-width: 32px;
+  font-weight: var(--case-weight-bold);
+  min-width: 36px;
   text-align: right;
 }
 
@@ -108,9 +114,10 @@
   display: flex;
   justify-content: space-between;
   font-family: var(--case-font-mono);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--case-text-muted);
   letter-spacing: var(--case-tracking-wider);
+  font-weight: var(--case-weight-medium);
 }
 
 /* ── 2. Session / Continue Learning Card ── */
@@ -124,7 +131,8 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--case-space-6);
-  border-color: var(--case-border);
+  border: var(--case-border-width) solid var(--case-border);
+  background-color: var(--case-surface-1);
   transition: border-color var(--case-transition-fast);
 }
 
@@ -180,8 +188,7 @@
 .academy-curriculum {
   display: flex;
   flex-direction: column;
-  gap: var(--case-space-4);
-  margin-top: var(--case-space-2);
+  gap: var(--case-space-5);
 }
 
 .academy-curriculum__header {
@@ -208,28 +215,39 @@
 .academy-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--case-space-4);
+  gap: var(--case-space-5);
   align-items: stretch;
 }
 
-/* Module Card */
+/* Module Card — Tonal Neutrality with Restrained Accent */
 .module-card {
   display: flex;
   flex-direction: column;
   height: 100%;
   position: relative;
+  border: var(--case-border-width) solid var(--case-border);
+  background-color: var(--case-surface-1);
   transition:
     border-color var(--case-transition-fast),
     background-color var(--case-transition-fast);
 }
 
+.module-card:hover {
+  border-color: var(--case-border-strong);
+}
+
+/* Solo el módulo activo lleva borde de acento Electric Blue */
 .module-card--current {
   border-color: var(--case-accent);
-  background-color: var(--case-surface-2);
+}
+
+.module-card--current:hover {
+  border-color: var(--case-accent-hover, var(--case-accent));
 }
 
 .module-card--locked {
   opacity: var(--case-opacity-muted);
+  background-color: var(--case-surface-0);
 }
 
 .module-card__top {
@@ -249,7 +267,7 @@
 }
 
 .module-card--current .module-card__order {
-  color: var(--case-text-primary);
+  color: var(--case-text-secondary);
 }
 
 .module-card__badge-icon {
@@ -336,6 +354,7 @@
   }
   .academy-hero {
     flex-direction: column;
+    align-items: stretch;
   }
   .academy-progress-panel {
     width: 100%;

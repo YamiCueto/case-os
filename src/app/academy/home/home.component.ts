@@ -76,25 +76,60 @@ export class HomeComponent {
     return this.modules.reduce((sum, m) => sum + (m.lessons?.length || 0), 0);
   });
 
-  // ViewModel reactivo para la interfaz
+  // ViewModel reactivo para la interfaz con resolución coherente de estados curriculares
   readonly viewModules = computed<ViewModule[]>(() => {
     const prog = this.progress();
+    const completedLessonSet = new Set(prog.completedLessons || []);
+
+    // 1. Identificar el módulo activo real:
+    // - Si el usuario tiene una lección visitada, es el módulo que la contiene.
+    // - De lo contrario, es el primer módulo que aún no está completado.
+    let activeModuleId: string | null = null;
+    if (prog.lastVisitedLessonId) {
+      const mod = this.modules.find(m => m.lessons?.some(l => l.id === prog.lastVisitedLessonId));
+      if (mod && mod.state !== 'LOCKED') {
+        activeModuleId = mod.id;
+      }
+    }
+
+    if (!activeModuleId) {
+      for (const mod of this.modules) {
+        if (mod.state === 'LOCKED') continue;
+        const isModFinished = (mod.lessons?.length || 0) > 0 && mod.lessons.every(l => completedLessonSet.has(l.id));
+        if (!isModFinished) {
+          activeModuleId = mod.id;
+          break;
+        }
+      }
+    }
+
+    // Fallback inicial: si no hay lecciones o todos están listos, primer módulo
+    if (!activeModuleId && this.modules.length > 0) {
+      activeModuleId = this.modules[0].id;
+    }
+
     return this.modules.map(mod => {
       const lessonCount = mod.lessons?.filter(l => l.type === 'LESSON' || !l.type).length || 0;
       const demoCount = mod.lessons?.filter(l => l.type === 'DEMO').length || 0;
       const labCount = mod.lessons?.filter(l => l.type === 'LAB').length || 0;
 
-      // Determinación de estado basada en la configuración real y progreso
-      let uiState: 'COMPLETED' | 'CURRENT' | 'NEXT' | 'LOCKED' =
-        mod.state === 'LIVE' ? 'CURRENT' : (mod.state === 'LOCKED' ? 'LOCKED' : 'NEXT');
+      const isAllLessonsCompleted = (mod.lessons?.length || 0) > 0 && mod.lessons.every(l => completedLessonSet.has(l.id));
 
-      if (mod.state === 'LIVE' && mod.order < 9 && prog.completionPercentage > (mod.order * 10)) {
+      let uiState: 'COMPLETED' | 'CURRENT' | 'NEXT' | 'LOCKED' = 'NEXT';
+
+      if (mod.state === 'LOCKED') {
+        uiState = 'LOCKED';
+      } else if (isAllLessonsCompleted) {
         uiState = 'COMPLETED';
+      } else if (mod.id === activeModuleId) {
+        uiState = 'CURRENT';
+      } else {
+        uiState = 'NEXT';
       }
 
       let badgeVariant: BadgeVariant = 'default';
-      let badgeLabel = 'BLOQUEADO';
-      let badgeIcon = 'lock';
+      let badgeLabel = 'SIGUIENTE';
+      let badgeIcon = 'arrow_forward';
 
       if (uiState === 'COMPLETED') {
         badgeVariant = 'success';
@@ -104,10 +139,10 @@ export class HomeComponent {
         badgeVariant = 'accent';
         badgeLabel = 'EN CURSO';
         badgeIcon = 'radio_button_checked';
-      } else if (uiState === 'NEXT') {
+      } else if (uiState === 'LOCKED') {
         badgeVariant = 'default';
-        badgeLabel = 'SIGUIENTE';
-        badgeIcon = 'arrow_forward';
+        badgeLabel = 'BLOQUEADO';
+        badgeIcon = 'lock';
       }
 
       return {
