@@ -101,22 +101,17 @@ export const routes: Routes = [
         loadComponent: () => import('./framework/framework.component').then(m => m.FrameworkComponent)
       },
       {
-        path: '',
-        loadComponent: () => import('./core/layout/academy-layout/academy-layout.component').then(m => m.AcademyLayoutComponent),
-        children: [
-
-          {
-            path: 'installation-guides',
-            loadComponent: () => import('./installation-guides/installation-guides.component').then(m => m.InstallationGuidesComponent)
-          },
-          {
-            path: 'tech-stack',
-            loadComponent: () => import('./tech-stack/tech-stack.component').then(m => m.TechStackComponent)
-          },
-          {
-            path: 'academy/home',
-            loadComponent: () => import('./academy/home/home.component').then(m => m.HomeComponent)
-          },
+        path: 'installation-guides',
+        loadComponent: () => import('./installation-guides/installation-guides.component').then(m => m.InstallationGuidesComponent)
+      },
+      {
+        path: 'tech-stack',
+        loadComponent: () => import('./tech-stack/tech-stack.component').then(m => m.TechStackComponent)
+      },
+      {
+        path: 'academy/home',
+        loadComponent: () => import('./academy/home/home.component').then(m => m.HomeComponent)
+      },
           {
             path: 'academy/roadmap',
             loadComponent: () => import('./academy/roadmap/roadmap.component').then(m => m.RoadmapComponent)
@@ -297,11 +292,9 @@ export const routes: Routes = [
             path: 'academy/modules/m09-architecture/demo-architecture-builder',
             loadComponent: () => import('./academy/modules/m09-architecture/demo-architecture-builder/demo-architecture-builder').then(m => m.DemoArchitectureBuilder)
           },
-          {
-            path: 'academy/modules/m09-architecture/lab-09-architecture-blueprint',
-            loadComponent: () => import('./academy/modules/m09-architecture/lab-09-architecture-blueprint/lab-09-architecture-blueprint').then(m => m.Lab09ArchitectureBlueprint)
-          }
-        ]
+      {
+        path: 'academy/modules/m09-architecture/lab-09-architecture-blueprint',
+        loadComponent: () => import('./academy/modules/m09-architecture/lab-09-architecture-blueprint/lab-09-architecture-blueprint').then(m => m.Lab09ArchitectureBlueprint)
       }
     ]
   },

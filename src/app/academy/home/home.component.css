@@ -1,0 +1,362 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.academy-home {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--case-space-6) var(--case-space-6) var(--case-space-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-6);
+  animation: case-fade-in var(--case-duration-enter) var(--case-ease-out) both;
+}
+
+/* ── 1. Hero Header ── */
+.academy-hero {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--case-space-6);
+}
+
+.academy-hero__info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.academy-hero__eyebrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-secondary);
+  letter-spacing: var(--case-tracking-wider);
+  margin-bottom: var(--case-space-2);
+}
+
+.academy-hero__eyebrow-accent {
+  color: var(--case-accent);
+  font-weight: var(--case-weight-semibold);
+}
+
+.academy-hero__eyebrow-sep {
+  color: var(--case-border-strong);
+  margin: 0 var(--case-space-2);
+}
+
+.academy-hero__title {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-2xl);
+  font-weight: var(--case-weight-semibold);
+  color: var(--case-text-primary);
+  letter-spacing: var(--case-tracking-tight);
+  margin: 0 0 var(--case-space-1) 0;
+  line-height: var(--case-leading-tight);
+}
+
+.academy-hero__subtitle {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-base);
+  color: var(--case-text-secondary);
+  line-height: var(--case-leading-normal);
+  margin: 0;
+}
+
+/* Progress Panel Widget */
+.academy-progress-panel {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+.academy-progress-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--case-space-3);
+}
+
+.academy-progress-panel__label {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-secondary);
+  font-weight: var(--case-weight-medium);
+  letter-spacing: var(--case-tracking-wide);
+}
+
+.academy-progress-panel__bar-container {
+  display: flex;
+  align-items: center;
+  gap: var(--case-space-3);
+  margin-bottom: var(--case-space-2);
+}
+
+.academy-progress-panel__percentage {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-primary);
+  font-weight: var(--case-weight-semibold);
+  min-width: 32px;
+  text-align: right;
+}
+
+.academy-progress-panel__footer {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--case-font-mono);
+  font-size: 10px;
+  color: var(--case-text-muted);
+  letter-spacing: var(--case-tracking-wider);
+}
+
+/* ── 2. Session / Continue Learning Card ── */
+.academy-session {
+  width: 100%;
+}
+
+.academy-session-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--case-space-6);
+  border-color: var(--case-border);
+  transition: border-color var(--case-transition-fast);
+}
+
+.academy-session-card:hover {
+  border-color: var(--case-border-strong);
+}
+
+.academy-session-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-1);
+  min-width: 0;
+}
+
+.academy-session-card__eyebrow {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-accent);
+  font-weight: var(--case-weight-semibold);
+  letter-spacing: var(--case-tracking-wider);
+  text-transform: uppercase;
+}
+
+.academy-session-card__title {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-lg);
+  font-weight: var(--case-weight-semibold);
+  color: var(--case-text-primary);
+  margin: 0;
+  line-height: var(--case-leading-tight);
+}
+
+.academy-session-card__lesson {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-sm);
+  color: var(--case-text-secondary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.academy-session-card__action {
+  flex-shrink: 0;
+}
+
+.academy-action-link {
+  text-decoration: none;
+  display: inline-flex;
+}
+
+/* ── 3. Curriculum Grid ── */
+.academy-curriculum {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-4);
+  margin-top: var(--case-space-2);
+}
+
+.academy-curriculum__header {
+  display: flex;
+  align-items: center;
+  gap: var(--case-space-2);
+}
+
+.academy-curriculum__header-icon {
+  font-size: var(--case-icon-sm);
+  color: var(--case-text-muted);
+}
+
+.academy-curriculum__header-title {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  font-weight: var(--case-weight-semibold);
+  color: var(--case-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--case-tracking-wider);
+  margin: 0;
+}
+
+.academy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--case-space-4);
+  align-items: stretch;
+}
+
+/* Module Card */
+.module-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  transition:
+    border-color var(--case-transition-fast),
+    background-color var(--case-transition-fast);
+}
+
+.module-card--current {
+  border-color: var(--case-accent);
+  background-color: var(--case-surface-2);
+}
+
+.module-card--locked {
+  opacity: var(--case-opacity-muted);
+}
+
+.module-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--case-space-3);
+}
+
+.module-card__order {
+  font-family: var(--case-font-mono);
+  font-size: 22px;
+  font-weight: var(--case-weight-bold);
+  color: var(--case-text-muted);
+  line-height: 1;
+  transition: color var(--case-transition-fast);
+}
+
+.module-card--current .module-card__order {
+  color: var(--case-text-primary);
+}
+
+.module-card__badge-icon {
+  font-size: 11px;
+  margin-right: 2px;
+  vertical-align: middle;
+}
+
+.module-card__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-2);
+  margin-bottom: var(--case-space-4);
+  flex: 1;
+}
+
+.module-card__title {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-md);
+  font-weight: var(--case-weight-medium);
+  color: var(--case-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--case-space-2);
+  line-height: var(--case-leading-tight);
+}
+
+.module-card__icon {
+  font-size: var(--case-icon-sm);
+  color: var(--case-text-muted);
+  flex-shrink: 0;
+}
+
+.module-card--current .module-card__icon {
+  color: var(--case-accent);
+}
+
+.module-card__description {
+  font-family: var(--case-font-sans);
+  font-size: var(--case-text-sm);
+  color: var(--case-text-secondary);
+  line-height: var(--case-leading-normal);
+  margin: 0;
+}
+
+.module-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-1);
+  padding: var(--case-space-3) 0;
+  border-top: var(--case-border-width) solid var(--case-border);
+  margin-top: auto;
+}
+
+.module-card__meta-item {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-muted);
+}
+
+.module-card__meta-val {
+  color: var(--case-text-primary);
+  font-weight: var(--case-weight-medium);
+}
+
+.module-card__footer {
+  padding-top: var(--case-space-3);
+  margin-top: auto;
+}
+
+.module-card__action-link {
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+/* ── Responsive Rules ── */
+@media (max-width: 1024px) {
+  .academy-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .academy-hero {
+    flex-direction: column;
+  }
+  .academy-progress-panel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .academy-grid {
+    grid-template-columns: 1fr;
+  }
+  .academy-session-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .academy-session-card__action {
+    width: 100%;
+  }
+  .academy-action-link {
+    width: 100%;
+  }
+  .academy-action-link case-button {
+    width: 100%;
+  }
+}

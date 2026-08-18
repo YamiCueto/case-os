@@ -118,18 +118,28 @@ export type ButtonType = 'button' | 'submit' | 'reset';
     .case-btn__icon .material-symbols-outlined {
       font-size: var(--case-icon-sm);
     }
-  `]
+
+    /* — Full width — */
+    :host([fullWidth]) .case-btn {
+      width: 100%;
+    }
+  `],
+  host: {
+    '[attr.fullWidth]': 'fullWidth || null',
+  }
 })
 export class CaseButtonComponent {
   @Input() variant: ButtonVariant = 'primary';
   @Input() size: ButtonSize = 'md';
   @Input() disabled = false;
+  @Input() fullWidth = false;
   @Input() type: ButtonType = 'button';
   @Input() iconLeft?: string;
   @Input() iconRight?: string;
 
   get buttonClass(): string {
-    return ['case-btn', `case-btn--${this.variant}`, `case-btn--${this.size}`]
+    return ['case-btn', `case-btn--${this.variant}`, `case-btn--${this.size}`, this.fullWidth ? 'case-btn--full-width' : '']
+      .filter(Boolean)
       .join(' ');
   }
 }

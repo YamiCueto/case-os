@@ -1,152 +1,171 @@
-﻿<div class="max-w-6xl mx-auto space-y-8">
-  <!-- Header / Hero -->
-  <div class="flex flex-col gap-4">
-    <div>
-      <div class="font-label-mono text-[10px] text-slate-400 mb-2 tracking-wider flex items-center gap-2">
-        <span class="text-indigo-400">AI ENGINEERING PROGRAM</span>
-        <span class="text-slate-600">|</span>
-        <span>09 MODULES</span>
-        <span class="text-slate-600">|</span>
-        <span>FOUNDATIONS &rarr; ARCHITECTURE</span>
-      </div>
-      <h1 class="font-display text-3xl font-semibold text-white mb-2 tracking-tight">CASE Academy</h1>
-      <p class="font-body-base text-sm text-slate-400">AI Engineering education for Software Engineers.</p>
-    </div>
+<div class="academy-home" role="main">
+
+  <!-- ── 1. Header / Hero Section ── -->
+  <section class="academy-hero" aria-label="Información del programa y progreso">
     
+    <div class="academy-hero__info">
+      <div class="academy-hero__eyebrow">
+        <span class="academy-hero__eyebrow-accent">PROGRAMA DE INGENIERÍA DE IA</span>
+        <span class="academy-hero__eyebrow-sep" aria-hidden="true">|</span>
+        <span>09 MÓDULOS</span>
+        <span class="academy-hero__eyebrow-sep" aria-hidden="true">|</span>
+        <span>FUNDAMENTOS → ARQUITECTURA</span>
+      </div>
+      <h1 class="academy-hero__title">CASE Academy</h1>
+      <p class="academy-hero__subtitle">Educación en Ingeniería de IA para Software Engineers.</p>
+    </div>
+
     <!-- Progress Overview Widget -->
-    <div *ngIf="progress() as prog" class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-4 w-full md:w-[320px]">
-      <div class="flex justify-between items-center mb-2">
-        <span class="font-label-mono text-xs text-slate-400 uppercase">Your Progress</span>
-        <span class="font-label-mono text-[10px] text-white bg-[#1F1F1F] px-1.5 py-0.5 rounded-[2px]">
-          {{ prog.completedLessons.length }} lessons
-        </span>
+    <case-panel [elevation]="1" padding="md" class="academy-progress-panel">
+      <div class="academy-progress-panel__header">
+        <span class="academy-progress-panel__label">TU PROGRESO</span>
+        <case-badge variant="default" [mono]="true">
+          {{ completedModulesCount() }}/{{ totalModules() }} MÓDULOS
+        </case-badge>
       </div>
-      <div class="flex items-center gap-2 mb-1">
-        <div class="flex-1 h-1 bg-[#1F1F1F] rounded-full overflow-hidden">
-          <div class="h-full bg-indigo-500 transition-all duration-500" [style.width.%]="prog.completionPercentage"></div>
+
+      <div class="academy-progress-panel__bar-container">
+        <case-progress-bar
+          [value]="progress().completionPercentage"
+          [max]="100"
+          height="xs"
+          variant="accent"
+        />
+        <span class="academy-progress-panel__percentage">{{ progress().completionPercentage }}%</span>
+      </div>
+
+      <div class="academy-progress-panel__footer">
+        <span class="academy-progress-panel__stage">FUNDAMENTOS</span>
+        <span class="academy-progress-panel__stage">ARQUITECTURA</span>
+      </div>
+    </case-panel>
+
+  </section>
+
+  <!-- ── 2. Continue Learning Hero Card ── -->
+  <section class="academy-session" aria-label="Sesión de aprendizaje activa">
+    @if (progress().lastVisitedLessonPath) {
+      <case-panel [elevation]="2" padding="lg" class="academy-session-card">
+        <div class="academy-session-card__body">
+          <div class="academy-session-card__eyebrow">CONTINUAR APRENDIZAJE</div>
+          <h2 class="academy-session-card__title">{{ lastModuleTitle() || 'CASE Academy' }}</h2>
+          <p class="academy-session-card__lesson">{{ progress().lastVisitedLessonTitle }}</p>
         </div>
-        <span class="font-code-sm text-[10px] text-white">{{ prog.completionPercentage }}%</span>
-      </div>
-      <div class="flex justify-between font-code-sm text-[10px] text-slate-500 mt-2">
-        <span>FOUNDATIONS</span>
-        <span>ARCHITECTURE</span>
-      </div>
-    </div>
-  </div>
+        <div class="academy-session-card__action">
+          <a [routerLink]="progress().lastVisitedLessonPath" class="academy-action-link">
+            <case-button variant="primary" size="md" iconRight="arrow_forward">
+              Continuar Sesión
+            </case-button>
+          </a>
+        </div>
+      </case-panel>
+    } @else {
+      <case-panel [elevation]="2" padding="lg" class="academy-session-card">
+        <div class="academy-session-card__body">
+          <div class="academy-session-card__eyebrow">NUEVO INGENIERO</div>
+          <h2 class="academy-session-card__title">Empezar CASE Academy</h2>
+          <p class="academy-session-card__lesson">Comienza tu recorrido con 01. Fundamentos de IA</p>
+        </div>
+        <div class="academy-session-card__action">
+          <a routerLink="/academy/modules/m01-ai-foundations/lesson-01-probabilidad" class="academy-action-link">
+            <case-button variant="primary" size="md" iconRight="arrow_forward">
+              Comenzar Curso
+            </case-button>
+          </a>
+        </div>
+      </case-panel>
+    }
+  </section>
 
-  <!-- Continue Learning Hero -->
-  <div *ngIf="progress()?.lastVisitedLessonPath" class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-6 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-indigo-500 transition-colors">
-    <div class="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
-    <div class="relative z-10 flex-1">
-      <div class="font-label-mono text-[10px] text-indigo-400 uppercase mb-2 tracking-wider">Continue Learning</div>
-      <h2 class="font-headline-md text-xl font-medium text-white mb-1">{{ lastModuleTitle() || 'CASE Academy' }}</h2>
-      <p class="font-code-sm text-[13px] text-slate-400">{{ progress()?.lastVisitedLessonTitle }}</p>
-    </div>
-    <a [routerLink]="progress()?.lastVisitedLessonPath" class="relative z-10 bg-indigo-600 text-white font-body-sm text-sm px-6 py-2.5 rounded-[2px] flex items-center justify-center gap-2 hover:bg-indigo-500 transition-colors whitespace-nowrap self-start md:self-center">
-      Resume Session
-      <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-    </a>
-  </div>
-
-  <div *ngIf="!progress()?.lastVisitedLessonPath" class="bg-[#0A0A0A] border border-[#1F1F1F] rounded-[2px] p-6 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-indigo-500 transition-colors">
-    <div class="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
-    <div class="relative z-10 flex-1">
-      <div class="font-label-mono text-[10px] text-indigo-400 uppercase mb-2 tracking-wider">Nuevo Usuario</div>
-      <h2 class="font-headline-md text-xl font-medium text-white mb-1">Empezar Academy</h2>
-      <p class="font-code-sm text-[13px] text-slate-400">Comienza tu recorrido con AI Foundations</p>
-    </div>
-    <a routerLink="/academy/modules/m01-ai-foundations/lesson-01-probabilidad" class="relative z-10 bg-indigo-600 text-white font-body-sm text-sm px-6 py-2.5 rounded-[2px] flex items-center justify-center gap-2 hover:bg-indigo-500 transition-colors whitespace-nowrap self-start md:self-center">
-      Comenzar Curso
-      <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-    </a>
-  </div>
-
-  <!-- Curriculum Roadmap & Grid -->
-  <div>
-    <h3 class="font-label-mono text-[11px] text-slate-400 uppercase tracking-wider mb-6 flex items-center gap-2">
-      <span class="material-symbols-outlined text-[14px]">route</span>
-      Learning Path Progression
-    </h3>
+  <!-- ── 3. Learning Path Progression ── -->
+  <section class="academy-curriculum" aria-label="Progreso curricular de módulos">
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div *ngFor="let mod of viewModules()" 
-           class="rounded-[2px] p-5 flex flex-col h-full relative overflow-hidden transition-all group"
-           [ngClass]="{
-             'bg-[#0A0A0A] border border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.15)]': mod.uiState === 'CURRENT',
-             'bg-[#0A0A0A] border border-[#1F1F1F] hover:border-[#333]': mod.uiState === 'COMPLETED' || mod.uiState === 'NEXT',
-             'bg-[#050505] border border-[#1F1F1F] opacity-60': mod.uiState === 'LOCKED'
-           }">
-        
-        <div *ngIf="mod.uiState === 'CURRENT'" class="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
-        
-        <div class="flex justify-between items-start mb-4 relative z-10">
-          <span class="font-label-mono text-[24px] font-bold transition-colors"
-                [ngClass]="{
-                  'text-white': mod.uiState === 'CURRENT',
-                  'text-[#353534] group-hover:text-[#454747]': mod.uiState === 'COMPLETED' || mod.uiState === 'NEXT',
-                  'text-[#1F1F1F]': mod.uiState === 'LOCKED'
-                }">
-            {{ mod.formattedOrder }}
-          </span>
-          
-          <!-- Badges based on state -->
-          <span *ngIf="mod.uiState === 'COMPLETED'" class="font-label-mono text-[10px] text-[#22c55e] bg-[#22c55e]/10 px-2 py-1 rounded-[2px] border border-[#22c55e]/20 flex items-center gap-1">
-            <span class="material-symbols-outlined text-[10px]">check</span> COMPLETED
-          </span>
-          <span *ngIf="mod.uiState === 'CURRENT'" class="font-label-mono text-[10px] text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded-[2px] border border-indigo-500/30 flex items-center gap-1">
-            <span class="material-symbols-outlined text-[10px]">radio_button_checked</span> CURRENT
-          </span>
-          <span *ngIf="mod.uiState === 'NEXT'" class="font-label-mono text-[10px] text-white bg-[#1F1F1F] px-2 py-1 rounded-[2px] border border-[#353534] flex items-center gap-1">
-            <span class="material-symbols-outlined text-[10px]">arrow_forward</span> NEXT
-          </span>
-          <span *ngIf="mod.uiState === 'LOCKED'" class="font-label-mono text-[10px] text-slate-500 bg-transparent border border-[#1F1F1F] px-2 py-1 rounded-[2px] flex items-center gap-1">
-            <span class="material-symbols-outlined text-[10px]">lock</span> LOCKED
-          </span>
-        </div>
-        
-        <h4 class="font-headline-md text-[16px] mb-2 font-medium flex items-center gap-2 relative z-10"
-            [ngClass]="mod.uiState === 'LOCKED' ? 'text-slate-400' : 'text-white'">
-          <span class="material-symbols-outlined text-[16px]"
-                [ngClass]="mod.uiState === 'CURRENT' ? 'text-indigo-400' : (mod.uiState === 'LOCKED' ? 'text-[#353534]' : 'text-slate-400')">
-            {{ mod.uiState === 'LOCKED' ? 'lock' : 'folder' }}
-          </span>
-          {{ mod.title }}
-        </h4>
-        
-        <p class="font-body-sm text-sm mb-6 flex-1 relative z-10"
-           [ngClass]="mod.uiState === 'LOCKED' ? 'text-[#454747]' : 'text-slate-400'">
-          {{ mod.description }}
-        </p>
-        
-        <div class="mt-auto border-t border-[#1F1F1F] pt-4 relative z-10">
-          <ng-container *ngIf="mod.uiState !== 'LOCKED'">
-            <div class="font-label-mono text-[10px] text-slate-400 flex flex-col gap-1 mb-4">
-              <div class="flex justify-between"><span>Lessons:</span><span class="text-white">{{ mod.lessonCount }}</span></div>
-              <div class="flex justify-between"><span>Demos:</span><span class="text-white">{{ mod.demoCount }}</span></div>
-              <div class="flex justify-between"><span>Labs:</span><span class="text-white">{{ mod.labCount }}</span></div>
-            </div>
-            
-            <a *ngIf="mod.uiState === 'CURRENT'" [routerLink]="mod.lessons?.[0]?.path" class="w-full font-label-mono text-[11px] text-white bg-indigo-600 py-2 rounded-[2px] hover:bg-indigo-500 transition-colors flex items-center justify-center gap-2 cursor-pointer">
-              Continue Learning <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-            </a>
-            
-            <a *ngIf="mod.uiState === 'NEXT'" [routerLink]="mod.lessons?.[0]?.path" class="w-full font-label-mono text-[11px] text-white bg-transparent border border-[#1F1F1F] py-2 rounded-[2px] hover:bg-[#1F1F1F] transition-colors flex items-center justify-center gap-2 cursor-pointer">
-              Start Module
-            </a>
-            
-            <a *ngIf="mod.uiState === 'COMPLETED'" [routerLink]="mod.lessons?.[0]?.path" class="w-full font-label-mono text-[11px] text-white bg-[#1F1F1F] py-2 rounded-[2px] hover:bg-[#2a2a2a] transition-colors flex items-center justify-center gap-2 cursor-pointer">
-              Review Content
-            </a>
-          </ng-container>
-          
-          <ng-container *ngIf="mod.uiState === 'LOCKED'">
-            <div class="font-label-mono text-[10px] text-[#353534] flex flex-col gap-1">
-              <div class="flex justify-between"><span>Status:</span><span>Prerequisite Required</span></div>
-            </div>
-          </ng-container>
-        </div>
-        
-      </div>
+    <div class="academy-curriculum__header">
+      <span class="material-symbols-outlined academy-curriculum__header-icon" aria-hidden="true">route</span>
+      <h3 class="academy-curriculum__header-title">Ruta de Aprendizaje</h3>
     </div>
-  </div>
+
+    <!-- Modules Grid (3 columns on desktop) -->
+    <div class="academy-grid">
+      @for (mod of viewModules(); track mod.id) {
+        <case-panel
+          [elevation]="mod.uiState === 'CURRENT' ? 2 : 1"
+          padding="md"
+          class="module-card"
+          [class.module-card--current]="mod.uiState === 'CURRENT'"
+          [class.module-card--locked]="mod.uiState === 'LOCKED'"
+        >
+          <!-- Top Row: Number & Status Badge -->
+          <div class="module-card__top">
+            <span class="module-card__order">{{ mod.formattedOrder }}</span>
+            <case-badge [variant]="mod.badgeVariant" [mono]="true">
+              <span class="material-symbols-outlined module-card__badge-icon" aria-hidden="true">{{ mod.badgeIcon }}</span>
+              {{ mod.badgeLabel }}
+            </case-badge>
+          </div>
+
+          <!-- Module Identity -->
+          <div class="module-card__identity">
+            <h4 class="module-card__title">
+              <span class="material-symbols-outlined module-card__icon" aria-hidden="true">{{ mod.iconName }}</span>
+              {{ mod.title }}
+            </h4>
+            <p class="module-card__description">{{ mod.description }}</p>
+          </div>
+
+          <!-- Module Metadata Counts -->
+          <div class="module-card__meta">
+            @if (mod.uiState !== 'LOCKED') {
+              <div class="module-card__meta-item">
+                <span class="module-card__meta-key">Lecciones:</span>
+                <span class="module-card__meta-val">{{ mod.lessonCount }}</span>
+              </div>
+              <div class="module-card__meta-item">
+                <span class="module-card__meta-key">Demos:</span>
+                <span class="module-card__meta-val">{{ mod.demoCount }}</span>
+              </div>
+              <div class="module-card__meta-item">
+                <span class="module-card__meta-key">Labs:</span>
+                <span class="module-card__meta-val">{{ mod.labCount }}</span>
+              </div>
+            } @else {
+              <div class="module-card__meta-item">
+                <span class="module-card__meta-key">Requisito:</span>
+                <span class="module-card__meta-val">Módulo previo</span>
+              </div>
+            }
+          </div>
+
+          <!-- Contextual Action Footer -->
+          <div class="module-card__footer">
+            @if (mod.uiState === 'CURRENT') {
+              <a [routerLink]="mod.firstLessonPath" class="module-card__action-link">
+                <case-button variant="primary" size="sm" [fullWidth]="true" iconRight="arrow_forward">
+                  Continuar Módulo
+                </case-button>
+              </a>
+            } @else if (mod.uiState === 'NEXT') {
+              <a [routerLink]="mod.firstLessonPath" class="module-card__action-link">
+                <case-button variant="secondary" size="sm" [fullWidth]="true">
+                  Iniciar Módulo
+                </case-button>
+              </a>
+            } @else if (mod.uiState === 'COMPLETED') {
+              <a [routerLink]="mod.firstLessonPath" class="module-card__action-link">
+                <case-button variant="secondary" size="sm" [fullWidth]="true">
+                  Repasar Contenido
+                </case-button>
+              </a>
+            } @else {
+              <case-button variant="ghost" size="sm" [fullWidth]="true" [disabled]="true">
+                Bloqueado
+              </case-button>
+            }
+          </div>
+        </case-panel>
+      }
+    </div>
+
+  </section>
+
 </div>
