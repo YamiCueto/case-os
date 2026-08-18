@@ -1,160 +1,151 @@
-<div class="presentation-container">
-  <div class="back-to-menu">
-    <a routerLink="/academy/home" class="back-btn">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Anterior
-    </a>
-  </div>
+<div class="living-doc" role="main">
+  @if (lesson) {
+    <!-- ── 1. Unified Technical Header ── -->
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      subtitle="Tokens, Ventana de Contexto y Temperatura"
+    />
 
-  <div class="slide-wrapper">
-    <div class="progress-bar-container">
-      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
-    </div>
-
-    <!-- Slide 1: Tokens -->
-    <div class="slide" [class.active]="currentSlide() === 0">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 01: Fundamentos de IA
-        </div>
-        <h1>Anatomía de la Inferencia</h1>
-        <p class="subtitle">Tokens, Ventana de Contexto y Temperatura</p>
-      </div>
-
-      <div class="slide-content">
-        <div class="tech-card" style="margin-bottom: 24px;">
-          <div class="tech-icon" style="color: #10b981;">📝</div>
-          <h3>¿Qué es un Token?</h3>
-          <p>Un modelo de lenguaje no lee palabras completas, lee <strong>tokens</strong>. Un token es un fragmento de texto (una sílaba, una palabra corta o un símbolo).</p>
-          <ul class="tech-list" style="margin-top: 16px;">
-            <li>En inglés, 1 token ≈ ¾ de una palabra (100 tokens ≈ 75 palabras).</li>
-            <li>En español o código fuente, cada palabra se rompe en múltiples tokens, aumentando el costo.</li>
-            <li>El modelo convierte estos tokens en IDs para poder procesarlos matemáticamente.</li>
-          </ul>
-        </div>
-        
-        <div class="template-container" style="border-radius: 8px; border: 1px solid #1F1F1F;">
-          <div class="template-header" style="background: #1A1A1A; padding: 12px 24px; color: #e4e1ed;">
-            <h3 style="font-size: 14px; margin: 0; font-family: 'JetBrains Mono', monospace;">Ejemplo de Tokenización</h3>
-          </div>
-          <div style="padding: 24px; background: #0A0A0A;">
-            <p style="color: #c7c4d7; margin-bottom: 16px;">La frase "Ingeniería de software" podría dividirse así:</p>
-            <div class="prompt-text">["Ingen", "ier", "ía", " de", " software"]</div>
-            <p style="color: #908fa0; font-size: 14px; margin-top: 16px;">Por eso los LLMs son malos resolviendo anagramas: ¡no ven las letras, ven fragmentos estadísticos!</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 2: Context Window -->
-    <div class="slide" [class.active]="currentSlide() === 1">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 01: Fundamentos de IA
-        </div>
-        <h1>La Ventana de Contexto</h1>
-        <p class="subtitle">La memoria a corto plazo del modelo</p>
-      </div>
-
-      <div class="slide-content">
-        <div class="tech-card active" style="margin-bottom: 24px;">
-          <div class="tech-meta">Arquitectura</div>
-          <div class="tech-icon" style="color: #6366f1;">🪟</div>
-          <h3>Context Window Limit</h3>
-          <p>Todo modelo tiene un límite máximo de tokens que puede "ver" a la vez. Este límite incluye <strong>el prompt de entrada + la respuesta generada</strong>.</p>
-          <ul class="tech-list" style="margin-top: 16px;">
-            <li>GPT-3: 4K tokens.</li>
-            <li>Claude 3 / GPT-4o: 128K - 200K tokens.</li>
-            <li>Gemini 1.5 Pro: Hasta 2 Millones de tokens.</li>
-          </ul>
-        </div>
-
-        <div class="warning-box">
-          <strong>Restricción de Ingeniería:</strong> Meter 128K tokens de contexto en cada petición cuesta dinero y tiempo. "Context Engineering" se trata de mandar <em>solo lo estrictamente necesario</em> para resolver la tarea.
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 3: Temperatura -->
-    <div class="slide" [class.active]="currentSlide() === 2">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 01: Fundamentos de IA
-        </div>
-        <h1>Temperatura y Sampling</h1>
-        <p class="subtitle">Controlando el "Caos" Matemático</p>
-      </div>
-
-      <div class="slide-content">
-        <p style="margin-bottom: 32px;">Al predecir el siguiente token, el LLM calcula una distribución de probabilidad para todos los tokens posibles. La <strong>Temperatura</strong> manipula esas probabilidades en tiempo de ejecución.</p>
-        
-        <div class="tech-grid">
-          <!-- Temp 0 -->
-          <div class="tech-card">
-            <div class="tech-meta">Temp: 0.0</div>
-            <h3>Extracción y Código</h3>
-            <p>El modelo casi siempre elegirá el token más probable. Las respuestas son deterministas, repetitivas y precisas.</p>
-            <div style="margin-top: auto; padding-top: 24px;">
-              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #10b981;">Ideal para: RAG, código, JSON</span>
-            </div>
-          </div>
-          
-          <!-- Temp High -->
-          <div class="tech-card">
-            <div class="tech-meta" style="color: #f59e0b; border-color: #f59e0b;">Temp: 0.8+</div>
-            <h3>Creatividad</h3>
-            <p>Se achatan las probabilidades, permitiendo que tokens menos probables sean elegidos. Respuestas variadas.</p>
-            <div style="margin-top: auto; padding-top: 24px;">
-              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #f59e0b;">Ideal para: Lluvia de ideas, redacción</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 4: Costos -->
-    <div class="slide" [class.active]="currentSlide() === 3">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 01: Fundamentos de IA
-        </div>
-        <h1>Economía de la Inferencia</h1>
-        <p class="subtitle">Entendiendo cómo pagamos por usar la IA</p>
-      </div>
-
-      <div class="slide-content">
-        <div class="tech-card active" style="margin-bottom: 48px;">
-          <div class="tech-meta">FinOps</div>
-          <div class="tech-icon" style="color: #6366f1;">💸</div>
-          <h3>Tokens de Entrada vs Salida</h3>
-          <p>En el uso de APIs comerciales, el costo se divide en dos factores principales de computación:</p>
-          <ul class="tech-list" style="margin-top: 16px;">
-            <li><strong>Input Tokens (Prompt):</strong> Procesamiento en paralelo, más rápidos y baratos.</li>
-            <li><strong>Output Tokens (Generación):</strong> Procesamiento secuencial (auto-regresivo). Suelen costar entre 3x y 5x más.</li>
-          </ul>
-          <p style="margin-top: 24px; color: #908fa0; font-family: 'JetBrains Mono', monospace; font-size: 12px;">/* Diseñar prompts que devuelvan respuestas concisas (JSON estricto) no solo ahorra latencia, ahorra dinero */</p>
-        </div>
-
-        <div style="text-align: center;">
-          <a routerLink="/academy/modules/m01-ai-foundations/lesson-03-sistemas" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
-            Siguiente Lección: Modelos vs Sistemas &rarr;
+    <!-- ── 2. Table of Contents / Outline Navigation ── -->
+    <nav class="living-doc__outline" aria-label="Índice de la lección">
+      <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
+      <div class="living-doc__outline-items">
+        @for (sec of doc.sections; track sec.id) {
+          <a [href]="'#' + sec.id" class="living-doc__outline-link">
+            {{ sec.title }}
           </a>
-        </div>
+        }
       </div>
+    </nav>
+
+    <!-- ── 3. Flowing Sections ── -->
+    <div class="living-doc__sections">
+      @for (sec of doc.sections; track sec.id) {
+        <section class="living-doc-section" [id]="sec.id" [attr.aria-label]="sec.title">
+          
+          <div class="living-doc-section__header">
+            <h2 class="living-doc-section__title">{{ sec.title }}</h2>
+            @if (sec.subtitle) {
+              <p class="living-doc-section__subtitle">{{ sec.subtitle }}</p>
+            }
+          </div>
+
+          <div class="living-doc-section__body">
+            @for (block of sec.blocks; track $index) {
+              
+              <!-- Paragraph Block -->
+              @if (block.type === 'PARAGRAPH') {
+                <p class="living-doc-paragraph" [class.living-doc-paragraph--lead]="block.lead">
+                  {{ block.text }}
+                </p>
+              }
+
+              <!-- Comparison Block -->
+              @else if (block.type === 'COMPARISON') {
+                <app-lesson-comparison [comparison]="block" />
+              }
+
+              <!-- Callout Block -->
+              @else if (block.type === 'CALLOUT') {
+                <case-callout
+                  [variant]="block.variant"
+                  [title]="block.title"
+                  [message]="block.message"
+                />
+              }
+
+              <!-- Code Block -->
+              @else if (block.type === 'CODE') {
+                <case-code-block
+                  [code]="block.code"
+                  [language]="block.language"
+                  [filename]="block.filename"
+                  [lineNumbers]="block.lineNumbers || false"
+                />
+              }
+
+              <!-- Example / Specification Block -->
+              @else if (block.type === 'EXAMPLE') {
+                <div class="living-doc-example">
+                  @if (block.title) {
+                    <div class="living-doc-example__header">
+                      <span class="material-symbols-outlined living-doc-example__icon" aria-hidden="true">data_object</span>
+                      <span class="living-doc-example__title">{{ block.title }}</span>
+                    </div>
+                  }
+                  <div class="living-doc-example__content">
+                    @if (block.content) {
+                      <ul class="living-doc-example__list">
+                        @for (item of (block.content); track item) {
+                          <li class="living-doc-example__item">
+                            <span class="living-doc-example__bullet">▸</span>
+                            <span>{{ item }}</span>
+                          </li>
+                        }
+                      </ul>
+                    }
+                  </div>
+                  @if (block.caption) {
+                    <div class="living-doc-example__caption">
+                      {{ block.caption }}
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Key Insights Block -->
+              @else if (block.type === 'KEY_INSIGHTS') {
+                <div class="living-doc-insights">
+                  <div class="living-doc-insights__header">
+                    <span class="material-symbols-outlined living-doc-insights__icon" aria-hidden="true">verified</span>
+                    <span class="living-doc-insights__title">{{ block.title || 'Key Insights de Ingeniería' }}</span>
+                  </div>
+                  <ul class="living-doc-insights__list">
+                    @for (item of block.items; track item) {
+                      <li class="living-doc-insights__item">
+                        <span class="material-symbols-outlined living-doc-insights__check" aria-hidden="true">check</span>
+                        <span>{{ item }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+
+              <!-- In-Flow Demo Reference -->
+              @else if (block.type === 'DEMO_REF') {
+                <div class="inflow-activity inflow-activity--demo">
+                  <div class="inflow-activity__icon-box">
+                    <span class="material-symbols-outlined inflow-activity__icon" aria-hidden="true">play_arrow</span>
+                  </div>
+                  <div class="inflow-activity__body">
+                    <div class="inflow-activity__tag">EXPERIMENTACIÓN GUIADA</div>
+                    <h3 class="inflow-activity__title">{{ block.title }}</h3>
+                    <p class="inflow-activity__desc">{{ block.description }}</p>
+                  </div>
+                  <div class="inflow-activity__action">
+                    <a [routerLink]="block.path" class="inflow-activity__link">
+                      <case-button variant="primary" size="sm" iconRight="arrow_forward">
+                        {{ block.actionLabel || 'Abrir Demo' }}
+                      </case-button>
+                    </a>
+                  </div>
+                </div>
+              }
+
+            }
+          </div>
+
+        </section>
+      }
     </div>
 
-    <!-- Bottom Controls -->
-    <div class="controls">
-      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-        &larr; Anterior
-      </button>
-      <div class="slide-counter">
-        {{ currentSlide() + 1 }} / {{ totalSlides }}
-      </div>
-      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-        Siguiente &rarr;
-      </button>
-    </div>
-
-  </div>
+    <!-- ── 4. Technical Footer Navigation & Completion ── -->
+    <app-lesson-footer
+      [lessonId]="lesson.id"
+      [nextLesson]="adjacentLessons.next"
+      [previousLesson]="adjacentLessons.previous"
+      [relatedDemo]="relatedDemo"
+    />
+  }
 </div>
