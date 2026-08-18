@@ -1,182 +1,176 @@
-<div class="presentation-container">
-  <div class="back-to-menu">
-    <a routerLink="/academy/home" class="back-btn">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Anterior
-    </a>
-  </div>
+<div class="living-doc" role="main">
+  @if (lesson) {
+    <!-- ── 1. Unified Technical Header ── -->
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      subtitle="¿Cómo sabemos si nuestro buscador funciona?"
+    />
 
-  <div class="slide-wrapper">
-    <div class="progress-bar-container">
-      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
-    </div>
-
-    <!-- Slide 1: Intro -->
-    <div class="slide" [class.active]="currentSlide() === 0">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 04: Recuperación y RAG
-        </div>
-        <h1>Evaluación de la Recuperación</h1>
-        <p class="subtitle">¿Cómo sabemos si nuestro buscador funciona?</p>
-      </div>
-
-      <div class="slide-content">
-        <h2>Medir antes de Generar</h2>
-        <p>Si el Retrieval falla, el RAG fallará ("Garbage in, garbage out"). Antes de evaluar si el LLM escribe bien, debemos evaluar <strong>si estamos inyectando los documentos correctos</strong>.</p>
-        
-        <div class="tech-card" style="margin-top: 32px; padding: 24px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px;">
-          <div style="text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #c7c4d7;">Retrieve</div>
-          </div>
-          <div style="color: #6366f1;">&rarr;</div>
-          <div style="text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">📏</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #10b981;">Measure</div>
-          </div>
-          <div style="color: #6366f1;">&rarr;</div>
-          <div style="text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">📈</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3b82f6;">Evaluate</div>
-          </div>
-          <div style="color: #6366f1;">&rarr;</div>
-          <div style="text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">🛠️</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a855f7;">Improve</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 2: Precisión y Recall -->
-    <div class="slide" [class.active]="currentSlide() === 1">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 04: Recuperación y RAG
-        </div>
-        <h1>Precision & Recall</h1>
-        <p class="subtitle">Las métricas de oro del Information Retrieval</p>
-      </div>
-
-      <div class="slide-content">
-        <div class="tech-grid">
-          <div class="tech-card">
-            <div class="tech-meta">Calidad</div>
-            <h3>Precision</h3>
-            <p><strong>"De todos los documentos que recuperé, ¿cuántos eran realmente útiles?"</strong></p>
-            <p style="margin-top: 16px; font-size: 14px; color: #c7c4d7;">Alta Precisión = No envías basura al LLM. Si recuperas 5 y los 5 sirven, tienes 100% Precision. Si recuperas 5 y solo 1 sirve, tienes 20%.</p>
-          </div>
-          
-          <div class="tech-card active">
-            <div class="tech-meta" style="color: #10b981;">Cobertura</div>
-            <h3>Recall</h3>
-            <p><strong>"De todos los documentos útiles que EXISTEN en la DB, ¿cuántos logré recuperar?"</strong></p>
-            <p style="margin-top: 16px; font-size: 14px; color: #c7c4d7;">Alto Recall = No te pierdes la aguja en el pajar. Si la BD tiene 3 respuestas, y trajiste las 3, es 100%. Si solo trajiste 1, es 33%.</p>
-          </div>
-        </div>
-        
-        <div class="warning-box" style="margin-top: 24px; border-left-color: #ef4444;">
-          <strong>El Trade-off:</strong> Para subir el Recall al 100%, podrías simplemente extraer toda la base de datos (Top-K = Infinito). Pero tu Precision colapsaría a cero, y quebrarías el Context Budget del M03.
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 3: Hit Rate y Reranking -->
-    <div class="slide" [class.active]="currentSlide() === 2">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 04: Recuperación y RAG
-        </div>
-        <h1>Hit Rate & Reranking</h1>
-        <p class="subtitle">Importa QUÉ recuperas, y en QUÉ ORDEN</p>
-      </div>
-
-      <div class="slide-content">
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #8b5cf6; padding: 24px; border-radius: 4px;">
-            <strong style="color: #e4e1ed; font-family: 'Inter', sans-serif; font-size: 16px;">Hit Rate</strong>
-            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 14px;">Métrica simple: ¿El documento correcto apareció en el Top-K? (Sí o No). Es ideal para tests automatizados simples (Ej. "De 100 preguntas, en el 85% logramos recuperar la respuesta").</p>
-          </div>
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #f59e0b; padding: 24px; border-radius: 4px;">
-            <strong style="color: #e4e1ed; font-family: 'Inter', sans-serif; font-size: 16px;">Reranking</strong>
-            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 14px;">El LLM presta más atención a los primeros documentos (Lost in the Middle). Por eso, a menudo buscamos un Top-50 rápido con Embeddings, y luego aplicamos un <strong>Cross-Encoder</strong> (Reranker) pesado para ordenar perfectamente el Top-5 final que sí se enviará.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 4: El Ciclo de Evaluación -->
-    <div class="slide" [class.active]="currentSlide() === 3">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 04: Recuperación y RAG
-        </div>
-        <h1>El Ciclo de Producción</h1>
-        <p class="subtitle">RAG no termina cuando encontramos documentos</p>
-      </div>
-
-      <div class="slide-content">
-        <p>Un sistema RAG profesional requiere una iteración continua para asegurar su confiabilidad.</p>
-
-        <div class="tech-card" style="margin-top: 32px; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #3b82f6; padding: 24px; border-radius: 4px;">
-            <strong style="color: #3b82f6; font-family: 'Inter', sans-serif; font-size: 16px;">1. Retrieval & Evaluation</strong>
-            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 14px;">Ejecutar el sistema y medir Precision, Recall y Hit Rate continuamente.</p>
-          </div>
-          <div style="text-align: center; color: #6366f1;">&darr;</div>
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #f59e0b; padding: 24px; border-radius: 4px;">
-            <strong style="color: #f59e0b; font-family: 'Inter', sans-serif; font-size: 16px;">2. Failure Analysis</strong>
-            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 14px;">Cuando el Hit Rate cae, analizar por qué: ¿Chunking muy grande? ¿Embeddings ciegos a ciertas palabras (dominio específico)? ¿Ausencia de Búsqueda Híbrida?</p>
-          </div>
-          <div style="text-align: center; color: #6366f1;">&darr;</div>
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #10b981; padding: 24px; border-radius: 4px;">
-            <strong style="color: #10b981; font-family: 'Inter', sans-serif; font-size: 16px;">3. Improved Retrieval</strong>
-            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 14px;">Ajustar hiperparámetros (Top-K, Overlap), añadir Reranking o integrar Metadata filtering, y repetir el ciclo.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 5: Conclusion -->
-    <div class="slide" [class.active]="currentSlide() === 4">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 04: Recuperación y RAG
-        </div>
-        <h1>Práctica: Construir la Recuperación</h1>
-        <p class="subtitle">Evaluando el Top-K empíricamente</p>
-      </div>
-
-      <div class="slide-content">
-        <div class="tech-card active" style="margin-bottom: 48px;">
-          <div class="tech-meta">Demo 04 · Interactive</div>
-          <div class="tech-icon" style="color: #6366f1;">🎮</div>
-          <h3>Demo 04 — Construir la Recuperación</h3>
-          <p>En el siguiente Demo interactivo, explorarás un pipeline de recuperación basado en similitud cosenoidal. Tu objetivo es entender por qué <strong>recuperar MÁS candidatos no significa tener MEJOR contexto</strong>.</p>
-          <p style="margin-top: 16px;">Verás empíricamente cómo ajustar el parámetro Top-K altera el delicado balance entre Precision@K y Hit Rate antes de diseñar tu propia estrategia en el Real Engineering Lab.</p>
-        </div>
-        
-        <div style="text-align: center;">
-          <a routerLink="/academy/modules/m04-retrieval-rag/demo-build-retrieval" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
-            🎮 Probar Demo 04 &rarr;
+    <!-- ── 2. Table of Contents / Outline Navigation ── -->
+    <nav class="living-doc__outline" aria-label="Índice de la lección">
+      <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
+      <div class="living-doc__outline-items">
+        @for (sec of doc.sections; track sec.id) {
+          <a [href]="'#' + sec.id" class="living-doc__outline-link">
+            {{ sec.title }}
           </a>
-        </div>
+        }
       </div>
+    </nav>
+
+    <!-- ── 3. Flowing Sections ── -->
+    <div class="living-doc__sections">
+      @for (sec of doc.sections; track sec.id) {
+        <section class="living-doc-section" [id]="sec.id" [attr.aria-label]="sec.title">
+          
+          <div class="living-doc-section__header">
+            <h2 class="living-doc-section__title">{{ sec.title }}</h2>
+            @if (sec.subtitle) {
+              <p class="living-doc-section__subtitle">{{ sec.subtitle }}</p>
+            }
+          </div>
+
+          <div class="living-doc-section__body">
+            @for (block of sec.blocks; track $index) {
+              
+              <!-- Paragraph Block -->
+              @if (block.type === 'PARAGRAPH') {
+                <p class="living-doc-paragraph" [class.living-doc-paragraph--lead]="block.lead">
+                  {{ block.text }}
+                </p>
+              }
+
+              <!-- Comparison Block -->
+              @else if (block.type === 'COMPARISON') {
+                <app-lesson-comparison [comparison]="block" />
+              }
+
+              <!-- Callout Block -->
+              @else if (block.type === 'CALLOUT') {
+                <case-callout
+                  [variant]="block.variant"
+                  [title]="block.title"
+                  [message]="block.message"
+                />
+              }
+
+              <!-- Code Block -->
+              @else if (block.type === 'CODE') {
+                <case-code-block
+                  [code]="block.code"
+                  [language]="block.language"
+                  [filename]="block.filename"
+                  [lineNumbers]="block.lineNumbers || false"
+                />
+              }
+
+              <!-- Example / Specification Block -->
+              @else if (block.type === 'EXAMPLE') {
+                <div class="living-doc-example">
+                  @if (block.title) {
+                    <div class="living-doc-example__header">
+                      <span class="material-symbols-outlined living-doc-example__icon" aria-hidden="true">data_object</span>
+                      <span class="living-doc-example__title">{{ block.title }}</span>
+                    </div>
+                  }
+                  <div class="living-doc-example__content">
+                    @if (block.content) {
+                      <ul class="living-doc-example__list">
+                        @for (item of (block.content); track item) {
+                          <li class="living-doc-example__item">
+                            <span class="living-doc-example__bullet">▸</span>
+                            <span>{{ item }}</span>
+                          </li>
+                        }
+                      </ul>
+                    }
+                  </div>
+                  @if (block.caption) {
+                    <div class="living-doc-example__caption">
+                      {{ block.caption }}
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Key Insights Block -->
+              @else if (block.type === 'KEY_INSIGHTS') {
+                <div class="living-doc-insights">
+                  <div class="living-doc-insights__header">
+                    <span class="material-symbols-outlined living-doc-insights__icon" aria-hidden="true">verified</span>
+                    <span class="living-doc-insights__title">{{ block.title || 'Key Insights de Ingeniería' }}</span>
+                  </div>
+                  <ul class="living-doc-insights__list">
+                    @for (item of block.items; track item) {
+                      <li class="living-doc-insights__item">
+                        <span class="material-symbols-outlined living-doc-insights__check" aria-hidden="true">check</span>
+                        <span>{{ item }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+
+              <!-- In-Flow Demo Reference -->
+              @else if (block.type === 'DEMO_REF') {
+                <div class="inflow-activity inflow-activity--demo">
+                  <div class="inflow-activity__icon-box">
+                    <span class="material-symbols-outlined inflow-activity__icon" aria-hidden="true">play_arrow</span>
+                  </div>
+                  <div class="inflow-activity__body">
+                    <div class="inflow-activity__tag">EXPERIMENTACIÓN GUIADA</div>
+                    <h3 class="inflow-activity__title">{{ block.title }}</h3>
+                    <p class="inflow-activity__desc">{{ block.description }}</p>
+                  </div>
+                  <div class="inflow-activity__action">
+                    <a [routerLink]="block.path" class="inflow-activity__link">
+                      <case-button variant="primary" size="sm" iconRight="arrow_forward">
+                        {{ block.actionLabel || 'Abrir Demo' }}
+                      </case-button>
+                    </a>
+                  </div>
+                </div>
+              }
+
+              <!-- In-Flow Lab Reference -->
+              @else if (block.type === 'LAB_REF') {
+                <div class="inflow-activity inflow-activity--lab">
+                  <div class="inflow-activity__icon-box inflow-activity__icon-box--lab">
+                    <span class="material-symbols-outlined inflow-activity__icon" aria-hidden="true">science</span>
+                  </div>
+                  <div class="inflow-activity__body">
+                    <div class="inflow-activity__tag inflow-activity__tag--lab">APLICACIÓN REAL DE INGENIERÍA</div>
+                    <h3 class="inflow-activity__title">{{ block.title }}</h3>
+                    <p class="inflow-activity__desc">{{ block.description }}</p>
+                    @if (block.duration) {
+                      <span class="inflow-activity__time">⏱️ Duración estimada: {{ block.duration }}</span>
+                    }
+                  </div>
+                  <div class="inflow-activity__action">
+                    <a [routerLink]="block.path" class="inflow-activity__link">
+                      <case-button variant="secondary" size="sm" iconRight="arrow_forward">
+                        {{ block.actionLabel || 'Iniciar Laboratorio' }}
+                      </case-button>
+                    </a>
+                  </div>
+                </div>
+              }
+
+            }
+          </div>
+
+        </section>
+      }
     </div>
 
-    <!-- Bottom Controls -->
-    <div class="controls">
-      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-        &larr; Anterior
-      </button>
-      <div class="slide-counter">
-        {{ currentSlide() + 1 }} / {{ totalSlides }}
-      </div>
-      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-        Siguiente &rarr;
-      </button>
-    </div>
-
-  </div>
+    <!-- ── 4. Technical Footer Navigation & Completion ── -->
+    <app-lesson-footer
+      [lessonId]="lesson.id"
+      [nextLesson]="adjacentLessons.next"
+      [previousLesson]="adjacentLessons.previous"
+      [relatedDemo]="relatedDemo"
+      [relatedLab]="relatedLab"
+    />
+  }
 </div>

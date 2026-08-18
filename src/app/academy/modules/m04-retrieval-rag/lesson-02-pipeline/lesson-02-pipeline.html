@@ -1,151 +1,129 @@
-<div class="presentation-container">
-  <div class="back-to-menu">
-    <a routerLink="/academy/home" class="back-btn">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Anterior
-    </a>
-  </div>
+<div class="living-doc" role="main">
+  @if (lesson) {
+    <!-- ── 1. Unified Technical Header ── -->
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      subtitle="Retrieval-Augmented Generation en la práctica"
+    />
 
-  <div class="slide-wrapper">
-    <div class="progress-bar-container">
-      <div class="progress-bar-fill" [style.width.%]="((currentSlide() + 1) / totalSlides) * 100"></div>
-    </div>
-
-    <!-- Slide 1: Intro -->
-    <div class="slide" [class.active]="currentSlide() === 0">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 04: Recuperación y RAG
-        </div>
-        <h1>La Tubería RAG</h1>
-        <p class="subtitle">Retrieval-Augmented Generation en la práctica</p>
-      </div>
-
-      <div class="slide-content">
-        <h2>Conectando la búsqueda con el LLM</h2>
-        <p>Retrieval por sí solo es solo un motor de búsqueda. RAG es el patrón arquitectónico que toma los resultados de esa búsqueda y los utiliza para inyectar <strong>Contexto Útil</strong> en el LLM en tiempo real.</p>
-        
-        <div class="tech-card" style="margin-top: 32px; padding: 24px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
-          <div style="text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">📚</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #c7c4d7;">Collect & Embed</div>
-          </div>
-          <div style="color: #6366f1;">&rarr;</div>
-          <div style="text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #10b981;">Search</div>
-          </div>
-          <div style="color: #6366f1;">&rarr;</div>
-          <div style="text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">🧩</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6366f1;">Assemble Context</div>
-          </div>
-          <div style="color: #6366f1;">&rarr;</div>
-          <div style="text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">🧠</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a855f7;">Generate</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 2: Ingestion -->
-    <div class="slide" [class.active]="currentSlide() === 1">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 04: Recuperación y RAG
-        </div>
-        <h1>Fase 1: Ingestion</h1>
-        <p class="subtitle">Preparando la biblioteca de conocimiento (Offline)</p>
-      </div>
-
-      <div class="slide-content">
-        <p>Antes de que el usuario pregunte algo, debemos preparar nuestros documentos internos (PDFs, Wiki, Logs).</p>
-        
-        <div class="tech-grid" style="margin-top: 24px;">
-          <div class="tech-card">
-            <div class="tech-icon" style="color: #f59e0b;">🔪</div>
-            <h3>1. Chunking</h3>
-            <p>No podemos enviar un libro de 500 páginas al modelo de embedding. Debemos dividirlo en fragmentos lógicos ("Chunks") de unos 500 tokens cada uno, asegurando un leve solapamiento (overlap) para no cortar ideas por la mitad.</p>
-          </div>
-          
-          <div class="tech-card active">
-            <div class="tech-icon" style="color: #6366f1;">🤖</div>
-            <h3>2. Embedding & Indexing</h3>
-            <p>Pasamos cada Chunk por un modelo (ej. <code>text-embedding-3-small</code>) para obtener su vector de 1536 dimensiones, y lo guardamos en la Vector DB junto con la metadata original (URL, título, fecha).</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 3: Retrieval & Generation -->
-    <div class="slide" [class.active]="currentSlide() === 2">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 04: Recuperación y RAG
-        </div>
-        <h1>Fase 2: Inference</h1>
-        <p class="subtitle">El proceso en tiempo real (Online)</p>
-      </div>
-
-      <div class="slide-content">
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #10b981; padding: 24px; border-radius: 4px;">
-            <strong style="color: #10b981; font-family: 'Inter', sans-serif; font-size: 16px;">1. Search (Retrieval)</strong>
-            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 14px;">El usuario envía un Query. Convertimos el Query en un vector y buscamos los <strong>Top-K</strong> vectores más cercanos en la DB.</p>
-          </div>
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #3b82f6; padding: 24px; border-radius: 4px;">
-            <strong style="color: #3b82f6; font-family: 'Inter', sans-serif; font-size: 16px;">2. Assemble (Context Engineering)</strong>
-            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 14px;">Tomamos los textos de los chunks recuperados y los inyectamos en un template, aplicando las reglas de <strong>Relevancia y Presupuesto</strong> aprendidas en el Módulo 03.</p>
-          </div>
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #a855f7; padding: 24px; border-radius: 4px;">
-            <strong style="color: #a855f7; font-family: 'Inter', sans-serif; font-size: 16px;">3. Generate</strong>
-            <p style="margin: 8px 0 0 0; color: #c7c4d7; font-size: 14px;">Enviamos el prompt ensamblado al LLM (con Temp: 0.0) para que redacte la respuesta final basándose ESTRICTAMENTE en el contexto inyectado.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 4: Conclusion -->
-    <div class="slide" [class.active]="currentSlide() === 3">
-      <div class="slide-title">
-        <div class="workshop-badge">
-          <span class="icon">●</span> Módulo 04: Recuperación y RAG
-        </div>
-        <h1>Conclusión</h1>
-        <p class="subtitle">RAG es Ingeniería de Contexto automatizada</p>
-      </div>
-
-      <div class="slide-content">
-        <div class="tech-card active" style="margin-bottom: 48px;">
-          <div class="tech-icon" style="color: #10b981;">💡</div>
-          <h3>La conexión M03 -> M04</h3>
-          <p>En el Módulo 03, nosotros seleccionábamos manualmente el estado de la aplicación para ensamblar el prompt. En RAG, <strong>automatizamos esa selección utilizando geometría espacial (Retrieval)</strong>.</p>
-          <div style="background: #1A1A1A; border: 1px solid #2A2A2A; border-left: 2px solid #ef4444; padding: 24px; border-radius: 4px; margin-top: 16px;">
-            <p style="margin: 0; color: #c7c4d7; font-size: 14px;">Pero cuidado: <strong>basura entra, basura sale</strong>. Si tu motor Retrieval recupera documentos irrelevantes, estarás inyectando basura matemática en el contexto del LLM, garantizando una alucinación.</p>
-          </div>
-        </div>
-        
-        <div style="text-align: center;">
-          <a routerLink="/academy/modules/m04-retrieval-rag/lesson-03-evaluation" class="control-btn primary" style="display: inline-flex; justify-content: center; padding: 16px 32px; font-size: 14px;">
-            Siguiente Lección: Evaluación de la Recuperación &rarr;
+    <!-- ── 2. Table of Contents / Outline Navigation ── -->
+    <nav class="living-doc__outline" aria-label="Índice de la lección">
+      <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
+      <div class="living-doc__outline-items">
+        @for (sec of doc.sections; track sec.id) {
+          <a [href]="'#' + sec.id" class="living-doc__outline-link">
+            {{ sec.title }}
           </a>
-        </div>
+        }
       </div>
+    </nav>
+
+    <!-- ── 3. Flowing Sections ── -->
+    <div class="living-doc__sections">
+      @for (sec of doc.sections; track sec.id) {
+        <section class="living-doc-section" [id]="sec.id" [attr.aria-label]="sec.title">
+          
+          <div class="living-doc-section__header">
+            <h2 class="living-doc-section__title">{{ sec.title }}</h2>
+            @if (sec.subtitle) {
+              <p class="living-doc-section__subtitle">{{ sec.subtitle }}</p>
+            }
+          </div>
+
+          <div class="living-doc-section__body">
+            @for (block of sec.blocks; track $index) {
+              
+              <!-- Paragraph Block -->
+              @if (block.type === 'PARAGRAPH') {
+                <p class="living-doc-paragraph" [class.living-doc-paragraph--lead]="block.lead">
+                  {{ block.text }}
+                </p>
+              }
+
+              <!-- Comparison Block -->
+              @else if (block.type === 'COMPARISON') {
+                <app-lesson-comparison [comparison]="block" />
+              }
+
+              <!-- Callout Block -->
+              @else if (block.type === 'CALLOUT') {
+                <case-callout
+                  [variant]="block.variant"
+                  [title]="block.title"
+                  [message]="block.message"
+                />
+              }
+
+              <!-- Code Block -->
+              @else if (block.type === 'CODE') {
+                <case-code-block
+                  [code]="block.code"
+                  [language]="block.language"
+                  [filename]="block.filename"
+                  [lineNumbers]="block.lineNumbers || false"
+                />
+              }
+
+              <!-- Example / Specification Block -->
+              @else if (block.type === 'EXAMPLE') {
+                <div class="living-doc-example">
+                  @if (block.title) {
+                    <div class="living-doc-example__header">
+                      <span class="material-symbols-outlined living-doc-example__icon" aria-hidden="true">data_object</span>
+                      <span class="living-doc-example__title">{{ block.title }}</span>
+                    </div>
+                  }
+                  <div class="living-doc-example__content">
+                    @if (block.content) {
+                      <ul class="living-doc-example__list">
+                        @for (item of (block.content); track item) {
+                          <li class="living-doc-example__item">
+                            <span class="living-doc-example__bullet">▸</span>
+                            <span>{{ item }}</span>
+                          </li>
+                        }
+                      </ul>
+                    }
+                  </div>
+                  @if (block.caption) {
+                    <div class="living-doc-example__caption">
+                      {{ block.caption }}
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Key Insights Block -->
+              @else if (block.type === 'KEY_INSIGHTS') {
+                <div class="living-doc-insights">
+                  <div class="living-doc-insights__header">
+                    <span class="material-symbols-outlined living-doc-insights__icon" aria-hidden="true">verified</span>
+                    <span class="living-doc-insights__title">{{ block.title || 'Key Insights de Ingeniería' }}</span>
+                  </div>
+                  <ul class="living-doc-insights__list">
+                    @for (item of block.items; track item) {
+                      <li class="living-doc-insights__item">
+                        <span class="material-symbols-outlined living-doc-insights__check" aria-hidden="true">check</span>
+                        <span>{{ item }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+
+            }
+          </div>
+
+        </section>
+      }
     </div>
 
-    <!-- Bottom Controls -->
-    <div class="controls">
-      <button class="control-btn" [disabled]="currentSlide() === 0" (click)="prevSlide()">
-        &larr; Anterior
-      </button>
-      <div class="slide-counter">
-        {{ currentSlide() + 1 }} / {{ totalSlides }}
-      </div>
-      <button class="control-btn" [disabled]="currentSlide() === totalSlides - 1" (click)="nextSlide()">
-        Siguiente &rarr;
-      </button>
-    </div>
-
-  </div>
+    <!-- ── 4. Technical Footer Navigation & Completion ── -->
+    <app-lesson-footer
+      [lessonId]="lesson.id"
+      [nextLesson]="adjacentLessons.next"
+      [previousLesson]="adjacentLessons.previous"
+    />
+  }
 </div>
