@@ -33,14 +33,14 @@ import {
     CaseButtonComponent
   ],
   templateUrl: './lesson-03-evaluation.html',
-  styleUrl: './lesson-03-evaluation.css'
+  styleUrls: ['./lesson-03-evaluation.css']
 })
 export class Lesson03Evaluation implements OnInit {
   private courseService = inject(CourseService);
   private userProgressService = inject(UserProgressService);
 
   readonly doc = LESSON_03_DOCUMENT;
-  
+
   readonly lesson: Lesson | undefined = this.courseService.getLessonByPath('/academy/modules/m04-retrieval-rag/lesson-03-evaluation');
   readonly module: AcademyModule | undefined = this.courseService.getModuleById('m4');
   readonly adjacentLessons = this.courseService.getAdjacentLessons('c12');
