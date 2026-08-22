@@ -1,4 +1,4 @@
-﻿<div class="presentation-container pb-32">
+<div class="presentation-container pb-32">
 
   <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
 
@@ -63,12 +63,18 @@
 
       <!-- 03 — The Central Artifact: CONTEXT MANIFEST -->
       <section>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">03 —</span>
-          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">El Artefacto Entregable: Context Manifest</h2>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">03 —</span>
+            <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">El Artefacto Entregable: Context Manifest</h2>
+          </div>
+          <a href="/docs/LAB_03_Context_Manifest_v1.0.md" download class="control-btn primary" style="font-size: 12px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
+            <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Descargar Plantilla (MD)
+          </a>
         </div>
         <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 18px 0;">
-          Antes de interactuar con el asistente de IA, debes formalizar el razonamiento del contexto en un <strong style="color: #e4e1ed;">Context Manifest</strong>. Este manifiesto es el contrato que garantiza que no estás adivinando ni inyectando ruido:
+          Antes de interactuar con el asistente de IA, debes formalizar el razonamiento del contexto en un <strong style="color: #e4e1ed;">Context Manifest</strong>. Descarga la plantilla oficial y documenta tu contexto de forma estructurada. 
         </p>
 
         <!-- Manifest Display Box -->
@@ -80,44 +86,47 @@
 
           <div style="display: flex; flex-direction: column; gap: 18px; font-size: 12px;">
             <div>
-              <span style="color: #818cf8; font-weight: 700;">[ TASK ]</span>
-              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Qué problema específico estás resolviendo? (ej. Migrar rutina de facturación a servicio stateless)</p>
+              <span style="color: #818cf8; font-weight: 700;">1. [ TASK ]</span>
+              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Qué problema real vamos a resolver? Objetivo y alcance.</p>
             </div>
 
             <div>
-              <span style="color: #22c55e; font-weight: 700;">[ REQUIRED CONTEXT ]</span>
+              <span style="color: #22c55e; font-weight: 700;">2. [ REQUIRED CONTEXT ]</span>
               <div style="color: #94a3b8; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px; line-height: 1.6;">
-                • Archivo/Artefacto A &rarr; <em>¿Por qué es necesario? ¿Qué información técnica aporta?</em><br>
-                • Archivo/Artefacto B &rarr; <em>¿Por qué es necesario? ¿Qué información técnica aporta?</em>
+                ¿Qué información necesita el agente? Aplica los filtros de Relevance, Recency y Redundancy para cada artefacto.
               </div>
             </div>
 
             <div>
-              <span style="color: #ef4444; font-weight: 700;">[ EXCLUDED CONTEXT ]</span>
+              <span style="color: #ef4444; font-weight: 700;">3. [ EXCLUDED CONTEXT ]</span>
               <div style="color: #94a3b8; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px; line-height: 1.6;">
-                • Archivo/Artefacto X &rarr; <em>¿Por qué NO es necesario? ¿Qué riesgo/ruido introduce si se incluye?</em><br>
-                • Archivo/Artefacto Y &rarr; <em>¿Por qué NO es necesario? ¿Qué riesgo/ruido introduce si se incluye?</em>
+                ¿Qué información decidimos NO incluir? Justifica para evitar ruido.
               </div>
             </div>
 
             <div>
-              <span style="color: #eab308; font-weight: 700;">[ DEPENDENCIES ]</span>
-              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Qué relaciones entre módulos, tablas o contratos se deben preservar intactas?</p>
+              <span style="color: #eab308; font-weight: 700;">4. [ DEPENDENCIES ]</span>
+              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Qué relaciones (componentes, APIs, tablas) debemos preservar?</p>
             </div>
 
             <div>
-              <span style="color: #38bdf8; font-weight: 700;">[ CONTEXT HYPOTHESIS ]</span>
-              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Qué esperas exactamente que el modelo pueda resolver con este payload delimitado?</p>
+              <span style="color: #14b8a6; font-weight: 700;">5. [ ASSEMBLY ]</span>
+              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Cómo vamos a organizar el contexto seleccionado (tags XML, estructura)?</p>
             </div>
 
             <div>
-              <span style="color: #a855f7; font-weight: 700;">[ VALIDATION ]</span>
-              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Qué evidencia técnica (tests, diff, compilación) demostrará que el contexto fue suficiente?</p>
+              <span style="color: #38bdf8; font-weight: 700;">6. [ CONTEXT HYPOTHESIS ]</span>
+              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Qué debería poder hacer el agente con este contexto?</p>
             </div>
 
             <div>
-              <span style="color: #f97316; font-weight: 700;">[ CONTEXT GAPS ]</span>
-              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Qué faltó o qué alucinación ocurrió en la primera ejecución por falta de un dato no declarado?</p>
+              <span style="color: #a855f7; font-weight: 700;">7. [ VALIDATION ]</span>
+              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Cómo comprobaremos técnica o lógicamente que el contexto fue suficiente?</p>
+            </div>
+
+            <div>
+              <span style="color: #f97316; font-weight: 700;">8. [ CONTEXT GAPS ]</span>
+              <p style="color: #cbd5e1; margin: 4px 0 0 0; font-family: sans-serif; font-size: 13px;">¿Qué información faltó luego de ejecutar? Documenta la brecha.</p>
             </div>
           </div>
         </div>
@@ -135,40 +144,40 @@
           <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 18px 20px;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
               <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1; background: rgba(99,102,241,0.1); padding: 2px 8px; border-radius: 4px;">PASO 1</span>
-              <strong style="color: #f1f5f9; font-size: 14px;">Mapear el Grafo de Candidatos y Anonimizar</strong>
+              <strong style="color: #f1f5f9; font-size: 14px;">Definir el Problema y Descargar el Manifiesto</strong>
             </div>
             <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">
-              Examina tu repositorio local. Enumera los 5 a 10 archivos potencialmente relacionados. Elimina credenciales o datos PII reemplazándolos con placeholders.
+              Descarga la plantilla del manifiesto y describe detalladamente la tarea o problema real a resolver (Sección 1).
             </p>
           </div>
 
           <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 18px 20px;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
               <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1; background: rgba(99,102,241,0.1); padding: 2px 8px; border-radius: 4px;">PASO 2</span>
-              <strong style="color: #f1f5f9; font-size: 14px;">Construir el Context Manifest v1.0</strong>
+              <strong style="color: #f1f5f9; font-size: 14px;">Completar el Context Manifest v1.0</strong>
             </div>
             <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">
-              Diligencia las secciones `REQUIRED CONTEXT` y `EXCLUDED CONTEXT`. Justifica explícitamente por qué descartas archivos tentadores pero innecesarios.
+              Analiza los archivos locales y documenta sistemáticamente qué archivos se requieren y cuáles se excluyen, justificando cada decisión (Secciones 2-7).
             </p>
           </div>
 
           <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 18px 20px;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
               <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1; background: rgba(99,102,241,0.1); padding: 2px 8px; border-radius: 4px;">PASO 3</span>
-              <strong style="color: #f1f5f9; font-size: 14px;">Ejecutar el Payload en tu Asistente Autorizado</strong>
+              <strong style="color: #f1f5f9; font-size: 14px;">Ensamblar y Ejecutar el Payload</strong>
             </div>
             <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">
-              Pasa al asistente de IA ÚNICAMENTE los archivos declarados en `REQUIRED CONTEXT` combinados con la instrucción redactada según los estándares de M02.
+              Organiza la información como lo definiste en Assembly (Sección 5) y envíasela a tu Asistente Autorizado de IA (sin incluir código propietario no permitido).
             </p>
           </div>
 
           <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 18px 20px;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
               <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1; background: rgba(99,102,241,0.1); padding: 2px 8px; border-radius: 4px;">PASO 4</span>
-              <strong style="color: #f1f5f9; font-size: 14px;">Auditar la Respuesta y Registrar Context Gaps</strong>
+              <strong style="color: #f1f5f9; font-size: 14px;">Auditar y Registrar Context Gaps</strong>
             </div>
             <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">
-              Evalúa si el modelo asumió tipos de datos incorrectos o inventó firmas. Si falló, documenta la brecha en `CONTEXT GAPS` y ajusta el manifiesto para la iteración v1.1.
+              Evalúa si el modelo logró cumplir la hipótesis. Si falló porque le faltó algún archivo o tabla, documenta esa brecha en la Sección 8 del manifiesto para tu próxima iteración.
             </p>
           </div>
 
