@@ -8,13 +8,15 @@ interface PipelineNode {
   id: string;
   label: string;
   type: 'ingestion' | 'inference';
-  position: THREE.Vector3;
   description: string;
   input: string;
   process: string;
   output: string;
   concepts: string;
   icon: string;
+  // Layout logic
+  hPos: THREE.Vector3; // Horizontal position (Desktop)
+  vPos: THREE.Vector3; // Vertical position (Mobile)
 }
 
 interface Particle {
@@ -25,6 +27,14 @@ interface Particle {
   speed: number;
 }
 
+interface TopKChunk {
+  id: number;
+  isSignal: boolean;
+  score: number;
+  label: string;
+  active: boolean; // if false, it's filtered out by current Top-K
+}
+
 @Component({
   selector: 'app-exp-rag-pipeline-explorer',
   standalone: true,
@@ -32,8 +42,10 @@ interface Particle {
   template: `
     <div class="exp-container">
       <div class="exp-header">
-        <h3 class="exp-title">RAG Pipeline Explorer</h3>
-        <p class="exp-subtitle">Flujo interactivo de Retrieval-Augmented Generation</p>
+        <div>
+          <h3 class="exp-title">Explorador del RAG Pipeline</h3>
+          <p class="exp-subtitle">Observa cómo Retrieval convierte una consulta en contexto para el LLM.</p>
+        </div>
         
         <div class="exp-controls">
           <button 
@@ -54,21 +66,56 @@ interface Particle {
             <label class="control-label">
               Top-K: <span class="control-value">{{ topK() }}</span>
             </label>
-            <input type="range" min="1" max="5" [ngModel]="topK()" (ngModelChange)="topK.set(+$event)" class="control-slider">
+            <input type="range" min="1" max="5" [ngModel]="topK()" (ngModelChange)="onTopKChange($event)" class="control-slider">
           </div>
         </div>
       </div>
 
       <div class="exp-layout">
-        <div class="exp-canvas-wrapper">
+        <!-- Visualization Area -->
+        <div class="exp-canvas-wrapper" #canvasWrapper>
           <div #canvasContainer class="exp-canvas" aria-label="Espacio 3D interactivo mostrando el pipeline RAG."></div>
           
-          <div class="exp-canvas-controls">
-            @if (!isCameraReset()) {
-              <button class="exp-btn-icon" (click)="resetCamera()" title="Restablecer vista" aria-label="Restablecer vista">
-                <span class="material-symbols-outlined">center_focus_strong</span>
-              </button>
+          <!-- HTML Overlays -->
+          <div class="html-overlay-container">
+            <!-- Zone Labels -->
+            <div id="zone-offline" class="zone-label zone-offline">
+              <strong>OFFLINE</strong> / INGESTION
+            </div>
+            <div id="zone-online" class="zone-label zone-online">
+              <strong>ONLINE</strong> / INFERENCE
+            </div>
+
+            <!-- Nodes -->
+            @for (node of nodes; track node.id) {
+              <div 
+                [id]="'node-' + node.id" 
+                class="html-node" 
+                [class.html-node--ingestion]="node.type === 'ingestion'"
+                [class.html-node--inference]="node.type === 'inference'"
+                [class.html-node--selected]="selectedNodeId() === node.id"
+                (click)="selectNode(node.id)"
+              >
+                <span class="material-symbols-outlined html-node-icon">{{ node.icon }}</span>
+                <span class="html-node-label">{{ node.label }}</span>
+              </div>
             }
+
+            <!-- Top-K Visualization Panel (Floating near Retrieval/Context) -->
+            <div id="topk-panel" class="topk-panel" [class.topk-panel--visible]="showTopKPanel()">
+              <div class="topk-header">Candidate Chunks (Top-{{ topK() }})</div>
+              <ul class="topk-list">
+                @for (chunk of mockChunks; track chunk.id) {
+                  <li class="topk-item" [class.topk-item--signal]="chunk.isSignal" [class.topk-item--noise]="!chunk.isSignal" [style.display]="chunk.active ? 'flex' : 'none'">
+                    <span class="material-symbols-outlined">{{ chunk.isSignal ? 'check_circle' : 'cancel' }}</span>
+                    <span>{{ chunk.label }}</span>
+                  </li>
+                }
+              </ul>
+              @if (hasNoiseInTopK()) {
+                <div class="topk-warning">⚠️ Riesgo de alucinación</div>
+              }
+            </div>
           </div>
           
           @if (webglError()) {
@@ -79,6 +126,7 @@ interface Particle {
           }
         </div>
 
+        <!-- Secondary Info Panel -->
         <div class="exp-info-panel">
           @if (selectedNodeData()) {
             <div class="exp-info-card">
@@ -105,30 +153,6 @@ interface Particle {
                   <strong>Concepts:</strong> <span>{{ selectedNodeData()!.concepts }}</span>
                 </div>
               </div>
-
-              @if (selectedNodeData()!.id === 'retrieval' || selectedNodeData()!.id === 'context') {
-                <div class="retrieval-simulation">
-                  <p class="simulation-note"><strong>Simulación Didáctica:</strong> Mostrando Top-{{ topK() }} candidate chunks (Cosine Similarity Mock)</p>
-                  <ul class="chunk-list">
-                    @for (chunk of mockChunks | slice:0:topK(); track $index) {
-                      <li class="chunk-item" [class.chunk-signal]="chunk.isSignal" [class.chunk-noise]="!chunk.isSignal">
-                        <span class="material-symbols-outlined chunk-icon">
-                          {{ chunk.isSignal ? 'check_circle' : 'cancel' }}
-                        </span>
-                        <div class="chunk-text">
-                          <span class="chunk-status">{{ chunk.isSignal ? 'Signal (Relevant)' : 'Noise (Irrelevant)' }}</span>
-                          <span class="chunk-score">Score: {{ chunk.score }}</span>
-                        </div>
-                      </li>
-                    }
-                  </ul>
-                  @if (selectedNodeData()!.id === 'context' && !mockChunks[topK()-1].isSignal) {
-                    <div class="tradeoff-card tradeoff-card--danger" style="margin-top: 12px;">
-                      Al inyectar Noise (ruido) en el Contexto, aumentamos drásticamente la probabilidad de que el LLM alucine.
-                    </div>
-                  }
-                </div>
-              }
             </div>
           } @else {
             <div class="exp-empty-state">
@@ -145,37 +169,46 @@ interface Particle {
 })
 export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvasContainer', { static: false }) canvasContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('canvasWrapper', { static: false }) canvasWrapper!: ElementRef<HTMLDivElement>;
 
   // State
   pipelineState = signal<'idle' | 'running' | 'completed'>('idle');
   selectedNodeId = signal<string | null>(null);
   topK = signal<number>(3);
   webglError = signal<boolean>(false);
-  isCameraReset = signal<boolean>(true);
+  isMobileLayout = false;
 
-  // Mock data for Top-K simulation
-  readonly mockChunks = [
-    { isSignal: true, score: 0.89 },
-    { isSignal: true, score: 0.82 },
-    { isSignal: false, score: 0.65 }, // Noise starts appearing
-    { isSignal: false, score: 0.58 },
-    { isSignal: false, score: 0.41 }
+  // Top-K Mock Data (Simulación didáctica)
+  mockChunks: TopKChunk[] = [
+    { id: 1, isSignal: true, score: 0.89, label: 'Signal (0.89)', active: true },
+    { id: 2, isSignal: true, score: 0.82, label: 'Signal (0.82)', active: true },
+    { id: 3, isSignal: false, score: 0.65, label: 'Noise (0.65)', active: true },
+    { id: 4, isSignal: false, score: 0.58, label: 'Noise (0.58)', active: false },
+    { id: 5, isSignal: false, score: 0.41, label: 'Noise (0.41)', active: false }
   ];
 
-  // Pipeline Nodes
+  showTopKPanel = computed(() => {
+    return this.pipelineState() === 'running' || this.selectedNodeId() === 'retrieval' || this.selectedNodeId() === 'context';
+  });
+
+  hasNoiseInTopK = computed(() => {
+    return this.mockChunks.some(c => c.active && !c.isSignal);
+  });
+
+  // Pipeline Nodes (8 nodes total based on constraints)
   readonly nodes: PipelineNode[] = [
     // Ingestion (Offline)
-    { id: 'docs', label: 'Documents', type: 'ingestion', position: new THREE.Vector3(-4, 2, -2), icon: 'description', description: 'Biblioteca de conocimiento original.', input: 'PDFs, Confluence, repositorios', process: 'Extracción de texto plano', output: 'Raw text documents', concepts: 'ETL, Data Sources' },
-    { id: 'chunking', label: 'Chunking', type: 'ingestion', position: new THREE.Vector3(-1.5, 2, -2), icon: 'cut', description: 'Fragmentación del texto en piezas digeribles.', input: 'Raw text', process: 'Split por tokens/caracteres con overlap', output: 'Chunks de texto', concepts: 'Chunk Size, Overlap' },
-    { id: 'embedding_off', label: 'Embedding', type: 'ingestion', position: new THREE.Vector3(1.5, 2, -2), icon: 'transform', description: 'Vectorización de cada chunk.', input: 'Text Chunks', process: 'Paso por modelo de embedding', output: 'Vectores densos', concepts: 'Vector Space, Dimensions' },
-    { id: 'vectordb', label: 'Vector DB', type: 'ingestion', position: new THREE.Vector3(4, 2, -2), icon: 'database', description: 'Almacenamiento indexado de vectores y metadata.', input: 'Vectores + Metadata', process: 'Indexación HNSW/IVF', output: 'Índice buscable', concepts: 'ANN, Indexes, Metadata' },
+    { id: 'docs', label: 'Documents', type: 'ingestion', hPos: new THREE.Vector3(-4.5, 2, 0), vPos: new THREE.Vector3(0, 7.5, 0), icon: 'description', description: 'Biblioteca de conocimiento original.', input: 'PDFs, Confluence, repositorios', process: 'Extracción de texto plano', output: 'Raw text documents', concepts: 'ETL, Data Sources' },
+    { id: 'chunking', label: 'Chunking', type: 'ingestion', hPos: new THREE.Vector3(-1.5, 2, 0), vPos: new THREE.Vector3(0, 5, 0), icon: 'cut', description: 'Fragmentación del texto en piezas digeribles.', input: 'Raw text', process: 'Split por tokens/caracteres con overlap', output: 'Chunks de texto', concepts: 'Chunk Size, Overlap' },
+    { id: 'embedding_off', label: 'Embedding', type: 'ingestion', hPos: new THREE.Vector3(1.5, 2, 0), vPos: new THREE.Vector3(0, 2.5, 0), icon: 'transform', description: 'Vectorización de cada chunk.', input: 'Text Chunks', process: 'Paso por modelo de embedding', output: 'Vectores densos', concepts: 'Vector Space, Dimensions' },
+    { id: 'vectordb', label: 'Vector DB', type: 'ingestion', hPos: new THREE.Vector3(4.5, 2, 0), vPos: new THREE.Vector3(0, 0, 0), icon: 'database', description: 'Almacenamiento indexado de vectores y metadata.', input: 'Vectores + Metadata', process: 'Indexación HNSW/IVF', output: 'Índice buscable', concepts: 'ANN, Indexes, Metadata' },
     
     // Inference (Online)
-    { id: 'query', label: 'Query', type: 'inference', position: new THREE.Vector3(-4, -1, 2), icon: 'search', description: 'Pregunta del usuario en tiempo real.', input: 'User Input', process: 'Recepción del prompt', output: 'Raw string query', concepts: 'Intent, User Prompt' },
-    { id: 'embedding_on', label: 'Embedding', type: 'inference', position: new THREE.Vector3(-1.5, -1, 2), icon: 'transform', description: 'Vectorización de la pregunta (mismo modelo).', input: 'Raw string query', process: 'Paso por modelo de embedding', output: 'Query Vector', concepts: 'Symmetry' },
-    { id: 'retrieval', label: 'Retrieval', type: 'inference', position: new THREE.Vector3(1, -1, 2), icon: 'radar', description: 'Búsqueda de los chunks más similares.', input: 'Query Vector', process: 'Cosine Similarity / ANN Search en Vector DB', output: 'Top-K candidate chunks', concepts: 'Similarity, Top-K' },
-    { id: 'context', label: 'Context Build', type: 'inference', position: new THREE.Vector3(3.5, -1, 2), icon: 'construction', description: 'Ensamblaje del prompt inyectando los chunks.', input: 'Top-K chunks + Query', process: 'Prompt Formatting', output: 'Structured Prompt', concepts: 'Context Engineering' },
-    { id: 'llm', label: 'LLM Generation', type: 'inference', position: new THREE.Vector3(6, -1, 2), icon: 'smart_toy', description: 'Generación de la respuesta fundamentada.', input: 'Structured Prompt', process: 'Inferencia causal', output: 'Final Response', concepts: 'Grounded Generation' }
+    { id: 'query', label: 'Query', type: 'inference', hPos: new THREE.Vector3(-4.5, -2, 0), vPos: new THREE.Vector3(0, -3.5, 0), icon: 'search', description: 'Pregunta del usuario en tiempo real.', input: 'User Input', process: 'Recepción del prompt', output: 'Raw string query', concepts: 'Intent, User Prompt' },
+    // Embedding removed as independent node per user request. Retrieval will assume query vectorization conceptually.
+    { id: 'retrieval', label: 'Retrieval', type: 'inference', hPos: new THREE.Vector3(-1.5, -2, 0), vPos: new THREE.Vector3(0, -6, 0), icon: 'radar', description: 'Búsqueda vectorial. (Incluye vectorización del Query).', input: 'Query (Raw)', process: 'Vectorización + Cosine Similarity Search', output: 'Top-K candidate chunks', concepts: 'Similarity, Top-K' },
+    { id: 'context', label: 'Context Build', type: 'inference', hPos: new THREE.Vector3(1.5, -2, 0), vPos: new THREE.Vector3(0, -8.5, 0), icon: 'construction', description: 'Ensamblaje del prompt inyectando los chunks recuperados.', input: 'Top-K chunks + Query', process: 'Prompt Formatting', output: 'Structured Prompt', concepts: 'Context Engineering' },
+    { id: 'llm', label: 'LLM', type: 'inference', hPos: new THREE.Vector3(4.5, -2, 0), vPos: new THREE.Vector3(0, -11, 0), icon: 'smart_toy', description: 'Generación de la respuesta fundamentada.', input: 'Structured Prompt', process: 'Inferencia causal', output: 'Final Response', concepts: 'Grounded Generation' }
   ];
 
   selectedNodeData = computed(() => {
@@ -184,29 +217,22 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
 
   // Three.js State
   private scene!: THREE.Scene;
-  private camera!: THREE.PerspectiveCamera;
+  private camera!: THREE.OrthographicCamera; // Usar ortográfica mejora layout UI 2D
   private renderer!: THREE.WebGLRenderer;
-  private controls!: OrbitControls;
-  private raycaster = new THREE.Raycaster();
-  private mouse = new THREE.Vector2();
   
   private nodeMeshes: Map<string, THREE.Mesh> = new Map();
   private edgesGroup = new THREE.Group();
   private particlesGroup = new THREE.Group();
+  private bgGroup = new THREE.Group();
   private particles: Particle[] = [];
   
-  private hoveredId: string | null = null;
   private resizeObserver!: ResizeObserver;
   private animationFrameId: number | null = null;
   
   private colors = {
-    ingestion: 0x3b82f6, // blue
-    inference: 0x10b981, // green
-    bg: 0x0A0A0A,
-    nodeBg: 0x1e293b,
-    highlight: 0xf59e0b,
-    edge: 0x334155,
-    particle: 0x60a5fa
+    edge: 0x475569, // slate-600
+    edgeHighlight: 0x94a3b8, // slate-400
+    particle: 0xf59e0b // amber-500
   };
 
   constructor(private ngZone: NgZone) {}
@@ -221,176 +247,16 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
     this.cleanupThreeJs();
   }
 
-  private initThreeJs() {
-    try {
-      const container = this.canvasContainer.nativeElement;
-      this.scene = new THREE.Scene();
-      this.scene.background = new THREE.Color(this.colors.bg);
-
-      const aspect = container.clientWidth / container.clientHeight;
-      this.camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 100);
-      this.camera.position.set(1, 1, 12);
-
-      this.renderer = new THREE.WebGLRenderer({ antialias: true });
-      this.renderer.setSize(container.clientWidth, container.clientHeight);
-      this.renderer.setPixelRatio(window.devicePixelRatio);
-      container.appendChild(this.renderer.domElement);
-
-      this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-      this.controls.enableDamping = true;
-      this.controls.dampingFactor = 0.05;
-
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-      this.scene.add(ambientLight);
-      const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
-      dirLight.position.set(5, 10, 5);
-      this.scene.add(dirLight);
-
-      this.scene.add(this.edgesGroup);
-      this.scene.add(this.particlesGroup);
-
-      this.createNodes();
-      this.createEdges();
-
-      container.addEventListener('pointermove', this.onPointerMove.bind(this));
-      container.addEventListener('click', this.onClick.bind(this));
-
-      this.resizeObserver = new ResizeObserver(() => this.onResize());
-      this.resizeObserver.observe(container);
-
-      this.animate();
-    } catch (e) {
-      this.ngZone.run(() => this.webglError.set(true));
-      console.error(e);
-    }
+  onTopKChange(val: number) {
+    this.topK.set(val);
+    this.mockChunks = this.mockChunks.map(c => ({
+      ...c,
+      active: c.id <= val
+    }));
   }
 
-  private createNodes() {
-    const geometry = new THREE.BoxGeometry(1.2, 0.8, 0.2);
-    
-    this.nodes.forEach(node => {
-      // Create canvas texture for text
-      const canvas = document.createElement('canvas');
-      canvas.width = 256;
-      canvas.height = 128;
-      const ctx = canvas.getContext('2d')!;
-      ctx.fillStyle = '#1e293b'; // Base node color
-      ctx.fillRect(0, 0, 256, 128);
-      ctx.fillStyle = node.type === 'ingestion' ? '#60a5fa' : '#34d399';
-      ctx.font = 'bold 24px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(node.label, 128, 64);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      
-      const material = new THREE.MeshPhongMaterial({ 
-        color: 0xffffff,
-        map: texture
-      });
-      
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.copy(node.position);
-      mesh.userData = { id: node.id, type: node.type, texture, canvas, ctx };
-      
-      this.nodeMeshes.set(node.id, mesh);
-      this.scene.add(mesh);
-    });
-  }
-
-  private createEdges() {
-    const material = new THREE.LineBasicMaterial({ color: this.colors.edge, linewidth: 2 });
-    
-    // Ingestion flow
-    this.addEdge('docs', 'chunking', material);
-    this.addEdge('chunking', 'embedding_off', material);
-    this.addEdge('embedding_off', 'vectordb', material);
-    
-    // Inference flow
-    this.addEdge('query', 'embedding_on', material);
-    this.addEdge('embedding_on', 'retrieval', material);
-    this.addEdge('retrieval', 'context', material);
-    this.addEdge('context', 'llm', material);
-    
-    // Cross flow
-    this.addEdge('vectordb', 'retrieval', material, true);
-  }
-
-  private addEdge(fromId: string, toId: string, material: THREE.Material, dashed = false) {
-    const from = this.nodeMeshes.get(fromId)!.position;
-    const to = this.nodeMeshes.get(toId)!.position;
-    
-    const points = [from, to];
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    
-    let lineMat = material;
-    const line = new THREE.Line(geometry, lineMat);
-    if (dashed) {
-      line.material = new THREE.LineDashedMaterial({ color: this.colors.edge, dashSize: 0.2, gapSize: 0.1 });
-      line.computeLineDistances();
-    }
-    
-    this.edgesGroup.add(line);
-  }
-
-  private updateNodeVisuals() {
-    const selectedId = this.selectedNodeId();
-    
-    this.nodeMeshes.forEach((mesh, id) => {
-      const isSelected = id === selectedId;
-      const isHovered = id === this.hoveredId;
-      
-      mesh.scale.setScalar(isSelected ? 1.15 : (isHovered ? 1.05 : 1.0));
-      
-      // Update canvas texture outline
-      const ud = mesh.userData;
-      const ctx = ud['ctx'] as CanvasRenderingContext2D;
-      ctx.fillStyle = '#1e293b';
-      ctx.fillRect(0, 0, 256, 128);
-      
-      if (isSelected) {
-        ctx.strokeStyle = '#f59e0b';
-        ctx.lineWidth = 10;
-        ctx.strokeRect(0, 0, 256, 128);
-      } else if (isHovered) {
-        ctx.strokeStyle = '#cbd5e1';
-        ctx.lineWidth = 6;
-        ctx.strokeRect(0, 0, 256, 128);
-      }
-      
-      ctx.fillStyle = ud['type'] === 'ingestion' ? '#60a5fa' : '#34d399';
-      ctx.font = 'bold 24px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(this.nodes.find(n => n.id === id)!.label, 128, 64);
-      
-      const texture = ud['texture'] as THREE.CanvasTexture;
-      texture.needsUpdate = true;
-    });
-  }
-
-  private onPointerMove(event: PointerEvent) {
-    const rect = this.canvasContainer.nativeElement.getBoundingClientRect();
-    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-    this.raycaster.setFromCamera(this.mouse, this.camera);
-    const intersects = this.raycaster.intersectObjects(Array.from(this.nodeMeshes.values()));
-
-    let newHover = intersects.length > 0 ? intersects[0].object.userData['id'] : null;
-
-    if (newHover !== this.hoveredId) {
-      this.hoveredId = newHover;
-      document.body.style.cursor = this.hoveredId ? 'pointer' : 'default';
-      this.updateNodeVisuals();
-    }
-  }
-
-  private onClick() {
-    this.ngZone.run(() => {
-      this.selectedNodeId.set(this.hoveredId);
-      this.updateNodeVisuals();
-    });
+  selectNode(id: string) {
+    this.selectedNodeId.set(id);
   }
 
   togglePipeline() {
@@ -409,31 +275,162 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
     this.clearParticles();
   }
 
+  private initThreeJs() {
+    try {
+      const container = this.canvasContainer.nativeElement;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      this.scene = new THREE.Scene();
+
+      // Orthographic camera makes mapping 3D to 2D screen much more predictable
+      const aspect = width / height;
+      const viewSize = 12; // Base view size
+      this.camera = new THREE.OrthographicCamera(
+        -viewSize * aspect / 2, viewSize * aspect / 2,
+        viewSize / 2, -viewSize / 2,
+        0.1, 100
+      );
+      this.camera.position.set(0, 0, 10);
+
+      this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      this.renderer.setSize(width, height);
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      container.appendChild(this.renderer.domElement);
+
+      this.scene.add(this.bgGroup);
+      this.scene.add(this.edgesGroup);
+      this.scene.add(this.particlesGroup);
+
+      this.createNodeAnchors();
+      this.updateLayout(width, height); // Creates edges too
+
+      this.resizeObserver = new ResizeObserver(() => this.onResize());
+      this.resizeObserver.observe(container);
+
+      this.animate();
+    } catch (e) {
+      this.ngZone.run(() => this.webglError.set(true));
+      console.error(e);
+    }
+  }
+
+  private createNodeAnchors() {
+    // Invisible meshes used purely for anchoring 3D lines and particles
+    const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    const material = new THREE.MeshBasicMaterial({ visible: false });
+    
+    this.nodes.forEach(node => {
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.userData = { id: node.id };
+      this.nodeMeshes.set(node.id, mesh);
+      this.scene.add(mesh);
+    });
+  }
+
+  private updateLayout(width: number, height: number) {
+    this.isMobileLayout = window.innerWidth <= 1024;
+    
+    const aspect = width / height;
+    
+    if (this.isMobileLayout) {
+      // Vertical layout: Lock the vertical view size
+      const viewSizeHeight = 24; 
+      this.camera.top = viewSizeHeight / 2;
+      this.camera.bottom = -viewSizeHeight / 2;
+      this.camera.left = -viewSizeHeight * aspect / 2;
+      this.camera.right = viewSizeHeight * aspect / 2;
+    } else {
+      // Horizontal layout: Lock the horizontal view size
+      const viewSizeWidth = 14; // Gives enough space for 9 units of nodes + padding
+      this.camera.left = -viewSizeWidth / 2;
+      this.camera.right = viewSizeWidth / 2;
+      this.camera.top = (viewSizeWidth / aspect) / 2;
+      this.camera.bottom = -(viewSizeWidth / aspect) / 2;
+    }
+    this.camera.updateProjectionMatrix();
+
+    // Position meshes based on current layout mode
+    this.nodes.forEach(node => {
+      const mesh = this.nodeMeshes.get(node.id)!;
+      const pos = this.isMobileLayout ? node.vPos : node.hPos;
+      mesh.position.copy(pos);
+    });
+
+    this.rebuildEdges();
+    this.updateHtmlOverlayPositions();
+  }
+
+  private rebuildEdges() {
+    // Clear edges
+    while(this.edgesGroup.children.length > 0){ 
+      const child = this.edgesGroup.children[0] as any;
+      if (child.geometry) child.geometry.dispose();
+      if (child.material) child.material.dispose();
+      this.edgesGroup.remove(child);
+    }
+
+    const material = new THREE.LineBasicMaterial({ color: this.colors.edge, linewidth: 2 });
+    
+    // Ingestion flow
+    this.addEdge('docs', 'chunking', material);
+    this.addEdge('chunking', 'embedding_off', material);
+    this.addEdge('embedding_off', 'vectordb', material);
+    
+    // Inference flow
+    this.addEdge('query', 'retrieval', material);
+    this.addEdge('retrieval', 'context', material);
+    this.addEdge('context', 'llm', material);
+    
+    // Cross flow (Vector DB to Retrieval)
+    const dashedMat = new THREE.LineDashedMaterial({ color: this.colors.edge, dashSize: 0.3, gapSize: 0.15 });
+    this.addEdge('vectordb', 'retrieval', dashedMat, true);
+  }
+
+  private addEdge(fromId: string, toId: string, material: THREE.Material, isDashed = false) {
+    const from = this.nodeMeshes.get(fromId)!.position;
+    const to = this.nodeMeshes.get(toId)!.position;
+    
+    const points = [from, to];
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const line = new THREE.Line(geometry, material);
+    if (isDashed) {
+      line.computeLineDistances();
+    }
+    this.edgesGroup.add(line);
+  }
+
   private startSimulation() {
     this.clearParticles();
-    // Simulate flow: Query -> Embed -> Retrieval -> Context -> LLM
-    this.spawnParticle('query', 'embedding_on', 0);
-    this.spawnParticle('embedding_on', 'retrieval', 1000);
     
-    // Cross flow from Vector DB
-    this.spawnParticle('vectordb', 'retrieval', 1500);
+    const speed = this.isMobileLayout ? 0.015 : 0.01;
+    
+    // Offline / Ingestion Part
+    this.spawnParticle('docs', 'chunking', 0, speed);
+    this.spawnParticle('chunking', 'embedding_off', 1000, speed);
+    this.spawnParticle('embedding_off', 'vectordb', 2000, speed);
+    
+    // Online / Inference Part
+    this.spawnParticle('query', 'retrieval', 3500, speed);
+    
+    // Cross flow (Knowledge injected)
+    this.spawnParticle('vectordb', 'retrieval', 4500, speed);
     
     // Chunks going to context
-    this.spawnParticle('retrieval', 'context', 2500);
-    this.spawnParticle('context', 'llm', 3500);
+    this.spawnParticle('retrieval', 'context', 6000, speed);
+    this.spawnParticle('context', 'llm', 7500, speed);
     
     setTimeout(() => {
       this.ngZone.run(() => {
         if (this.pipelineState() === 'running') {
           this.pipelineState.set('completed');
           this.selectedNodeId.set('llm');
-          this.updateNodeVisuals();
         }
       });
-    }, 4500);
+    }, 8500);
   }
 
-  private spawnParticle(fromId: string, toId: string, delay: number) {
+  private spawnParticle(fromId: string, toId: string, delay: number, speed: number) {
     setTimeout(() => {
       if (this.pipelineState() !== 'running') return;
       
@@ -441,8 +438,8 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
       const to = this.nodeMeshes.get(toId)!.position;
       
       const mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(0.15, 16, 16),
-        new THREE.MeshBasicMaterial({ color: 0xfde047 }) // yellow glow
+        new THREE.CircleGeometry(0.25, 32),
+        new THREE.MeshBasicMaterial({ color: this.colors.particle })
       );
       mesh.position.copy(from);
       
@@ -452,7 +449,7 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
         start: from.clone(),
         end: to.clone(),
         progress: 0,
-        speed: 0.02
+        speed: speed
       });
     }, delay);
   }
@@ -468,7 +465,6 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
 
   private animate() {
     this.animationFrameId = requestAnimationFrame(() => this.animate());
-    this.controls.update();
     
     // Animate particles
     for (let i = this.particles.length - 1; i >= 0; i--) {
@@ -486,45 +482,101 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
     }
 
     this.renderer.render(this.scene, this.camera);
-    this.checkCameraPosition();
+    
+    // Sync HTML Overlays
+    this.updateHtmlOverlayPositions();
   }
 
-  private checkCameraPosition() {
-    const isReset = 
-      Math.abs(this.camera.position.x - 1) < 0.1 &&
-      Math.abs(this.camera.position.y - 1) < 0.1 &&
-      Math.abs(this.camera.position.z - 12) < 0.1;
+  private updateHtmlOverlayPositions() {
+    if (!this.canvasWrapper) return;
+    const width = this.canvasWrapper.nativeElement.clientWidth;
+    const height = this.canvasWrapper.nativeElement.clientHeight;
+
+    this.nodes.forEach(node => {
+      const mesh = this.nodeMeshes.get(node.id);
+      if (!mesh) return;
+
+      mesh.updateMatrixWorld();
+      const vector = new THREE.Vector3();
+      vector.setFromMatrixPosition(mesh.matrixWorld);
+      vector.project(this.camera);
       
-    if (this.isCameraReset() !== isReset) {
-      this.ngZone.run(() => this.isCameraReset.set(isReset));
+      const x = (vector.x * 0.5 + 0.5) * width;
+      const y = (vector.y * -0.5 + 0.5) * height;
+
+      const el = document.getElementById('node-' + node.id);
+      if (el) {
+        el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+      }
+    });
+
+    // Update Zone labels (approximate positions based on anchors)
+    const offlineEl = document.getElementById('zone-offline');
+    const onlineEl = document.getElementById('zone-online');
+    
+    if (this.isMobileLayout) {
+      if (offlineEl) {
+        const offVec = new THREE.Vector3(0, 9, 0).project(this.camera);
+        offlineEl.style.transform = `translate(${(offVec.x*0.5+0.5)*width}px, ${(offVec.y*-0.5+0.5)*height}px) translate(-50%, -50%)`;
+      }
+      if (onlineEl) {
+        const onVec = new THREE.Vector3(0, -1.5, 0).project(this.camera);
+        onlineEl.style.transform = `translate(${(onVec.x*0.5+0.5)*width}px, ${(onVec.y*-0.5+0.5)*height}px) translate(-50%, -50%)`;
+      }
+    } else {
+      if (offlineEl) {
+        const offVec = new THREE.Vector3(0, 3.5, 0).project(this.camera);
+        offlineEl.style.transform = `translate(${(offVec.x*0.5+0.5)*width}px, ${(offVec.y*-0.5+0.5)*height}px) translate(-50%, -50%)`;
+      }
+      if (onlineEl) {
+        const onVec = new THREE.Vector3(0, -0.5, 0).project(this.camera);
+        onlineEl.style.transform = `translate(${(onVec.x*0.5+0.5)*width}px, ${(onVec.y*-0.5+0.5)*height}px) translate(-50%, -50%)`;
+      }
+    }
+
+    // Position Top-K Panel
+    const topkEl = document.getElementById('topk-panel');
+    if (topkEl) {
+      const retrievalVec = this.nodeMeshes.get('retrieval')!.position.clone();
+      const contextVec = this.nodeMeshes.get('context')!.position.clone();
+      
+      // Place it between Retrieval and Context
+      const midVec = new THREE.Vector3().lerpVectors(retrievalVec, contextVec, 0.5);
+      
+      if (this.isMobileLayout) {
+        // Offset right
+        midVec.x += 2.5; 
+      } else {
+        // Offset down
+        midVec.y -= 1.5;
+      }
+      
+      midVec.project(this.camera);
+      const px = (midVec.x * 0.5 + 0.5) * width;
+      const py = (midVec.y * -0.5 + 0.5) * height;
+      
+      topkEl.style.transform = `translate(${px}px, ${py}px) translate(-50%, -50%)`;
     }
   }
 
-  resetCamera() {
-    this.camera.position.set(1, 1, 12);
-    this.controls.target.set(0, 0, 0);
-  }
-
   private onResize() {
-    if (!this.canvasContainer || !this.renderer) return;
-    const width = this.canvasContainer.nativeElement.clientWidth;
-    const height = this.canvasContainer.nativeElement.clientHeight;
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
+    if (!this.canvasWrapper || !this.renderer) return;
+    const width = this.canvasWrapper.nativeElement.clientWidth;
+    const height = this.canvasWrapper.nativeElement.clientHeight;
+    
     this.renderer.setSize(width, height);
+    this.updateLayout(width, height);
   }
 
   private cleanupThreeJs() {
     if (this.animationFrameId !== null) cancelAnimationFrame(this.animationFrameId);
     if (this.resizeObserver) this.resizeObserver.disconnect();
-    if (this.controls) this.controls.dispose();
     
     this.clearParticles();
     
     this.nodeMeshes.forEach(mesh => {
       mesh.geometry.dispose();
-      if (mesh.material instanceof THREE.Material) mesh.material.dispose();
-      if (mesh.userData['texture']) mesh.userData['texture'].dispose();
+      (mesh.material as THREE.Material).dispose();
     });
     
     this.edgesGroup.children.forEach(child => {

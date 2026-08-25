@@ -10,19 +10,22 @@
 
 .exp-header {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .exp-title {
   margin: 0;
   color: var(--case-text-primary);
+  font-size: 1.25rem;
 }
 
 .exp-subtitle {
-  margin: 0 0 12px 0;
+  margin: 4px 0 0 0;
   color: var(--case-text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .exp-controls {
@@ -37,7 +40,7 @@
   align-items: center;
   gap: 8px;
   background: var(--case-surface-3);
-  padding: 4px 12px;
+  padding: 6px 12px;
   border-radius: var(--case-radius-md);
   border: 1px solid var(--case-border);
 }
@@ -59,8 +62,9 @@
 
 .exp-layout {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr 300px;
   gap: var(--case-space-6);
+  margin-top: 12px;
 }
 
 @media (max-width: 1024px) {
@@ -75,8 +79,15 @@
   border-radius: var(--case-radius-lg);
   border: 1px solid var(--case-border);
   overflow: hidden;
-  aspect-ratio: 16/9;
+  min-height: 400px;
   display: flex;
+  align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+  .exp-canvas-wrapper {
+    min-height: 850px; /* Taller for vertical layout */
+  }
 }
 
 .exp-canvas {
@@ -85,34 +96,158 @@
   outline: none;
 }
 
-.exp-canvas-controls {
+/* HTML Overlays System */
+.html-overlay-container {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
+  inset: 0;
+  pointer-events: none; /* Let clicks pass through to background if needed */
+  overflow: hidden;
+}
+
+.zone-label {
+  position: absolute;
+  color: var(--case-text-muted);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.zone-label strong {
+  color: var(--case-text-secondary);
+}
+
+.html-node {
+  position: absolute;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
+  width: 140px;
+  padding: 12px;
+  background: var(--case-surface-3);
+  border: 2px solid var(--case-border);
+  border-radius: var(--case-radius-md);
+  cursor: pointer;
+  pointer-events: auto; /* Re-enable clicks for nodes */
+  transition: transform 0.1s linear, box-shadow 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+}
+
+.html-node:hover {
+  transform: translate(-50%, -50%) scale(1.05) !important;
+  border-color: var(--case-border-strong);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.html-node--selected {
+  border-color: var(--case-accent);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.html-node--ingestion .html-node-icon {
+  color: #60a5fa;
+}
+
+.html-node--inference .html-node-icon {
+  color: #34d399;
+}
+
+.html-node-icon {
+  font-size: 32px;
+}
+
+.html-node-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--case-text-primary);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Top-K Floating Panel */
+.topk-panel {
+  position: absolute;
+  width: 200px;
+  background: var(--case-surface-2);
+  border: 1px solid var(--case-border-strong);
+  border-radius: var(--case-radius-md);
+  padding: 12px;
+  pointer-events: auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 10;
 }
 
-.exp-btn-icon {
+.topk-panel--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.topk-header {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--case-text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--case-border);
+  padding-bottom: 4px;
+}
+
+.topk-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.topk-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--case-radius);
-  background: var(--case-surface-3);
+  gap: 8px;
+  font-size: 0.85rem;
+  font-family: var(--case-font-mono);
+  padding: 4px 8px;
+  border-radius: var(--case-radius-sm);
+  background: var(--case-surface-1);
+  border-left: 3px solid transparent;
+}
+
+.topk-item--signal {
+  border-left-color: #34d399;
   color: var(--case-text-primary);
-  border: 1px solid var(--case-border);
-  cursor: pointer;
-  transition: var(--case-transition);
+}
+.topk-item--signal span.material-symbols-outlined {
+  color: #34d399;
+  font-size: 16px;
 }
 
-.exp-btn-icon:hover {
-  background: var(--case-surface-4);
-  border-color: var(--case-border-strong);
+.topk-item--noise {
+  border-left-color: #f87171;
+  color: var(--case-text-secondary);
+}
+.topk-item--noise span.material-symbols-outlined {
+  color: #f87171;
+  font-size: 16px;
 }
 
+.topk-warning {
+  margin-top: 10px;
+  padding: 6px 8px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  font-size: 0.75rem;
+  border-radius: var(--case-radius-sm);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Secondary Info Panel */
 .exp-info-panel {
   display: flex;
   flex-direction: column;
@@ -125,16 +260,16 @@
   justify-content: center;
   height: 100%;
   text-align: center;
-  padding: var(--case-space-8);
+  padding: var(--case-space-6);
   background: var(--case-surface-1);
   border-radius: var(--case-radius-lg);
   border: 1px dashed var(--case-border);
-  min-height: 300px;
+  min-height: 200px;
 }
 
 .exp-empty-state span {
   font-size: 3rem;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   color: var(--case-text-muted);
 }
 
@@ -146,7 +281,7 @@
 .exp-empty-state p {
   color: var(--case-text-secondary);
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .exp-info-card {
@@ -156,13 +291,13 @@
   padding: var(--case-space-5);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .exp-badge {
   display: inline-block;
   align-self: flex-start;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   padding: 2px 8px;
   border-radius: var(--case-radius-pill);
   font-weight: bold;
@@ -184,14 +319,14 @@
   gap: 8px;
   margin: 0;
   color: var(--case-text-primary);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
 }
 
 .node-description {
   margin: 0;
   color: var(--case-text-secondary);
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .node-details {
@@ -207,18 +342,18 @@
 .detail-row {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .detail-row strong {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--case-text-muted);
 }
 
 .detail-row span {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--case-text-primary);
 }
 
@@ -231,91 +366,5 @@
 .concepts-row span {
   color: var(--case-accent);
   font-family: var(--case-font-mono);
-  font-size: 0.85rem;
-}
-
-.retrieval-simulation {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.simulation-note {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--case-text-secondary);
-  background: var(--case-surface-4);
-  padding: 8px;
-  border-radius: var(--case-radius-sm);
-  border-left: 3px solid var(--case-accent);
-}
-
-.chunk-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.chunk-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  border-radius: var(--case-radius-md);
-  background: var(--case-surface-1);
-  border: 1px solid var(--case-border);
-}
-
-.chunk-signal {
-  border-color: rgba(52, 211, 153, 0.4);
-}
-
-.chunk-noise {
-  border-color: rgba(248, 113, 113, 0.4);
-}
-
-.chunk-icon {
-  font-size: 20px;
-}
-
-.chunk-signal .chunk-icon {
-  color: #34d399;
-}
-
-.chunk-noise .chunk-icon {
-  color: #f87171;
-}
-
-.chunk-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.chunk-status {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--case-text-primary);
-}
-
-.chunk-score {
-  font-size: 0.75rem;
-  color: var(--case-text-secondary);
-  font-family: var(--case-font-mono);
-}
-
-.tradeoff-card {
-  padding: 12px 16px;
-  border-radius: var(--case-radius-md);
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
-
-.tradeoff-card--danger {
-  background: rgba(239, 68, 68, 0.1);
-  border-left: 4px solid var(--case-text-danger);
-  color: var(--case-text-primary);
+  font-size: 0.8rem;
 }
