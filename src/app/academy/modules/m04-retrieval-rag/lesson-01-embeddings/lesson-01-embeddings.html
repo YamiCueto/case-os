@@ -1,134 +1,119 @@
 <div class="living-doc" role="main">
   @if (lesson) {
-    <!-- ── 1. Unified Technical Header ── -->
-    <app-lesson-header
-      [lesson]="lesson"
-      [moduleTitle]="module?.title"
-      subtitle="Representando conocimiento matemático"
-    />
+  <!-- ── 1. Unified Technical Header ── -->
+  <app-lesson-header [lesson]="lesson" [moduleTitle]="module?.title" subtitle="Representando conocimiento matemático" />
 
-    <!-- ── 2. Table of Contents / Outline Navigation ── -->
-    <nav class="living-doc__outline" aria-label="Índice de la lección">
-      <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
-      <div class="living-doc__outline-items">
-        @for (sec of doc.sections; track sec.id) {
-          <a [href]="'#' + sec.id" class="living-doc__outline-link">
-            {{ sec.title }}
-          </a>
-        }
-      </div>
-    </nav>
-
-    <!-- ── 3. Flowing Sections ── -->
-    <div class="living-doc__sections">
+  <!-- ── 2. Table of Contents / Outline Navigation ── -->
+  <nav class="living-doc__outline" aria-label="Índice de la lección">
+    <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
+    <div class="living-doc__outline-items">
       @for (sec of doc.sections; track sec.id) {
-        <section class="living-doc-section" [id]="sec.id" [attr.aria-label]="sec.title">
-          
-          <div class="living-doc-section__header">
-            <h2 class="living-doc-section__title">{{ sec.title }}</h2>
-            @if (sec.subtitle) {
-              <p class="living-doc-section__subtitle">{{ sec.subtitle }}</p>
-            }
-          </div>
-
-          <div class="living-doc-section__body">
-            @for (block of sec.blocks; track $index) {
-              
-              <!-- Paragraph Block -->
-              @if (block.type === 'PARAGRAPH') {
-                <p class="living-doc-paragraph" [class.living-doc-paragraph--lead]="block.lead">
-                  {{ block.text }}
-                </p>
-              }
-
-              <!-- Comparison Block -->
-              @else if (block.type === 'COMPARISON') {
-                <app-lesson-comparison [comparison]="block" />
-              }
-
-              <!-- Callout Block -->
-              @else if (block.type === 'CALLOUT') {
-                <case-callout
-                  [variant]="block.variant"
-                  [title]="block.title"
-                  [message]="block.message"
-                />
-              }
-
-              <!-- Code Block -->
-              @else if (block.type === 'CODE') {
-                <case-code-block
-                  [code]="block.code"
-                  [language]="block.language"
-                  [filename]="block.filename"
-                  [lineNumbers]="block.lineNumbers || false"
-                />
-              }
-
-              <!-- Example / Specification Block -->
-              @else if (block.type === 'EXAMPLE') {
-                <div class="living-doc-example">
-                  @if (block.title) {
-                    <div class="living-doc-example__header">
-                      <span class="material-symbols-outlined living-doc-example__icon" aria-hidden="true">data_object</span>
-                      <span class="living-doc-example__title">{{ block.title }}</span>
-                    </div>
-                  }
-                  <div class="living-doc-example__content">
-                    @if (block.content) {
-                      <ul class="living-doc-example__list">
-                        @for (item of (block.content); track item) {
-                          <li class="living-doc-example__item">
-                            <span class="living-doc-example__bullet">▸</span>
-                            <span>{{ item }}</span>
-                          </li>
-                        }
-                      </ul>
-                    }
-                  </div>
-                  @if (block.caption) {
-                    <div class="living-doc-example__caption">
-                      {{ block.caption }}
-                    </div>
-                  }
-                </div>
-              }
-
-              <!-- Key Insights Block -->
-              @else if (block.type === 'KEY_INSIGHTS') {
-                <div class="living-doc-insights">
-                  <div class="living-doc-insights__header">
-                    <span class="material-symbols-outlined living-doc-insights__icon" aria-hidden="true">verified</span>
-                    <span class="living-doc-insights__title">{{ block.title || 'Key Insights de Ingeniería' }}</span>
-                  </div>
-                  <ul class="living-doc-insights__list">
-                    @for (item of block.items; track item) {
-                      <li class="living-doc-insights__item">
-                        <span class="material-symbols-outlined living-doc-insights__check" aria-hidden="true">check</span>
-                        <span>{{ item }}</span>
-                      </li>
-                    }
-                  </ul>
-                </div>
-              }
-
-              <!-- Experience Block (Interactive Component) -->
-              @else if (block.type === 'EXPERIENCE') {
-                <app-experience-registry [experienceId]="block.experienceId" />
-              }
-
-            }
-          </div>
-
-        </section>
+      <a [href]="'#' + sec.id" class="living-doc__outline-link">
+        {{ sec.title }}
+      </a>
       }
     </div>
+  </nav>
 
-    <!-- ── 4. Technical Footer Navigation & Completion ── -->
-    <app-lesson-footer
-      [lessonId]="lesson.id"
-      [nextLesson]="adjacentLessons.next"
-      [previousLesson]="adjacentLessons.previous"
-    />
+  <!-- ── 3. Flowing Sections ── -->
+  <div class="living-doc__sections">
+    @for (sec of doc.sections; track sec.id) {
+    <section class="living-doc-section" [id]="sec.id" [attr.aria-label]="sec.title">
+
+      <div class="living-doc-section__header">
+        <h2 class="living-doc-section__title">{{ sec.title }}</h2>
+        @if (sec.subtitle) {
+        <p class="living-doc-section__subtitle">{{ sec.subtitle }}</p>
+        }
+      </div>
+
+      <div class="living-doc-section__body">
+        @for (block of sec.blocks; track $index) {
+
+        <!-- Paragraph Block -->
+        @if (block.type === 'PARAGRAPH') {
+        <p class="living-doc-paragraph" [class.living-doc-paragraph--lead]="block.lead">
+          {{ block.text }}
+        </p>
+        }
+
+        <!-- Comparison Block -->
+        @else if (block.type === 'COMPARISON') {
+        <app-lesson-comparison [comparison]="block" />
+        }
+
+        <!-- Callout Block -->
+        @else if (block.type === 'CALLOUT') {
+        <case-callout [variant]="block.variant" [title]="block.title" [message]="block.message" />
+        }
+
+        <!-- Code Block -->
+        @else if (block.type === 'CODE') {
+        <case-code-block [code]="block.code" [language]="block.language" [filename]="block.filename"
+          [lineNumbers]="block.lineNumbers || false" />
+        }
+
+        <!-- Example / Specification Block -->
+        @else if (block.type === 'EXAMPLE') {
+        <div class="living-doc-example">
+          @if (block.title) {
+          <div class="living-doc-example__header">
+            <span class="material-symbols-outlined living-doc-example__icon" aria-hidden="true">data_object</span>
+            <span class="living-doc-example__title">{{ block.title }}</span>
+          </div>
+          }
+          <div class="living-doc-example__content">
+            @if (block.content) {
+            <ul class="living-doc-example__list">
+              @for (item of (block.content); track item) {
+              <li class="living-doc-example__item">
+                <span class="living-doc-example__bullet">▸</span>
+                <span>{{ item }}</span>
+              </li>
+              }
+            </ul>
+            }
+          </div>
+          @if (block.caption) {
+          <div class="living-doc-example__caption">
+            {{ block.caption }}
+          </div>
+          }
+        </div>
+        }
+
+        <!-- Key Insights Block -->
+        @else if (block.type === 'KEY_INSIGHTS') {
+        <div class="living-doc-insights">
+          <div class="living-doc-insights__header">
+            <span class="material-symbols-outlined living-doc-insights__icon" aria-hidden="true">verified</span>
+            <span class="living-doc-insights__title">{{ block.title || 'Key Insights de Ingeniería' }}</span>
+          </div>
+          <ul class="living-doc-insights__list">
+            @for (item of block.items; track item) {
+            <li class="living-doc-insights__item">
+              <span class="material-symbols-outlined living-doc-insights__check" aria-hidden="true">check</span>
+              <span>{{ item }}</span>
+            </li>
+            }
+          </ul>
+        </div>
+        }
+
+        <!-- Experience Block (Interactive Component) -->
+        @else if (block.type === 'EXPERIENCE') {
+        <app-experience-registry [experienceId]="block.experienceId" />
+        }
+
+        }
+      </div>
+
+    </section>
+    }
+  </div>
+
+  <!-- ── 4. Technical Footer Navigation & Completion ── -->
+  <app-lesson-footer [lessonId]="lesson.id" [nextLesson]="adjacentLessons.next"
+    [previousLesson]="adjacentLessons.previous" />
   }
 </div>
