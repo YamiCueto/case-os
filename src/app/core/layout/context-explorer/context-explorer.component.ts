@@ -1,7 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { WorkspaceRegistryService } from '../workspace-registry/workspace-registry.service';
 import { CaseIconButtonComponent } from '../../ui/components/case-icon-button/case-icon-button.component';
+import { LayoutStateService } from '../layout-state.service';
 
 /**
  * ContextExplorerComponent — CASE Shell
@@ -156,12 +157,36 @@ import { CaseIconButtonComponent } from '../../ui/components/case-icon-button/ca
       overflow: hidden;
       transition:
         width var(--case-transition-slow),
-        border-color var(--case-transition-slow);
+        border-color var(--case-transition-slow),
+        transform var(--case-transition-slow);
     }
 
     .explorer--collapsed {
       width: 0;
       border-right-color: transparent;
+    }
+
+    @media (max-width: 768px) {
+      .explorer {
+        position: fixed;
+        top: var(--case-topbar-height);
+        left: 0;
+        bottom: 0;
+        height: auto;
+        z-index: var(--case-z-modal);
+        width: 280px;
+        transform: translateX(0);
+      }
+
+      .explorer--collapsed {
+        transform: translateX(-100%);
+        width: 280px;
+        border-right-color: transparent;
+      }
+      
+      .explorer__header case-icon-button {
+        display: none;
+      }
     }
 
     /* ── Header ─────────────────────────────────────────────────────────── */
@@ -352,14 +377,15 @@ import { CaseIconButtonComponent } from '../../ui/components/case-icon-button/ca
 })
 export class ContextExplorerComponent {
   private registry = inject(WorkspaceRegistryService);
+  private layoutState = inject(LayoutStateService);
 
   /** The current workspace config from the registry */
   readonly config = this.registry.explorerConfig;
 
-  /** Collapse state — managed locally */
-  readonly collapsed = signal(false);
+  /** Collapse state — managed via LayoutStateService */
+  readonly collapsed = computed(() => !this.layoutState.sidebarOpen());
 
   toggleCollapse(): void {
-    this.collapsed.update(v => !v);
+    this.layoutState.toggleSidebar();
   }
 }

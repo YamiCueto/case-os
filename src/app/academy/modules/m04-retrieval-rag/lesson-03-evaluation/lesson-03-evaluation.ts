@@ -45,18 +45,6 @@ export class Lesson03Evaluation implements OnInit {
   readonly module: AcademyModule | undefined = this.courseService.getModuleById('m4');
   readonly adjacentLessons = this.courseService.getAdjacentLessons('c12');
 
-  readonly relatedDemo = {
-    title: 'Demo 04 — Construir la Recuperación',
-    path: '/academy/modules/m04-retrieval-rag/demo-build-retrieval',
-    description: 'Simulador interactivo de Top-K, Precision@K y Hit Rate.'
-  };
-
-  readonly relatedLab = {
-    title: 'Lab 04 — Diseñar una Estrategia de Recuperación',
-    path: '/academy/modules/m04-retrieval-rag/lab-04-build-retrieval-strategy',
-    duration: '60 min'
-  };
-
   ngOnInit(): void {
     if (this.lesson) {
       this.userProgressService.setLastVisitedLesson(

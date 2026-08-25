@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CaseIconButtonComponent } from '../../ui/components/case-icon-button/case-icon-button.component';
 import { CaseBreadcrumbComponent } from '../../ui/components/case-breadcrumb/case-breadcrumb.component';
 import { WorkspaceRegistryService } from '../workspace-registry/workspace-registry.service';
+import { LayoutStateService } from '../layout-state.service';
 
 /**
  * WorkspaceTopBar — CASE Shell
@@ -17,6 +18,17 @@ import { WorkspaceRegistryService } from '../workspace-registry/workspace-regist
   imports: [RouterModule, CaseIconButtonComponent, CaseBreadcrumbComponent],
   template: `
     <header class="topbar" role="banner">
+
+      <!-- Mobile Menu Toggle -->
+      <div class="topbar__mobile-menu">
+        <case-icon-button
+          icon="menu"
+          tooltip="Menú"
+          size="sm"
+          variant="ghost"
+          (click)="toggleMenu()"
+        />
+      </div>
 
       <!-- Brand -->
       <a routerLink="/dashboard" class="topbar__brand" aria-label="CASE OS — Engineering Workspace">
@@ -91,6 +103,21 @@ import { WorkspaceRegistryService } from '../workspace-registry/workspace-regist
       border-bottom: var(--case-border-width) solid var(--case-border);
       padding: 0 var(--case-space-3);
       gap: 0;
+    }
+
+    /* ── Mobile Menu ── */
+    .topbar__mobile-menu {
+      display: none;
+      margin-right: var(--case-space-1);
+    }
+    
+    @media (max-width: 768px) {
+      .topbar__mobile-menu {
+        display: block;
+      }
+      .topbar__brand-name {
+        display: none;
+      }
     }
 
     /* ── Brand ── */
@@ -264,6 +291,11 @@ import { WorkspaceRegistryService } from '../workspace-registry/workspace-regist
 })
 export class WorkspaceTopBarComponent {
   private registry = inject(WorkspaceRegistryService);
+  private layoutState = inject(LayoutStateService);
 
   readonly breadcrumbs = this.registry.breadcrumbs;
+
+  toggleMenu(): void {
+    this.layoutState.toggleSidebar();
+  }
 }

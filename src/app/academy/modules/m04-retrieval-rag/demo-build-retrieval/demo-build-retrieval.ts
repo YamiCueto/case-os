@@ -1,7 +1,8 @@
-﻿import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CaseButtonComponent } from '../../../../core/ui/components';
 
 interface Document {
   id: string;
@@ -13,7 +14,7 @@ interface Document {
 @Component({
   selector: 'app-demo-build-retrieval',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, CaseButtonComponent],
   templateUrl: './demo-build-retrieval.html',
   styleUrls: ['../../../../shared-presentation.css']
 })

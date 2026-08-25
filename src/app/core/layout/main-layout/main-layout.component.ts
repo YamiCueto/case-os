@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { WorkspaceTopBarComponent } from '../workspace-topbar/workspace-topbar.component';
 import { GlobalNavComponent } from '../global-nav/global-nav.component';
 import { ContextExplorerComponent } from '../context-explorer/context-explorer.component';
 import { CommandPaletteComponent } from '../../command/command-palette/command-palette.component';
+import { LayoutStateService } from '../layout-state.service';
 
 /**
  * MainLayoutComponent — CASE Shell
@@ -44,6 +45,11 @@ import { CommandPaletteComponent } from '../../command/command-palette/command-p
         <!-- Region 2a: Global Navigation — 48px, permanent -->
         <app-global-nav />
 
+        <!-- Mobile Backdrop -->
+        @if (isSidebarOpen()) {
+          <div class="workspace__backdrop" (click)="closeSidebar()" aria-hidden="true"></div>
+        }
+
         <!-- Region 2b: Context Explorer — 240px, collapsible -->
         <app-context-explorer />
 
@@ -76,6 +82,25 @@ import { CommandPaletteComponent } from '../../command/command-palette/command-p
       overflow: hidden;
     }
 
+    /* ── Mobile Backdrop ── */
+    .workspace__backdrop {
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .workspace__backdrop {
+        display: block;
+        position: fixed;
+        top: var(--case-topbar-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: calc(var(--case-z-modal) - 1);
+        backdrop-filter: blur(2px);
+      }
+    }
+
     /* ── Canvas: all routed content ── */
     .workspace__canvas {
       flex: 1;
@@ -100,4 +125,12 @@ import { CommandPaletteComponent } from '../../command/command-palette/command-p
     }
   `]
 })
-export class MainLayoutComponent {}
+export class MainLayoutComponent {
+  private layoutState = inject(LayoutStateService);
+  
+  readonly isSidebarOpen = this.layoutState.sidebarOpen;
+  
+  closeSidebar(): void {
+    this.layoutState.closeSidebar();
+  }
+}

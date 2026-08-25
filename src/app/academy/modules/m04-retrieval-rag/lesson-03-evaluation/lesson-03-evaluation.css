@@ -182,7 +182,7 @@
 .living-doc-example__caption {
   font-family: var(--case-font-mono);
   font-size: 11px;
-  color: var(--case-text-muted);
+  color: var(--case-text-secondary);
   border-top: var(--case-border-width) solid var(--case-border);
   padding-top: var(--case-space-2);
   margin-top: var(--case-space-1);
