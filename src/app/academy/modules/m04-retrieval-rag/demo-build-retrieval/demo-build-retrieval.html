@@ -125,6 +125,8 @@
                   <span
                     style="font-size:10px; color:#64748b; background:#0f172a; border:1px solid #1e293b; padding:2px 6px; border-radius:4px;">{{
                     doc.category }}</span>
+                  <span *ngIf="doc.isRelevant" style="font-size:10px; color:var(--case-text-success); background:rgba(34, 197, 94, 0.1); border:1px solid rgba(34, 197, 94, 0.2); padding:2px 6px; border-radius:4px;">Relevant</span>
+                  <span *ngIf="!doc.isRelevant" style="font-size:10px; color:var(--case-text-danger); background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.2); padding:2px 6px; border-radius:4px;">Irrelevant</span>
                 </div>
                 <span [style.color]="doc.score > 0.6 ? '#22c55e' : '#eab308'"
                   style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;">
@@ -140,6 +142,53 @@
         <!-- Right: Retrieved Payload Assembly -->
         <div style="display:flex; flex-direction:column; gap:1.5rem;">
 
+          <!-- Budget Visualization -->
+          <div class="template-container" style="display:flex; flex-direction:column;">
+            <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
+              <h3 style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#908fa0; margin:0;">
+                Context Window Budget (M03)
+              </h3>
+            </div>
+            <div style="padding:1.25rem; background:#050505; display:flex; flex-direction:column; gap:16px;">
+              
+              <div style="height: 12px; display: flex; border-radius: 6px; overflow: hidden; background: #1F1F1F;">
+                <div [style.width]="(signalTokens() / budgetMax * 100) + '%'" style="background: var(--case-text-success); transition: width 0.3s;"></div>
+                <div [style.width]="(noiseTokens() / budgetMax * 100) + '%'" style="background: var(--case-text-danger); transition: width 0.3s;"></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-family:'JetBrains Mono',monospace; font-size:11px;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <span style="color: var(--case-text-success);">■ Relevante (Signal): {{ signalTokens() }} tks</span>
+                  <span style="color: var(--case-text-danger);">■ Irrelevante (Noise): {{ noiseTokens() }} tks</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px; text-align: right;">
+                  <span style="color: #64748b;">■ Disponible: {{ budgetMax - usedTokens() }} tks</span>
+                  <strong style="color: var(--case-text-primary); margin-top: 4px;">Total: {{ usedTokens() }} / {{ budgetMax }}</strong>
+                </div>
+              </div>
+
+              <div style="padding: 12px; background: rgba(99,102,241,0.05); border-left: 2px solid var(--case-accent); border-radius: 4px;">
+                <p style="font-size:12px; color:#cbd5e1; margin:0; line-height: 1.5;">
+                  <ng-container *ngIf="usedTokens() === 0">
+                    No hay contexto consumido.
+                  </ng-container>
+                  <ng-container *ngIf="usedTokens() > 0 && usedTokens() <= budgetMax * 0.35">
+                    Has utilizado poco presupuesto. Podrías estar dejando documentos relevantes fuera (bajo Recall).
+                  </ng-container>
+                  <ng-container *ngIf="usedTokens() > budgetMax * 0.35 && noiseTokens() <= signalTokens()">
+                    Has recuperado varios documentos manteniendo un buen equilibrio de señal y ruido en el contexto.
+                  </ng-container>
+                  <ng-container *ngIf="usedTokens() > budgetMax * 0.35 && noiseTokens() > signalTokens()">
+                    Una parte importante del contexto corresponde a documentos irrelevantes. Un contexto con demasiado ruido puede dificultar la identificación de la información útil y aumentar el costo de inferencia.
+                  </ng-container>
+                </p>
+              </div>
+              <p style="font-size:10px; color:#64748b; margin:0; font-style:italic;">
+                *Nota: El número de tokens es una simulación didáctica.
+              </p>
+            </div>
+          </div>
+
           <div class="template-container" style="display:flex; flex-direction:column; flex:1;">
             <div class="template-header" style="padding:12px 16px; border-bottom:1px solid #1F1F1F;">
               <h3
@@ -149,20 +198,13 @@
             <div style="padding:1.25rem; background:#050505; flex:1; display:flex; flex-direction:column; gap:12px;">
 
               <div *ngFor="let item of retrievedContext()"
-                style="background:#0A0A0A; border:1px solid #1F1F1F; border-left:2px solid #22c55e; padding:10px 14px; border-radius:6px;">
+                [style.borderLeftColor]="item.isRelevant ? 'var(--case-text-success)' : 'var(--case-text-danger)'"
+                style="background:#0A0A0A; border:1px solid #1F1F1F; border-left-width: 2px; border-left-style: solid; padding:10px 14px; border-radius:6px;">
                 <span
-                  style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#22c55e; font-weight:700;">PAYLOAD
-                  ITEM · {{ item.id }}</span>
+                  [style.color]="item.isRelevant ? 'var(--case-text-success)' : 'var(--case-text-danger)'"
+                  style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700;">PAYLOAD
+                  ITEM · {{ item.id }} ({{ item.tokens }} tks)</span>
                 <p style="margin:4px 0 0 0; font-size:12px; color:#c7c4d7; line-height:1.5;">{{ item.text }}</p>
-              </div>
-
-              <div style="margin-top:auto; padding-top:12px; border-top:1px solid #1F1F1F;">
-                <p
-                  style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--case-text-secondary); margin:0; line-height:1.5;">
-                  <strong style="color:var(--case-text-primary);">Trade-off Observado:</strong> Un Top-K pequeño
-                  incrementa la precisión pero arriesga omitir datos. Un Top-K amplio eleva el recall pero inyecta ruido
-                  y diluye la atención (M03).
-                </p>
               </div>
 
             </div>

@@ -9,6 +9,8 @@ interface Document {
   text: string;
   category: string;
   vector: number[];
+  tokens: number;
+  isRelevant?: boolean;
 }
 
 @Component({
@@ -20,12 +22,12 @@ interface Document {
 })
 export class DemoBuildRetrieval {
   documents: Document[] = [
-    { id: 'DOC-001', category: 'HR / Políticas', text: 'Política de Vacaciones: Los empleados tienen 15 días hábiles al año y deben solicitarse con 1 mes de anticipación.', vector: [0.9, 0.1, 0.0, 0.8, 0.4] },
-    { id: 'DOC-002', category: 'Finanzas', text: 'Reembolso de Gastos: Las comidas en viajes de negocio tienen un límite de $50 diarios. Requiere factura.', vector: [0.1, 0.9, 0.0, 0.7, 0.1] },
-    { id: 'DOC-003', category: 'IT / Infra', text: 'Renovación de Equipo: Las laptops (Mac/PC) se cambian cada 3 años mediante solicitud a IT.', vector: [0.0, 0.4, 0.9, 0.5, 0.1] },
-    { id: 'DOC-004', category: 'Beneficios', text: 'Seguro Médico Premium: Cubre atención dental, oftalmológica y psicológica hasta 80%.', vector: [0.1, 0.2, 0.0, 0.2, 0.9] },
-    { id: 'DOC-005', category: 'HR / Calendario', text: 'Feriados Nacionales 2026: La oficina permanecerá cerrada. No descuenta de las vacaciones regulares.', vector: [0.7, 0.0, 0.0, 0.5, 0.2] },
-    { id: 'DOC-006', category: 'Cumplimiento', text: 'Código de vestimenta (Dresscode): Se requiere casual de negocios de lunes a jueves. Viernes casual.', vector: [0.0, 0.0, 0.0, 0.8, 0.0] }
+    { id: 'DOC-001', category: 'HR / Políticas', text: 'Política de Vacaciones: Los empleados tienen 15 días hábiles al año y deben solicitarse con 1 mes de anticipación.', vector: [0.9, 0.1, 0.0, 0.8, 0.4], tokens: 280 },
+    { id: 'DOC-002', category: 'Finanzas', text: 'Reembolso de Gastos: Las comidas en viajes de negocio tienen un límite de $50 diarios. Requiere factura.', vector: [0.1, 0.9, 0.0, 0.7, 0.1], tokens: 250 },
+    { id: 'DOC-003', category: 'IT / Infra', text: 'Renovación de Equipo: Las laptops (Mac/PC) se cambian cada 3 años mediante solicitud a IT.', vector: [0.0, 0.4, 0.9, 0.5, 0.1], tokens: 220 },
+    { id: 'DOC-004', category: 'Beneficios', text: 'Seguro Médico Premium: Cubre atención dental, oftalmológica y psicológica hasta 80%.', vector: [0.1, 0.2, 0.0, 0.2, 0.9], tokens: 210 },
+    { id: 'DOC-005', category: 'HR / Calendario', text: 'Feriados Nacionales 2026: La oficina permanecerá cerrada. No descuenta de las vacaciones regulares.', vector: [0.7, 0.0, 0.0, 0.5, 0.2], tokens: 260 },
+    { id: 'DOC-006', category: 'Cumplimiento', text: 'Código de vestimenta (Dresscode): Se requiere casual de negocios de lunes a jueves. Viernes casual.', vector: [0.0, 0.0, 0.0, 0.8, 0.0], tokens: 240 }
   ];
 
   query = signal('Quiero pedir días libres para viajar');
@@ -44,9 +46,25 @@ export class DemoBuildRetrieval {
     return vec;
   });
 
+  groundTruth = computed(() => {
+    const qVec = this.queryVector();
+    const maxVal = Math.max(...qVec);
+    const intentIndex = qVec.indexOf(maxVal);
+    
+    return this.documents.map(doc => {
+      const docMax = Math.max(...doc.vector);
+      const docIntentIndex = doc.vector.indexOf(docMax);
+      return {
+        ...doc,
+        // Document is relevant if it matches the main intent of the query
+        isRelevant: intentIndex === docIntentIndex && maxVal > 0.5
+      };
+    });
+  });
+
   rankedResults = computed(() => {
     const qVec = this.queryVector();
-    return this.documents
+    return this.groundTruth()
       .map(doc => ({
         ...doc,
         score: this.cosineSimilarity(qVec, doc.vector)
@@ -59,17 +77,33 @@ export class DemoBuildRetrieval {
   });
 
   precisionEstimate = computed(() => {
-    const k = this.topK();
-    if (k === 1) return 100;
-    if (k === 2) return 100;
-    if (k === 3) return 67;
-    return Math.round((2 / k) * 100);
+    const retrieved = this.retrievedContext();
+    if (retrieved.length === 0) return 0;
+    const relevantRetrieved = retrieved.filter(d => d.isRelevant).length;
+    return Math.round((relevantRetrieved / retrieved.length) * 100);
   });
 
   recallEstimate = computed(() => {
-    const k = this.topK();
-    if (k === 1) return 50;
-    return 100;
+    const retrieved = this.retrievedContext();
+    const totalRelevant = this.groundTruth().filter(d => d.isRelevant).length;
+    if (totalRelevant === 0) return 100;
+    const relevantRetrieved = retrieved.filter(d => d.isRelevant).length;
+    return Math.round((relevantRetrieved / totalRelevant) * 100);
+  });
+
+  // --- Context Window Budget Metrics ---
+  budgetMax = 2000;
+  
+  usedTokens = computed(() => {
+    return this.retrievedContext().reduce((acc, doc) => acc + doc.tokens, 0);
+  });
+
+  signalTokens = computed(() => {
+    return this.retrievedContext().filter(d => d.isRelevant).reduce((acc, doc) => acc + doc.tokens, 0);
+  });
+
+  noiseTokens = computed(() => {
+    return this.retrievedContext().filter(d => !d.isRelevant).reduce((acc, doc) => acc + doc.tokens, 0);
   });
 
   cosineSimilarity(vecA: number[], vecB: number[]): number {
