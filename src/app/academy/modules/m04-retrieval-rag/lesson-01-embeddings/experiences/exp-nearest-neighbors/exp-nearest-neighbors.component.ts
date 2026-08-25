@@ -22,7 +22,7 @@ interface DataPoint3D {
         <p class="exp-subtitle">Modifica K para recuperar los resultados semánticos más afines a la consulta central (Query).</p>
         <div class="exp-disclaimer">
           <span class="material-symbols-outlined exp-disclaimer-icon">info</span>
-          <span><strong>Nota didáctica:</strong> En sistemas reales, K es el número de vectores que se recuperan del espacio multidimensional ordenados por similitud respecto a la consulta.</span>
+          <span><strong>Nota didáctica:</strong> Los embeddings reales pueden tener cientos o miles de dimensiones y la métrica de similitud depende del sistema. En sistemas reales, K es el número de vectores que se recuperan ordenados por similitud respecto a la consulta.</span>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ interface DataPoint3D {
                   <span class="exp-result-rank">{{ i + 1 }}</span>
                   <div style="display: flex; flex-direction: column;">
                     <span class="exp-result-label">{{ neighbor.label }}</span>
-                    <span class="exp-result-dist">Distancia: {{ neighbor.dist.toFixed(3) }}</span>
+                    <span class="exp-result-dist">Distancia relativa en esta representación 3D: {{ neighbor.dist.toFixed(3) }}</span>
                   </div>
                 </li>
               }

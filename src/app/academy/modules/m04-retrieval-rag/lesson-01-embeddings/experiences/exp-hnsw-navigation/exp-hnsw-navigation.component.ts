@@ -24,7 +24,7 @@ interface HnswNode3D {
         
         <div class="exp-callout">
           <span class="material-symbols-outlined">lightbulb</span>
-          <span>HNSW no compara la query contra todos los puntos. Entra por la capa superior y desciende por el grafo hacia la zona más prometedora, acercándose al resultado ideal en muy pocos pasos.</span>
+          <span>HNSW no compara la query contra todos los puntos. Entra por la capa superior y desciende por el grafo hacia la zona más prometedora. <strong>El eje vertical representa visualmente las capas jerárquicas de HNSW. No representa una dimensión adicional del embedding.</strong></span>
         </div>
       </div>
 
@@ -59,7 +59,7 @@ interface HnswNode3D {
               <div class="exp-step-icon"><span class="material-symbols-outlined">login</span></div>
               <div class="exp-step-text">
                 <strong>Entry Point</strong>
-                <span>Entramos al grafo por el nodo de la capa superior.</span>
+                <span>Layer superior → navegación gruesa. Entramos al grafo por el nodo de la capa superior.</span>
               </div>
             </div>
             
@@ -75,7 +75,7 @@ interface HnswNode3D {
               <div class="exp-step-icon"><span class="material-symbols-outlined">zoom_in_map</span></div>
               <div class="exp-step-text">
                 <strong>Nearest Region</strong>
-                <span>Al no encontrar mejoras grandes, bajamos de capa para buscar más fino.</span>
+                <span>Layer intermedia → refinamiento. Bajamos de capa al no encontrar grandes mejoras.</span>
               </div>
             </div>
             
@@ -83,7 +83,7 @@ interface HnswNode3D {
               <div class="exp-step-icon"><span class="material-symbols-outlined">check_circle</span></div>
               <div class="exp-step-text">
                 <strong>Local Minimum Found</strong>
-                <span>¡Encontramos los vecinos más cercanos sin visitar todo el mapa!</span>
+                <span>Layer inferior → búsqueda fina. ¡Encontramos los vecinos más cercanos aproximados (ANN)!</span>
               </div>
             </div>
           </div>
