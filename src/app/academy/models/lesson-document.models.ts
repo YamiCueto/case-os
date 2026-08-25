@@ -18,7 +18,13 @@ export type LessonBlock =
   | KeyInsightsBlock
   | ExampleBlock
   | DemoRefBlock
-  | LabRefBlock;
+  | LabRefBlock
+  | ExperienceBlock;
+
+export interface ExperienceBlock {
+  type: 'EXPERIENCE';
+  experienceId: string;
+}
 
 export interface ParagraphBlock {
   type: 'PARAGRAPH';

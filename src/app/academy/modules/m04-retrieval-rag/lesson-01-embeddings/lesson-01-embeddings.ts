@@ -11,6 +11,7 @@ import {
   CaseCalloutComponent,
   CaseCodeBlockComponent
 } from '../../../../core/ui/components';
+import { ExperienceRegistryComponent } from './experiences/experience-registry.component';
 
 /**
  * Lesson01Embeddings — CASE Academy
@@ -26,7 +27,8 @@ import {
     LessonComparisonComponent,
     LessonFooterComponent,
     CaseCalloutComponent,
-    CaseCodeBlockComponent
+    CaseCodeBlockComponent,
+    ExperienceRegistryComponent
   ],
   templateUrl: './lesson-01-embeddings.html',
   styleUrl: './lesson-01-embeddings.css'
