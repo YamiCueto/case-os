@@ -28,20 +28,18 @@ import { LayoutStateService } from '../layout-state.service';
 
       <!-- ── Header ── -->
       <div class="explorer__header">
-        @if (!collapsed()) {
-          <span class="explorer__header-title">
-            @if (config()) {
-              <span class="material-symbols-outlined explorer__header-icon" aria-hidden="true">
-                {{ config()!.icon }}
-              </span>
-              {{ config()!.label }}
-            } @else {
-              Explorer
-            }
-          </span>
-        }
+        <span class="explorer__header-title">
+          @if (config()) {
+            <span class="material-symbols-outlined explorer__header-icon" aria-hidden="true">
+              {{ config()!.icon }}
+            </span>
+            <span class="explorer__header-label">{{ config()!.label }}</span>
+          } @else {
+            <span class="explorer__header-label">Explorer</span>
+          }
+        </span>
         <case-icon-button
-          [icon]="collapsed() ? 'panel_open' : 'panel_close'"
+          [icon]="collapsed() ? 'keyboard_double_arrow_right' : 'keyboard_double_arrow_left'"
           [tooltip]="collapsed() ? 'Expandir' : 'Colapsar'"
           size="sm"
           variant="ghost"
@@ -52,10 +50,8 @@ import { LayoutStateService } from '../layout-state.service';
       <!-- ── Body ── -->
       <div class="explorer__body" [attr.aria-hidden]="collapsed()">
 
-        @if (!collapsed()) {
-
-          @if (config(); as explorerConfig) {
-            <!-- Render workspace sections and items -->
+        @if (config(); as explorerConfig) {
+          <!-- Render workspace sections and items -->
             @for (section of explorerConfig.config.sections; track section.id) {
               <div class="explorer__section">
 
@@ -77,6 +73,7 @@ import { LayoutStateService } from '../layout-state.service';
                       [class.explorer__item--child]="(item.depth ?? 0) > 0"
                       [style.--item-depth]="item.depth ?? 0"
                       [attr.title]="item.label"
+                      [attr.aria-label]="item.label"
                       [attr.aria-current]="item.isActive ? 'page' : null"
                     >
                       @if (item.icon) {
@@ -135,7 +132,6 @@ import { LayoutStateService } from '../layout-state.service';
             </div>
           }
 
-        }
       </div>
     </aside>
   `,
@@ -164,6 +160,32 @@ import { LayoutStateService } from '../layout-state.service';
     .explorer--collapsed {
       width: 0;
       border-right-color: transparent;
+    }
+
+    @media (min-width: 769px) {
+      .explorer--collapsed {
+        width: 64px;
+        border-right-color: var(--case-border);
+      }
+      .explorer--collapsed .explorer__header {
+        justify-content: center;
+        padding: 0;
+      }
+      .explorer--collapsed .explorer__header-title {
+        display: none;
+      }
+      .explorer--collapsed .explorer__section-header {
+        display: none;
+      }
+      .explorer--collapsed .explorer__item-label,
+      .explorer--collapsed .explorer__item-lock {
+        display: none;
+      }
+      .explorer--collapsed .explorer__item {
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+      }
     }
 
     @media (max-width: 768px) {
@@ -207,7 +229,9 @@ import { LayoutStateService } from '../layout-state.service';
     }
 
     .explorer__header-title {
-      display: inline-flex;
+      display: flex;
+      flex: 1;
+      min-width: 0;
       align-items: center;
       gap: var(--case-space-2);
       font-family: var(--case-font-sans);
@@ -216,13 +240,19 @@ import { LayoutStateService } from '../layout-state.service';
       color: var(--case-text-secondary);
       text-transform: uppercase;
       letter-spacing: var(--case-tracking-wider);
+    }
+
+    .explorer__header-label {
+      flex: 1;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .explorer__header-icon {
       font-size: var(--case-icon-xs);
       color: var(--case-text-muted);
+      flex-shrink: 0;
       font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
     }
 
