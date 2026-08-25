@@ -79,71 +79,127 @@
   border-radius: var(--case-radius-lg);
   border: 1px solid var(--case-border);
   overflow: hidden;
-  min-height: 400px;
+  /* Allow the DOM content to dictate the height */
   display: flex;
   align-items: stretch;
-}
-
-@media (max-width: 1024px) {
-  .exp-canvas-wrapper {
-    min-height: 850px; /* Taller for vertical layout */
-  }
+  min-height: 580px; /* Taller on desktop to fit Top-K panel */
 }
 
 .exp-canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   outline: none;
+  z-index: 0; /* Underlay */
+  pointer-events: none; /* Never steal clicks from DOM */
 }
 
-/* HTML Overlays System */
-.html-overlay-container {
-  position: absolute;
-  inset: 0;
-  pointer-events: none; /* Let clicks pass through to background if needed */
-  overflow: hidden;
+/* ----------------------------------------------------
+   DOM Layout System (Strict CSS Flexbox / Grid)
+   ---------------------------------------------------- */
+.pipeline-zones {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 80px;
+  padding: 40px 20px 220px 20px; /* Huge bottom padding for Top-K panel */
+  pointer-events: none; /* Let clicks fall through to wrapper */
 }
 
-.zone-label {
-  position: absolute;
+.zone-row {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  pointer-events: none;
+  width: 100%;
+}
+
+.zone-title {
+  text-align: center;
   color: var(--case-text-muted);
   font-size: 1rem;
   letter-spacing: 0.1em;
-  white-space: nowrap;
   pointer-events: none;
 }
 
-.zone-label strong {
+.zone-title strong {
   color: var(--case-text-secondary);
 }
 
+.nodes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px; /* Smaller gap for tighter screens */
+  pointer-events: none;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .nodes-grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 32px;
+  }
+}
+
+.node-wrapper {
+  display: flex;
+  justify-content: center;
+  position: relative; /* For anchoring the Top-K Panel */
+  pointer-events: none;
+  width: 100%;
+}
+
 .html-node {
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: 140px;
-  padding: 12px;
+  width: 100%;
+  max-width: 140px; /* Prevents overflow */
+  min-width: 100px;
+  padding: 12px 8px; /* Slightly less padding so text fits */
   background: var(--case-surface-3);
   border: 2px solid var(--case-border);
   border-radius: var(--case-radius-md);
   cursor: pointer;
   pointer-events: auto; /* Re-enable clicks for nodes */
-  transition: transform 0.1s linear, box-shadow 0.2s ease, border-color 0.2s ease;
   user-select: none;
+  
+  /* Strict rule: only visual changes, no transform scale */
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+@keyframes nodeProcessing {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
 }
 
 .html-node:hover {
-  transform: translate(-50%, -50%) scale(1.05) !important;
+  background: var(--case-surface-4);
   border-color: var(--case-border-strong);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .html-node--selected {
   border-color: var(--case-accent);
   box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.html-node--processing {
+  border-color: var(--case-accent);
+  animation: nodeProcessing 1.5s infinite;
+}
+
+.html-node--completed {
+  border-color: var(--case-border-strong);
+  opacity: 0.9;
 }
 
 .html-node--ingestion .html-node-icon {
@@ -169,22 +225,28 @@
 /* Top-K Floating Panel */
 .topk-panel {
   position: absolute;
-  width: 200px;
+  top: calc(100% + 20px); /* Strictly anchored visually below Retrieval */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
   background: var(--case-surface-2);
   border: 1px solid var(--case-border-strong);
   border-radius: var(--case-radius-md);
   padding: 12px;
-  pointer-events: auto;
   box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  opacity: 0;
+  z-index: 20;
+  
+  /* Strict visibility toggle to prevent layout shifts */
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .topk-panel--visible {
-  opacity: 1;
   visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
 }
 
 .topk-header {
@@ -216,6 +278,16 @@
   border-radius: var(--case-radius-sm);
   background: var(--case-surface-1);
   border-left: 3px solid transparent;
+  
+  /* Sequential fade in */
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.topk-item--visible {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .topk-item--signal {
