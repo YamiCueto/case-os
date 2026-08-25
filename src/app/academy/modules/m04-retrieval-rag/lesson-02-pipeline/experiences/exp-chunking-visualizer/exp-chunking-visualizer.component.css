@@ -1,0 +1,193 @@
+.exp-chunking {
+  padding: var(--case-space-5);
+  background: var(--case-surface-1);
+  border-radius: var(--case-radius-md);
+  border: 1px solid var(--case-border);
+  margin-top: var(--case-space-6);
+  margin-bottom: var(--case-space-6);
+}
+
+.exp-chunking__header {
+  display: flex;
+  align-items: center;
+  gap: var(--case-space-2);
+  margin-bottom: var(--case-space-3);
+}
+
+.exp-chunking__title {
+  margin: 0;
+  font-size: var(--case-text-lg);
+  color: var(--case-text-primary);
+  font-weight: 600;
+}
+
+.exp-chunking__disclaimer {
+  font-size: var(--case-text-sm);
+  color: var(--case-text-secondary);
+  background: var(--case-surface-2);
+  padding: var(--case-space-3);
+  border-left: 3px solid var(--case-accent);
+  border-radius: var(--case-radius-sm);
+  margin-bottom: var(--case-space-5);
+  line-height: 1.5;
+}
+
+.exp-chunking__controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--case-space-4);
+  align-items: end;
+  margin-bottom: var(--case-space-5);
+  padding: var(--case-space-4);
+  background: var(--case-surface-2);
+  border-radius: var(--case-radius-md);
+  border: 1px solid var(--case-border);
+}
+
+@media (max-width: 768px) {
+  .exp-chunking__controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-2);
+}
+
+.control-label {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.control-value {
+  color: var(--case-text-primary);
+  font-weight: 700;
+}
+
+.control-slider {
+  width: 100%;
+  accent-color: var(--case-accent);
+}
+
+.control-metrics {
+  display: flex;
+  gap: var(--case-space-4);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metric-label {
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-value {
+  font-size: var(--case-text-xl);
+  font-weight: 700;
+  color: var(--case-text-primary);
+}
+
+.exp-chunking__preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-3);
+  margin-bottom: var(--case-space-5);
+}
+
+.chunk-card {
+  background: var(--case-surface-0);
+  border: 1px solid var(--case-border);
+  border-radius: var(--case-radius-md);
+  overflow: hidden;
+}
+
+.chunk-card__header {
+  background: var(--case-surface-2);
+  padding: var(--case-space-2) var(--case-space-3);
+  font-family: var(--case-font-mono);
+  font-size: var(--case-text-xs);
+  color: var(--case-text-secondary);
+  border-bottom: 1px solid var(--case-border);
+}
+
+.chunk-card__content {
+  padding: var(--case-space-3);
+  font-family: var(--case-font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--case-text-primary);
+  word-wrap: break-word;
+}
+
+.overlap-start {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  border-radius: 2px;
+  padding: 0 2px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.overlap-end {
+  background: rgba(56, 189, 248, 0.15);
+  color: #7dd3fc;
+  border-radius: 2px;
+  padding: 0 2px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.exp-chunking__tradeoffs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-3);
+}
+
+.exp-chunking__tradeoffs h4 {
+  margin: 0;
+  font-size: var(--case-text-sm);
+  color: var(--case-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tradeoff-card {
+  padding: var(--case-space-3) var(--case-space-4);
+  border-radius: var(--case-radius-sm);
+  font-size: var(--case-text-sm);
+  line-height: 1.5;
+}
+
+.tradeoff-card--warning {
+  background: rgba(245, 158, 11, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-left: 3px solid #f59e0b;
+  color: #cbd5e1;
+}
+.tradeoff-card--warning strong { color: #fcd34d; }
+
+.tradeoff-card--success {
+  background: rgba(34, 197, 94, 0.05);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-left: 3px solid #22c55e;
+  color: #cbd5e1;
+}
+.tradeoff-card--success strong { color: #86efac; }
+
+.tradeoff-card--danger {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-left: 3px solid #ef4444;
+  color: #cbd5e1;
+}
+.tradeoff-card--danger strong { color: #fca5a5; }

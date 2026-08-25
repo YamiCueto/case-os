@@ -8,6 +8,7 @@ import { ExpNearestNeighborsComponent } from './exp-nearest-neighbors/exp-neares
 import { ExpHnswNavigationComponent } from './exp-hnsw-navigation/exp-hnsw-navigation.component';
 import { ExpHybridSearchComponent } from './exp-hybrid-search/exp-hybrid-search.component';
 import { ExpRetrievalDecisionComponent } from './exp-retrieval-decision/exp-retrieval-decision.component';
+import { ExpChunkingVisualizerComponent } from '../../lesson-02-pipeline/experiences/exp-chunking-visualizer/exp-chunking-visualizer.component';
 
 @Component({
   selector: 'app-experience-registry',
@@ -20,7 +21,8 @@ import { ExpRetrievalDecisionComponent } from './exp-retrieval-decision/exp-retr
     ExpNearestNeighborsComponent,
     ExpHnswNavigationComponent,
     ExpHybridSearchComponent,
-    ExpRetrievalDecisionComponent
+    ExpRetrievalDecisionComponent,
+    ExpChunkingVisualizerComponent
   ],
   template: `
     <div class="experience-container">
@@ -45,6 +47,9 @@ import { ExpRetrievalDecisionComponent } from './exp-retrieval-decision/exp-retr
         }
         @case ('retrieval-decision') {
           <app-exp-retrieval-decision />
+        }
+        @case ('chunking-overlap') {
+          <app-exp-chunking-visualizer />
         }
         @default {
           <div class="experience-error">Experiencia no encontrada: {{ experienceId }}</div>

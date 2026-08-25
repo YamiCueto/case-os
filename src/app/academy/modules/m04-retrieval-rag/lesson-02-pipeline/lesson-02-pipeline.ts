@@ -11,6 +11,7 @@ import {
   CaseCalloutComponent,
   CaseCodeBlockComponent
 } from '../../../../core/ui/components';
+import { ExperienceRegistryComponent } from '../lesson-01-embeddings/experiences/experience-registry.component';
 
 /**
  * Lesson02Pipeline — CASE Academy
@@ -26,7 +27,8 @@ import {
     LessonComparisonComponent,
     LessonFooterComponent,
     CaseCalloutComponent,
-    CaseCodeBlockComponent
+    CaseCodeBlockComponent,
+    ExperienceRegistryComponent
   ],
   templateUrl: './lesson-02-pipeline.html',
   styleUrl: './lesson-02-pipeline.css'

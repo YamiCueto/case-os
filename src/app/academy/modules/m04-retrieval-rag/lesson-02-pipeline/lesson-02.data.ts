@@ -64,6 +64,10 @@ export const LESSON_02_DOCUMENT: LessonDocument = {
               'La metadata permite aplicar filtros deterministas durante la búsqueda.'
             ]
           }
+        },
+        {
+          type: 'EXPERIENCE',
+          experienceId: 'chunking-overlap'
         }
       ]
     },
