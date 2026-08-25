@@ -11,7 +11,7 @@ import {
   CaseCalloutComponent,
   CaseCodeBlockComponent
 } from '../../../../core/ui/components';
-import { ExperienceRegistryComponent } from '../lesson-01-embeddings/experiences/experience-registry.component';
+import { ExperienceRegistryComponent } from '../shared/experiences/experience-registry.component';
 
 /**
  * Lesson02Pipeline — CASE Academy

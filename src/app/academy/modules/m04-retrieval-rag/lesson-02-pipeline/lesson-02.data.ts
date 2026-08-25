@@ -18,15 +18,8 @@ export const LESSON_02_DOCUMENT: LessonDocument = {
           text: 'El Retrieval por sí solo es simplemente un motor de búsqueda. RAG (Retrieval-Augmented Generation) es el patrón arquitectónico que toma los resultados de esa búsqueda y los inyecta como Contexto Útil en el LLM en tiempo real para generar respuestas fundamentadas y libres de alucinaciones.'
         },
         {
-          type: 'EXAMPLE',
-          title: 'Flujo Arquitectónico del Pipeline RAG',
-          content: [
-            '1. Collect & Embed (📚) ──► Ingestión, fragmentación e indexación offline de la biblioteca de documentos.',
-            '2. Search (🔍) ──► Recuperación online de los fragmentos más afines a la consulta del usuario.',
-            '3. Assemble Context (🧩) ──► Estructuración del prompt aplicando reglas de relevancia y presupuesto (M03).',
-            '4. Generate (🧠) ──► El LLM sintetiza la respuesta final operando estrictamente sobre el contexto inyectado.'
-          ],
-          caption: 'RAG convierte un modelo estático y genérico en un sistema experto con conocimiento corporativo actualizado.'
+          type: 'EXPERIENCE',
+          experienceId: 'rag-pipeline-explorer'
         }
       ]
     },

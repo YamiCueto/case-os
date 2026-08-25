@@ -1,14 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ExpLexicalSemanticComponent } from './exp-lexical-semantic/exp-lexical-semantic.component';
-import { ExpEmbeddings2dComponent } from './exp-embeddings-2d/exp-embeddings-2d.component';
-import { ExpCosineSimilarityComponent } from './exp-cosine-similarity/exp-cosine-similarity.component';
-import { ExpNearestNeighborsComponent } from './exp-nearest-neighbors/exp-nearest-neighbors.component';
-import { ExpHnswNavigationComponent } from './exp-hnsw-navigation/exp-hnsw-navigation.component';
-import { ExpHybridSearchComponent } from './exp-hybrid-search/exp-hybrid-search.component';
-import { ExpRetrievalDecisionComponent } from './exp-retrieval-decision/exp-retrieval-decision.component';
+import { ExpLexicalSemanticComponent } from '../../lesson-01-embeddings/experiences/exp-lexical-semantic/exp-lexical-semantic.component';
+import { ExpEmbeddings2dComponent } from '../../lesson-01-embeddings/experiences/exp-embeddings-2d/exp-embeddings-2d.component';
+import { ExpCosineSimilarityComponent } from '../../lesson-01-embeddings/experiences/exp-cosine-similarity/exp-cosine-similarity.component';
+import { ExpNearestNeighborsComponent } from '../../lesson-01-embeddings/experiences/exp-nearest-neighbors/exp-nearest-neighbors.component';
+import { ExpHnswNavigationComponent } from '../../lesson-01-embeddings/experiences/exp-hnsw-navigation/exp-hnsw-navigation.component';
+import { ExpHybridSearchComponent } from '../../lesson-01-embeddings/experiences/exp-hybrid-search/exp-hybrid-search.component';
+import { ExpRetrievalDecisionComponent } from '../../lesson-01-embeddings/experiences/exp-retrieval-decision/exp-retrieval-decision.component';
 import { ExpChunkingVisualizerComponent } from '../../lesson-02-pipeline/experiences/exp-chunking-visualizer/exp-chunking-visualizer.component';
+import { ExpRagPipelineExplorerComponent } from '../../lesson-02-pipeline/experiences/exp-rag-pipeline-explorer/exp-rag-pipeline-explorer.component';
 
 @Component({
   selector: 'app-experience-registry',
@@ -22,7 +23,8 @@ import { ExpChunkingVisualizerComponent } from '../../lesson-02-pipeline/experie
     ExpHnswNavigationComponent,
     ExpHybridSearchComponent,
     ExpRetrievalDecisionComponent,
-    ExpChunkingVisualizerComponent
+    ExpChunkingVisualizerComponent,
+    ExpRagPipelineExplorerComponent
   ],
   template: `
     <div class="experience-container">
@@ -50,6 +52,9 @@ import { ExpChunkingVisualizerComponent } from '../../lesson-02-pipeline/experie
         }
         @case ('chunking-overlap') {
           <app-exp-chunking-visualizer />
+        }
+        @case ('rag-pipeline-explorer') {
+          <app-exp-rag-pipeline-explorer />
         }
         @default {
           <div class="experience-error">Experiencia no encontrada: {{ experienceId }}</div>
