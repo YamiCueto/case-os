@@ -120,6 +120,12 @@ interface TopKChunk {
                       <span class="html-node-label">{{ node.label }}</span>
                     </div>
 
+                    @if (node.id === 'llm') {
+                      <div class="final-response-bubble" [class.final-response-bubble--visible]="pipelineState() === 'completed'">
+                        El LLM recibió contexto recuperado y filtrado.
+                      </div>
+                    }
+
                     <!-- Top-K Panel strictly anchored to Retrieval node via DOM hierarchy -->
                     @if (node.id === 'retrieval') {
                       <div class="topk-panel" [class.topk-panel--visible]="showTopKPanel()">
@@ -463,22 +469,48 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
     const checkAbort = () => this.currentSimId !== simId || this.pipelineState() !== 'running';
     const speed = 0.015;
 
-    // Etapa 1: Query
+    // Etapa 1: Preparación (Offline)
+    const offlineNodes = ['docs', 'chunking', 'embedding_off', 'vectordb'];
+    for (let i = 0; i < offlineNodes.length; i++) {
+      const node = offlineNodes[i];
+      this.nodeStates.update(s => ({...s, [node]: 'processing'}));
+      if (i > 0) {
+        this.spawnParticleAsync(offlineNodes[i - 1], node, speed); // don't await, let it flow
+      }
+      await this.delay(350);
+      if (checkAbort()) return;
+      this.nodeStates.update(s => ({...s, [node]: 'completed'}));
+    }
+    
+    // Apagar los nodos offline para cambiar el foco
+    this.nodeStates.update(s => {
+      const newState = { ...s };
+      offlineNodes.forEach(n => delete newState[n]);
+      return newState;
+    });
+    
+    await this.delay(400);
+    if (checkAbort()) return;
+
+    // Etapa 2: Query
     this.nodeStates.update(s => ({...s, query: 'processing'}));
+    // Simulate user query entering the system
+    this.spawnParticleAsync('query', 'query', speed, 'default', true); // generic spawn for effect
     await this.delay(600);
     if (checkAbort()) return;
 
+    // Etapa 3: Vectorización y Retrieval
     const p1 = this.spawnParticleAsync('query', 'retrieval', speed);
     await p1;
     if (checkAbort()) return;
-    this.nodeStates.update(s => ({...s, query: 'completed'}));
-
-    // Etapa 2: Retrieval
-    this.nodeStates.update(s => ({...s, retrieval: 'processing'}));
+    
+    this.nodeStates.update(s => {
+      const ns = {...s}; delete ns['query']; ns['retrieval'] = 'processing'; return ns;
+    });
     await this.delay(500);
     if (checkAbort()) return;
 
-    // Generar chunks uno por uno
+    // Etapa 4: Candidate Chunks
     const activeChunks = this.mockChunks.filter(c => c.active);
     for (const chunk of activeChunks) {
       const idx = this.mockChunks.findIndex(c => c.id === chunk.id);
@@ -493,7 +525,7 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
     await this.delay(600);
     if (checkAbort()) return;
 
-    // Etapa 3: Signal / Noise particles
+    // Etapa 5: Signal vs Noise
     const particlePromises = [];
     for (const chunk of activeChunks) {
       if (chunk.isSignal) {
@@ -506,30 +538,35 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
     
     await Promise.all(particlePromises);
     if (checkAbort()) return;
-    this.nodeStates.update(s => ({...s, retrieval: 'completed'}));
-
-    // Etapa 4: Context Build
-    this.nodeStates.update(s => ({...s, context: 'processing'}));
+    
+    // Etapa 6: Context Build
+    this.nodeStates.update(s => {
+      const ns = {...s}; delete ns['retrieval']; ns['context'] = 'processing'; return ns;
+    });
     await this.delay(800);
     if (checkAbort()) return;
-    this.nodeStates.update(s => ({...s, context: 'completed'}));
 
-    // Etapa 5: Context -> LLM
+    // Etapa 7: LLM
     const p3 = this.spawnParticleAsync('context', 'llm', speed, 'context');
     await p3;
     if (checkAbort()) return;
 
-    // Etapa 6: LLM
-    this.nodeStates.update(s => ({...s, llm: 'processing'}));
+    this.nodeStates.update(s => {
+      const ns = {...s}; delete ns['context']; ns['llm'] = 'processing'; return ns;
+    });
     await this.delay(600);
     if (checkAbort()) return;
-    this.nodeStates.update(s => ({...s, llm: 'completed'}));
+
+    // Etapa 8: Completed
+    this.nodeStates.update(s => {
+      const ns = {...s}; ns['llm'] = 'completed'; return ns;
+    });
     
     this.pipelineState.set('completed');
     this.selectedNodeId.set('llm');
   }
 
-  private spawnParticleAsync(fromId: string, toId: string | 'discard', speed: number, type: 'default' | 'signal' | 'noise' | 'context' = 'default'): Promise<void> {
+  private spawnParticleAsync(fromId: string, toId: string | 'discard', speed: number, type: 'default' | 'signal' | 'noise' | 'context' = 'default', fromOutside = false): Promise<void> {
     return new Promise(resolve => {
       let fromVec: THREE.Vector3;
       let toVec: THREE.Vector3;
@@ -538,7 +575,10 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
       if (!fromMesh) { resolve(); return; }
       fromVec = fromMesh.position.clone();
 
-      if (toId === 'discard') {
+      if (fromOutside) {
+        toVec = fromVec.clone();
+        fromVec.y += 80;
+      } else if (toId === 'discard') {
         toVec = fromVec.clone();
         toVec.y -= 80; // Go down visually to discard
       } else {
