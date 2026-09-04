@@ -9,81 +9,81 @@ export const LESSON_03_DOCUMENT: LessonDocument = {
   sections: [
     {
       id: 'medir-antes-de-generar',
-      title: '01. Medir antes de Generar',
+      title: '01. Medir antes de generar',
       subtitle: '¿Cómo sabemos si nuestro buscador recupera el conocimiento correcto?',
       blocks: [
         {
           type: 'PARAGRAPH',
           lead: true,
-          text: 'Si el Retrieval falla, el RAG fallará inexorablemente ("Garbage in, garbage out"). Antes de evaluar si el modelo escribe con buena prosa, debemos evaluar con métricas formales si estamos inyectando los documentos correctos.'
+          text: 'Si la recuperación (retrieval) falla, RAG tendrá evidencia insuficiente o incorrecta. Antes de evaluar la redacción del modelo, debemos medir si estamos inyectando los documentos adecuados.'
         },
         {
           type: 'EXAMPLE',
-          title: 'Ciclo de Evaluación de Information Retrieval',
+      title: 'Ciclo de evaluación de recuperación de información (information retrieval)',
           content: [
-            '1. Retrieve (🔍) ──► Ejecutar la consulta vectorial y extraer candidatos Top-K.',
-            '2. Measure (📏) ──► Calcular métricas de calidad y cobertura (Precision, Recall, Hit Rate).',
-            '3. Evaluate (📈) ──► Realizar Failure Analysis de los casos donde la respuesta no estuvo en el Top-K.',
-            '4. Improve (🛠️) ──► Ajustar tamaño de chunking, modelo de embedding, filtros o incorporar Reranking.'
+            '1. Recuperar (retrieve) 🔍 ──► Ejecutar la consulta vectorial y extraer candidatos Top-K.',
+            '2. Medir (measure) 📏 ──► Calcular precisión (precision), cobertura (recall) y tasa de aciertos (hit rate).',
+            '3. Evaluar (evaluate) 📈 ──► Analizar los casos donde la respuesta no apareció dentro de Top-K.',
+            '4. Mejorar (improve) 🛠️ ──► Ajustar fragmentación (chunking), modelo de representaciones vectoriales, filtros o reordenamiento (reranking).'
           ],
-          caption: 'El benchmark cuantitativo de retrieval es la base de todo sistema RAG de nivel de producción.'
+          caption: 'Una referencia cuantitativa de recuperación (retrieval) permite mejorar RAG con evidencia.'
         }
       ]
     },
     {
       id: 'precision-vs-recall',
-      title: '02. Precision & Recall: Las Métricas de Oro',
+      title: '02. Precisión y cobertura (precision & recall)',
       subtitle: 'Calidad de señal vs Cobertura de conocimiento',
       blocks: [
         {
           type: 'COMPARISON',
           left: {
-            title: 'Precision@K (Calidad de Señal)',
+      title: 'Precisión@K (precision@K): calidad de señal',
             subtitle: '¿Cuántos de los recuperados son útiles?',
             icon: '🎯',
             badge: 'Calidad',
             points: [
               '"De todos los documentos que recuperé, ¿cuántos eran realmente útiles?"',
-              'Alta Precisión = Cero ruido inyectado al LLM.',
-              'Si recuperas 5 documentos y los 5 aportan a la respuesta, tienes 100% de Precision.',
-              'Si recuperas 5 y solo 1 sirve, tu Precision es del 20% (el 80% restante es distracción).'
+              'Alta precisión significa poco ruido inyectado al LLM.',
+              'Si recuperas 5 documentos y los 5 aportan a la respuesta, tienes 100% de precisión.',
+              'Si recuperas 5 y solo 1 sirve, tu precisión es del 20%; el resto es distracción.'
             ]
           },
           right: {
-            title: 'Recall@K (Cobertura)',
+      title: 'Cobertura@K (recall@K): conocimiento encontrado',
             subtitle: '¿Cuántos de los existentes logré traer?',
             icon: '🌐',
             badge: 'Cobertura',
             active: true,
             points: [
               '"De todos los documentos útiles que EXISTEN en la base de datos, ¿cuántos logré recuperar?"',
-              'Alto Recall = No te pierdes la aguja en el pajar.',
-              'Si la base de datos contiene 3 documentos clave y trajiste los 3, tu Recall es del 100%.',
-              'Si solo trajiste 1 de los 3, tu Recall es del 33%.'
+              'Alta cobertura significa que no dejas fuera evidencia útil.',
+              'Si la base de datos contiene 3 documentos clave y trajiste los 3, tu cobertura es del 100%.',
+              'Si solo trajiste 1 de los 3, tu cobertura es del 33%.'
             ]
           }
         },
         {
           type: 'CALLOUT',
           variant: 'rule',
-          title: 'El Trade-off Fundamental de Retrieval',
-          message: 'Para subir el Recall al 100% bastaría con extraer toda la base de datos (Top-K = Infinito). Pero tu Precision colapsaría a cero, quebrarías el presupuesto de tokens (Context Budget) y provocarías Attention Collapse en el modelo. El balance entre Precision y Recall define el éxito del pipeline.'
+      title: 'El equilibrio fundamental de la recuperación (retrieval)',
+          message: 'Para subir la cobertura (recall) al 100% bastaría con extraer toda la base de datos. Pero la precisión (precision) bajaría, excederías el presupuesto de contexto (context budget) y aumentarías el riesgo de colapso de atención (attention collapse). El equilibrio depende de la tarea.'
         }
       ]
     },
     {
       id: 'hit-rate-y-reranking',
-      title: '03. Hit Rate & Reranking (Cross-Encoders)',
+      title: '03. Tasa de acierto y reordenamiento (hit rate & reranking)',
       subtitle: 'Importa QUÉ recuperas, y en QUÉ ORDEN se posiciona',
       blocks: [
         {
           type: 'EXAMPLE',
-          title: 'Métricas Operativas y Técnicas de Reordenamiento',
+      title: 'Métricas operativas y técnicas de reordenamiento',
           content: [
-            'Hit Rate: Métrica binaria simple: ¿El documento que contiene la respuesta correcta apareció dentro del Top-K? (Sí o No). Es ideal para suites de tests automatizados continuos (ej. "En el 88% de las 100 queries de prueba se recuperó el chunk correcto").',
-            'Reranking (Cross-Encoders): El LLM presta mayor atención a los primeros documentos (Lost in the Middle). La arquitectura moderna recupera un Top-50 rápido con Embeddings ligeros, y aplica un modelo Cross-Encoder pesado para reordenar con precisión milimétrica los Top-5 finales que se inyectan al prompt.'
+            'Tasa de aciertos (hit rate): métrica binaria. ¿El documento con la respuesta apareció dentro de Top-K? Es útil para pruebas automatizadas continuas.',
+            'Reordenamiento (reranking): después de recuperar candidatos, un segundo modelo puede ordenar mejor los primeros resultados antes de inyectarlos al prompt.'
           ],
-          caption: 'El patrón Two-Stage Retrieval (Bi-Encoder + Cross-Encoder) maximiza el Hit Rate manteniendo un contexto compacto.'
+          caption: 'La recuperación en dos etapas (two-stage retrieval) puede elevar la tasa de aciertos manteniendo un contexto compacto.'
         }
       ]
     },
@@ -94,7 +94,7 @@ export const LESSON_03_DOCUMENT: LessonDocument = {
       blocks: [
         {
           type: 'PARAGRAPH',
-          text: 'Hemos cubierto los fundamentos de embeddings y bases vectoriales, la arquitectura de ingestión e inferencia RAG, y el marco cuantitativo de evaluación con Precision, Recall, Hit Rate y Reranking. Es momento de pasar a la práctica interactiva.'
+          text: 'Hemos cubierto representaciones vectoriales (embeddings), bases de datos vectoriales, la tubería RAG y la evaluación con precisión, cobertura, tasa de aciertos y reordenamiento. Es momento de pasar a la práctica interactiva.'
         },
         {
           type: 'DEMO_REF',

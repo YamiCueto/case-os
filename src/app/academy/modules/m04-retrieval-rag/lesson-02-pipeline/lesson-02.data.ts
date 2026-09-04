@@ -9,13 +9,13 @@ export const LESSON_02_DOCUMENT: LessonDocument = {
   sections: [
     {
       id: 'conectando-busqueda-llm',
-      title: '01. La Tubería RAG (Retrieval-Augmented Generation)',
+      title: '01. La tubería RAG (retrieval-augmented generation)',
       subtitle: 'Conectando la búsqueda con el modelo en tiempo real',
       blocks: [
         {
           type: 'PARAGRAPH',
           lead: true,
-          text: 'El Retrieval por sí solo es simplemente un motor de búsqueda. RAG (Retrieval-Augmented Generation) es el patrón arquitectónico que toma los resultados de esa búsqueda y los inyecta como Contexto Útil en el LLM en tiempo real para generar respuestas fundamentadas y libres de alucinaciones.'
+      text: 'La recuperación (retrieval) por sí sola es un motor de búsqueda. RAG (retrieval-augmented generation) toma sus resultados y los añade como contexto útil al LLM para producir respuestas fundamentadas. No elimina por sí mismo el riesgo de error: la calidad del contexto sigue importando.'
         },
         {
           type: 'EXPERIENCE',
@@ -25,7 +25,7 @@ export const LESSON_02_DOCUMENT: LessonDocument = {
     },
     {
       id: 'fase-1-ingestion',
-      title: '02. Fase 1: Ingestión (Offline)',
+      title: '02. Fase 1: preparación e ingestión (offline)',
       subtitle: 'Preparando la biblioteca de conocimiento antes de la inferencia',
       blocks: [
         {
@@ -35,7 +35,7 @@ export const LESSON_02_DOCUMENT: LessonDocument = {
         {
           type: 'COMPARISON',
           left: {
-            title: '1. Chunking Estratégico',
+      title: '1. Fragmentación estratégica (chunking)',
             subtitle: 'Fragmentación Lógica',
             icon: '🔪',
             badge: 'Preprocesamiento',
@@ -46,7 +46,7 @@ export const LESSON_02_DOCUMENT: LessonDocument = {
             ]
           },
           right: {
-            title: '2. Embedding & Indexing',
+      title: '2. Representaciones vectoriales e indexación (embeddings & indexing)',
             subtitle: 'Vectorización & Almacenamiento',
             icon: '🤖',
             badge: 'Vector DB',
@@ -66,38 +66,38 @@ export const LESSON_02_DOCUMENT: LessonDocument = {
     },
     {
       id: 'fase-2-inference',
-      title: '03. Fase 2: Inferencia (Online)',
+      title: '03. Fase 2: respuesta e inferencia (online)',
       subtitle: 'El ciclo de ejecución en tiempo real',
       blocks: [
         {
           type: 'KEY_INSIGHTS',
-          title: 'El Proceso Online de 3 Pasos',
+      title: 'El proceso de respuesta en tres pasos',
           items: [
-            '1. Search (Retrieval): El usuario envía un Query. Convertimos el Query en un vector y extraemos los Top-K vectores más cercanos de la Vector DB.',
-            '2. Assemble (Context Engineering): Tomamos el texto de los chunks recuperados y los inyectamos en un template estructurado (XML / Markdown), aplicando las restricciones de presupuesto de tokens aprendidas en el Módulo 03.',
-            '3. Generate: Enviamos el prompt ensamblado al LLM (con Temp: 0.0) para que redacte la respuesta basándose estrictamente en los datos inyectados.'
+            '1. Búsqueda (search) y recuperación (retrieval): el usuario envía una consulta (query). La convertimos en vector y extraemos los vectores Top-K más cercanos de la base de datos vectorial (vector database).',
+            '2. Ensamblaje (context engineering): tomamos los fragmentos recuperados y los añadimos a una plantilla estructurada (XML o Markdown), respetando el presupuesto de tokens aprendido en M03.',
+            '3. Generación (generate): enviamos el prompt ensamblado al LLM para que redacte una respuesta basada en los datos inyectados.'
           ]
         },
         {
           type: 'CALLOUT',
           variant: 'rule',
           title: 'La Conexión M03 → M04',
-          message: 'En el Módulo 03 seleccionábamos manualmente el estado de la aplicación para ensamblar el prompt. En RAG, automatizamos esa selección utilizando geometría espacial (Retrieval). Sin embargo, la regla de oro se mantiene: si el motor de búsqueda recupera documentos irrelevantes, inyectará ruido en el contexto y provocará alucinaciones.'
+          message: 'En M03 seleccionábamos manualmente el estado de la aplicación para ensamblar el prompt. En RAG automatizamos esa selección mediante recuperación (retrieval). La regla de oro se mantiene: si el motor encuentra documentos irrelevantes, inyectará ruido en el contexto y aumentará el riesgo de respuestas no fundamentadas.'
         }
       ]
     },
     {
       id: 'cierre-pipeline',
-      title: '04. Conclusión: Calidad de Contexto en RAG',
-      subtitle: 'Garbage in, garbage out',
+      title: '04. Conclusión: calidad del contexto en RAG',
+      subtitle: 'La calidad de la entrada condiciona la calidad de la respuesta',
       blocks: [
         {
           type: 'KEY_INSIGHTS',
-          title: 'Garantías del Pipeline RAG',
+          title: 'Lo que una tubería RAG sí y no garantiza',
           items: [
-            'RAG no elimina el trabajo de Context Engineering: lo automatiza.',
-            'La calidad de la respuesta generada está acotada superiormente por la calidad de los chunks recuperados.',
-            'Para asegurar que el sistema no falle, es indispensable medir y evaluar el retrieval de forma aislada.'
+            'RAG no elimina la ingeniería de contexto (context engineering): automatiza parte de la selección.',
+            'La calidad de la respuesta generada depende de la calidad de los fragmentos recuperados.',
+            'Para evaluar el sistema, conviene medir la recuperación (retrieval) de forma aislada.'
           ]
         }
       ]

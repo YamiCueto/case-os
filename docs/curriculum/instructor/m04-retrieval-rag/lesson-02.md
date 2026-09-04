@@ -1,4 +1,9 @@
-# Lesson 02 — The RAG Pipeline
+# Lesson 02 — La tubería RAG (RAG Pipeline)
+
+## Guía de conducción actualizada
+
+**Qué observar:** la preparación e ingestión (offline) crea una base de datos vectorial (vector database); la respuesta e inferencia (online) transforma la consulta, recupera candidatos Top-K y construye contexto para el LLM.
+**Qué significa el resultado:** el explorador ilustra una simulación de flujo. Un Top-K mayor puede traer más evidencia, pero también más ruido; no es una garantía de una respuesta correcta.
 
 ## 1. Propósito de la clase
 Articular la arquitectura completa de RAG, enfocándose en su naturaleza de tubería (pipeline). Enseñar la Regla de Oro: **El proceso de Retrieval recupera candidatos, pero NO decide automáticamente qué merece entrar al contexto final.**
