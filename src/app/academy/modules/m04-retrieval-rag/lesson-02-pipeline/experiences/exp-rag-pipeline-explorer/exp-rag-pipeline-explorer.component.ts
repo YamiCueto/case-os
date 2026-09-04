@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, NgZone, sig
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as THREE from 'three';
+import { M04_TERMINOLOGY } from '../../../shared/m04-terminology';
 
 interface PipelineNode {
   id: string;
@@ -42,8 +43,8 @@ interface TopKChunk {
     <div class="exp-container">
       <div class="exp-header">
         <div>
-          <h3 class="exp-title">Explorador del RAG Pipeline</h3>
-          <p class="exp-subtitle">Observa cómo Retrieval convierte una consulta en contexto para el LLM.</p>
+          <h3 class="exp-title">Explorador de la tubería RAG (RAG pipeline)</h3>
+          <p class="exp-subtitle">Qué observar: cómo la recuperación (retrieval) convierte una consulta en contexto para el LLM.</p>
         </div>
         
         <div class="exp-controls">
@@ -54,11 +55,11 @@ interface TopKChunk {
             (click)="togglePipeline()"
           >
             <span class="material-symbols-outlined">{{ pipelineState() === 'running' ? 'stop' : 'play_arrow' }}</span>
-            {{ pipelineState() === 'running' ? 'Stop Simulation' : 'Run Pipeline' }}
+            {{ pipelineState() === 'running' ? 'Detener simulación' : 'Ejecutar tubería' }}
           </button>
           
           <button class="case-button case-button--secondary" (click)="resetPipeline()" [disabled]="pipelineState() === 'idle'">
-            <span class="material-symbols-outlined">restart_alt</span> Reset
+            <span class="material-symbols-outlined">restart_alt</span> Reiniciar
           </button>
 
           <div class="control-group">
@@ -82,7 +83,7 @@ interface TopKChunk {
             
             <!-- Ingestion Phase -->
             <div class="zone-row offline-zone">
-              <div class="zone-title"><strong>OFFLINE</strong> / INGESTION</div>
+              <div class="zone-title"><strong>PREPARACIÓN</strong> / ingestión fuera de línea (offline)</div>
               <div class="nodes-grid">
                 @for (node of ingestionNodes; track node.id) {
                   <div class="node-wrapper">
@@ -93,6 +94,10 @@ interface TopKChunk {
                       [class.html-node--processing]="nodeStates()[node.id] === 'processing'"
                       [class.html-node--completed]="nodeStates()[node.id] === 'completed'"
                       (click)="selectNode(node.id)"
+                      tabindex="0"
+                      [attr.aria-label]="node.label"
+                      [attr.aria-description]="node.description"
+                      [attr.title]="node.description"
                     >
                       <span class="material-symbols-outlined html-node-icon">{{ node.icon }}</span>
                       <span class="html-node-label">{{ node.label }}</span>
@@ -104,7 +109,7 @@ interface TopKChunk {
 
             <!-- Inference Phase -->
             <div class="zone-row online-zone">
-              <div class="zone-title"><strong>ONLINE</strong> / INFERENCE</div>
+              <div class="zone-title"><strong>RESPUESTA</strong> / inferencia en línea (online)</div>
               <div class="nodes-grid">
                 @for (node of inferenceNodes; track node.id) {
                   <div class="node-wrapper">
@@ -115,6 +120,10 @@ interface TopKChunk {
                       [class.html-node--processing]="nodeStates()[node.id] === 'processing'"
                       [class.html-node--completed]="nodeStates()[node.id] === 'completed'"
                       (click)="selectNode(node.id)"
+                      tabindex="0"
+                      [attr.aria-label]="node.label"
+                      [attr.aria-description]="node.description"
+                      [attr.title]="node.description"
                     >
                       <span class="material-symbols-outlined html-node-icon">{{ node.icon }}</span>
                       <span class="html-node-label">{{ node.label }}</span>
@@ -122,14 +131,14 @@ interface TopKChunk {
 
                     @if (node.id === 'llm') {
                       <div class="final-response-bubble" [class.final-response-bubble--visible]="pipelineState() === 'completed'">
-                        El LLM recibió contexto recuperado y filtrado.
+                        Qué significa: el LLM recibió evidencia recuperada y filtrada, no toda la base de datos.
                       </div>
                     }
 
                     <!-- Top-K Panel strictly anchored to Retrieval node via DOM hierarchy -->
                     @if (node.id === 'retrieval') {
                       <div class="topk-panel" [class.topk-panel--visible]="showTopKPanel()">
-                        <div class="topk-header">Candidate Chunks (Top-{{ topK() }})</div>
+                        <div class="topk-header">Fragmentos candidatos (Top-{{ topK() }})</div>
                         <ul class="topk-list">
                           @for (chunk of mockChunks; track chunk.id) {
                             <li class="topk-item" 
@@ -167,7 +176,7 @@ interface TopKChunk {
           @if (selectedNodeData()) {
             <div class="exp-info-card">
               <span class="exp-badge" [class.exp-badge--ingestion]="selectedNodeData()!.type === 'ingestion'" [class.exp-badge--inference]="selectedNodeData()!.type === 'inference'">
-                {{ selectedNodeData()!.type | uppercase }}
+                {{ selectedNodeData()!.type === 'ingestion' ? 'INGESTIÓN' : 'INFERENCIA' }}
               </span>
               <h4 class="node-title">
                 <span class="material-symbols-outlined">{{ selectedNodeData()!.icon }}</span>
@@ -177,24 +186,24 @@ interface TopKChunk {
               
               <div class="node-details">
                 <div class="detail-row">
-                  <strong>Input:</strong> <span>{{ selectedNodeData()!.input }}</span>
+                  <strong>Entrada:</strong> <span>{{ selectedNodeData()!.input }}</span>
                 </div>
                 <div class="detail-row">
-                  <strong>Process:</strong> <span>{{ selectedNodeData()!.process }}</span>
+                  <strong>Proceso:</strong> <span>{{ selectedNodeData()!.process }}</span>
                 </div>
                 <div class="detail-row">
-                  <strong>Output:</strong> <span>{{ selectedNodeData()!.output }}</span>
+                  <strong>Salida:</strong> <span>{{ selectedNodeData()!.output }}</span>
                 </div>
                 <div class="detail-row concepts-row">
-                  <strong>Concepts:</strong> <span>{{ selectedNodeData()!.concepts }}</span>
+                  <strong>Conceptos:</strong> <span>{{ selectedNodeData()!.concepts }}</span>
                 </div>
               </div>
             </div>
           } @else {
             <div class="exp-empty-state">
               <span class="material-symbols-outlined">touch_app</span>
-              <h4>Explora el Pipeline</h4>
-              <p>Selecciona cualquier nodo para ver sus detalles de ingeniería.</p>
+              <h4>Explora la tubería</h4>
+              <p>Selecciona un nodo para consultar su función, entrada, proceso y salida.</p>
             </div>
           }
         </div>
@@ -216,11 +225,11 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
 
   // Top-K Mock Data
   mockChunks: TopKChunk[] = [
-    { id: 1, isSignal: true, score: 0.89, label: 'Signal (0.89)', active: true, rendered: false },
-    { id: 2, isSignal: true, score: 0.82, label: 'Signal (0.82)', active: true, rendered: false },
-    { id: 3, isSignal: false, score: 0.65, label: 'Noise (0.65)', active: true, rendered: false },
-    { id: 4, isSignal: false, score: 0.58, label: 'Noise (0.58)', active: false, rendered: false },
-    { id: 5, isSignal: false, score: 0.41, label: 'Noise (0.41)', active: false, rendered: false }
+    { id: 1, isSignal: true, score: 0.89, label: 'Señal útil (0.89)', active: true, rendered: false },
+    { id: 2, isSignal: true, score: 0.82, label: 'Señal útil (0.82)', active: true, rendered: false },
+    { id: 3, isSignal: false, score: 0.65, label: 'Ruido (0.65)', active: true, rendered: false },
+    { id: 4, isSignal: false, score: 0.58, label: 'Ruido (0.58)', active: false, rendered: false },
+    { id: 5, isSignal: false, score: 0.41, label: 'Ruido (0.41)', active: false, rendered: false }
   ];
 
   showTopKPanel = computed(() => {
@@ -233,15 +242,15 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
 
   // Pipeline Nodes Configuration
   readonly nodes: PipelineNode[] = [
-    { id: 'docs', label: 'Documents', type: 'ingestion', icon: 'description', description: 'Biblioteca de conocimiento original.', input: 'PDFs, Confluence, repositorios', process: 'Extracción de texto plano', output: 'Raw text documents', concepts: 'ETL, Data Sources' },
-    { id: 'chunking', label: 'Chunking', type: 'ingestion', icon: 'cut', description: 'Fragmentación del texto en piezas digeribles.', input: 'Raw text', process: 'Split por tokens/caracteres con overlap', output: 'Chunks de texto', concepts: 'Chunk Size, Overlap' },
-    { id: 'embedding_off', label: 'Embedding', type: 'ingestion', icon: 'transform', description: 'Vectorización de cada chunk.', input: 'Text Chunks', process: 'Paso por modelo de embedding', output: 'Vectores densos', concepts: 'Vector Space, Dimensions' },
-    { id: 'vectordb', label: 'Vector DB', type: 'ingestion', icon: 'database', description: 'Almacenamiento indexado de vectores y metadata.', input: 'Vectores + Metadata', process: 'Indexación HNSW/IVF', output: 'Índice buscable', concepts: 'ANN, Indexes, Metadata' },
+    { id: 'docs', label: 'Documentos', type: 'ingestion', icon: 'description', description: 'Documentos (documents): biblioteca de conocimiento original.', input: 'PDF, Confluence, repositorios', process: 'Extracción de texto plano', output: 'Documentos de texto', concepts: 'ETL, fuentes de datos (data sources)' },
+    { id: 'chunking', label: M04_TERMINOLOGY.chunking.spanish, type: 'ingestion', icon: 'cut', description: 'Fragmentación (chunking): división del texto en piezas manejables.', input: 'Texto original', process: 'División por tokens o caracteres con solapamiento (overlap)', output: 'Fragmentos de texto', concepts: 'Tamaño de fragmento (chunk size), solapamiento (overlap)' },
+    { id: 'embedding_off', label: M04_TERMINOLOGY.embeddings.spanish, type: 'ingestion', icon: 'transform', description: 'Representaciones vectoriales (embeddings): conversión de cada fragmento en un vector.', input: 'Fragmentos de texto', process: 'Paso por un modelo de representaciones vectoriales', output: 'Vectores densos', concepts: 'Espacio vectorial (vector space), dimensiones' },
+    { id: 'vectordb', label: M04_TERMINOLOGY.vectorDatabase.spanish, type: 'ingestion', icon: 'database', description: 'Base de datos vectorial (vector database): almacenamiento indexado de vectores y metadatos.', input: 'Vectores y metadatos', process: 'Indexación HNSW/IVF', output: 'Índice consultable', concepts: 'Vecinos aproximados (ANN), índices, metadatos' },
     
-    { id: 'query', label: 'Query', type: 'inference', icon: 'search', description: 'Pregunta del usuario en tiempo real.', input: 'User Input', process: 'Recepción del prompt', output: 'Raw string query', concepts: 'Intent, User Prompt' },
-    { id: 'retrieval', label: 'Retrieval', type: 'inference', icon: 'radar', description: 'Búsqueda vectorial. (Incluye vectorización del Query).', input: 'Query (Raw)', process: 'Vectorización + Cosine Similarity Search', output: 'Top-K candidate chunks', concepts: 'Similarity, Top-K' },
-    { id: 'context', label: 'Context Build', type: 'inference', icon: 'construction', description: 'Ensamblaje del prompt inyectando los chunks recuperados.', input: 'Top-K chunks + Query', process: 'Prompt Formatting', output: 'Structured Prompt', concepts: 'Context Engineering' },
-    { id: 'llm', label: 'LLM', type: 'inference', icon: 'smart_toy', description: 'Generación de la respuesta fundamentada.', input: 'Structured Prompt', process: 'Inferencia causal', output: 'Final Response', concepts: 'Grounded Generation' }
+    { id: 'query', label: M04_TERMINOLOGY.query.spanish, type: 'inference', icon: 'search', description: 'Consulta (query): pregunta del usuario en tiempo real.', input: 'Entrada del usuario', process: 'Recepción de la consulta', output: 'Consulta de texto', concepts: 'Intención, pregunta del usuario' },
+    { id: 'retrieval', label: M04_TERMINOLOGY.retrieval.spanish, type: 'inference', icon: 'radar', description: 'Recuperación (retrieval): búsqueda vectorial que también convierte la consulta en vector.', input: 'Consulta de texto', process: 'Vectorización y búsqueda de similitud', output: 'Fragmentos candidatos Top-K', concepts: 'Similitud, Top-K' },
+    { id: 'context', label: M04_TERMINOLOGY.contextBuild.spanish, type: 'inference', icon: 'construction', description: 'Construcción de contexto (context building): ensamblaje de la pregunta con los fragmentos recuperados.', input: 'Fragmentos Top-K y consulta', process: 'Formateo del prompt', output: 'Prompt estructurado', concepts: 'Ingeniería de contexto (context engineering)' },
+    { id: 'llm', label: 'LLM', type: 'inference', icon: 'smart_toy', description: 'Generación de una respuesta fundamentada.', input: 'Prompt estructurado', process: 'Inferencia', output: 'Respuesta final', concepts: 'Generación fundamentada (grounded generation)' }
   ];
 
   get ingestionNodes() { return this.nodes.filter(n => n.type === 'ingestion'); }

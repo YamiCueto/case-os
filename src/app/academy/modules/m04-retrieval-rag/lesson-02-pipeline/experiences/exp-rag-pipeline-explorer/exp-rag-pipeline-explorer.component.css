@@ -62,14 +62,21 @@
 
 .exp-layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: minmax(0, 1fr) 300px;
   gap: var(--case-space-6);
   margin-top: 12px;
+  align-items: start;
 }
 
 @media (max-width: 1024px) {
   .exp-layout {
     grid-template-columns: 1fr;
+  }
+
+  .exp-info-panel {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
   }
 }
 
@@ -215,11 +222,12 @@
 }
 
 .html-node-label {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--case-text-primary);
   text-align: center;
   line-height: 1.2;
+  text-wrap: balance;
 }
 
 /* Top-K Floating Panel */
@@ -369,6 +377,9 @@
 .exp-info-panel {
   display: flex;
   flex-direction: column;
+  max-height: 580px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .exp-empty-state {
@@ -406,10 +417,10 @@
   background: var(--case-surface-3);
   border: 1px solid var(--case-border);
   border-radius: var(--case-radius-lg);
-  padding: var(--case-space-5);
+  padding: var(--case-space-4);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .exp-badge {
@@ -444,15 +455,16 @@
   margin: 0;
   color: var(--case-text-secondary);
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
 .node-details {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   background: var(--case-surface-1);
-  padding: 16px;
+  padding: 12px;
   border-radius: var(--case-radius-md);
   border: 1px solid var(--case-border);
 }
