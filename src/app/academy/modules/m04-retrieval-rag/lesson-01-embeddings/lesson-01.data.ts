@@ -5,7 +5,7 @@ export const LESSON_01_DOCUMENT: LessonDocument = {
   sections: [
     {
       id: 'lexical-vs-semantic-search',
-      title: '01. Búsqueda Léxica vs Búsqueda Semántica',
+      title: '01. El problema: palabras frente a significado',
       subtitle: 'Representando conocimiento matemático en espacios multidimensionales',
       blocks: [
         {
@@ -29,12 +29,12 @@ export const LESSON_01_DOCUMENT: LessonDocument = {
     },
     {
       id: 'que-es-un-embedding',
-      title: '02. ¿Qué es un Embedding?',
+      title: '02. Representaciones vectoriales (Embeddings)',
       subtitle: 'Traduciendo significado a vectores geométricos',
       blocks: [
         {
           type: 'PARAGRAPH',
-          text: 'Un Embedding es una lista ordenada de números (un vector denso) que captura el significado semántico de un texto dentro de un espacio de cientos o miles de dimensiones.'
+      text: 'Una representación vectorial (embedding) es una lista ordenada de números que aproxima el significado de un texto en un espacio de muchas dimensiones.'
         },
         {
           type: 'EXPERIENCE',
@@ -50,7 +50,7 @@ export const LESSON_01_DOCUMENT: LessonDocument = {
     },
     {
       id: 'similitud-coseno',
-      title: '03. MIDIENDO LA SIMILITUD (Cosine Similarity)',
+      title: '03. Medir similitud (cosine similarity)',
       subtitle: 'Álgebra lineal para comparar intenciones',
       blocks: [
         {
@@ -65,7 +65,7 @@ export const LESSON_01_DOCUMENT: LessonDocument = {
     },
     {
       id: 'nearest-neighbors',
-      title: '04. Top-K Retrieval',
+      title: '04. Recuperación Top-K (Top-K retrieval)',
       subtitle: 'Encontrando los vecinos más cercanos',
       blocks: [
         {
@@ -80,7 +80,7 @@ export const LESSON_01_DOCUMENT: LessonDocument = {
     },
     {
       id: 'hnsw-navigation',
-      title: '05. Indexación HNSW (Approximate Nearest Neighbors)',
+      title: '05. Índice HNSW (approximate nearest neighbors)',
       subtitle: 'Búsqueda sub-lineal a gran escala',
       blocks: [
         {
@@ -95,7 +95,7 @@ export const LESSON_01_DOCUMENT: LessonDocument = {
     },
     {
       id: 'hybrid-search-y-conclusion',
-      title: '06. Búsqueda Híbrida (Hybrid Search)',
+      title: '06. Búsqueda híbrida (hybrid search)',
       subtitle: 'Combinando BM25 con Embeddings',
       blocks: [
         {

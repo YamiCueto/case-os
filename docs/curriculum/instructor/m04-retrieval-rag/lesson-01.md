@@ -1,4 +1,9 @@
-# Lesson 01 — Embeddings & Vector Databases
+# Lesson 01 — Representaciones vectoriales (Embeddings) y bases de datos vectoriales (Vector Databases)
+
+## Guía de conducción actualizada
+
+**Qué observar:** dos textos pueden tener palabras distintas y aun así quedar cerca por significado cuando se convierten en representaciones vectoriales (embeddings).
+**Qué significa el resultado:** cercanía es una señal para buscar candidatos, no una prueba de que el documento sea correcto. Pide al grupo distinguir similitud de relevancia para la tarea.
 
 ## 1. Propósito de la clase
 Desmitificar las representaciones vectoriales (*Embeddings*). Enseñar que los vectores son una técnica matemática para capturar la proximidad semántica (significado) de los textos, pero que no comprenden el conocimiento absoluto ni son inmunes a errores de ambigüedad.

@@ -1,4 +1,9 @@
-# Lesson 03 — Retrieval Evaluation
+# Lesson 03 — Evaluación de la recuperación (Retrieval Evaluation)
+
+## Guía de conducción actualizada
+
+**Qué observar:** precisión (precision) pregunta cuántos resultados traídos sirven; cobertura (recall) pregunta cuántos resultados útiles existentes logramos traer.
+**Qué significa el resultado:** las métricas orientan decisiones de recuperación, pero no sustituyen una revisión de calidad ni validan automáticamente la respuesta generada.
 
 ## 1. Propósito de la clase
 Enseñar a los ingenieros que implementar RAG sin evaluación es programar a ciegas. Demostrar cómo utilizar las métricas clásicas de recuperación de información (Precision y Recall) para diagnosticar si el problema de un sistema de IA está en la generación (LLM) o en la base de datos (Retrieval).

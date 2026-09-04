@@ -62,14 +62,21 @@
 
 .exp-layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: minmax(0, 1fr) 300px;
   gap: var(--case-space-6);
   margin-top: 12px;
+  align-items: start;
 }
 
 @media (max-width: 1024px) {
   .exp-layout {
     grid-template-columns: 1fr;
+  }
+
+  .exp-info-panel {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
   }
 }
 
@@ -215,11 +222,12 @@
 }
 
 .html-node-label {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--case-text-primary);
   text-align: center;
   line-height: 1.2;
+  text-wrap: balance;
 }
 
 /* Top-K Floating Panel */
@@ -287,7 +295,53 @@
 
 .topk-item--visible {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0) scale(1);
+}
+
+.final-response-bubble {
+  position: absolute;
+  top: 100%;
+  margin-top: 16px;
+  background: var(--case-surface-1);
+  border: 1px solid var(--case-border);
+  padding: 8px 12px;
+  border-radius: var(--case-radius-md);
+  font-size: 0.85rem;
+  color: var(--case-text);
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 20;
+}
+
+.final-response-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent var(--case-border) transparent;
+}
+
+.final-response-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent var(--case-surface-1) transparent;
+}
+
+.final-response-bubble--visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .topk-item--signal {
@@ -323,6 +377,9 @@
 .exp-info-panel {
   display: flex;
   flex-direction: column;
+  max-height: 580px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .exp-empty-state {
@@ -360,10 +417,10 @@
   background: var(--case-surface-3);
   border: 1px solid var(--case-border);
   border-radius: var(--case-radius-lg);
-  padding: var(--case-space-5);
+  padding: var(--case-space-4);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .exp-badge {
@@ -398,15 +455,16 @@
   margin: 0;
   color: var(--case-text-secondary);
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
 .node-details {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   background: var(--case-surface-1);
-  padding: 16px;
+  padding: 12px;
   border-radius: var(--case-radius-md);
   border: 1px solid var(--case-border);
 }

@@ -1,4 +1,8 @@
-# Demo 04 — Build Retrieval (Instructor Guide)
+# Demo 04 — Construir la recuperación (Retrieval) — Guía de instructor
+
+## Guía de conducción actualizada
+
+Antes de iniciar, declara que los valores y documentos de la demo son una simulación educativa. Pide al grupo observar qué cambia al variar Top-K: la cantidad de candidatos y el equilibrio entre precisión (precision) y cobertura (recall). El resultado ilustra una decisión de diseño; no mide un proveedor o modelo real.
 
 ## 1. Propósito de la Demo
 Visualizar de forma interactiva el comportamiento de la generación de candidatos (búsqueda semántica) frente a un océano de documentos, y observar en tiempo real el dilema clásico del *trade-off* entre Precision y Recall (Top-K).

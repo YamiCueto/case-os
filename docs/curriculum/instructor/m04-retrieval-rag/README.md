@@ -1,5 +1,11 @@
 # Module 04: Retrieval & RAG
 
+## Estándar de lenguaje del módulo
+
+En pantalla introduce los términos como español (inglés): **representaciones vectoriales (embeddings)**, **base de datos vectorial (vector database)**, **fragmentación (chunking)** y **recuperación (retrieval)**. Después usa la forma que haga más legible la explicación. RAG, LLM, HNSW, BM25, RRF y Top-K se conservan como siglas técnicas, explicadas en su primera aparición.
+
+Enfatiza siempre esta secuencia: recuperar candidatos no equivale a responder; la evidencia recuperada debe filtrarse, ensamblarse como contexto y evaluarse.
+
 ## MODULE BRIEF
 
 **Purpose**

@@ -1,4 +1,8 @@
-# Lab 04 — Build a Retrieval Strategy (Instructor Guide)
+# Lab 04 — Construir una estrategia de recuperación (Retrieval) — Guía de instructor
+
+## Guía de conducción actualizada
+
+El entregable es una estrategia de recuperación (retrieval), no un prompt. El estudiante debe definir fuente, consulta, candidatos, filtros, Top-K y cómo evaluará precisión y cobertura. Recuérdales usar datos ficticios, públicos o autorizados; nunca secretos, PII ni código propietario en herramientas no autorizadas.
 
 ## Engineering Problem
 Los ingenieros de software a menudo implementan herramientas complejas de bases de datos vectoriales sin medir primero si pueden encontrar el documento correcto para las preguntas de los usuarios. Desarrollan RAG "basado en vibras" (Vibes-based RAG) probándolo manualmente con 2 o 3 peticiones. Cuando el sistema falla en producción, no tienen forma de saber si fue culpa de la IA o de la base de datos.
