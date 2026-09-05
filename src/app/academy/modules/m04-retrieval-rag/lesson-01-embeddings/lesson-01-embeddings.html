@@ -3,6 +3,106 @@
   <!-- ── 1. Unified Technical Header ── -->
   <app-lesson-header [lesson]="lesson" [moduleTitle]="module?.title" subtitle="Representando conocimiento matemático" />
 
+  <!-- ── 1.5 Class Activity Download Card ── -->
+  <div class="activity-hero-card" role="region" aria-label="Descargar material de la actividad de clase">
+    <div class="activity-hero-card__glow" aria-hidden="true"></div>
+    <div class="activity-hero-card__inner">
+      <div class="activity-hero-card__header">
+        <div class="activity-hero-card__badge-row">
+          <case-badge variant="accent" [mono]="true" [dot]="true">ACTIVIDAD EN CLASE</case-badge>
+          <span class="activity-hero-card__filename">
+            <span class="material-symbols-outlined" aria-hidden="true">description</span>
+            {{ guideFileName }}
+          </span>
+          <span class="activity-hero-card__filesize">15.5 KB</span>
+        </div>
+        <h2 class="activity-hero-card__title">Taller Práctico: Demo de Embeddings con Python</h2>
+        <p class="activity-hero-card__desc">
+          Descarga la guía completa para seguir la sesión en vivo en tu computadora. Incluye instalación con
+          <code>Sentence Transformers</code> (modelo <code>all-MiniLM-L6-v2</code>), cálculo de similitud coseno,
+          búsqueda semántica paso a paso y la CLI interactiva final.
+        </p>
+      </div>
+
+      <div class="activity-hero-card__pills">
+        <case-badge variant="default" [mono]="true">Python 3.10+</case-badge>
+        <case-badge variant="default" [mono]="true">sentence-transformers</case-badge>
+        <case-badge variant="default" [mono]="true">scikit-learn</case-badge>
+        <case-badge variant="default" [mono]="true">384 dimensiones</case-badge>
+        <case-badge variant="success" [mono]="true">100% Offline / Local</case-badge>
+        <case-badge variant="warning" [mono]="true">Duración: 25–35 min</case-badge>
+      </div>
+
+      <div class="activity-hero-card__actions">
+        <button
+          type="button"
+          class="download-action-btn primary"
+          (click)="downloadActivityGuide()"
+          id="btn-download-top"
+          [attr.aria-label]="'Descargar archivo ' + guideFileName"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">
+            {{ downloadSuccess ? 'task_alt' : 'download' }}
+          </span>
+          <span class="btn-text">
+            {{ downloadSuccess ? '¡Guía Descargada!' : 'Descargar Guía (.md)' }}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="download-action-btn secondary"
+          (click)="toggleDemoOverview()"
+          id="btn-toggle-scripts"
+          [attr.aria-expanded]="showDemoOverview"
+          aria-controls="demo-overview-box"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">
+            {{ showDemoOverview ? 'unfold_less' : 'terminal' }}
+          </span>
+          <span>{{ showDemoOverview ? 'Ocultar Scripts' : 'Ver 5 Scripts de la Demo' }}</span>
+        </button>
+
+        <a [href]="guideFilePath" [download]="guideFileName" class="direct-link" title="Enlace directo de respaldo">
+          <span class="material-symbols-outlined" aria-hidden="true">link</span>
+          Descarga directa
+        </a>
+      </div>
+
+      @if (downloadSuccess) {
+        <div class="activity-hero-card__alert" role="status" aria-live="polite">
+          <span class="material-symbols-outlined activity-hero-card__alert-icon" aria-hidden="true">check_circle</span>
+          <span class="activity-hero-card__alert-text">
+            <strong>Descarga iniciada con éxito.</strong> Abre <code>{{ guideFileName }}</code> en VS Code u Obsidian para seguir el taller.
+          </span>
+        </div>
+      }
+
+      @if (showDemoOverview) {
+        <div id="demo-overview-box" class="activity-scripts-panel">
+          <div class="activity-scripts-panel__header">
+            <span class="material-symbols-outlined" aria-hidden="true">folder_open</span>
+            <span>Estructura de archivos incluidos en la guía:</span>
+          </div>
+          <div class="activity-scripts-panel__list">
+            @for (item of demoScripts; track item.file) {
+              <div class="script-row">
+                <div class="script-row__code">
+                  <span class="material-symbols-outlined" aria-hidden="true">description</span>
+                  <code>{{ item.file }}</code>
+                </div>
+                <div class="script-row__content">
+                  <span class="script-row__title">{{ item.title }}</span>
+                  <span class="script-row__desc">{{ item.desc }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
   <!-- ── 2. Table of Contents / Outline Navigation ── -->
   <nav class="living-doc__outline" aria-label="Índice de la lección">
     <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
@@ -105,6 +205,59 @@
         <app-experience-registry [experienceId]="block.experienceId" />
         }
 
+        }
+
+        <!-- Special Section Block for Section 08: Workshop Terminal Card -->
+        @if (sec.id === 'taller-practico-python') {
+          <div class="workshop-terminal-card">
+            <div class="workshop-terminal-card__top">
+              <div class="terminal-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+                <span class="terminal-title">bash — entorno local de ejecución</span>
+              </div>
+              <span class="terminal-tag">GUÍA PASO A PASO</span>
+            </div>
+
+            <div class="workshop-terminal-card__content">
+              <div class="cmd-block">
+                <span class="cmd-comment"># 1. Crear y activar entorno virtual</span>
+                <code class="cmd-line">python -m venv .venv</code>
+                <code class="cmd-line">.venv\Scripts\activate  <span class="cmd-comment"># (Windows)</span></code>
+              </div>
+
+              <div class="cmd-block">
+                <span class="cmd-comment"># 2. Instalar dependencias requeridas (0 costo / 100% local)</span>
+                <code class="cmd-line">pip install sentence-transformers scikit-learn numpy</code>
+              </div>
+
+              <div class="cmd-block">
+                <span class="cmd-comment"># 3. Descargar el archivo .md y ejecutar los scripts progresivamente</span>
+                <code class="cmd-line">python demo_01_embeddings.py</code>
+                <code class="cmd-line">python demo_completa.py</code>
+              </div>
+            </div>
+
+            <div class="workshop-terminal-card__footer">
+              <div class="footer-info">
+                <span class="material-symbols-outlined" aria-hidden="true">task_alt</span>
+                <span>Guía completa con 5 demos, preguntas de clase y soluciones:</span>
+              </div>
+              <button
+                type="button"
+                class="download-action-btn primary"
+                (click)="downloadActivityGuide()"
+                id="btn-download-section"
+                [attr.aria-label]="'Descargar guía de la clase ' + guideFileName"
+              >
+                <span class="material-symbols-outlined" aria-hidden="true">
+                  {{ downloadSuccess ? 'task_alt' : 'download' }}
+                </span>
+                <span>{{ downloadSuccess ? '¡Archivo Descargado!' : 'Descargar ' + guideFileName }}</span>
+              </button>
+            </div>
+          </div>
         }
       </div>
 

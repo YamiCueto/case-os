@@ -9,7 +9,8 @@ import { LessonComparisonComponent } from '../../../components/lesson-comparison
 import { LessonFooterComponent } from '../../../components/lesson-footer/lesson-footer.component';
 import {
   CaseCalloutComponent,
-  CaseCodeBlockComponent
+  CaseCodeBlockComponent,
+  CaseBadgeComponent
 } from '../../../../core/ui/components';
 import { ExperienceRegistryComponent } from '../shared/experiences/experience-registry.component';
 
@@ -28,6 +29,7 @@ import { ExperienceRegistryComponent } from '../shared/experiences/experience-re
     LessonFooterComponent,
     CaseCalloutComponent,
     CaseCodeBlockComponent,
+    CaseBadgeComponent,
     ExperienceRegistryComponent
   ],
   templateUrl: './lesson-01-embeddings.html',
@@ -43,6 +45,39 @@ export class Lesson01Embeddings implements OnInit {
   readonly module: AcademyModule | undefined = this.courseService.getModuleById('m4');
   readonly adjacentLessons = this.courseService.getAdjacentLessons('c10');
 
+  readonly guideFileName = 'demo_embeddings_python_clase.md';
+  readonly guideFilePath = 'docs/demo_embeddings_python_clase.md';
+  downloadSuccess = false;
+  showDemoOverview = false;
+
+  readonly demoScripts = [
+    {
+      file: 'demo_01_embeddings.py',
+      title: '01. Convertir texto en embeddings',
+      desc: 'SentenceTransformer("all-MiniLM-L6-v2") genera vectores numéricos de 384 dimensiones.'
+    },
+    {
+      file: 'demo_02_similarity.py',
+      title: '02. Similitud coseno',
+      desc: 'Comparación angular por pares con cosine_similarity de scikit-learn.'
+    },
+    {
+      file: 'demo_03_semantic_search.py',
+      title: '03. Búsqueda semántica',
+      desc: 'Ranking de 5 documentos contra consulta en lenguaje natural sin coincidencias de palabra clave.'
+    },
+    {
+      file: 'demo_04_top_k.py',
+      title: '04. Top-K Retrieval',
+      desc: 'Selección de los mejores K candidatos relevantes para contexto de RAG.'
+    },
+    {
+      file: 'demo_completa.py',
+      title: '05. Demo interactiva completa',
+      desc: 'CLI interactiva con loop de preguntas en vivo y prueba del caso límite ("Factura #100245").'
+    }
+  ];
+
   ngOnInit(): void {
     if (this.lesson) {
       this.userProgressService.setLastVisitedLesson(
@@ -51,5 +86,23 @@ export class Lesson01Embeddings implements OnInit {
         this.lesson.path
       );
     }
+  }
+
+  downloadActivityGuide(): void {
+    const link = document.createElement('a');
+    link.href = this.guideFilePath;
+    link.download = this.guideFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    this.downloadSuccess = true;
+    setTimeout(() => {
+      this.downloadSuccess = false;
+    }, 4000);
+  }
+
+  toggleDemoOverview(): void {
+    this.showDemoOverview = !this.showDemoOverview;
   }
 }
