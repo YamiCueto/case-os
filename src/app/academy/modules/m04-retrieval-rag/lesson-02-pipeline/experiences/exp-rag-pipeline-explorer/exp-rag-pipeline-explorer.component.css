@@ -188,10 +188,13 @@
   100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
 }
 
-.html-node:hover {
+.html-node:hover,
+.html-node:focus-visible,
+.html-node--previewed {
   background: var(--case-surface-4);
-  border-color: var(--case-border-strong);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: var(--case-accent);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12), 0 8px 20px rgba(0,0,0,0.2);
+  outline: none;
 }
 
 .html-node--selected {
@@ -228,6 +231,14 @@
   text-align: center;
   line-height: 1.2;
   text-wrap: balance;
+}
+
+.html-node-summary {
+  min-height: 2.4em;
+  color: var(--case-text-secondary);
+  font-size: 0.7rem;
+  line-height: 1.2;
+  text-align: center;
 }
 
 /* Top-K Floating Panel */
@@ -423,6 +434,24 @@
   gap: 14px;
 }
 
+.exp-info-card--preview {
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
+.exp-info-card__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.preview-label {
+  color: var(--case-text-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
 .exp-badge {
   display: inline-block;
   align-self: flex-start;
@@ -457,6 +486,49 @@
   font-style: italic;
   font-size: 0.85rem;
   line-height: 1.4;
+}
+
+.node-summary {
+  margin: -4px 0 0;
+  color: var(--case-text-primary);
+  font-size: 0.95rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.teaching-prompt {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--case-radius-md);
+}
+
+.teaching-prompt > .material-symbols-outlined {
+  color: var(--case-accent);
+  font-size: 20px;
+}
+
+.teaching-prompt__label {
+  color: var(--case-accent);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.teaching-prompt p {
+  margin: 4px 0 0;
+  color: var(--case-text-primary);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.panel-hint {
+  margin: 0;
+  color: var(--case-text-muted);
+  font-size: 0.75rem;
+  text-align: center;
 }
 
 .node-details {
