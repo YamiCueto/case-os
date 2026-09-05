@@ -118,6 +118,24 @@ export const LESSON_01_DOCUMENT: LessonDocument = {
           experienceId: 'retrieval-decision'
         }
       ]
+    },
+    {
+      id: 'taller-practico-python',
+      title: '08. Taller Práctico: Demo en Python',
+      subtitle: 'Guía paso a paso para ejecutar embeddings, similitud coseno y Top-K en local',
+      blocks: [
+        {
+          type: 'PARAGRAPH',
+          lead: true,
+          text: 'Lleva la teoría a la práctica en tu propia terminal. Este taller práctico utiliza Sentence Transformers (all-MiniLM-L6-v2) y scikit-learn para transformar frases a vectores numéricos de 384 dimensiones, comparar similitudes y construir un buscador semántico interactivo sin depender de APIs de pago ni claves externas.'
+        },
+        {
+          type: 'CALLOUT',
+          variant: 'info',
+          title: 'Guía del Aprendiz para la Sesión en Vivo',
+          message: 'Descarga el archivo markdown demo_embeddings_python_clase.md. Contiene el entorno virtual (.venv), comandos pip, explicaciones para la clase y los 5 scripts ejecutables.'
+        }
+      ]
     }
   ]
 };

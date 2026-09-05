@@ -8,11 +8,13 @@ interface PipelineNode {
   id: string;
   label: string;
   type: 'ingestion' | 'inference';
+  summary: string;
   description: string;
   input: string;
   process: string;
   output: string;
   concepts: string;
+  teachingPrompt: string;
   icon: string;
 }
 
@@ -91,16 +93,22 @@ interface TopKChunk {
                       [id]="'node-' + node.id" 
                       class="html-node html-node--ingestion" 
                       [class.html-node--selected]="selectedNodeId() === node.id"
+                      [class.html-node--previewed]="hoveredNodeId() === node.id"
                       [class.html-node--processing]="nodeStates()[node.id] === 'processing'"
                       [class.html-node--completed]="nodeStates()[node.id] === 'completed'"
                       (click)="selectNode(node.id)"
+                      (mouseenter)="previewNode(node.id)"
+                      (mouseleave)="clearPreview()"
+                      (focus)="previewNode(node.id)"
+                      (blur)="clearPreview()"
                       tabindex="0"
-                      [attr.aria-label]="node.label"
+                      [attr.aria-label]="node.label + ': ' + node.summary"
                       [attr.aria-description]="node.description"
                       [attr.title]="node.description"
                     >
                       <span class="material-symbols-outlined html-node-icon">{{ node.icon }}</span>
                       <span class="html-node-label">{{ node.label }}</span>
+                      <span class="html-node-summary">{{ node.summary }}</span>
                     </div>
                   </div>
                 }
@@ -117,16 +125,22 @@ interface TopKChunk {
                       [id]="'node-' + node.id" 
                       class="html-node html-node--inference" 
                       [class.html-node--selected]="selectedNodeId() === node.id"
+                      [class.html-node--previewed]="hoveredNodeId() === node.id"
                       [class.html-node--processing]="nodeStates()[node.id] === 'processing'"
                       [class.html-node--completed]="nodeStates()[node.id] === 'completed'"
                       (click)="selectNode(node.id)"
+                      (mouseenter)="previewNode(node.id)"
+                      (mouseleave)="clearPreview()"
+                      (focus)="previewNode(node.id)"
+                      (blur)="clearPreview()"
                       tabindex="0"
-                      [attr.aria-label]="node.label"
+                      [attr.aria-label]="node.label + ': ' + node.summary"
                       [attr.aria-description]="node.description"
                       [attr.title]="node.description"
                     >
                       <span class="material-symbols-outlined html-node-icon">{{ node.icon }}</span>
                       <span class="html-node-label">{{ node.label }}</span>
+                      <span class="html-node-summary">{{ node.summary }}</span>
                     </div>
 
                     @if (node.id === 'llm') {
@@ -173,37 +187,54 @@ interface TopKChunk {
 
         <!-- Secondary Info Panel -->
         <div class="exp-info-panel">
-          @if (selectedNodeData()) {
-            <div class="exp-info-card">
-              <span class="exp-badge" [class.exp-badge--ingestion]="selectedNodeData()!.type === 'ingestion'" [class.exp-badge--inference]="selectedNodeData()!.type === 'inference'">
-                {{ selectedNodeData()!.type === 'ingestion' ? 'INGESTIÓN' : 'INFERENCIA' }}
-              </span>
+          @if (activeNodeData()) {
+            <div class="exp-info-card" [class.exp-info-card--preview]="hoveredNodeId() !== null">
+              <div class="exp-info-card__topline">
+                <span class="exp-badge" [class.exp-badge--ingestion]="activeNodeData()!.type === 'ingestion'" [class.exp-badge--inference]="activeNodeData()!.type === 'inference'">
+                  {{ activeNodeData()!.type === 'ingestion' ? 'INGESTIÓN' : 'INFERENCIA' }}
+                </span>
+                @if (hoveredNodeId()) {
+                  <span class="preview-label">VISTA PREVIA</span>
+                }
+              </div>
               <h4 class="node-title">
-                <span class="material-symbols-outlined">{{ selectedNodeData()!.icon }}</span>
-                {{ selectedNodeData()!.label }}
+                <span class="material-symbols-outlined">{{ activeNodeData()!.icon }}</span>
+                {{ activeNodeData()!.label }}
               </h4>
-              <p class="node-description">{{ selectedNodeData()!.description }}</p>
+              <p class="node-summary">{{ activeNodeData()!.summary }}</p>
+              <p class="node-description">{{ activeNodeData()!.description }}</p>
+
+              <div class="teaching-prompt">
+                <span class="material-symbols-outlined">record_voice_over</span>
+                <div>
+                  <span class="teaching-prompt__label">PREGUNTA PARA LA CLASE</span>
+                  <p>{{ activeNodeData()!.teachingPrompt }}</p>
+                </div>
+              </div>
               
               <div class="node-details">
                 <div class="detail-row">
-                  <strong>Entrada:</strong> <span>{{ selectedNodeData()!.input }}</span>
+                  <strong>Entrada:</strong> <span>{{ activeNodeData()!.input }}</span>
                 </div>
                 <div class="detail-row">
-                  <strong>Proceso:</strong> <span>{{ selectedNodeData()!.process }}</span>
+                  <strong>Proceso:</strong> <span>{{ activeNodeData()!.process }}</span>
                 </div>
                 <div class="detail-row">
-                  <strong>Salida:</strong> <span>{{ selectedNodeData()!.output }}</span>
+                  <strong>Salida:</strong> <span>{{ activeNodeData()!.output }}</span>
                 </div>
                 <div class="detail-row concepts-row">
-                  <strong>Conceptos:</strong> <span>{{ selectedNodeData()!.concepts }}</span>
+                  <strong>Conceptos:</strong> <span>{{ activeNodeData()!.concepts }}</span>
                 </div>
               </div>
+              @if (!hoveredNodeId()) {
+                <p class="panel-hint">Haz clic para fijar este detalle mientras expones.</p>
+              }
             </div>
           } @else {
             <div class="exp-empty-state">
               <span class="material-symbols-outlined">touch_app</span>
               <h4>Explora la tubería</h4>
-              <p>Selecciona un nodo para consultar su función, entrada, proceso y salida.</p>
+              <p>Qué observar: pasa el cursor por un nodo para una explicación rápida o haz clic para fijar sus detalles.</p>
             </div>
           }
         </div>
@@ -219,6 +250,7 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
   // State
   pipelineState = signal<'idle' | 'running' | 'completed'>('idle');
   selectedNodeId = signal<string | null>(null);
+  hoveredNodeId = signal<string | null>(null);
   nodeStates = signal<Record<string, 'processing' | 'completed'>>({});
   topK = signal<number>(3);
   webglError = signal<boolean>(false);
@@ -242,15 +274,15 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
 
   // Pipeline Nodes Configuration
   readonly nodes: PipelineNode[] = [
-    { id: 'docs', label: 'Documentos', type: 'ingestion', icon: 'description', description: 'Documentos (documents): biblioteca de conocimiento original.', input: 'PDF, Confluence, repositorios', process: 'Extracción de texto plano', output: 'Documentos de texto', concepts: 'ETL, fuentes de datos (data sources)' },
-    { id: 'chunking', label: M04_TERMINOLOGY.chunking.spanish, type: 'ingestion', icon: 'cut', description: 'Fragmentación (chunking): división del texto en piezas manejables.', input: 'Texto original', process: 'División por tokens o caracteres con solapamiento (overlap)', output: 'Fragmentos de texto', concepts: 'Tamaño de fragmento (chunk size), solapamiento (overlap)' },
-    { id: 'embedding_off', label: M04_TERMINOLOGY.embeddings.spanish, type: 'ingestion', icon: 'transform', description: 'Representaciones vectoriales (embeddings): conversión de cada fragmento en un vector.', input: 'Fragmentos de texto', process: 'Paso por un modelo de representaciones vectoriales', output: 'Vectores densos', concepts: 'Espacio vectorial (vector space), dimensiones' },
-    { id: 'vectordb', label: M04_TERMINOLOGY.vectorDatabase.spanish, type: 'ingestion', icon: 'database', description: 'Base de datos vectorial (vector database): almacenamiento indexado de vectores y metadatos.', input: 'Vectores y metadatos', process: 'Indexación HNSW/IVF', output: 'Índice consultable', concepts: 'Vecinos aproximados (ANN), índices, metadatos' },
+    { id: 'docs', label: 'Documentos', type: 'ingestion', icon: 'description', summary: 'Fuentes de conocimiento', description: 'Documentos (documents): biblioteca de conocimiento original.', input: 'PDF, Confluence, repositorios', process: 'Extracción de texto plano', output: 'Documentos de texto', concepts: 'ETL, fuentes de datos (data sources)', teachingPrompt: '¿Qué documentos tendría que consultar un asistente de Recursos Humanos para responder bien?' },
+    { id: 'chunking', label: M04_TERMINOLOGY.chunking.spanish, type: 'ingestion', icon: 'cut', summary: 'Divide sin perder contexto', description: 'Fragmentación (chunking): división del texto en piezas manejables.', input: 'Texto original', process: 'División por tokens o caracteres con solapamiento (overlap)', output: 'Fragmentos de texto', concepts: 'Tamaño de fragmento (chunk size), solapamiento (overlap)', teachingPrompt: '¿Por qué no conviene enviar un manual completo al LLM para responder una sola pregunta?' },
+    { id: 'embedding_off', label: M04_TERMINOLOGY.embeddings.spanish, type: 'ingestion', icon: 'transform', summary: 'Texto convertido en vector', description: 'Representaciones vectoriales (embeddings): conversión de cada fragmento en un vector.', input: 'Fragmentos de texto', process: 'Paso por un modelo de representaciones vectoriales', output: 'Vectores densos', concepts: 'Espacio vectorial (vector space), dimensiones', teachingPrompt: '¿Qué permite comparar un vector que las palabras por sí solas no siempre permiten?' },
+    { id: 'vectordb', label: M04_TERMINOLOGY.vectorDatabase.spanish, type: 'ingestion', icon: 'database', summary: 'Índice y metadatos', description: 'Base de datos vectorial (vector database): almacenamiento indexado de vectores y metadatos.', input: 'Vectores y metadatos', process: 'Indexación HNSW/IVF', output: 'Índice consultable', concepts: 'Vecinos aproximados (ANN), índices, metadatos', teachingPrompt: 'Además de similitud, ¿qué regla debe respetar el sistema antes de mostrar un documento?' },
     
-    { id: 'query', label: M04_TERMINOLOGY.query.spanish, type: 'inference', icon: 'search', description: 'Consulta (query): pregunta del usuario en tiempo real.', input: 'Entrada del usuario', process: 'Recepción de la consulta', output: 'Consulta de texto', concepts: 'Intención, pregunta del usuario' },
-    { id: 'retrieval', label: M04_TERMINOLOGY.retrieval.spanish, type: 'inference', icon: 'radar', description: 'Recuperación (retrieval): búsqueda vectorial que también convierte la consulta en vector.', input: 'Consulta de texto', process: 'Vectorización y búsqueda de similitud', output: 'Fragmentos candidatos Top-K', concepts: 'Similitud, Top-K' },
-    { id: 'context', label: M04_TERMINOLOGY.contextBuild.spanish, type: 'inference', icon: 'construction', description: 'Construcción de contexto (context building): ensamblaje de la pregunta con los fragmentos recuperados.', input: 'Fragmentos Top-K y consulta', process: 'Formateo del prompt', output: 'Prompt estructurado', concepts: 'Ingeniería de contexto (context engineering)' },
-    { id: 'llm', label: 'LLM', type: 'inference', icon: 'smart_toy', description: 'Generación de una respuesta fundamentada.', input: 'Prompt estructurado', process: 'Inferencia', output: 'Respuesta final', concepts: 'Generación fundamentada (grounded generation)' }
+    { id: 'query', label: M04_TERMINOLOGY.query.spanish, type: 'inference', icon: 'search', summary: 'Pregunta del usuario', description: 'Consulta (query): pregunta del usuario en tiempo real.', input: 'Entrada del usuario', process: 'Recepción de la consulta', output: 'Consulta de texto', concepts: 'Intención, pregunta del usuario', teachingPrompt: '¿Qué necesita entender el sistema antes de poder buscar información útil?' },
+    { id: 'retrieval', label: M04_TERMINOLOGY.retrieval.spanish, type: 'inference', icon: 'radar', summary: 'Encuentra candidatos útiles', description: 'Recuperación (retrieval): búsqueda vectorial que también convierte la consulta en vector.', input: 'Consulta de texto', process: 'Vectorización y búsqueda de similitud', output: 'Fragmentos candidatos Top-K', concepts: 'Similitud, Top-K', teachingPrompt: '¿Por qué los primeros resultados son candidatos y todavía no una respuesta final?' },
+    { id: 'context', label: M04_TERMINOLOGY.contextBuild.spanish, type: 'inference', icon: 'construction', summary: 'Pregunta y evidencia', description: 'Construcción de contexto (context building): ensamblaje de la pregunta con los fragmentos recuperados.', input: 'Fragmentos Top-K y consulta', process: 'Formateo del prompt', output: 'Prompt estructurado', concepts: 'Ingeniería de contexto (context engineering)', teachingPrompt: '¿Qué puede ocurrir si aquí incluimos demasiados fragmentos irrelevantes?' },
+    { id: 'llm', label: 'LLM', type: 'inference', icon: 'smart_toy', summary: 'Redacta con contexto', description: 'Generación de una respuesta fundamentada.', input: 'Prompt estructurado', process: 'Inferencia', output: 'Respuesta final', concepts: 'Generación fundamentada (grounded generation)', teachingPrompt: '¿El LLM consulta toda la base de datos vectorial o recibe solo el contexto que le preparamos?' }
   ];
 
   get ingestionNodes() { return this.nodes.filter(n => n.type === 'ingestion'); }
@@ -258,6 +290,10 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
 
   selectedNodeData = computed(() => {
     return this.nodes.find(n => n.id === this.selectedNodeId()) || null;
+  });
+
+  activeNodeData = computed(() => {
+    return this.nodes.find(n => n.id === this.hoveredNodeId()) || this.selectedNodeData() || null;
   });
 
   // Three.js State
@@ -310,6 +346,14 @@ export class ExpRagPipelineExplorerComponent implements AfterViewInit, OnDestroy
 
   selectNode(id: string) {
     this.selectedNodeId.set(id);
+  }
+
+  previewNode(id: string) {
+    this.hoveredNodeId.set(id);
+  }
+
+  clearPreview() {
+    this.hoveredNodeId.set(null);
   }
 
   togglePipeline() {
