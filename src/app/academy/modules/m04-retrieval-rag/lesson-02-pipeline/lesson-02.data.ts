@@ -101,6 +101,24 @@ export const LESSON_02_DOCUMENT: LessonDocument = {
           ]
         }
       ]
+    },
+    {
+      id: 'taller-celulas-rag',
+      title: '05. Taller por Células: Mini Tubería RAG en Python',
+      subtitle: 'Construcción local paso a paso: Chunking, Embeddings, Retrieval y Context Assembly',
+      blocks: [
+        {
+          type: 'PARAGRAPH',
+          lead: true,
+          text: 'RAG no empieza en el LLM: empieza preparando y recuperando contexto de alta calidad. En esta actividad práctica en equipo, cada célula construirá una mini tubería RAG completa en Python, dividiendo documentos con solapamiento, vectorizando fragmentos, recuperando el Top-K y ensamblando el contexto final.'
+        },
+        {
+          type: 'CALLOUT',
+          variant: 'info',
+          title: 'Guía de Trabajo de la Célula',
+          message: 'Descarga el archivo M04-L02-demo-rag-python-por-celulas.md. Contiene las instrucciones paso a paso, la base de conocimiento (knowledge_base.txt), los 4 scripts modulares y la demo unificada demo_rag.py.'
+        }
+      ]
     }
   ]
 };
