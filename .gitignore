@@ -51,3 +51,12 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Environment configurations
+.env
+.env.local
+.env.*.local
+src/environments/environment.local.ts
+
+# Agent local workspace configuration
+.agents/

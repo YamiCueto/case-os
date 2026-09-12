@@ -121,6 +121,44 @@ El despliegue está orquestado mediante **GitHub Actions**. Cualquier push a `ma
 
 ---
 
+## 🧪 Pruebas y Validación de Calidad
+
+### Pruebas de Regresión de Servicios Angular
+Ejecuta la suite de pruebas unitarias reales sobre los servicios Angular (`GuestClaimService`, `SyncQueueService`, `EnrollmentService`, `UserProgressService`, `UserPreferencesService`, `SupabaseService`):
+```bash
+npm run test:services
+```
+
+### Verificación de Migraciones e Integridad SQL
+Valida estáticamente las reglas DDL/RLS y ejecuta opcionalmente pruebas dinámicas:
+```bash
+npm run test:sql
+```
+
+> [!IMPORTANT]
+> **Requisitos para Pruebas Dinámicas SQL:**
+> Un motor PostgreSQL genérico **NO** es suficiente. Las pruebas dinámicas requieren una instancia de **Supabase Local** (iniciada con `supabase start` en el puerto 54322) o una base Supabase de pruebas estrictamente aislada que suministre el esquema `auth.users`, la función `auth.uid()` y los roles nativos de Supabase (`anon`, `authenticated`, `service_role`).
+> **NUNCA** configurar `TEST_DATABASE_URL` apuntando al proyecto remoto de producción (`gqvqmuefdsxlllqsrgqz`).
+>
+> Ejemplo de ejecución con Supabase Local:
+> ```bash
+> TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres npm run test:sql
+> ```
+
+### Validación de Publicación de Catálogo (Dry Run)
+Valida la coherencia de módulos, lecciones y prerrequisitos definidos en Git sin escribir en Supabase:
+```bash
+node scripts/publish-catalog.mjs --dry-run
+```
+
+### Pruebas E2E (Playwright)
+```bash
+npm test
+```
+*Valida 7 escenarios funcionales independientes ejecutados a través de 3 motores de navegador (Chromium, Firefox, WebKit), totalizando 21 corridas.*
+
+---
+
 ## 🛣️ CASE OS Roadmap
 
 ### Phase I — Operating System (✅ Completado)

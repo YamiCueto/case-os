@@ -4,11 +4,14 @@
   "description": "CASE OS — Engineering Workspace",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "build:gh-pages": "ng build --configuration production --base-href ./",
+    "start": "node scripts/prepare-local-env.mjs && ng serve",
+    "build": "node scripts/prepare-local-env.mjs && ng build",
+    "build:gh-pages": "ng build --configuration production --base-href /case-os/ && node scripts/copy-404.mjs",
+    "publish:catalog": "node scripts/publish-catalog.mjs",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "playwright test",
+    "test:services": "node tests/services-regression.test.mjs",
+    "test:sql": "node scripts/test-sql-phase1.mjs"
   },
   "private": true,
   "packageManager": "npm@11.12.1",
@@ -20,6 +23,7 @@
     "@angular/platform-browser": "^22.0.0",
     "@angular/router": "^22.0.0",
     "@codemirror/lang-javascript": "^6.2.5",
+    "@supabase/supabase-js": "^2.116.0",
     "@types/three": "^0.185.4",
     "codemirror": "^6.0.2",
     "marked": "^18.0.9",
@@ -33,6 +37,8 @@
     "@angular/compiler-cli": "^22.0.0",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.2.0",
+    "@types/pg": "^8.23.1",
+    "pg": "^8.23.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2"
   }
