@@ -1,4 +1,4 @@
-﻿<div class="presentation-container pb-32">
+<div class="presentation-container pb-32">
 
   <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
 
@@ -21,6 +21,80 @@
           <strong>Nunca subas documentación técnica confidencial, esquemas de BD propietarios o credenciales</strong> a servicios no autorizados.
           CASE Academy no ejecuta ni almacena tu base de vectores. Este laboratorio es la guía técnica de ingeniería que ejecutas localmente en tu entorno corporativo.
         </p>
+      </div>
+    </div>
+
+    <!-- ── Lab Activity Download Card ── -->
+    <div class="activity-hero-card" role="region" aria-label="Descargar material de la guía práctica de Google Colab">
+      <div class="activity-hero-card__glow" aria-hidden="true"></div>
+      <div class="activity-hero-card__inner">
+        <div class="activity-hero-card__header">
+          <div class="activity-hero-card__badge-row">
+            <case-badge variant="accent" [mono]="true" [dot]="true">GUÍA DE LABORATORIO</case-badge>
+            <span class="activity-hero-card__filename">
+              <span class="material-symbols-outlined" aria-hidden="true">description</span>
+              {{ guideFileName }}
+            </span>
+            <span class="activity-hero-card__filesize">20.8 KB</span>
+          </div>
+          <h2 class="activity-hero-card__title">LAB 04: Retrieval Engineering en Google Colab</h2>
+          <p class="activity-hero-card__desc">
+            Construye, compara y evalúa una estrategia real de recuperación:
+            <code>Lexical &rarr; Semantic &rarr; Hybrid &rarr; Evaluate</code>
+          </p>
+        </div>
+
+        <div class="activity-hero-card__pills">
+          <case-badge variant="default" [mono]="true">Google Colab</case-badge>
+          <case-badge variant="default" [mono]="true">Python</case-badge>
+          <case-badge variant="default" [mono]="true">BM25</case-badge>
+          <case-badge variant="default" [mono]="true">Sentence Transformers</case-badge>
+          <case-badge variant="default" [mono]="true">Hybrid Search</case-badge>
+          <case-badge variant="warning" [mono]="true">60–90 min</case-badge>
+        </div>
+
+        <div class="activity-hero-card__actions">
+          <button
+            type="button"
+            class="download-action-btn primary"
+            (click)="downloadActivityGuide()"
+            id="btn-download-lab"
+            [attr.aria-label]="'Descargar guía ' + guideFileName"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">
+              {{ downloadSuccess ? 'task_alt' : 'download' }}
+            </span>
+            <span class="btn-text">
+              {{ downloadSuccess ? '¡Guía Descargada!' : 'Descargar Guía (.md)' }}
+            </span>
+          </button>
+
+          <a
+            href="https://colab.research.google.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="download-action-btn secondary"
+            id="btn-open-colab"
+            title="Abrir Google Colab en una nueva pestaña"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+            <span>Abrir Google Colab</span>
+          </a>
+
+          <a [href]="guideFilePath" [download]="guideFileName" class="direct-link" title="Enlace directo de respaldo">
+            <span class="material-symbols-outlined" aria-hidden="true">link</span>
+            Descarga directa
+          </a>
+        </div>
+
+        @if (downloadSuccess) {
+          <div class="activity-hero-card__alert" role="status" aria-live="polite">
+            <span class="material-symbols-outlined activity-hero-card__alert-icon" aria-hidden="true">check_circle</span>
+            <span class="activity-hero-card__alert-text">
+              <strong>Descarga iniciada con éxito.</strong> Abre <code>{{ guideFileName }}</code> para comenzar la práctica en Google Colab o tu entorno local.
+            </span>
+          </div>
+        }
       </div>
     </div>
 
@@ -100,7 +174,13 @@
         <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 24px;">
           <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F1F1F; padding-bottom: 12px; margin-bottom: 18px;">
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #6366f1; letter-spacing: 0.1em;">RETRIEVAL SPECIFICATION TEMPLATE</span>
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b;">CASE OS STANDARD</span>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b;">CASE OS STANDARD</span>
+              <a [href]="guideFilePath" [download]="guideFileName" class="direct-link" style="color: #818cf8; padding: 2px 6px;" title="Descargar plantilla y guía completa">
+                <span class="material-symbols-outlined" style="font-size: 14px;">download</span>
+                Descargar Guía (.md)
+              </a>
+            </div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 12px; color: #cbd5e1;">
