@@ -47,4 +47,16 @@ export class CourseService {
       next: index < module.lessons.length - 1 ? module.lessons[index + 1] : undefined
     };
   }
+
+  getTotalUnitsCount(): number {
+    return this.config().modules.reduce((acc, mod) => acc + (mod.lessons?.length || 0), 0);
+  }
+
+  getDefaultProgramSlug(): string {
+    return 'case-engineering-workspace';
+  }
+
+  getDefaultProgramVersion(): string {
+    return '1.0.0';
+  }
 }

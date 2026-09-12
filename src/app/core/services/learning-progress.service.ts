@@ -2,6 +2,10 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 import { LocalStorageProvider } from '../storage/local-storage.provider';
+import { StorageNamespaceService } from './storage-namespace.service';
+import { CourseService } from './course.service';
+import { SupabaseService } from './supabase.service';
+import { SyncQueueService } from './sync-queue.service';
 
 export interface Activity {
   id: string;
@@ -13,7 +17,7 @@ export interface Activity {
   metadata?: any;
 }
 
-const STORAGE_KEY = 'case_platform_learning_progress';
+const STORAGE_KEY = 'learning_progress_history';
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +25,26 @@ const STORAGE_KEY = 'case_platform_learning_progress';
 export class LearningProgressService {
   private router = inject(Router);
   private storage = inject(LocalStorageProvider);
+  private namespaceService = inject(StorageNamespaceService);
+  private courseService = inject(CourseService);
+  private supabaseService = inject(SupabaseService);
+  private syncQueueService = inject(SyncQueueService);
 
   private historySignal = signal<Activity[]>([]);
 
   constructor() {
     this.loadHistory();
     this.setupAutoCapture();
+
+    // Reset reactivo en memoria al cambiar de cuenta
+    this.namespaceService.onReset(() => {
+      this.loadHistory();
+    });
   }
 
   private loadHistory() {
     const data = this.storage.get<Activity[]>(STORAGE_KEY);
-    if (data) {
-      this.historySignal.set(data);
-    }
+    this.historySignal.set(Array.isArray(data) ? data : []);
   }
 
   private saveHistory(history: Activity[]) {
@@ -60,7 +71,6 @@ export class LearningProgressService {
 
     const firstSegment = segments[0];
 
-    // Generic formatting for titles
     const formatTitle = (slug: string) => {
       return slug
         .split('-')
@@ -79,7 +89,7 @@ export class LearningProgressService {
 
     if (firstSegment === 'library') {
       const slug = segments[1];
-      if (!slug) return null; // Ignore home library page to focus on actual learning resources, or log it if needed
+      if (!slug) return null;
       return {
         type: 'LIBRARY',
         entityId: slug,
@@ -100,8 +110,18 @@ export class LearningProgressService {
     }
 
     if (firstSegment.startsWith('clase') || firstSegment.includes('plan') || firstSegment === 'academy') {
-      // Academy routes
-      const entityId = segments[segments.length - 1]; // last segment
+      // Intentar resolver la lección canónica directamente desde COURSE_CONFIG
+      const canonicalLesson = this.courseService.getLessonByPath(url);
+      if (canonicalLesson) {
+        return {
+          type: 'ACADEMY',
+          entityId: canonicalLesson.id, // ID canónico real: c1, l1, d1...
+          title: canonicalLesson.title,
+          route: url
+        };
+      }
+
+      const entityId = segments[segments.length - 1];
       return {
         type: 'ACADEMY',
         entityId: entityId,
@@ -122,16 +142,24 @@ export class LearningProgressService {
       timestamp: Date.now()
     };
 
-    // Prevent immediate duplicate logging (e.g. rapid reloads)
     if (currentHistory.length > 0) {
       const last = currentHistory[0];
       if (last.route === newActivity.route && (newActivity.timestamp - last.timestamp < 10000)) {
-        return; // debounce
+        return;
       }
     }
 
-    const updatedHistory = [newActivity, ...currentHistory].slice(0, 50); // Keep last 50
+    const updatedHistory = [newActivity, ...currentHistory].slice(0, 50);
     this.saveHistory(updatedHistory);
+
+    if (this.supabaseService.isAuthenticated()) {
+      this.syncQueueService.enqueue('learning_activity', newActivity.id, 'insert', {
+        activity_type: newActivity.type,
+        entity_id: newActivity.entityId,
+        title: newActivity.title,
+        route: newActivity.route
+      });
+    }
   }
 
   getRecentHistory() {

@@ -1,5 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { LocalStorageProvider } from '../storage/local-storage.provider';
+import { StorageNamespaceService } from './storage-namespace.service';
 
 export interface UserStats {
   completedLabs: number;
@@ -7,12 +8,14 @@ export interface UserStats {
   firstSessionDate: string;
 }
 
+const STATS_KEY = 'user_platform_stats';
+
 @Injectable({
   providedIn: 'root'
 })
 export class UserStatsService {
   private storage = inject(LocalStorageProvider);
-  private readonly STATS_KEY = 'case_platform_stats';
+  private namespaceService = inject(StorageNamespaceService);
 
   private statsSignal = signal<UserStats>({
     completedLabs: 0,
@@ -22,19 +25,30 @@ export class UserStatsService {
 
   constructor() {
     this.loadStats();
+
+    // Reset reactivo en memoria al cambiar de cuenta
+    this.namespaceService.onReset(() => {
+      this.loadStats();
+    });
   }
 
   private loadStats() {
-    const saved = this.storage.get<UserStats>(this.STATS_KEY);
+    const saved = this.storage.get<UserStats>(STATS_KEY);
     if (saved) {
       this.statsSignal.set(saved);
     } else {
-      this.saveStats(this.statsSignal());
+      const initial: UserStats = {
+        completedLabs: 0,
+        totalResourcesViewed: 0,
+        firstSessionDate: new Date().toISOString()
+      };
+      this.statsSignal.set(initial);
+      this.saveStats(initial);
     }
   }
 
   private saveStats(stats: UserStats) {
-    this.storage.set(this.STATS_KEY, stats);
+    this.storage.set(STATS_KEY, stats);
   }
 
   getStats() {

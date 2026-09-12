@@ -33,11 +33,14 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Angular App for GitHub Pages
-        run: npx ng build --configuration production --base-href /case-os/
+      - name: Inject Supabase Production Environment
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: node scripts/inject-env.mjs --strict
 
-      - name: Copy index.html to 404.html for Fallback
-        run: cp dist/curso-ia-generativa/browser/index.html dist/curso-ia-generativa/browser/404.html
+      - name: Build Angular App for GitHub Pages
+        run: npm run build:gh-pages
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
