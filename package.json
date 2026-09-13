@@ -26,7 +26,7 @@
     "@supabase/supabase-js": "^2.116.0",
     "@types/three": "^0.185.4",
     "codemirror": "^6.0.2",
-    "marked": "^18.0.9",
+    "marked": "^18.0.12",
     "rxjs": "~7.8.0",
     "three": "^0.185.1",
     "tslib": "^2.3.0"
