@@ -86,7 +86,7 @@ export class EnrollmentService {
       };
     }
 
-    // 4. Si no existe, crear la inscripción automática para el usuario nuevo
+    // 4. Si no existe, intentar crear la inscripción para el usuario nuevo
     const { data: created, error: createErr } = await client
       .from('enrollments')
       .insert({
@@ -101,8 +101,40 @@ export class EnrollmentService {
       return null;
     }
 
-    if (createErr || !created) {
+    if (createErr) {
+      // Manejo idempotente de carrera concurrente (código 23505 o duplicate key en uq_user_enrollment)
+      const isUniqueViolation =
+        (createErr as any).code === '23505' ||
+        createErr.message?.includes('uq_user_enrollment') ||
+        createErr.message?.toLowerCase().includes('duplicate key');
+
+      if (isUniqueViolation) {
+        const { data: retryExisting } = await client
+          .from('enrollments')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('program_version_id', programVersionId)
+          .eq('status', 'ACTIVE')
+          .maybeSingle();
+
+        if (expectedGen !== undefined && this.supabaseService.currentAuthGeneration() !== expectedGen) {
+          return null;
+        }
+
+        if (retryExisting) {
+          return {
+            enrollmentId: retryExisting.id,
+            programVersionId,
+            totalUnitsCount
+          };
+        }
+      }
+
       console.error('Error al auto-inscribir al usuario nuevo:', createErr?.message);
+      return null;
+    }
+
+    if (!created) {
       return null;
     }
 

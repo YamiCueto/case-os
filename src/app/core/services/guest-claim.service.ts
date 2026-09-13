@@ -5,6 +5,7 @@ import { StorageNamespaceService } from './storage-namespace.service';
 import { getStorageNamespace } from '../models/sync.model';
 import { CourseService } from './course.service';
 import { EnrollmentService } from './enrollment.service';
+import { UserProgressService } from './user-progress.service';
 
 export interface FailedImportItem {
   lessonId: string;
@@ -20,6 +21,7 @@ export class GuestClaimService {
   private namespaceService = inject(StorageNamespaceService);
   private courseService = inject(CourseService);
   private enrollmentService = inject(EnrollmentService);
+  private userProgressService = inject(UserProgressService, { optional: true });
 
   readonly hasGuestData = signal<boolean>(false);
   readonly isImporting = signal<boolean>(false);
@@ -182,6 +184,11 @@ export class GuestClaimService {
 
       this.lastImportCount.set(confirmedImportedIds.length);
       this.failedLessons.set(failedItems);
+
+      // 8. Hidratación y recarga reactiva inmediata de UserProgressService
+      if (confirmedImportedIds.length > 0 && this.userProgressService) {
+        this.userProgressService.reloadProgress();
+      }
 
       if (failedItems.length > 0) {
         this.importError.set(

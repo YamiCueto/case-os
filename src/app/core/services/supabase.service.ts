@@ -51,6 +51,9 @@ export class SupabaseService implements OnDestroy {
   readonly profileLoading = signal<boolean>(false);
   readonly profileError = signal<string | null>(null);
   readonly syncStatus = signal<GlobalSyncStatus>('local');
+  readonly isPasswordRecovery = signal<boolean>(false);
+
+  private readonly PRE_AUTH_ROUTE_KEY = 'case:pre_auth_route';
 
   private sessionInitListeners: Array<(userId: string, generation: number) => Promise<void> | void> = [];
 
@@ -161,8 +164,8 @@ export class SupabaseService implements OnDestroy {
   }
 
   /**
-   * Responsable único del intercambio de código PKCE de Google OAuth.
-   * Evita doble intercambio y preserva la ruta Hash de Angular intacta (/#/...).
+   * Responsable único del intercambio de código PKCE de Google OAuth y captura de errores OAuth.
+   * Evita doble intercambio, detecta errores devueltos por el proveedor y preserva la ruta Hash intacta.
    */
   private async handleOAuthCallbackIfNeeded(): Promise<void> {
     if (typeof window === 'undefined' || !this.supabase) return;
@@ -170,30 +173,65 @@ export class SupabaseService implements OnDestroy {
     try {
       const params = new URLSearchParams(window.location.search);
       const code = params.get('code');
+      const error = params.get('error');
+      const errorCode = params.get('error_code');
+      const errorDescription = params.get('error_description');
 
+      // 1. Detección de errores devueltos por el proveedor OAuth
+      if (error || errorCode || errorDescription) {
+        const rawMsg = errorDescription || error || errorCode || 'Error durante la autenticación OAuth';
+        const message = decodeURIComponent(rawMsg.replace(/\+/g, ' '));
+        this.authError.set(message);
+
+        // Limpiar URL tanto en éxito como en error preservando el Hash
+        const cleanUrl = `${window.location.origin}${window.location.pathname}${window.location.hash}`;
+        const title = typeof document !== 'undefined' ? document.title : '';
+        window.history.replaceState({}, title, cleanUrl);
+        return;
+      }
+
+      // 2. Intercambio de código PKCE
       if (code) {
         this.authLoading.set(true);
-        const { data, error } = await this.supabase.auth.exchangeCodeForSession(code);
+        try {
+          const { data, error: exchangeErr } = await this.supabase.auth.exchangeCodeForSession(code);
 
-        // Limpiar únicamente los parámetros de búsqueda de OAuth, preservando el Hash location
-        const cleanUrl = `${window.location.origin}${window.location.pathname}${window.location.hash}`;
-        window.history.replaceState({}, document.title, cleanUrl);
+          // Limpiar únicamente los parámetros de búsqueda de OAuth, preservando el Hash location
+          const cleanUrl = `${window.location.origin}${window.location.pathname}${window.location.hash}`;
+          const title = typeof document !== 'undefined' ? document.title : '';
+          window.history.replaceState({}, title, cleanUrl);
 
-        if (error) {
-          console.error('Error durante intercambio PKCE:', error.message);
-          this.authError.set(error.message);
-        } else if (data.session) {
-          this.handleAuthStateChange('SIGNED_IN', data.session);
+          if (exchangeErr) {
+            console.error('Error durante intercambio PKCE:', exchangeErr.message);
+            this.authError.set(exchangeErr.message);
+          } else if (data.session) {
+            this.handleAuthStateChange('SIGNED_IN', data.session);
+          }
+        } finally {
+          this.authLoading.set(false);
         }
       }
     } catch (e) {
       console.warn('Fallo en comprobación de retorno OAuth:', e);
-    } finally {
-      this.authLoading.set(false);
     }
   }
 
   private handleAuthStateChange(event: AuthChangeEvent, session: Session | null): void {
+    if (event === 'PASSWORD_RECOVERY') {
+      this.isPasswordRecovery.set(true);
+      this.authGeneration.update(g => g + 1);
+      this.currentSession.set(session);
+      this.currentUser.set(session?.user ?? null);
+      this.authError.set(null);
+      this.syncStatus.set('local');
+      this.isInitialized.set(true);
+      return;
+    }
+
+    if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+      this.isPasswordRecovery.set(false);
+    }
+
     const isDuplicate =
       session !== null &&
       this.currentSession()?.access_token === session.access_token &&
@@ -321,7 +359,65 @@ export class SupabaseService implements OnDestroy {
     this.currentProfile.set(null);
     this.profileError.set(null);
     this.profileLoading.set(false);
+    this.isPasswordRecovery.set(false);
     this.syncStatus.set('local');
+  }
+
+  /**
+   * Validación estricta de rutas internas para evitar redirecciones abiertas.
+   */
+  isValidInternalRoute(route: string | null | undefined): boolean {
+    if (!route || typeof route !== 'string') return false;
+    const trimmed = route.trim();
+    if (trimmed.length === 0) return false;
+
+    // Rechazar URLs absolutas con esquema o relativas de protocolo (ej. //evil.com)
+    if (/^([a-zA-Z][a-zA-Z\d+\-.]*:|\/\/)/.test(trimmed)) {
+      return false;
+    }
+
+    // Rechazar inyección de pseudo-protocolos (ej. javascript:, data:)
+    if (/^[a-zA-Z0-9_-]+:/i.test(trimmed)) {
+      return false;
+    }
+
+    // Aceptar únicamente rutas relativas internas que inicien con #/ o /
+    return trimmed.startsWith('#/') || trimmed.startsWith('/');
+  }
+
+  /**
+   * Guarda de forma segura la ruta contextual antes de iniciar un flujo OAuth.
+   * Utiliza sessionStorage según los lineamientos de arquitectura (no localStorage).
+   */
+  savePreAuthRoute(route?: string): void {
+    if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return;
+    try {
+      const candidate = route ?? (window.location.hash || window.location.pathname);
+      if (this.isValidInternalRoute(candidate)) {
+        sessionStorage.setItem(this.PRE_AUTH_ROUTE_KEY, candidate.trim());
+      }
+    } catch (e) {
+      console.warn('No se pudo guardar la ruta previa de autenticación:', e);
+    }
+  }
+
+  /**
+   * Consume la ruta contextual previamente guardada, validando que sea interna y segura.
+   */
+  consumePreAuthRoute(): string | null {
+    if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return null;
+    try {
+      const saved = sessionStorage.getItem(this.PRE_AUTH_ROUTE_KEY);
+      if (saved) {
+        sessionStorage.removeItem(this.PRE_AUTH_ROUTE_KEY);
+        if (this.isValidInternalRoute(saved)) {
+          return saved.trim();
+        }
+      }
+    } catch (e) {
+      console.warn('No se pudo consumir la ruta previa de autenticación:', e);
+    }
+    return null;
   }
 
   async signInWithGoogle(): Promise<{ error: AuthError | null }> {
@@ -333,6 +429,7 @@ export class SupabaseService implements OnDestroy {
 
     this.authLoading.set(true);
     this.authError.set(null);
+    this.savePreAuthRoute();
 
     try {
       const redirectUrl = `${window.location.origin}${window.location.pathname}`;
@@ -351,6 +448,150 @@ export class SupabaseService implements OnDestroy {
       return { error: null };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Error al iniciar sesión con Google';
+      const authErr = new AuthError(message);
+      this.authError.set(authErr.message);
+      return { error: authErr };
+    } finally {
+      this.authLoading.set(false);
+    }
+  }
+
+  async signUpWithEmail(
+    email: string,
+    password: string,
+    displayName?: string
+  ): Promise<{ data: { user: User | null; session: Session | null } | null; error: AuthError | null }> {
+    if (!this.supabase) {
+      const err = new AuthError('El cliente de Supabase no está configurado');
+      this.authError.set(err.message);
+      return { data: null, error: err };
+    }
+
+    this.authLoading.set(true);
+    this.authError.set(null);
+
+    try {
+      const redirectUrl = `${window.location.origin}${window.location.pathname}`;
+      const result = await this.supabase.auth.signUp({
+        email: email.trim(),
+        password,
+        options: {
+          data: displayName?.trim() ? { full_name: displayName.trim() } : undefined,
+          emailRedirectTo: redirectUrl,
+        },
+      });
+
+      if (result.error) {
+        this.authError.set(result.error.message);
+        return { data: null, error: result.error };
+      }
+
+      return { data: result.data, error: null };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error al registrar usuario';
+      const authErr = new AuthError(message);
+      this.authError.set(authErr.message);
+      return { data: null, error: authErr };
+    } finally {
+      this.authLoading.set(false);
+    }
+  }
+
+  async signInWithPassword(
+    email: string,
+    password: string
+  ): Promise<{ data: { user: User | null; session: Session | null } | null; error: AuthError | null }> {
+    if (!this.supabase) {
+      const err = new AuthError('El cliente de Supabase no está configurado');
+      this.authError.set(err.message);
+      return { data: null, error: err };
+    }
+
+    this.authLoading.set(true);
+    this.authError.set(null);
+
+    try {
+      const result = await this.supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+      if (result.error) {
+        this.authError.set(result.error.message);
+        return { data: null, error: result.error };
+      }
+
+      return { data: result.data, error: null };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error al iniciar sesión';
+      const authErr = new AuthError(message);
+      this.authError.set(authErr.message);
+      return { data: null, error: authErr };
+    } finally {
+      this.authLoading.set(false);
+    }
+  }
+
+  async resetPasswordForEmail(
+    email: string
+  ): Promise<{ error: AuthError | null }> {
+    if (!this.supabase) {
+      const err = new AuthError('El cliente de Supabase no está configurado');
+      this.authError.set(err.message);
+      return { error: err };
+    }
+
+    this.authLoading.set(true);
+    this.authError.set(null);
+
+    try {
+      const redirectUrl = `${window.location.origin}${window.location.pathname}`;
+      const result = await this.supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: redirectUrl,
+      });
+
+      if (result.error) {
+        this.authError.set(result.error.message);
+        return { error: result.error };
+      }
+
+      return { error: null };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error al solicitar recuperación de contraseña';
+      const authErr = new AuthError(message);
+      this.authError.set(authErr.message);
+      return { error: authErr };
+    } finally {
+      this.authLoading.set(false);
+    }
+  }
+
+  async updateUserPassword(
+    newPassword: string
+  ): Promise<{ error: AuthError | null }> {
+    if (!this.supabase) {
+      const err = new AuthError('El cliente de Supabase no está configurado');
+      this.authError.set(err.message);
+      return { error: err };
+    }
+
+    this.authLoading.set(true);
+    this.authError.set(null);
+
+    try {
+      const result = await this.supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (result.error) {
+        this.authError.set(result.error.message);
+        return { error: result.error };
+      }
+
+      this.isPasswordRecovery.set(false);
+      return { error: null };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error al actualizar contraseña';
       const authErr = new AuthError(message);
       this.authError.set(authErr.message);
       return { error: authErr };
