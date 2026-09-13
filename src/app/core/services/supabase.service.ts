@@ -73,6 +73,9 @@ export class SupabaseService implements OnDestroy {
   }
 
   readonly isAuthenticated = computed(() => this.currentUser() !== null);
+  readonly canSynchronize = computed(
+    () => this.isAuthenticated() && !this.isPasswordRecovery()
+  );
   readonly userDisplayName = computed(() => {
     const prof = this.currentProfile();
     if (prof?.display_name) return prof.display_name;
@@ -179,8 +182,8 @@ export class SupabaseService implements OnDestroy {
 
       // 1. Detección de errores devueltos por el proveedor OAuth
       if (error || errorCode || errorDescription) {
-        const rawMsg = errorDescription || error || errorCode || 'Error durante la autenticación OAuth';
-        const message = decodeURIComponent(rawMsg.replace(/\+/g, ' '));
+        // URLSearchParams entrega ya los valores decodificados; no usar decodeURIComponent adicional
+        const message = errorDescription || error || errorCode || 'Error durante la autenticación OAuth';
         this.authError.set(message);
 
         // Limpiar URL tanto en éxito como en error preservando el Hash
@@ -194,7 +197,7 @@ export class SupabaseService implements OnDestroy {
       if (code) {
         this.authLoading.set(true);
         try {
-          const { data, error: exchangeErr } = await this.supabase.auth.exchangeCodeForSession(code);
+          const { error: exchangeErr } = await this.supabase.auth.exchangeCodeForSession(code);
 
           // Limpiar únicamente los parámetros de búsqueda de OAuth, preservando el Hash location
           const cleanUrl = `${window.location.origin}${window.location.pathname}${window.location.hash}`;
@@ -204,9 +207,10 @@ export class SupabaseService implements OnDestroy {
           if (exchangeErr) {
             console.error('Error durante intercambio PKCE:', exchangeErr.message);
             this.authError.set(exchangeErr.message);
-          } else if (data.session) {
-            this.handleAuthStateChange('SIGNED_IN', data.session);
           }
+          // NOTA: NO forzar SIGNED_IN manualmente aquí.
+          // supabase.auth.exchangeCodeForSession dispara internamente onAuthStateChange
+          // con SIGNED_IN o PASSWORD_RECOVERY según el tipo de redirección OAuth.
         } finally {
           this.authLoading.set(false);
         }
@@ -216,6 +220,11 @@ export class SupabaseService implements OnDestroy {
     }
   }
 
+  private triggerSessionLifecycle(userId: string, generation: number): void {
+    this.syncStatus.set('syncing');
+    queueMicrotask(() => this.fetchProfile(userId, generation));
+  }
+
   private handleAuthStateChange(event: AuthChangeEvent, session: Session | null): void {
     if (event === 'PASSWORD_RECOVERY') {
       this.isPasswordRecovery.set(true);
@@ -223,16 +232,23 @@ export class SupabaseService implements OnDestroy {
       this.currentSession.set(session);
       this.currentUser.set(session?.user ?? null);
       this.authError.set(null);
+
+      // Nunca dejar a un usuario autenticado en recovery operando bajo case_guest:
+      this.namespaceService.setActiveUser(session?.user?.id ?? null);
+
+      // En modo recovery no se dispara sync normal mientras cambia la contraseña
       this.syncStatus.set('local');
       this.isInitialized.set(true);
       return;
     }
 
-    if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+    const wasRecovery = this.isPasswordRecovery();
+    if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'USER_UPDATED') {
       this.isPasswordRecovery.set(false);
     }
 
     const isDuplicate =
+      !wasRecovery &&
       session !== null &&
       this.currentSession()?.access_token === session.access_token &&
       this.currentUser()?.id === session.user.id;
@@ -252,9 +268,7 @@ export class SupabaseService implements OnDestroy {
     this.namespaceService.setActiveUser(session?.user?.id ?? null);
 
     if (session?.user) {
-      // Sincronización en curso
-      this.syncStatus.set('syncing');
-      queueMicrotask(() => this.fetchProfile(session.user.id, currentGen));
+      this.triggerSessionLifecycle(session.user.id, currentGen);
     } else {
       this.clearIdentityState();
       this.syncStatus.set('local');
@@ -323,7 +337,7 @@ export class SupabaseService implements OnDestroy {
   }
 
   recalculateSyncStatus(userId: string): void {
-    if (!this.isAuthenticated()) {
+    if (!this.canSynchronize()) {
       this.setSyncStatus('local');
       return;
     }
@@ -588,7 +602,22 @@ export class SupabaseService implements OnDestroy {
         return { error: result.error };
       }
 
+      // 1. Si aún estábamos en modo recovery (p. ej. si supabase-js no emitió USER_UPDATED de forma síncrona)
+      const wasRecovery = this.isPasswordRecovery();
       this.isPasswordRecovery.set(false);
+
+      // 2. Asegurar namespace del usuario autenticado
+      const user = this.currentUser() ?? result.data?.user;
+      const userId = user?.id;
+      if (userId) {
+        this.namespaceService.setActiveUser(userId);
+        // 3. Ejecutar inicialización normal de la sesión una sola vez
+        if (wasRecovery) {
+          const currentGen = this.authGeneration();
+          this.triggerSessionLifecycle(userId, currentGen);
+        }
+      }
+
       return { error: null };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Error al actualizar contraseña';

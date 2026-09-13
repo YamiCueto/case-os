@@ -61,7 +61,7 @@ export class UserProgressService {
       completedLessons: savedLessons
     });
 
-    if (this.supabaseService.isAuthenticated()) {
+    if (this.supabaseService.canSynchronize()) {
       this.fetchRemoteProgress();
     }
   }

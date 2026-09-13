@@ -28,7 +28,7 @@ export class SyncQueueService {
   constructor() {
     if (typeof window !== 'undefined') {
       window.addEventListener('online', () => {
-        if (this.supabaseService.isAuthenticated()) {
+        if (this.supabaseService.canSynchronize()) {
           this.processQueue();
         }
       });
@@ -40,6 +40,11 @@ export class SyncQueueService {
         this.supabaseService.currentAuthGeneration() !== gen ||
         this.activeUserId !== userId
       ) {
+        return;
+      }
+
+      if (!this.supabaseService.canSynchronize()) {
+        this.updateGlobalStatus();
         return;
       }
 
@@ -71,6 +76,11 @@ export class SyncQueueService {
           this.supabaseService.currentAuthGeneration() !== expectedGen ||
           this.activeUserId !== expectedUserId
         ) {
+          return;
+        }
+
+        if (!this.supabaseService.canSynchronize()) {
+          this.updateGlobalStatus();
           return;
         }
 
@@ -120,10 +130,12 @@ export class SyncQueueService {
 
     this.saveQueueForUser(userId, queue);
 
-    // Si el usuario está autenticado y online, procesar de inmediato
-    if (this.supabaseService.isAuthenticated()) {
+    // Si el usuario puede sincronizar y está online, procesar de inmediato
+    if (this.supabaseService.canSynchronize()) {
       this.supabaseService.setSyncStatus('syncing');
       queueMicrotask(() => this.processQueue());
+    } else if (this.supabaseService.isPasswordRecovery()) {
+      this.supabaseService.setSyncStatus('local');
     }
   }
 
@@ -224,7 +236,7 @@ export class SyncQueueService {
   }
 
   private updateGlobalStatus(): void {
-    if (!this.supabaseService.isAuthenticated()) {
+    if (this.supabaseService.isPasswordRecovery() || !this.supabaseService.isAuthenticated()) {
       this.supabaseService.setSyncStatus('local');
       return;
     }
@@ -254,6 +266,11 @@ export class SyncQueueService {
    */
   async processQueue(): Promise<{ processed: number; failed: number }> {
     if (this.isProcessing) return { processed: 0, failed: 0 };
+
+    if (!this.supabaseService.canSynchronize()) {
+      this.updateGlobalStatus();
+      return { processed: 0, failed: 0 };
+    }
 
     const client = this.supabaseService.client;
     const user = this.supabaseService.currentUser();

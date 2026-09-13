@@ -196,6 +196,8 @@ await testCase('2. GuestClaimService: Lecciones inexistentes o fallidas se conse
     client: mockClient,
     currentUser: () => ({ id: 'user_claim_test' }),
     isAuthenticated: () => true,
+    canSynchronize: () => true,
+    isPasswordRecovery: () => false,
     currentAuthGeneration: () => 1
   };
 
@@ -275,6 +277,8 @@ await testCase('3. SyncQueueService: Despacho tardío de A NO altera colas ni de
     },
     currentUser: () => activeUser,
     isAuthenticated: () => true,
+    canSynchronize: () => true,
+    isPasswordRecovery: () => false,
     currentAuthGeneration: () => authGen,
     setSyncStatus: () => {}
   };
@@ -331,6 +335,8 @@ await testCase('4. UserProgressService: Cálculo dinámico de avance sin denomin
     client: null,
     currentUser: () => null,
     isAuthenticated: () => false,
+    canSynchronize: () => false,
+    isPasswordRecovery: () => false,
     currentAuthGeneration: () => 1
   };
 
@@ -403,6 +409,8 @@ await testCase('5. UserPreferencesService: Merge CRDT LWW y restauración de his
     },
     currentUser: () => ({ id: 'user_prefs_test' }),
     isAuthenticated: () => true,
+    canSynchronize: () => true,
+    isPasswordRecovery: () => false,
     currentAuthGeneration: () => 1
   };
 
@@ -490,16 +498,17 @@ await testCase('7. SupabaseService + SyncQueueService: Inicialización de sesió
 });
 
 // -----------------------------------------------------------------------------
-// Test 8: SupabaseService - Detección de error OAuth y limpieza de URL
+// Test 8: SupabaseService - Detección de error OAuth con '%' literal y limpieza de URL
 // -----------------------------------------------------------------------------
-await testCase('8. SupabaseService: OAuth error callback detecta parámetros de error y limpia URL', async () => {
+await testCase('8. SupabaseService: OAuth error callback maneja "%" literal sin URIError y limpia URL', async () => {
   let cleanedUrl = null;
   global.window = {
     location: {
       origin: 'http://localhost:4200',
       pathname: '/case-os/',
       hash: '#/academy/modules',
-      search: '?error=access_denied&error_description=User+declined+the+authorization+request'
+      // Error que contiene un caracter '%' literal
+      search: '?error=access_denied&error_description=Request+denied+100%+by+user'
     },
     history: {
       replaceState: (_state, _title, url) => {
@@ -523,12 +532,13 @@ await testCase('8. SupabaseService: OAuth error callback detecta parámetros de 
   const supabaseService = runInInjectionContext(injector, () => injector.get(SupabaseService));
   supabaseService['supabase'] = mockClient;
 
+  // No debe lanzar URIError
   await supabaseService['handleOAuthCallbackIfNeeded']();
 
   assert.strictEqual(
     supabaseService.authError(),
-    'User declined the authorization request',
-    'authError debe contener la descripción del error decodificada'
+    'Request denied 100% by user',
+    'authError debe contener el mensaje exacto incluso con caracteres "%" literales'
   );
   assert.strictEqual(
     cleanedUrl,
@@ -584,17 +594,124 @@ await testCase('9. SupabaseService: Métodos de registro y login directo con ema
 });
 
 // -----------------------------------------------------------------------------
-// Test 10: SupabaseService - Soporte para PASSWORD_RECOVERY y actualización
+// Test 10: SupabaseService + SyncQueueService + UserProgressService - Flujo real recovery y aislamiento funcional
 // -----------------------------------------------------------------------------
-await testCase('10. SupabaseService: Soporte de estado PASSWORD_RECOVERY y actualización de contraseña', async () => {
+await testCase('10. SupabaseService + SyncQueueService + UserProgressService: Recovery aísla IO y reactiva ciclo post-update', async () => {
+  const mockStorage = createMockLocalStorage();
+  global.localStorage = mockStorage;
+
+  let authStateCallback = null;
   let capturedUpdate = null;
+  let cleanedUrl = null;
+  let profileFetchCount = 0;
+  let unitProgressQueries = 0;
+  let dispatchedQueueItems = 0;
+
+  const recoverySession = {
+    access_token: 'rec-pkce-jwt',
+    user: { id: 'rec-user-pkce', email: 'recovery@case-os.dev' }
+  };
+
+  // Pre-sembrar un item en la cola del usuario de recovery
+  const userQueueKey = 'case_u_rec-user-pkce:queue';
+  const preSeededItem = {
+    id: 'pref-init-1',
+    entityType: 'user_preferences',
+    action: 'upsert',
+    payload: {
+      favorites: [{ id: 'fav-1', deleted: false, updated_at: new Date().toISOString() }],
+      history: []
+    },
+    enqueuedAt: new Date().toISOString(),
+    retryCount: 0,
+    status: 'pending'
+  };
+  mockStorage.setItem(userQueueKey, JSON.stringify([preSeededItem]));
+
   const mockClient = {
+    from: (table) => {
+      if (table === 'profiles') {
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: async () => {
+                profileFetchCount++;
+                return { data: { id: 'rec-user-pkce', display_name: 'Recovered User' }, error: null };
+              }
+            })
+          })
+        };
+      }
+      if (table === 'unit_progress') {
+        return {
+          select: () => {
+            unitProgressQueries++;
+            return {
+              eq: () => ({
+                eq: async () => ({ data: [], error: null })
+              })
+            };
+          }
+        };
+      }
+      if (table === 'user_preferences') {
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: async () => ({ data: null, error: null })
+            })
+          }),
+          upsert: async () => {
+            dispatchedQueueItems++;
+            return { error: null };
+          }
+        };
+      }
+      return {
+        select: () => ({
+          eq: () => ({
+            maybeSingle: async () => ({ data: null, error: null })
+          })
+        })
+      };
+    },
     auth: {
+      onAuthStateChange: (cb) => {
+        authStateCallback = cb;
+        return { data: { subscription: { unsubscribe: () => {} } } };
+      },
+      getSession: async () => ({ data: { session: null }, error: null }),
+      exchangeCodeForSession: async (_code) => {
+        // Simular que el intercambio PKCE de supabase-js emite PASSWORD_RECOVERY vía onAuthStateChange
+        if (authStateCallback) {
+          authStateCallback('PASSWORD_RECOVERY', recoverySession);
+        }
+        return { data: { session: recoverySession, user: recoverySession.user }, error: null };
+      },
       updateUser: async (payload) => {
         capturedUpdate = payload;
-        return { data: { user: { id: 'rec-user' } }, error: null };
+        // Simular que supabase-js real emite USER_UPDATED al actualizar el usuario
+        if (authStateCallback) {
+          authStateCallback('USER_UPDATED', recoverySession);
+        }
+        return { data: { user: recoverySession.user }, error: null };
       }
     }
+  };
+
+  global.window = {
+    location: {
+      origin: 'http://localhost:4200',
+      pathname: '/case-os/',
+      hash: '#/dashboard',
+      search: '?code=pkce-recovery-code-123'
+    },
+    history: {
+      replaceState: (_state, _title, url) => {
+        cleanedUrl = url;
+      }
+    },
+    addEventListener: () => {}
   };
 
   const injector = Injector.create({
@@ -603,28 +720,74 @@ await testCase('10. SupabaseService: Soporte de estado PASSWORD_RECOVERY y actua
       { provide: ɵEffectScheduler, useValue: { add: () => {}, remove: () => {} } },
       { provide: LocalStorageProvider, useClass: LocalStorageProvider },
       { provide: StorageNamespaceService, useClass: StorageNamespaceService },
-      { provide: SupabaseService, useClass: SupabaseService }
+      { provide: CourseService, useClass: CourseService },
+      { provide: EnrollmentService, useClass: EnrollmentService },
+      { provide: SyncQueueService, useClass: SyncQueueService },
+      { provide: UserProgressService, useClass: UserProgressService },
+      { provide: SupabaseService, useClass: SupabaseService },
+      { provide: 'SUPABASE_CLIENT', useValue: mockClient }
     ]
   });
 
+  const namespaceService = runInInjectionContext(injector, () => injector.get(StorageNamespaceService));
+  const enrollmentService = runInInjectionContext(injector, () => injector.get(EnrollmentService));
+  const syncQueueService = runInInjectionContext(injector, () => injector.get(SyncQueueService));
+  const userProgressService = runInInjectionContext(injector, () => injector.get(UserProgressService));
   const supabaseService = runInInjectionContext(injector, () => injector.get(SupabaseService));
   supabaseService['supabase'] = mockClient;
 
-  // 1. Recibir evento PASSWORD_RECOVERY
-  supabaseService['handleAuthStateChange']('PASSWORD_RECOVERY', {
-    access_token: 'recovery-token',
-    user: { id: 'rec-user', email: 'recovery@case-os.dev' }
+  let enrollmentCalls = 0;
+  const origEnsureEnrollment = enrollmentService.ensureActiveEnrollment.bind(enrollmentService);
+  enrollmentService.ensureActiveEnrollment = async (...args) => {
+    enrollmentCalls++;
+    return origEnsureEnrollment(...args);
+  };
+
+  // Registrar callback de onAuthStateChange
+  mockClient.auth.onAuthStateChange((event, session) => {
+    supabaseService['handleAuthStateChange'](event, session);
   });
 
-  assert.strictEqual(supabaseService.isPasswordRecovery(), true, 'Debe activar flag isPasswordRecovery');
-  assert.strictEqual(supabaseService.syncStatus(), 'local', 'No debe forzar syncStatus a syncing durante recuperación');
-  assert.strictEqual(supabaseService.currentUser()?.email, 'recovery@case-os.dev');
+  // A. Ejecutar el retorno OAuth PKCE de PASSWORD_RECOVERY
+  await supabaseService['handleOAuthCallbackIfNeeded']();
 
-  // 2. Actualizar contraseña con éxito
-  const updateRes = await supabaseService.updateUserPassword('BrandNewPassword456!');
+  // Esperar microtasks para verificar que listeners (onReset, reloadProgress) NO dispararon IO remoto
+  await new Promise(r => setTimeout(r, 60));
+
+  // Comprobaciones durante PASSWORD_RECOVERY:
+  assert.strictEqual(namespaceService.currentUserId(), 'rec-user-pkce', 'Namespace debe ser del usuario');
+  assert.strictEqual(supabaseService.isPasswordRecovery(), true, 'isPasswordRecovery debe ser true');
+  assert.strictEqual(supabaseService.canSynchronize(), false, 'canSynchronize debe ser false durante recovery');
+  assert.strictEqual(enrollmentCalls, 0, 'Auto-enrollment NO debe ser invocado durante recovery');
+  assert.strictEqual(unitProgressQueries, 0, 'Fetch remoto de progreso NO debe ser ejecutado durante recovery');
+  assert.strictEqual(dispatchedQueueItems, 0, 'La cola NO debe ser despachada durante recovery');
+  assert.strictEqual(profileFetchCount, 0, 'El perfil NO debe ser cargado durante recovery');
+  assert.strictEqual(supabaseService.syncStatus(), 'local', 'syncStatus debe permanecer en local');
+  assert.strictEqual(cleanedUrl, 'http://localhost:4200/case-os/#/dashboard', 'La URL debe quedar limpia');
+
+  // Verificar que la cola del usuario NO se perdió
+  const queueBeforeUpdate = syncQueueService.getQueueForUser('rec-user-pkce');
+  assert.strictEqual(queueBeforeUpdate.length, 1, 'La cola local debe preservarse intacta sin pérdidas');
+
+  // B. Ejecutar actualización de contraseña (simulando que supabase-js emite USER_UPDATED)
+  const updateRes = await supabaseService.updateUserPassword('NewSecurePassword123!');
   assert.strictEqual(updateRes.error, null);
-  assert.strictEqual(capturedUpdate.password, 'BrandNewPassword456!');
-  assert.strictEqual(supabaseService.isPasswordRecovery(), false, 'isPasswordRecovery debe desactivarse tras cambio exitoso');
+  assert.strictEqual(capturedUpdate.password, 'NewSecurePassword123!');
+
+  // Esperar resolución de ciclo de vida, profile y despacho de colas
+  await new Promise(r => setTimeout(r, 80));
+
+  // Comprobaciones después de updateUserPassword:
+  assert.strictEqual(supabaseService.isPasswordRecovery(), false, 'isPasswordRecovery debe ser false tras actualizar contraseña');
+  assert.strictEqual(supabaseService.canSynchronize(), true, 'canSynchronize debe ser true tras actualizar contraseña');
+  assert.strictEqual(namespaceService.currentUserId(), 'rec-user-pkce', 'Namespace debe conservarse en el usuario autenticado');
+  assert.strictEqual(profileFetchCount, 1, 'El profile lifecycle debe ejecutarse exactamente una sola vez');
+  assert.strictEqual(supabaseService.currentProfile()?.display_name, 'Recovered User', 'El perfil debe estar inicializado');
+  assert.strictEqual(dispatchedQueueItems, 1, 'La cola pendiente debe haberse despachado en el lifecycle post-recovery');
+
+  const queueAfterUpdate = syncQueueService.getQueueForUser('rec-user-pkce');
+  assert.strictEqual(queueAfterUpdate.length, 0, 'La cola debe quedar vacía tras ser despachada');
+  assert.strictEqual(supabaseService.syncStatus(), 'synced', 'El syncStatus debe terminar en synced tras procesar la cola');
 });
 
 // -----------------------------------------------------------------------------
@@ -720,7 +883,9 @@ await testCase('12. GuestClaimService: Dispara recarga reactiva de progreso en U
     client: mockClient,
     currentUser: () => ({ id: 'claimer-user-id' }),
     currentAuthGeneration: () => 1,
-    isAuthenticated: () => true
+    isAuthenticated: () => true,
+    canSynchronize: () => true,
+    isPasswordRecovery: () => false
   };
 
   const mockEnrollment = {
