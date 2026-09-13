@@ -11,6 +11,8 @@ import {
   CaseCalloutComponent,
   CaseCodeBlockComponent
 } from '../../../../core/ui/components';
+import { ExperienceRegistryComponent } from '../shared/experiences/experience-registry.component';
+import { AgentBuildingMapComponent } from '../shared/components/agent-building-map/agent-building-map.component';
 
 /**
  * Lesson01Workflows — CASE Academy
@@ -26,7 +28,9 @@ import {
     LessonComparisonComponent,
     LessonFooterComponent,
     CaseCalloutComponent,
-    CaseCodeBlockComponent
+    CaseCodeBlockComponent,
+    ExperienceRegistryComponent,
+    AgentBuildingMapComponent
   ],
   templateUrl: './lesson-01-workflows.html',
   styleUrl: './lesson-01-workflows.css'

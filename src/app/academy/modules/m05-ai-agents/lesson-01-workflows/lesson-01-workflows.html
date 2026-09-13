@@ -19,6 +19,10 @@
       </div>
     </nav>
 
+    <div style="margin-top: 32px;">
+      <app-agent-building-map stage="decision"></app-agent-building-map>
+    </div>
+
     <!-- ── 3. Flowing Sections ── -->
     <div class="living-doc__sections">
       @for (sec of doc.sections; track sec.id) {
@@ -94,6 +98,13 @@
                 </div>
               }
 
+              <!-- Experience Block -->
+              @else if (block.type === 'EXPERIENCE') {
+                <div class="living-doc-experience">
+                  <app-experience-registry-m05 [experienceId]="block.experienceId"></app-experience-registry-m05>
+                </div>
+              }
+
               <!-- Key Insights Block -->
               @else if (block.type === 'KEY_INSIGHTS') {
                 <div class="living-doc-insights">
@@ -117,6 +128,10 @@
 
         </section>
       }
+    </div>
+
+    <div style="margin-top: 32px;">
+      <app-agent-building-map stage="decision"></app-agent-building-map>
     </div>
 
     <!-- ── 4. Technical Footer Navigation & Completion ── -->

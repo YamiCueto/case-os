@@ -8,103 +8,86 @@ export const LESSON_01_DOCUMENT: LessonDocument = {
   lessonId: 'c13',
   sections: [
     {
-      id: 'escalera-de-autonomia',
-      title: '01. La Escalera de la Autonomía',
-      subtitle: 'La autonomía es un costo operacional, no un objetivo por sí mismo',
+      id: 'la-frontera',
+      title: '01. La Frontera de la Autonomía',
+      subtitle: 'Cuando el código ya no sabe cuál es el siguiente paso',
       blocks: [
         {
           type: 'PARAGRAPH',
           lead: true,
-          text: 'En ingeniería de software con IA, la autonomía no es un objetivo, es un costo. Mientras más autonomía otorgas a un modelo, menor es tu control sobre la ejecución, la latencia y los costos económicos.'
+          text: 'Hasta ahora, en M04 (RAG), nuestro código decidía cuándo buscar información. Teníamos un flujo determinista donde la consulta pasaba por un proceso de recuperación y terminaba en el modelo. Pero, ¿qué ocurre cuando la capacidad necesaria depende de información descubierta en tiempo de ejecución?'
+        },
+        {
+          type: 'PARAGRAPH',
+          text: 'En lugar de controlar rígidamente el flujo, comenzamos a permitir que el modelo participe en la decisión del siguiente paso, siempre dentro de los límites definidos por el software. Identificar correctamente cuándo delegar esta decisión es la habilidad fundacional para construir sistemas basados en IA.'
+        },
+        {
+          type: 'EXPERIENCE',
+          experienceId: 'what-is-an-agent'
+        },
+        {
+          type: 'KEY_INSIGHTS',
+          title: 'Taxonomía Operacional en CASE',
+          items: [
+            'Tool-Using Workflow: El modelo decide usar una herramienta. El sistema la ejecuta, entrega el resultado al usuario y termina. NO hay realimentación.',
+            'Agent Loop: El resultado de la herramienta regresa al modelo, quien evalúa la nueva observación y decide si necesita ejecutar otra acción o finalizar.'
+          ]
+        }
+      ]
+    },
+    {
+      id: 'control-de-flujo',
+      title: '02. ¿Quién controla el flujo?',
+      subtitle: 'El paso del IF-ELSE al ruteo semántico',
+      blocks: [
+        {
+          type: 'PARAGRAPH',
+          text: 'El primer paso hacia la autonomía no es un agente complejo, sino un "Model-Routed Workflow". En lugar de hardcodear reglas de negocio rígidas que fallan ante variaciones inesperadas, usamos la capacidad de clasificación del LLM para determinar qué herramienta o subsistema debe ejecutarse a continuación.'
+        },
+        {
+          type: 'EXPERIENCE',
+          experienceId: 'who-controls-flow'
+        },
+        {
+          type: 'CODE',
+          filename: 'model_router.py',
+          language: 'python',
+          description: 'Estructura de un Model-Routed Workflow. El modelo toma la decisión, pero el código controla rígidamente la ejecución posterior.',
+          code: `# 1. El modelo evalúa el contexto y devuelve un JSON con su decisión
+response = llm.generate(
+    prompt=router_prompt,
+    response_format={"type": "json_object"}
+)
+intent = response.get("intent")
+
+# 2. El flujo determinista recupera el control
+if intent == "technical_support":
+    return route_to_support_workflow(user_data)
+elif intent == "refund":
+    return execute_refund_workflow(user_data)
+else:
+    return fallback_workflow()`
+        }
+      ]
+    },
+    {
+      id: 'cuanta-autonomia',
+      title: '03. ¿Cuánta autonomía necesitas?',
+      subtitle: 'La autonomía es un costo operacional, no un objetivo por sí mismo',
+      blocks: [
+        {
+          type: 'PARAGRAPH',
+          text: 'Construir un Agente completo (Agent Loop) introduce no-determinismo. Un agente recibe un objetivo general, descubre información y decide por sí mismo qué workflows iniciar y cuándo detenerse. Esto reduce la predictibilidad y aumenta los costos y riesgos operativos.'
+        },
+        {
+          type: 'EXPERIENCE',
+          experienceId: 'autonomy-tradeoffs'
         },
         {
           type: 'CALLOUT',
           variant: 'rule',
           title: 'Regla Arquitectónica: Least Autonomy Necessary',
-          message: 'Construye utilizando siempre el nivel más bajo de autonomía que resuelva de forma robusta tu caso de uso.'
-        }
-      ]
-    },
-    {
-      id: 'deterministic-workflow',
-      title: '02. Nivel 1: Flujo Determinista (Static Pipeline)',
-      subtitle: 'Cero autonomía, control absoluto',
-      blocks: [
-        {
-          type: 'PARAGRAPH',
-          text: 'El código dicta la secuencia estricta. El LLM es solo una función determinista dentro del pipeline:'
-        },
-        {
-          type: 'CODE',
-          filename: 'static-pipeline-sequence.txt',
-          language: 'text',
-          code: `User Input ──► App Code (Validation) ──► LLM (Extraction/Transform) ──► App Code (Persist/Response)`
-        },
-        {
-          type: 'KEY_INSIGHTS',
-          title: 'Características del Pipeline Estático',
-          items: [
-            'Predictibilidad: Máxima (100% control del flujo en código).',
-            'Costo y Latencia: Mínima (1 sola llamada al LLM).',
-            'Casos de Uso: Clasificación, Extracción RAG, Traducción, Resúmenes estructurados.'
-          ]
-        }
-      ]
-    },
-    {
-      id: 'tools-vs-agent-loop',
-      title: '03. Nivel 2: Tool-Using vs Nivel 3: Agent Loop',
-      subtitle: 'Otorgando capacidad de decisión acotada vs ciclo interactivo',
-      blocks: [
-        {
-          type: 'COMPARISON',
-          left: {
-            title: '2. Tool-Using Workflow',
-            subtitle: 'Decisión Acotada (Single-Step)',
-            icon: '🛠️',
-            badge: 'Tool-Using',
-            points: [
-              'El LLM recibe una petición y una lista de herramientas.',
-              'Decide qué herramienta usar y propone los parámetros.',
-              'El software ejecuta la herramienta y termina (NO orquesta el ciclo).',
-              'Útil para: Interfaces de búsqueda, ejecución de un solo comando (ej. "Apaga las luces").'
-            ]
-          },
-          right: {
-            title: '3. Agent Loop (ReAct)',
-            subtitle: 'Multi-Step Orchestration',
-            icon: '🔄',
-            badge: 'Ciclo Agéntico',
-            active: true,
-            points: [
-              'El LLM decide usar una herramienta; el sistema la ejecuta y devuelve el resultado.',
-              'El LLM evalúa la observación y decide el siguiente paso iterativamente.',
-              'Se repite hasta alcanzar el objetivo final.',
-              'Útil para: Tareas donde los pasos dependen del resultado anterior (Research, Debugging).'
-            ]
-          }
-        }
-      ]
-    },
-    {
-      id: 'autonomous-agent-y-conclusion',
-      title: '04. Nivel 4: Agente Autónomo',
-      subtitle: 'El extremo de la escalera: la caja negra total',
-      blocks: [
-        {
-          type: 'CALLOUT',
-          variant: 'warning',
-          title: 'El Riesgo de la Autonomía Extrema',
-          message: 'Un agente verdaderamente autónomo recibe un objetivo general ("Maximiza las ventas") y decide por sí mismo qué workflows iniciar, qué herramientas descubrir y cuándo detenerse, a menudo ejecutándose en background por horas. Son impredecibles y difíciles de evaluar. La mayoría de los sistemas empresariales se benefician de mantener la autonomía acotada y utilizar workflows deterministas siempre que sea suficiente.'
-        },
-        {
-          type: 'KEY_INSIGHTS',
-          title: 'Principios de Arquitectura Agéntica',
-          items: [
-            'La autonomía introduce no-determinismo: aplícala solo donde las ramas de decisión no puedan codificarse en reglas deterministas.',
-            'Prefiere Tool-Using Workflows sobre Agent Loops si el número de pasos es conocido de antemano.',
-            'A mayor grado de autonomía, más estrictos deben ser los límites de seguridad y monitoreo FinOps.'
-          ]
+          message: 'Construye utilizando siempre el nivel más bajo de autonomía que resuelva de forma robusta tu caso de uso. Prefiere un flujo determinista; si falla, delega el enrutamiento al modelo (Model-Routed); y reserva el ciclo agéntico (Agent Loop) solo para problemas abiertos que requieran investigación iterativa.'
         }
       ]
     }
