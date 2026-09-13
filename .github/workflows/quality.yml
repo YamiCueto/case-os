@@ -1,0 +1,65 @@
+name: Quality & Dependency Audit
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Service Regression Tests
+        run: npm run test:services
+
+      - name: Run SQL Migrations Verification
+        run: npm run test:sql
+
+      - name: Build Application Bundle
+        run: npm run build
+
+  dependency-audit:
+    name: dependency-audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Audit Production Dependencies (Hard Gate)
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Full Dependency Audit (Informational)
+        continue-on-error: true
+        run: npm audit --audit-level=high
+
+      - name: Verify Package Signatures (Informational)
+        continue-on-error: true
+        run: npm audit signatures

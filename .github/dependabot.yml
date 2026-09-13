@@ -1,0 +1,37 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "05:00"
+    open-pull-requests-limit: 5
+    groups:
+      angular-framework:
+        patterns:
+          - "@angular/*"
+          - "zone.js"
+          - "rxjs"
+      supabase:
+        patterns:
+          - "@supabase/*"
+      dev-tooling:
+        patterns:
+          - "typescript"
+          - "eslint*"
+          - "@types/*"
+          - "playwright*"
+          - "@playwright/*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "05:00"
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns:
+          - "*"
