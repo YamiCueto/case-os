@@ -3,24 +3,23 @@ import { createClient } from '@supabase/supabase-js';
 
 // Parse arguments
 const isDryRun = process.argv.includes('--dry-run') || process.argv.includes('--validate-only');
-const shouldCleanDraft = process.argv.includes('--clean-draft') || process.argv.includes('--reset-draft');
 
 /**
  * ============================================================================
- * NOTA DE ARQUITECTURA Y RECUPERABILIDAD DE BORRADORES
+ * NOTA DE ARQUITECTURA Y PROYECCIÓN IDEMPOTENTE DEL CATÁLOGO
  * ============================================================================
  * Las entidades previas a la publicación (learning_units, learning_unit_versions,
- * program_units) se proyectan mediante peticiones HTTPS secuenciales con la versión
- * del programa en estado 'DRAFT'.
+ * program_units) se proyectan con la versión del programa en estado 'DRAFT'.
  *
- * Si ocurre una falla de red o error de API durante esta etapa preliminar:
- * 1. La versión permanece estrictamente en 'DRAFT'.
- * 2. Las políticas RLS de enrollments impiden que ningún estudiante se inscriba
- *    (requieren status = 'PUBLISHED').
- * 3. Los triggers de inmutabilidad no bloquean la corrección del borrador.
- * 4. El script es idempotente: ejecutarlo de nuevo reutilizará el borrador
- *    existente y completará las unidades faltantes.
- * 5. Si se requiere reiniciar el borrador desde cero, ejecutar con `--clean-draft`.
+ * Si el programa ya existe en 'DRAFT' (por una ejecución previa interrumpida):
+ * 1. Se purgan automáticamente sus enlaces en 'program_units' para garantizar
+ *    que la malla sea un espejo 1:1 exacto de Git (sin unidades huérfanas).
+ * 2. Se re-insertan las 45 unidades y sus relaciones de prerrequisitos.
+ * 3. Antes de invocar `publish_program_version`, se realiza una reconciliación
+ *    exhaustiva 1:1 contra la base de datos (cardinalidad, ids, títulos, paths,
+ *    módulos, tipos, orden, prerrequisitos sin mutación y ausencia de duplicados).
+ * 4. Si cualquier metadato difiere, el script falla con exit code 1 y el programa
+ *    permanece en DRAFT sin transicionar a PUBLISHED.
  * ============================================================================
  */
 
@@ -81,7 +80,124 @@ export function extractCourseConfig() {
   return { modules, lessons };
 }
 
-async function run() {
+/**
+ * Valida que la credencial provista tenga privilegios administrativos reales (service_role o secret key)
+ * y pertenezca al proyecto objetivo mediante una llamada de solo lectura a la API de administración.
+ * No asume que el token sea JWT ni imprime/persiste secretos.
+ */
+export async function verifyAdministrativeAccess(supabase) {
+  const { error } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1 });
+  if (error) {
+    throw new Error(`Acceso administrativo denegado (${error.message}). La credencial provista no tiene permisos administrativos o no coincide con el proyecto objetivo.`);
+  }
+}
+
+/**
+ * Reconcilia exhaustivamente la proyección remota de unidades contra el catálogo esperado en Git.
+ * Valida cardinalidad, duplicados, id, versión, título, path, moduleId, tipo, orden y prerrequisitos
+ * (usando copias inmutables ordenadas sin mutar el array original).
+ */
+export function reconcileCatalog(lessons, remoteUnits) {
+  const issues = [];
+
+  if (!Array.isArray(remoteUnits)) {
+    return {
+      valid: false,
+      issues: ['La respuesta remota de unidades no es un arreglo válido.']
+    };
+  }
+
+  // 1. Cardinalidad exacta
+  if (remoteUnits.length !== lessons.length) {
+    issues.push(`Cardinalidad discrepante: esperado ${lessons.length} unidades en Git, encontradas ${remoteUnits.length} en remoto.`);
+  }
+
+  // 2. Detección de duplicados en remoto
+  const seenUnitIds = new Set();
+  const duplicateUnitIds = new Set();
+  for (const ru of remoteUnits) {
+    const unitId = ru.learning_unit_versions?.learning_units?.id;
+    if (unitId) {
+      if (seenUnitIds.has(unitId)) {
+        duplicateUnitIds.add(unitId);
+      }
+      seenUnitIds.add(unitId);
+    }
+  }
+  if (duplicateUnitIds.size > 0) {
+    issues.push(`Unidades duplicadas en program_units remoto: [${Array.from(duplicateUnitIds).join(', ')}]`);
+  }
+
+  // 3. Mapeo de unidades remotas
+  const remoteMap = new Map();
+  for (const ru of remoteUnits) {
+    const luv = ru.learning_unit_versions;
+    const lu = luv?.learning_units;
+    if (lu?.id) {
+      remoteMap.set(lu.id, {
+        unitId: lu.id,
+        moduleId: lu.module_id,
+        type: lu.type,
+        version: luv.version,
+        path: luv.path,
+        title: luv.title,
+        displayOrder: ru.display_order,
+        // Copia ordenada para comparación sin mutar el array original
+        prerequisites: Array.isArray(ru.prerequisites) ? [...ru.prerequisites].sort() : []
+      });
+    }
+  }
+
+  // 4. Contrastar cada lección esperada de Git
+  for (const local of lessons) {
+    const remote = remoteMap.get(local.id);
+    if (!remote) {
+      issues.push(`Unidad faltante en remoto: '${local.id}' (${local.title})`);
+      continue;
+    }
+
+    if (remote.version !== '1.0.0') {
+      issues.push(`Versión desalineada en unidad '${local.id}': esperado '1.0.0', remoto '${remote.version}'`);
+    }
+    if (remote.title !== local.title) {
+      issues.push(`Título desalineado en unidad '${local.id}': esperado '${local.title}', remoto '${remote.title}'`);
+    }
+    if (remote.path !== local.path) {
+      issues.push(`Path desalineado en unidad '${local.id}': esperado '${local.path}', remoto '${remote.path}'`);
+    }
+    if (remote.moduleId !== local.moduleId) {
+      issues.push(`Módulo desalineado en unidad '${local.id}': esperado '${local.moduleId}', remoto '${remote.moduleId}'`);
+    }
+    if (remote.type !== local.type) {
+      issues.push(`Tipo desalineado en unidad '${local.id}': esperado '${local.type}', remoto '${remote.type}'`);
+    }
+    if (remote.displayOrder !== local.globalOrder) {
+      issues.push(`Orden (display_order) desalineado en unidad '${local.id}': esperado ${local.globalOrder}, remoto ${remote.displayOrder}`);
+    }
+
+    // Comparar prerrequisitos usando copias ordenadas sin mutar
+    const localPrereqsSorted = [...local.prerequisites].sort();
+    const remotePrereqsSorted = [...remote.prerequisites].sort();
+    if (JSON.stringify(localPrereqsSorted) !== JSON.stringify(remotePrereqsSorted)) {
+      issues.push(`Prerrequisitos desalineados en unidad '${local.id}': esperado [${localPrereqsSorted.join(', ')}], remoto [${remotePrereqsSorted.join(', ')}]`);
+    }
+  }
+
+  // 5. Detectar unidades sobrantes en remoto que no están en Git
+  const localIds = new Set(lessons.map(l => l.id));
+  for (const remoteId of remoteMap.keys()) {
+    if (!localIds.has(remoteId)) {
+      issues.push(`Unidad sobrante en remoto no presente en Git: '${remoteId}'`);
+    }
+  }
+
+  return {
+    valid: issues.length === 0,
+    issues
+  };
+}
+
+export async function run() {
   console.log('--- Proyección y Publicación del Catálogo CASE OS desde Git ---');
   const { modules, lessons } = extractCourseConfig();
   console.log(`Detectados en Git: ${modules.length} módulos y ${lessons.length} unidades de aprendizaje.`);
@@ -101,16 +217,31 @@ async function run() {
   }
 
   const url = process.env.SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const administrativeKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!url || !serviceRoleKey) {
-    console.log('[MODO LOCAL / INFORMATIVO] SUPABASE_URL o SUPABASE_SERVICE_ROLE_KEY no están configuradas.');
-    console.log('[SEGURIDAD] La publicación del catálogo exige exclusivamente SUPABASE_SERVICE_ROLE_KEY; no se acepta clave anónima.');
-    console.log('No se realizó ninguna publicación ni conexión remota. Validación de catálogo completada localmente.');
-    return;
+  if (!url || !administrativeKey) {
+    console.error('Error: SUPABASE_URL y una credencial administrativa (SUPABASE_SECRET_KEY o SUPABASE_SERVICE_ROLE_KEY) son obligatorias para publicar.');
+    console.error('[SEGURIDAD] La publicación del catálogo exige exclusivamente una clave administrativa con bypass RLS (service_role o sb_secret_*); las claves anónimas y de usuario no están permitidas.');
+    process.exit(1);
   }
 
-  const supabase = createClient(url, serviceRoleKey);
+  const supabase = createClient(url, administrativeKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false
+    }
+  });
+
+  // Validar privilegio administrativo real contra el proyecto remoto
+  console.log('Validando credencial administrativa contra el proyecto Supabase objetivo...');
+  try {
+    await verifyAdministrativeAccess(supabase);
+    console.log('[PASS] Credencial administrativa autenticada con éxito en el proyecto remoto.');
+  } catch (authErr) {
+    console.error(`[ERROR DE SEGURIDAD] ${authErr.message}`);
+    process.exit(1);
+  }
+
   const programSlug = 'case-engineering-workspace';
   const programVersion = '1.0.0';
   const programTitle = 'CASE OS — Engineering Workspace';
@@ -156,22 +287,21 @@ async function run() {
     programId = createdProg.id;
   } else {
     programId = existingProg.id;
-    if (shouldCleanDraft) {
-      console.log(`[CLEAN-DRAFT] Purgando enlaces del borrador previo ${programId}...`);
-      const { error: cleanErr } = await supabase
-        .from('program_units')
-        .delete()
-        .eq('program_version_id', programId);
+    console.log(`[DRAFT] Programa existente en borrador (id: ${programId}). Reconstruyendo program_units desde Git...`);
+    // Purgar vínculos previos en DRAFT para garantizar proyección 1:1 exacta con Git
+    const { error: cleanErr } = await supabase
+      .from('program_units')
+      .delete()
+      .eq('program_version_id', programId);
 
-      if (cleanErr) {
-        console.error('Error al purgar borrador previo:', cleanErr.message);
-        process.exit(1);
-      }
-      console.log('[CLEAN-DRAFT] Borrador purgado exitosamente. Procediendo con sincronización completa.');
+    if (cleanErr) {
+      console.error('Error al purgar enlaces de program_units del borrador previo:', cleanErr.message);
+      process.exit(1);
     }
+    console.log('[DRAFT] Enlaces previos purgados. Re-proyectando unidades desde Git...');
   }
 
-  // 2. Sincronizar entidades individuales comprobando cada respuesta de Supabase
+  // 2. Sincronizar entidades maestras y de versión
   console.log('Sincronizando unidades de aprendizaje y versiones...');
   for (const lesson of lessons) {
     const { error: luErr } = await supabase.from('learning_units').upsert({
@@ -214,7 +344,46 @@ async function run() {
     }
   }
 
-  // 3. Publicación atómica mediante RPC con bloqueo coordinado
+  // 3. Auditoría exhaustiva pre-publicación contra la base de datos
+  console.log('Realizando auditoría integral del borrador remoto contra el catálogo Git...');
+  const { data: remoteUnits, error: auditFetchErr } = await supabase
+    .from('program_units')
+    .select(`
+      program_version_id,
+      display_order,
+      prerequisites,
+      learning_unit_versions!inner (
+        id,
+        version,
+        path,
+        title,
+        learning_units!inner (
+          id,
+          module_id,
+          type
+        )
+      )
+    `)
+    .eq('program_version_id', programId);
+
+  if (auditFetchErr) {
+    console.error('Error al consultar datos remotos para auditoría pre-publicación:', auditFetchErr.message);
+    process.exit(1);
+  }
+
+  const reconciliation = reconcileCatalog(lessons, remoteUnits);
+  if (!reconciliation.valid) {
+    console.error('\n--- AUDITORÍA PRE-PUBLICACIÓN RECHAZADA ---');
+    for (const issue of reconciliation.issues) {
+      console.error(`  [X] ${issue}`);
+    }
+    console.error('\n[SEGURIDAD] La versión permanece en DRAFT. publish_program_version NO fue invocada.');
+    process.exit(1);
+  }
+
+  console.log(`[AUDIT PASS] Las ${lessons.length} unidades remotas coinciden 1:1 con Git (metadatos, orden, módulos, tipos y prerrequisitos).`);
+
+  // 4. Publicación atómica mediante RPC con bloqueo coordinado
   console.log(`Ejecutando procedimiento atómico public.publish_program_version(${programId}) con bloqueo coordinado...`);
   const { error: pubErr } = await supabase.rpc('publish_program_version', {
     p_program_version_id: programId
