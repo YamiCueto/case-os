@@ -196,6 +196,8 @@ await testCase('2. GuestClaimService: Lecciones inexistentes o fallidas se conse
     client: mockClient,
     currentUser: () => ({ id: 'user_claim_test' }),
     isAuthenticated: () => true,
+    canSynchronize: () => true,
+    isPasswordRecovery: () => false,
     currentAuthGeneration: () => 1
   };
 
@@ -275,6 +277,8 @@ await testCase('3. SyncQueueService: Despacho tardío de A NO altera colas ni de
     },
     currentUser: () => activeUser,
     isAuthenticated: () => true,
+    canSynchronize: () => true,
+    isPasswordRecovery: () => false,
     currentAuthGeneration: () => authGen,
     setSyncStatus: () => {}
   };
@@ -331,6 +335,8 @@ await testCase('4. UserProgressService: Cálculo dinámico de avance sin denomin
     client: null,
     currentUser: () => null,
     isAuthenticated: () => false,
+    canSynchronize: () => false,
+    isPasswordRecovery: () => false,
     currentAuthGeneration: () => 1
   };
 
@@ -403,6 +409,8 @@ await testCase('5. UserPreferencesService: Merge CRDT LWW y restauración de his
     },
     currentUser: () => ({ id: 'user_prefs_test' }),
     isAuthenticated: () => true,
+    canSynchronize: () => true,
+    isPasswordRecovery: () => false,
     currentAuthGeneration: () => 1
   };
 
@@ -489,7 +497,472 @@ await testCase('7. SupabaseService + SyncQueueService: Inicialización de sesió
   assert.strictEqual(supabaseService.syncStatus(), 'synced', 'El estado debe regresar a "synced" al limpiar deadletter');
 });
 
+// -----------------------------------------------------------------------------
+// Test 8: SupabaseService - Detección de error OAuth con '%' literal y limpieza de URL
+// -----------------------------------------------------------------------------
+await testCase('8. SupabaseService: OAuth error callback maneja "%" literal sin URIError y limpia URL', async () => {
+  let cleanedUrl = null;
+  global.window = {
+    location: {
+      origin: 'http://localhost:4200',
+      pathname: '/case-os/',
+      hash: '#/academy/modules',
+      // Error que contiene un caracter '%' literal
+      search: '?error=access_denied&error_description=Request+denied+100%+by+user'
+    },
+    history: {
+      replaceState: (_state, _title, url) => {
+        cleanedUrl = url;
+      }
+    }
+  };
+
+  const mockClient = { auth: { exchangeCodeForSession: async () => ({ data: null, error: null }) } };
+  const injector = Injector.create({
+    providers: [
+      { provide: ɵChangeDetectionScheduler, useValue: { notify: () => {}, runningTick: false } },
+      { provide: ɵEffectScheduler, useValue: { add: () => {}, remove: () => {} } },
+      { provide: LocalStorageProvider, useClass: LocalStorageProvider },
+      { provide: StorageNamespaceService, useClass: StorageNamespaceService },
+      { provide: SupabaseService, useClass: SupabaseService },
+      { provide: 'SUPABASE_CLIENT', useValue: mockClient }
+    ]
+  });
+
+  const supabaseService = runInInjectionContext(injector, () => injector.get(SupabaseService));
+  supabaseService['supabase'] = mockClient;
+
+  // No debe lanzar URIError
+  await supabaseService['handleOAuthCallbackIfNeeded']();
+
+  assert.strictEqual(
+    supabaseService.authError(),
+    'Request denied 100% by user',
+    'authError debe contener el mensaje exacto incluso con caracteres "%" literales'
+  );
+  assert.strictEqual(
+    cleanedUrl,
+    'http://localhost:4200/case-os/#/academy/modules',
+    'La URL debe limpiarse conservando origin, pathname y hash intactos'
+  );
+});
+
+// -----------------------------------------------------------------------------
+// Test 9: SupabaseService - Registro y login directo con Email y Contraseña
+// -----------------------------------------------------------------------------
+await testCase('9. SupabaseService: Métodos de registro y login directo con email y contraseña', async () => {
+  let capturedSignUp = null;
+  let capturedSignIn = null;
+
+  const mockClient = {
+    auth: {
+      signUp: async (options) => {
+        capturedSignUp = options;
+        return { data: { user: { id: 'u-reg-1', email: options.email }, session: null }, error: null };
+      },
+      signInWithPassword: async (credentials) => {
+        capturedSignIn = credentials;
+        return { data: { user: { id: 'u-reg-1', email: credentials.email }, session: { access_token: 'fake-jwt' } }, error: null };
+      }
+    }
+  };
+
+  const injector = Injector.create({
+    providers: [
+      { provide: ɵChangeDetectionScheduler, useValue: { notify: () => {}, runningTick: false } },
+      { provide: ɵEffectScheduler, useValue: { add: () => {}, remove: () => {} } },
+      { provide: LocalStorageProvider, useClass: LocalStorageProvider },
+      { provide: StorageNamespaceService, useClass: StorageNamespaceService },
+      { provide: SupabaseService, useClass: SupabaseService }
+    ]
+  });
+
+  const supabaseService = runInInjectionContext(injector, () => injector.get(SupabaseService));
+  supabaseService['supabase'] = mockClient;
+
+  // 1. Registro con nombre de usuario
+  const signUpRes = await supabaseService.signUpWithEmail('learner@case-os.dev', 'SecretPass123!', 'Alex Engineer');
+  assert.strictEqual(signUpRes.error, null);
+  assert.strictEqual(capturedSignUp.email, 'learner@case-os.dev');
+  assert.strictEqual(capturedSignUp.options.data.full_name, 'Alex Engineer');
+
+  // 2. Inicio de sesión directo
+  const signInRes = await supabaseService.signInWithPassword('learner@case-os.dev', 'SecretPass123!');
+  assert.strictEqual(signInRes.error, null);
+  assert.strictEqual(capturedSignIn.email, 'learner@case-os.dev');
+  assert.strictEqual(capturedSignIn.password, 'SecretPass123!');
+});
+
+// -----------------------------------------------------------------------------
+// Test 10: SupabaseService + SyncQueueService + UserProgressService - Flujo real recovery y aislamiento funcional
+// -----------------------------------------------------------------------------
+await testCase('10. SupabaseService + SyncQueueService + UserProgressService: Recovery aísla IO y reactiva ciclo post-update', async () => {
+  const mockStorage = createMockLocalStorage();
+  global.localStorage = mockStorage;
+
+  let authStateCallback = null;
+  let capturedUpdate = null;
+  let cleanedUrl = null;
+  let profileFetchCount = 0;
+  let unitProgressQueries = 0;
+  let dispatchedQueueItems = 0;
+
+  const recoverySession = {
+    access_token: 'rec-pkce-jwt',
+    user: { id: 'rec-user-pkce', email: 'recovery@case-os.dev' }
+  };
+
+  // Pre-sembrar un item en la cola del usuario de recovery
+  const userQueueKey = 'case_u_rec-user-pkce:queue';
+  const preSeededItem = {
+    id: 'pref-init-1',
+    entityType: 'user_preferences',
+    action: 'upsert',
+    payload: {
+      favorites: [{ id: 'fav-1', deleted: false, updated_at: new Date().toISOString() }],
+      history: []
+    },
+    enqueuedAt: new Date().toISOString(),
+    retryCount: 0,
+    status: 'pending'
+  };
+  mockStorage.setItem(userQueueKey, JSON.stringify([preSeededItem]));
+
+  const mockClient = {
+    from: (table) => {
+      if (table === 'profiles') {
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: async () => {
+                profileFetchCount++;
+                return { data: { id: 'rec-user-pkce', display_name: 'Recovered User' }, error: null };
+              }
+            })
+          })
+        };
+      }
+      if (table === 'unit_progress') {
+        return {
+          select: () => {
+            unitProgressQueries++;
+            return {
+              eq: () => ({
+                eq: async () => ({ data: [], error: null })
+              })
+            };
+          }
+        };
+      }
+      if (table === 'user_preferences') {
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: async () => ({ data: null, error: null })
+            })
+          }),
+          upsert: async () => {
+            dispatchedQueueItems++;
+            return { error: null };
+          }
+        };
+      }
+      return {
+        select: () => ({
+          eq: () => ({
+            maybeSingle: async () => ({ data: null, error: null })
+          })
+        })
+      };
+    },
+    auth: {
+      onAuthStateChange: (cb) => {
+        authStateCallback = cb;
+        return { data: { subscription: { unsubscribe: () => {} } } };
+      },
+      getSession: async () => ({ data: { session: null }, error: null }),
+      exchangeCodeForSession: async (_code) => {
+        // Simular que el intercambio PKCE de supabase-js emite PASSWORD_RECOVERY vía onAuthStateChange
+        if (authStateCallback) {
+          authStateCallback('PASSWORD_RECOVERY', recoverySession);
+        }
+        return { data: { session: recoverySession, user: recoverySession.user }, error: null };
+      },
+      updateUser: async (payload) => {
+        capturedUpdate = payload;
+        // Simular que supabase-js real emite USER_UPDATED al actualizar el usuario
+        if (authStateCallback) {
+          authStateCallback('USER_UPDATED', recoverySession);
+        }
+        return { data: { user: recoverySession.user }, error: null };
+      }
+    }
+  };
+
+  global.window = {
+    location: {
+      origin: 'http://localhost:4200',
+      pathname: '/case-os/',
+      hash: '#/dashboard',
+      search: '?code=pkce-recovery-code-123'
+    },
+    history: {
+      replaceState: (_state, _title, url) => {
+        cleanedUrl = url;
+      }
+    },
+    addEventListener: () => {}
+  };
+
+  const injector = Injector.create({
+    providers: [
+      { provide: ɵChangeDetectionScheduler, useValue: { notify: () => {}, runningTick: false } },
+      { provide: ɵEffectScheduler, useValue: { add: () => {}, remove: () => {} } },
+      { provide: LocalStorageProvider, useClass: LocalStorageProvider },
+      { provide: StorageNamespaceService, useClass: StorageNamespaceService },
+      { provide: CourseService, useClass: CourseService },
+      { provide: EnrollmentService, useClass: EnrollmentService },
+      { provide: SyncQueueService, useClass: SyncQueueService },
+      { provide: UserProgressService, useClass: UserProgressService },
+      { provide: SupabaseService, useClass: SupabaseService },
+      { provide: 'SUPABASE_CLIENT', useValue: mockClient }
+    ]
+  });
+
+  const namespaceService = runInInjectionContext(injector, () => injector.get(StorageNamespaceService));
+  const enrollmentService = runInInjectionContext(injector, () => injector.get(EnrollmentService));
+  const syncQueueService = runInInjectionContext(injector, () => injector.get(SyncQueueService));
+  const userProgressService = runInInjectionContext(injector, () => injector.get(UserProgressService));
+  const supabaseService = runInInjectionContext(injector, () => injector.get(SupabaseService));
+  supabaseService['supabase'] = mockClient;
+
+  let enrollmentCalls = 0;
+  const origEnsureEnrollment = enrollmentService.ensureActiveEnrollment.bind(enrollmentService);
+  enrollmentService.ensureActiveEnrollment = async (...args) => {
+    enrollmentCalls++;
+    return origEnsureEnrollment(...args);
+  };
+
+  // Registrar callback de onAuthStateChange
+  mockClient.auth.onAuthStateChange((event, session) => {
+    supabaseService['handleAuthStateChange'](event, session);
+  });
+
+  // A. Ejecutar el retorno OAuth PKCE de PASSWORD_RECOVERY
+  await supabaseService['handleOAuthCallbackIfNeeded']();
+
+  // Esperar microtasks para verificar que listeners (onReset, reloadProgress) NO dispararon IO remoto
+  await new Promise(r => setTimeout(r, 60));
+
+  // Comprobaciones durante PASSWORD_RECOVERY:
+  assert.strictEqual(namespaceService.currentUserId(), 'rec-user-pkce', 'Namespace debe ser del usuario');
+  assert.strictEqual(supabaseService.isPasswordRecovery(), true, 'isPasswordRecovery debe ser true');
+  assert.strictEqual(supabaseService.canSynchronize(), false, 'canSynchronize debe ser false durante recovery');
+  assert.strictEqual(enrollmentCalls, 0, 'Auto-enrollment NO debe ser invocado durante recovery');
+  assert.strictEqual(unitProgressQueries, 0, 'Fetch remoto de progreso NO debe ser ejecutado durante recovery');
+  assert.strictEqual(dispatchedQueueItems, 0, 'La cola NO debe ser despachada durante recovery');
+  assert.strictEqual(profileFetchCount, 0, 'El perfil NO debe ser cargado durante recovery');
+  assert.strictEqual(supabaseService.syncStatus(), 'local', 'syncStatus debe permanecer en local');
+  assert.strictEqual(cleanedUrl, 'http://localhost:4200/case-os/#/dashboard', 'La URL debe quedar limpia');
+
+  // Verificar que la cola del usuario NO se perdió
+  const queueBeforeUpdate = syncQueueService.getQueueForUser('rec-user-pkce');
+  assert.strictEqual(queueBeforeUpdate.length, 1, 'La cola local debe preservarse intacta sin pérdidas');
+
+  // B. Ejecutar actualización de contraseña (simulando que supabase-js emite USER_UPDATED)
+  const updateRes = await supabaseService.updateUserPassword('NewSecurePassword123!');
+  assert.strictEqual(updateRes.error, null);
+  assert.strictEqual(capturedUpdate.password, 'NewSecurePassword123!');
+
+  // Esperar resolución de ciclo de vida, profile y despacho de colas
+  await new Promise(r => setTimeout(r, 80));
+
+  // Comprobaciones después de updateUserPassword:
+  assert.strictEqual(supabaseService.isPasswordRecovery(), false, 'isPasswordRecovery debe ser false tras actualizar contraseña');
+  assert.strictEqual(supabaseService.canSynchronize(), true, 'canSynchronize debe ser true tras actualizar contraseña');
+  assert.strictEqual(namespaceService.currentUserId(), 'rec-user-pkce', 'Namespace debe conservarse en el usuario autenticado');
+  assert.strictEqual(profileFetchCount, 1, 'El profile lifecycle debe ejecutarse exactamente una sola vez');
+  assert.strictEqual(supabaseService.currentProfile()?.display_name, 'Recovered User', 'El perfil debe estar inicializado');
+  assert.strictEqual(dispatchedQueueItems, 1, 'La cola pendiente debe haberse despachado en el lifecycle post-recovery');
+
+  const queueAfterUpdate = syncQueueService.getQueueForUser('rec-user-pkce');
+  assert.strictEqual(queueAfterUpdate.length, 0, 'La cola debe quedar vacía tras ser despachada');
+  assert.strictEqual(supabaseService.syncStatus(), 'synced', 'El syncStatus debe terminar en synced tras procesar la cola');
+});
+
+// -----------------------------------------------------------------------------
+// Test 11: EnrollmentService - Manejo idempotente de carrera 23505
+// -----------------------------------------------------------------------------
+await testCase('11. EnrollmentService: Concurrencia segura maneja violación 23505 con reconsulta sin fallar', async () => {
+  let selectCount = 0;
+  const mockClient = {
+    from: (table) => ({
+      select: (fields, options) => ({
+        eq: (col1, val1) => ({
+          eq: (col2, val2) => ({
+            eq: (col3, val3) => ({
+              maybeSingle: async () => {
+                if (table === 'program_versions') {
+                  return { data: { id: 'prog-uuid-published' }, error: null };
+                }
+                if (table === 'enrollments') {
+                  selectCount++;
+                  if (selectCount === 1) {
+                    // Primera consulta: parece que no existe aún
+                    return { data: null, error: null };
+                  }
+                  // Segunda consulta tras error 23505: re-consulta devuelve la fila insertada por la otra hebra
+                  return { data: { id: 'enroll-won-race-uuid' }, error: null };
+                }
+                return { data: null, error: null };
+              }
+            }),
+            maybeSingle: async () => ({ data: { id: 'prog-uuid-published' }, error: null })
+          })
+        }),
+        head: true,
+        count: 'exact'
+      }),
+      insert: () => ({
+        select: () => ({
+          single: async () => {
+            // Simular que otra hebra concurrente insertó exactamente en este instante
+            const err = new Error('duplicate key value violates unique constraint "uq_user_enrollment"');
+            err.code = '23505';
+            return { data: null, error: err };
+          }
+        })
+      })
+    })
+  };
+
+  const mockSupabase = {
+    client: mockClient,
+    currentAuthGeneration: () => 1
+  };
+
+  const injector = Injector.create({
+    providers: [
+      { provide: CourseService, useClass: CourseService },
+      { provide: SupabaseService, useValue: mockSupabase },
+      { provide: EnrollmentService, useClass: EnrollmentService }
+    ]
+  });
+
+  const enrollmentService = runInInjectionContext(injector, () => injector.get(EnrollmentService));
+  const res = await enrollmentService.ensureActiveEnrollment('raced-user-uuid', 1);
+
+  assert.notStrictEqual(res, null, 'El resultado no debe ser null ante colisión 23505');
+  assert.strictEqual(res?.enrollmentId, 'enroll-won-race-uuid', 'Debe retornar la inscripción reconsultada exitosamente');
+});
+
+// -----------------------------------------------------------------------------
+// Test 12: GuestClaimService - Recarga reactiva de UserProgressService post-claim
+// -----------------------------------------------------------------------------
+await testCase('12. GuestClaimService: Dispara recarga reactiva de progreso en UserProgressService tras claim', async () => {
+  const mockStorage = createMockLocalStorage();
+  global.localStorage = mockStorage;
+
+  // Colocar lección de invitado para reclamar
+  mockStorage.setItem('case_guest:completed_lessons', JSON.stringify(['c1']));
+
+  let progressReloaded = false;
+  const mockUserProgress = {
+    reloadProgress: () => {
+      progressReloaded = true;
+    }
+  };
+
+  const mockClient = {
+    from: (table) => ({
+      upsert: async () => ({ error: null })
+    })
+  };
+
+  const mockSupabase = {
+    client: mockClient,
+    currentUser: () => ({ id: 'claimer-user-id' }),
+    currentAuthGeneration: () => 1,
+    isAuthenticated: () => true,
+    canSynchronize: () => true,
+    isPasswordRecovery: () => false
+  };
+
+  const mockEnrollment = {
+    ensureActiveEnrollment: async () => ({ enrollmentId: 'enroll-claim', programVersionId: 'pv-claim', totalUnitsCount: 45 }),
+    getUnitVersionMap: async () => new Map([['c1', 'unit-v-c1']])
+  };
+
+  const injector = Injector.create({
+    providers: [
+      { provide: ɵChangeDetectionScheduler, useValue: { notify: () => {}, runningTick: false } },
+      { provide: ɵEffectScheduler, useValue: { add: () => {}, remove: () => {} } },
+      { provide: LocalStorageProvider, useClass: LocalStorageProvider },
+      { provide: StorageNamespaceService, useClass: StorageNamespaceService },
+      { provide: CourseService, useClass: CourseService },
+      { provide: EnrollmentService, useValue: mockEnrollment },
+      { provide: SupabaseService, useValue: mockSupabase },
+      { provide: UserProgressService, useValue: mockUserProgress },
+      { provide: GuestClaimService, useClass: GuestClaimService }
+    ]
+  });
+
+  const guestClaim = runInInjectionContext(injector, () => injector.get(GuestClaimService));
+  const claimRes = await guestClaim.importGuestProgress();
+
+  assert.strictEqual(claimRes.success, true);
+  assert.strictEqual(claimRes.importedCount, 1);
+  assert.strictEqual(progressReloaded, true, 'UserProgressService.reloadProgress() debió ser invocado reactivamente');
+  assert.strictEqual(mockStorage.getItem('case_guest:completed_lessons'), null, 'La clave de invitado debió eliminarse tras confirmación');
+});
+
+// -----------------------------------------------------------------------------
+// Test 13: SupabaseService - Gestión y validación estricta de pre_auth_route
+// -----------------------------------------------------------------------------
+await testCase('13. SupabaseService: Validación estricta de pre_auth_route y rechazo de rutas externas', async () => {
+  const mockSessionStorage = createMockLocalStorage();
+  global.sessionStorage = mockSessionStorage;
+
+  const injector = Injector.create({
+    providers: [
+      { provide: ɵChangeDetectionScheduler, useValue: { notify: () => {}, runningTick: false } },
+      { provide: ɵEffectScheduler, useValue: { add: () => {}, remove: () => {} } },
+      { provide: LocalStorageProvider, useClass: LocalStorageProvider },
+      { provide: StorageNamespaceService, useClass: StorageNamespaceService },
+      { provide: SupabaseService, useClass: SupabaseService }
+    ]
+  });
+
+  const supabaseService = runInInjectionContext(injector, () => injector.get(SupabaseService));
+
+  // 1. Validación de rutas internas seguras
+  assert.strictEqual(supabaseService.isValidInternalRoute('#/academy/modules/m01/lesson-01'), true);
+  assert.strictEqual(supabaseService.isValidInternalRoute('/dashboard'), true);
+
+  // 2. Rechazo estricto de redirecciones abiertas y protocolos maliciosos
+  assert.strictEqual(supabaseService.isValidInternalRoute('https://evil-phishing.com'), false);
+  assert.strictEqual(supabaseService.isValidInternalRoute('http://attacker.com/steal'), false);
+  assert.strictEqual(supabaseService.isValidInternalRoute('//evil.com/open-redirect'), false);
+  assert.strictEqual(supabaseService.isValidInternalRoute('javascript:alert(1)'), false);
+  assert.strictEqual(supabaseService.isValidInternalRoute('data:text/html,malicious'), false);
+  assert.strictEqual(supabaseService.isValidInternalRoute(''), false);
+  assert.strictEqual(supabaseService.isValidInternalRoute(null), false);
+
+  // 3. Guardado y consumo seguro desde sessionStorage
+  supabaseService.savePreAuthRoute('#/academy/modules/m04-retrieval-rag/lesson-01');
+  const consumed = supabaseService.consumePreAuthRoute();
+  assert.strictEqual(consumed, '#/academy/modules/m04-retrieval-rag/lesson-01', 'Debe consumir la ruta previa guardada');
+
+  // 4. Una vez consumida, se vacía (idempotencia de consumo)
+  assert.strictEqual(supabaseService.consumePreAuthRoute(), null, 'Debe retornar null al segundo intento');
+
+  // 5. Intentar guardar ruta inválida no debe persistirse
+  supabaseService.savePreAuthRoute('https://malicious.com');
+  assert.strictEqual(supabaseService.consumePreAuthRoute(), null, 'Rutas maliciosas no deben guardarse');
+});
+
 console.log(`\n=== Resumen de Pruebas Reales: ${passedTests}/${totalTests} pruebas superadas ===`);
 if (passedTests !== totalTests) {
   process.exit(1);
 }
+
