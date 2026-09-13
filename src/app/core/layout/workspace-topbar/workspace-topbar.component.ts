@@ -7,6 +7,7 @@ import { WorkspaceRegistryService } from '../workspace-registry/workspace-regist
 import { LayoutStateService } from '../layout-state.service';
 import { SupabaseService } from '../../services/supabase.service';
 import { GuestClaimService } from '../../services/guest-claim.service';
+import { AuthUiService } from '../../services/auth-ui.service';
 
 /**
  * WorkspaceTopBar — CASE Shell
@@ -101,11 +102,11 @@ import { GuestClaimService } from '../../services/guest-claim.service';
             <button
               class="topbar__login-btn"
               type="button"
-              (click)="loginWithGoogle()"
+              (click)="openLogin()"
               [disabled]="supabase.authLoading()"
             >
               <span class="material-symbols-outlined">login</span>
-              <span>Google</span>
+              <span>Iniciar sesión</span>
             </button>
           }
 
@@ -508,6 +509,7 @@ export class WorkspaceTopBarComponent {
   private layoutState = inject(LayoutStateService);
   readonly supabase = inject(SupabaseService);
   readonly guestClaim = inject(GuestClaimService);
+  private authUi = inject(AuthUiService);
 
   readonly breadcrumbs = this.registry.breadcrumbs;
   readonly isUserMenuOpen = signal<boolean>(false);
@@ -524,8 +526,8 @@ export class WorkspaceTopBarComponent {
     this.isUserMenuOpen.set(false);
   }
 
-  async loginWithGoogle(): Promise<void> {
-    await this.supabase.signInWithGoogle();
+  openLogin(): void {
+    this.authUi.open('SIGN_IN');
   }
 
   async logout(): Promise<void> {

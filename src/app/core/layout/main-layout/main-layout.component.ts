@@ -5,6 +5,7 @@ import { GlobalNavComponent } from '../global-nav/global-nav.component';
 import { ContextExplorerComponent } from '../context-explorer/context-explorer.component';
 import { CommandPaletteComponent } from '../../command/command-palette/command-palette.component';
 import { LayoutStateService } from '../layout-state.service';
+import { AuthModalComponent } from '../../auth/auth-modal/auth-modal.component';
 
 /**
  * MainLayoutComponent — CASE Shell
@@ -31,7 +32,8 @@ import { LayoutStateService } from '../layout-state.service';
     WorkspaceTopBarComponent,
     GlobalNavComponent,
     ContextExplorerComponent,
-    CommandPaletteComponent
+    CommandPaletteComponent,
+    AuthModalComponent
   ],
   template: `
     <div class="workspace">
@@ -62,6 +64,9 @@ import { LayoutStateService } from '../layout-state.service';
 
       <!-- Command Platform Overlay -->
       <app-command-palette />
+      
+      <!-- Global Auth UI Modal -->
+      <app-auth-modal />
     </div>
   `,
   styles: [`

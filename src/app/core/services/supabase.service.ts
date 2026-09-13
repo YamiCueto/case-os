@@ -72,6 +72,10 @@ export class SupabaseService implements OnDestroy {
     this.syncStatus.set(status);
   }
 
+  clearAuthError(): void {
+    this.authError.set(null);
+  }
+
   readonly isAuthenticated = computed(() => this.currentUser() !== null);
   readonly canSynchronize = computed(
     () => this.isAuthenticated() && !this.isPasswordRecovery()
