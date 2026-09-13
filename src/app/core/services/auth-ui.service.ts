@@ -1,7 +1,7 @@
 import { Injectable, signal, effect, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 
-export type AuthView = 'SIGN_IN' | 'SIGN_UP' | 'FORGOT_PASSWORD' | 'SET_NEW_PASSWORD' | 'CHECK_EMAIL';
+export type AuthView = 'SIGN_IN' | 'SIGN_UP' | 'FORGOT_PASSWORD' | 'SET_NEW_PASSWORD' | 'CHECK_EMAIL_CONFIRMATION' | 'PASSWORD_RESET_EMAIL_SENT';
 
 @Injectable({
   providedIn: 'root'

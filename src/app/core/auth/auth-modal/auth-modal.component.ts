@@ -1,4 +1,4 @@
-import { Component, HostListener, computed, inject, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, HostListener, computed, inject, ElementRef, ViewChild, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthUiService, AuthView } from '../../services/auth-ui.service';
@@ -12,8 +12,8 @@ import { mapAuthError } from '../auth-error.mapper';
   template: `
     @if (authUi.isOpen()) {
       <div class="auth-modal-backdrop" (click)="onBackdropClick($event)">
-        <div class="auth-modal-container" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
-          
+        <div class="auth-modal-container" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title" (keydown)="onTrapFocus($event)" #modalContainer>
+
           <!-- Header -->
           <div class="auth-modal-header">
             <h2 id="auth-modal-title" class="auth-modal-title">{{ modalTitle() }}</h2>
@@ -26,7 +26,7 @@ import { mapAuthError } from '../auth-error.mapper';
 
           <!-- Body -->
           <div class="auth-modal-body">
-            
+
             <!-- Global Error Banner -->
             @if (mappedError()) {
               <div class="auth-modal-error" role="alert">
@@ -37,7 +37,7 @@ import { mapAuthError } from '../auth-error.mapper';
 
             <!-- Views -->
             @switch (authUi.view()) {
-              
+
               <!-- SIGN IN -->
               @case ('SIGN_IN') {
                 <button class="auth-btn auth-btn--google" (click)="signInWithGoogle()" [disabled]="isLoading()">
@@ -58,7 +58,7 @@ import { mapAuthError } from '../auth-error.mapper';
                     <label for="signin-password">Contraseña</label>
                     <input id="signin-password" type="password" formControlName="password" placeholder="••••••••" [attr.disabled]="isLoading() ? true : null">
                   </div>
-                  
+
                   <div class="auth-form-actions">
                     <button type="button" class="auth-link" (click)="changeView('FORGOT_PASSWORD')" [disabled]="isLoading()">
                       ¿Olvidaste tu contraseña?
@@ -90,7 +90,7 @@ import { mapAuthError } from '../auth-error.mapper';
                     <label for="signup-password">Contraseña</label>
                     <input id="signup-password" type="password" formControlName="password" placeholder="••••••••" [attr.disabled]="isLoading() ? true : null">
                   </div>
-                  
+
                   <div class="auth-form-actions">
                     <button type="submit" class="auth-btn auth-btn--primary auth-btn--full" [disabled]="signUpForm.invalid || isLoading()">
                       Crear cuenta
@@ -109,13 +109,13 @@ import { mapAuthError } from '../auth-error.mapper';
                 <p class="auth-modal-desc">
                   Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.
                 </p>
-                
+
                 <form [formGroup]="forgotForm" (ngSubmit)="onForgotSubmit()">
                   <div class="auth-form-group">
                     <label for="forgot-email">Correo electrónico</label>
                     <input id="forgot-email" type="email" formControlName="email" placeholder="tu@correo.com" [attr.disabled]="isLoading() ? true : null" #firstInput>
                   </div>
-                  
+
                   <div class="auth-form-actions">
                     <button type="submit" class="auth-btn auth-btn--primary auth-btn--full" [disabled]="forgotForm.invalid || isLoading()">
                       Enviar enlace de recuperación
@@ -133,7 +133,7 @@ import { mapAuthError } from '../auth-error.mapper';
                 <p class="auth-modal-desc">
                   Estás restableciendo tu contraseña. Ingresa una nueva contraseña segura.
                 </p>
-                
+
                 <form [formGroup]="setNewPasswordForm" (ngSubmit)="onSetNewPasswordSubmit()">
                   <div class="auth-form-group">
                     <label for="set-password">Nueva contraseña</label>
@@ -143,12 +143,12 @@ import { mapAuthError } from '../auth-error.mapper';
                     <label for="set-password-confirm">Confirmar contraseña</label>
                     <input id="set-password-confirm" type="password" formControlName="confirmPassword" placeholder="••••••••" [attr.disabled]="isLoading() ? true : null">
                   </div>
-                  
+
                   <div class="auth-form-actions auth-form-actions--stacked">
                     <button type="submit" class="auth-btn auth-btn--primary auth-btn--full" [disabled]="setNewPasswordForm.invalid || isLoading() || passwordsMismatch">
                       Guardar nueva contraseña
                     </button>
-                    
+
                     @if (isRecoveryMode()) {
                       <button type="button" class="auth-btn auth-btn--ghost auth-btn--full" (click)="cancelRecoveryAndSignOut()" [disabled]="isLoading()">
                         Cancelar recuperación y cerrar sesión
@@ -158,14 +158,27 @@ import { mapAuthError } from '../auth-error.mapper';
                 </form>
               }
 
-              <!-- CHECK EMAIL -->
-              @case ('CHECK_EMAIL') {
+              <!-- CHECK EMAIL CONFIRMATION (SIGN UP) -->
+              @case ('CHECK_EMAIL_CONFIRMATION') {
                 <div class="auth-modal-success-state">
                   <span class="material-symbols-outlined auth-success-icon">mark_email_unread</span>
                   <p class="auth-modal-desc">
-                    Hemos enviado un correo de confirmación. Por favor, revisa tu bandeja de entrada y sigue las instrucciones para activar tu cuenta.
+                    Revisa tu correo para confirmar/activar tu cuenta.
                   </p>
-                  <button type="button" class="auth-btn auth-btn--primary auth-btn--full" (click)="close()">
+                  <button type="button" class="auth-btn auth-btn--primary auth-btn--full" (click)="close()" #firstInput>
+                    Entendido
+                  </button>
+                </div>
+              }
+
+              <!-- PASSWORD RESET EMAIL SENT (FORGOT PASSWORD) -->
+              @case ('PASSWORD_RESET_EMAIL_SENT') {
+                <div class="auth-modal-success-state">
+                  <span class="material-symbols-outlined auth-success-icon">mark_email_unread</span>
+                  <p class="auth-modal-desc">
+                    Si la solicitud es válida, revisa tu correo para continuar con el restablecimiento de contraseña.
+                  </p>
+                  <button type="button" class="auth-btn auth-btn--primary auth-btn--full" (click)="close()" #firstInput>
                     Entendido
                   </button>
                 </div>
@@ -408,12 +421,32 @@ import { mapAuthError } from '../auth-error.mapper';
     }
   `]
 })
-export class AuthModalComponent implements AfterViewInit {
+export class AuthModalComponent {
   readonly authUi = inject(AuthUiService);
   readonly supabase = inject(SupabaseService);
   private fb = inject(FormBuilder);
 
-  @ViewChild('firstInput') firstInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('firstInput') firstInput?: ElementRef<HTMLElement>;
+  @ViewChild('modalContainer') modalContainer?: ElementRef<HTMLElement>;
+
+  private previousActiveElement: HTMLElement | null = null;
+
+  constructor() {
+    effect(() => {
+      if (this.authUi.isOpen()) {
+        this.previousActiveElement = document.activeElement as HTMLElement;
+        setTimeout(() => {
+          this.focusFirstInput();
+        }, 100);
+      } else {
+        if (this.previousActiveElement) {
+          const el = this.previousActiveElement;
+          this.previousActiveElement = null;
+          setTimeout(() => el.focus(), 0);
+        }
+      }
+    });
+  }
 
   // Forms
   signInForm: FormGroup = this.fb.group({
@@ -439,7 +472,7 @@ export class AuthModalComponent implements AfterViewInit {
   // Computed state
   isLoading = computed(() => this.supabase.authLoading());
   isRecoveryMode = computed(() => this.supabase.isPasswordRecovery());
-  
+
   // Custom mapped error
   mappedError = computed(() => mapAuthError(this.supabase.authError()));
 
@@ -449,7 +482,8 @@ export class AuthModalComponent implements AfterViewInit {
       case 'SIGN_UP': return 'Crear cuenta';
       case 'FORGOT_PASSWORD': return 'Recuperar contraseña';
       case 'SET_NEW_PASSWORD': return 'Nueva contraseña';
-      case 'CHECK_EMAIL': return 'Revisa tu correo';
+      case 'CHECK_EMAIL_CONFIRMATION': return 'Revisa tu correo';
+      case 'PASSWORD_RESET_EMAIL_SENT': return 'Revisa tu correo';
       default: return 'Autenticación';
     }
   });
@@ -463,10 +497,6 @@ export class AuthModalComponent implements AfterViewInit {
     const p1 = this.setNewPasswordForm.get('password')?.value;
     const p2 = this.setNewPasswordForm.get('confirmPassword')?.value;
     return p1 !== p2;
-  }
-
-  ngAfterViewInit() {
-    this.focusFirstInput();
   }
 
   private focusFirstInput() {
@@ -489,7 +519,7 @@ export class AuthModalComponent implements AfterViewInit {
   }
 
   close() {
-    if (this.canCloseNormal() || this.authUi.view() === 'CHECK_EMAIL') {
+    if (this.canCloseNormal() || this.authUi.view() === 'CHECK_EMAIL_CONFIRMATION' || this.authUi.view() === 'PASSWORD_RESET_EMAIL_SENT') {
       this.authUi.close();
       this.resetForms();
     }
@@ -499,6 +529,37 @@ export class AuthModalComponent implements AfterViewInit {
   onEscape(event: Event) {
     if (this.authUi.isOpen()) {
       this.close();
+    }
+  }
+
+  onTrapFocus(event: KeyboardEvent) {
+    if (event.key !== 'Tab') return;
+
+    if (this.modalContainer) {
+      const focusableElements = this.modalContainer.nativeElement.querySelectorAll(
+        'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      );
+
+      const elementsArray = Array.from(focusableElements).filter(
+        el => !(el as HTMLInputElement).disabled
+      ) as HTMLElement[];
+
+      if (elementsArray.length === 0) return;
+
+      const firstElement = elementsArray[0];
+      const lastElement = elementsArray[elementsArray.length - 1];
+
+      if (event.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          event.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          event.preventDefault();
+        }
+      }
     }
   }
 
@@ -532,7 +593,7 @@ export class AuthModalComponent implements AfterViewInit {
       if (data?.session) {
         this.close();
       } else {
-        this.changeView('CHECK_EMAIL');
+        this.changeView('CHECK_EMAIL_CONFIRMATION');
       }
     }
   }
@@ -542,7 +603,7 @@ export class AuthModalComponent implements AfterViewInit {
     const { email } = this.forgotForm.value;
     const { error } = await this.supabase.resetPasswordForEmail(email);
     if (!error) {
-      this.changeView('CHECK_EMAIL');
+      this.changeView('PASSWORD_RESET_EMAIL_SENT');
     }
   }
 

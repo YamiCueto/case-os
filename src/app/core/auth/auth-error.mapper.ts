@@ -14,7 +14,7 @@ export function mapAuthError(rawMessage: string | null | undefined): string | nu
     return 'Ya existe una cuenta con este correo electrónico.';
   }
   if (msg.includes('password should be at least')) {
-    return 'La contraseña es demasiado corta. Debe tener al menos 6 caracteres.';
+    return 'La contraseña no cumple los requisitos configurados.';
   }
   if (msg.includes('email not confirmed')) {
     return 'Debes confirmar tu correo electrónico antes de iniciar sesión.';
@@ -23,8 +23,7 @@ export function mapAuthError(rawMessage: string | null | undefined): string | nu
     return 'Demasiados intentos. Por favor, espera unos minutos e intenta nuevamente.';
   }
   if (msg.includes('user not found')) {
-    // For privacy, usually we don't say user not found for login, but for reset pass we might
-    return 'No hemos encontrado una cuenta con este correo.';
+    return 'El correo electrónico o la contraseña son incorrectos.'; // prevent enumeration
   }
   if (msg.includes('missing email') || msg.includes('missing password')) {
     return 'Por favor, completa todos los campos requeridos.';
