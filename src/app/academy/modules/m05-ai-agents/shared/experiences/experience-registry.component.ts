@@ -5,6 +5,10 @@ import { ExpWhatIsAnAgentComponent } from '../../lesson-01-workflows/experiences
 import { ExpWhoControlsFlowComponent } from '../../lesson-01-workflows/experiences/exp-who-controls-flow/exp-who-controls-flow.component';
 import { ExpAutonomyTradeoffsComponent } from '../../lesson-01-workflows/experiences/exp-autonomy-tradeoffs/exp-autonomy-tradeoffs.component';
 
+import { ExpToolAnatomyComponent } from '../../lesson-02-tool-calling/experiences/exp-tool-anatomy/exp-tool-anatomy.component';
+import { ExpToolCallingInspectorComponent } from '../../lesson-02-tool-calling/experiences/exp-tool-calling-inspector/exp-tool-calling-inspector.component';
+import { ExpToolBoundaryComponent } from '../../lesson-02-tool-calling/experiences/exp-tool-boundary/exp-tool-boundary.component';
+
 @Component({
   selector: 'app-experience-registry-m05',
   standalone: true,
@@ -12,7 +16,10 @@ import { ExpAutonomyTradeoffsComponent } from '../../lesson-01-workflows/experie
     CommonModule,
     ExpWhatIsAnAgentComponent,
     ExpWhoControlsFlowComponent,
-    ExpAutonomyTradeoffsComponent
+    ExpAutonomyTradeoffsComponent,
+    ExpToolAnatomyComponent,
+    ExpToolCallingInspectorComponent,
+    ExpToolBoundaryComponent
   ],
   template: `
     @switch (experienceId) {
@@ -24,6 +31,15 @@ import { ExpAutonomyTradeoffsComponent } from '../../lesson-01-workflows/experie
       }
       @case ('autonomy-tradeoffs') {
         <app-exp-autonomy-tradeoffs></app-exp-autonomy-tradeoffs>
+      }
+      @case ('tool-anatomy') {
+        <app-exp-tool-anatomy></app-exp-tool-anatomy>
+      }
+      @case ('tool-calling-inspector') {
+        <app-exp-tool-calling-inspector></app-exp-tool-calling-inspector>
+      }
+      @case ('tool-boundary') {
+        <app-exp-tool-boundary></app-exp-tool-boundary>
       }
       @default {
         <div class="case-callout case-callout--error">
