@@ -18,11 +18,18 @@ updates:
           - "@supabase/*"
       dev-tooling:
         patterns:
-          - "typescript"
           - "eslint*"
           - "@types/*"
           - "playwright*"
           - "@playwright/*"
+          - "prettier*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
 
   - package-ecosystem: "github-actions"
     directory: "/"
