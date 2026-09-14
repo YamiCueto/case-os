@@ -5,12 +5,15 @@ import { UserProgressService } from '../../../../core/services/user-progress.ser
 import { Lesson, AcademyModule } from '../../../../core/models/course.models';
 import { LESSON_02_DOCUMENT } from './lesson-02.data';
 import { LessonHeaderComponent } from '../../../components/lesson-header/lesson-header.component';
+import { LessonOutlineComponent } from '../../../components/lesson-outline/lesson-outline.component';
 import { LessonComparisonComponent } from '../../../components/lesson-comparison/lesson-comparison.component';
 import { LessonFooterComponent } from '../../../components/lesson-footer/lesson-footer.component';
 import {
   CaseCalloutComponent,
   CaseCodeBlockComponent
 } from '../../../../core/ui/components';
+import { ExperienceRegistryComponent } from '../shared/experiences/experience-registry.component';
+import { AgentBuildingMapComponent } from '../shared/components/agent-building-map/agent-building-map.component';
 
 /**
  * Lesson02ToolCalling — CASE Academy
@@ -23,10 +26,13 @@ import {
   imports: [
     CommonModule,
     LessonHeaderComponent,
+    LessonOutlineComponent,
     LessonComparisonComponent,
     LessonFooterComponent,
     CaseCalloutComponent,
-    CaseCodeBlockComponent
+    CaseCodeBlockComponent,
+    ExperienceRegistryComponent,
+    AgentBuildingMapComponent
   ],
   templateUrl: './lesson-02-tool-calling.html',
   styleUrl: './lesson-02-tool-calling.css'

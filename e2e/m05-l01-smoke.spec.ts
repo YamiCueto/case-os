@@ -51,4 +51,31 @@ test.describe('M05 L01 Smoke Test', () => {
     await exp2.scrollIntoViewIfNeeded();
     await expect(exp2).toBeVisible();
   });
+
+  test('Table of Contents Navigation: Scrolls smoothly to section without breaking hash route', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(url);
+
+    const outlineLink = page.locator('a.living-doc__outline-link:has-text("02. ¿Quién controla el flujo?")');
+    await expect(outlineLink).toBeVisible();
+    await outlineLink.click();
+
+    // Verify URL was not broken by hash navigation
+    expect(page.url()).toContain('/#/academy/modules/m05-ai-agents/lesson-01-workflows');
+
+    // Verify target section heading is visible and positioned below the header
+    const targetHeading = page.locator('#control-de-flujo h2.living-doc-section__title');
+    await expect(targetHeading).toBeVisible();
+
+    // Topbar is 40px; heading should settle below the topbar (> 40px) and within the upper part of viewport (< 300px)
+    await expect.poll(async () => {
+      const box = await targetHeading.boundingBox();
+      return box ? box.y : null;
+    }, { timeout: 5000 }).toBeLessThan(300);
+
+    await expect.poll(async () => {
+      const box = await targetHeading.boundingBox();
+      return box ? box.y : null;
+    }, { timeout: 5000 }).toBeGreaterThan(40);
+  });
 });
