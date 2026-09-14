@@ -10,7 +10,8 @@ import { LessonComparisonComponent } from '../../../components/lesson-comparison
 import { LessonFooterComponent } from '../../../components/lesson-footer/lesson-footer.component';
 import {
   CaseCalloutComponent,
-  CaseCodeBlockComponent
+  CaseCodeBlockComponent,
+  CaseBadgeComponent
 } from '../../../../core/ui/components';
 import { ExperienceRegistryComponent } from '../shared/experiences/experience-registry.component';
 import { AgentBuildingMapComponent } from '../shared/components/agent-building-map/agent-building-map.component';
@@ -31,6 +32,7 @@ import { AgentBuildingMapComponent } from '../shared/components/agent-building-m
     LessonFooterComponent,
     CaseCalloutComponent,
     CaseCodeBlockComponent,
+    CaseBadgeComponent,
     ExperienceRegistryComponent,
     AgentBuildingMapComponent
   ],
@@ -47,6 +49,10 @@ export class Lesson02ToolCalling implements OnInit {
   readonly module: AcademyModule | undefined = this.courseService.getModuleById('m5');
   readonly adjacentLessons = this.courseService.getAdjacentLessons('c14');
 
+  readonly workshopGuideFileName = 'M05-L02-taller-agent-v1.md';
+  readonly workshopGuideFilePath = 'docs/M05-L02-taller-agent-v1.md';
+  downloadSuccess = false;
+
   ngOnInit(): void {
     if (this.lesson) {
       this.userProgressService.setLastVisitedLesson(
@@ -55,5 +61,19 @@ export class Lesson02ToolCalling implements OnInit {
         this.lesson.path
       );
     }
+  }
+
+  downloadWorkshopGuide(): void {
+    const link = document.createElement('a');
+    link.href = this.workshopGuideFilePath;
+    link.download = this.workshopGuideFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    this.downloadSuccess = true;
+    setTimeout(() => {
+      this.downloadSuccess = false;
+    }, 4000);
   }
 }

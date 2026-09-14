@@ -10,7 +10,7 @@ Esta guía es el guion pedagógico completo para conducir la sesión de M05 L02.
 - **01. Desmitificando Tool Calling:** Función Python vs. Tool Schema (20 min).
 - **02. Tool Calling Inspector:** Ciclo de 7 fases y flujo de control (35 min).
 - **03. Frontera de Seguridad:** Validación en runtime y side effects (25 min).
-- **04. Agent v1 en Python:** Programación en vivo y su límite hacia L03 (35 min).
+- **04. Taller práctico:** Construye tu primer Agent v1 en grupos de estudio (60–75 min).
 
 ---
 
@@ -60,7 +60,7 @@ Ubícate en la **Sección 01** y muestra el componente interactivo `app-exp-tool
 - *Confusión:* "El modelo ejecutará otra función de Python automáticamente."
 
 ### Explicación técnica para resolver dudas
-> "La función en Python no cambia en nada; sigue recibiendo los mismos tipos y ejecutando la misma lógica. Pero el LLM toma decisiones basadas en similitud semántica y probabilidad de tokens. Si la descripción es ambigua, el modelo no seleccionará la herramienta cuando el usuario pregunte por su pedido, o la invocará en momentos inapropiados. La descripción de una tool es prompt engineering puro."
+> "La función en Python no cambia en nada; sigue recibiendo los mismos tipos y ejecutando la misma lógica. Pero el LLM toma decisiones basadas en el contexto del prompt y la distribución de probabilidad de los tokens. Una descripción ambigua proporciona al modelo una señal insuficiente sobre cuándo y para qué debe utilizar la herramienta, aumentando la posibilidad de que no la seleccione cuando el usuario pregunte por su pedido, seleccione otra o genere argumentos inadecuados. La descripción de una tool es prompt engineering puro."
 
 ### Checkpoint 1: Funciones Operacionales en Python Puro
 Abre tu editor de código o terminal en un archivo nuevo `agent_v1.py` y escribe en vivo las funciones base de nuestro asistente de pedidos:
@@ -254,7 +254,7 @@ En la **Sección 02**, proyecta el componente central `app-exp-tool-calling-insp
 - *Confusión:* "El modelo mantiene un hilo abierto de ejecución con la base de datos."
 
 ### Explicación técnica para resolver dudas
-> "Ninguna de las dos. La llamada HTTP al modelo terminó. La respuesta del modelo concluyó con un finish_reason especial llamado 'tool_calls'. El modelo se congeló. Tu servidor local tomó ese JSON, corrió código en Python y luego hizo una llamada HTTP completamente nueva al modelo entregándole el historial acumulado. El LLM es stateless."
+> "Ninguna de las dos. La llamada HTTP al modelo terminó y la inferencia concluyó con un finish_reason especial llamado 'tool_calls'. El modelo no mantiene ningún proceso ni hilo abierto en segundo plano. Tu servidor local tomó ese JSON, ejecutó la función en Python de forma determinista y luego realizó una llamada HTTP completamente nueva al modelo entregándole el historial acumulado con el rol 'tool'. El LLM es stateless."
 
 ### Checkpoint 3: Primera Invocación al Modelo con `tools`
 En `agent_v1.py`, añade la función para inspeccionar el primer turno de inferencia:
@@ -370,89 +370,104 @@ En la **Sección 03**, muestra la tabla comparativa de Tools de Lectura vs. Side
 
 ---
 
-## 04. Agent v1: Construcción en Python y Límite hacia L03
+## 04. Taller Práctico: Construye tu primer Agent v1
 
 ### Objetivo Pedagógico
-Completar la implementación funcional de **Agent v1 — Tool Calling** en Python y demostrar en vivo su limitación fundamental: resuelve un único turno de herramientas y carece de bucle de realimentación, estableciendo la necesidad de **L03 — Agent Loop**.
-
-### Qué explicar con tus propias palabras
-> "Vamos a escribir la función completa run_agent_v1. Observarán que nuestro agente ya es capaz de resolver consultas dinámicas. Pero al final le pondremos un problema donde una herramienta revele la necesidad de otra herramienta. Veremos cómo Agent v1 se detiene impotente porque no tiene un ciclo para seguir pensando."
-
-### Qué elemento de CASE OS mostrar
-En la **Sección 04**, proyecta el bloque de código de `agent_v1_tool_calling.py` y el panel de Key Insights de Ingeniería.
-
-### Checkpoint 5: Implementación Completa de Agent v1
-En `agent_v1.py`, añade la función orquestadora principal:
-
-```python
-def run_agent_v1(user_query: str) -> str:
-    messages = [{"role": "user", "content": user_query}]
-
-    first_response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=messages,
-        tools=TOOLS_SCHEMAS
-    )
-
-    first_message = first_response.choices[0].message
-    tool_calls = first_message.tool_calls
-
-    if not tool_calls:
-        return first_message.content or ""
-
-    messages.append(first_message)
-
-    for tool_call in tool_calls:
-        result_data = execute_tool_call(tool_call)
-
-        tool_message = {
-            "role": "tool",
-            "tool_call_id": tool_call.id,
-            "name": tool_call.function.name,
-            "content": json.dumps(result_data)
-        }
-        messages.append(tool_message)
-
-    second_response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=messages
-    )
-
-    return second_response.choices[0].message.content or ""
-```
-
-Prueba en consola:
-
-```python
-print(run_agent_v1("Donde viene mi pedido ORD-100?"))
-print(run_agent_v1("Aplica el cupon DESC15 a mi pedido ORD-300"))
-```
-
-### Resultado esperado
-El modelo consulta `get_order_status` o `calculate_discount`, recibe la observación estructurada y genera una respuesta precisa basada en los datos reales de `DB_ORDERS`.
+Transferir el aprendizaje de las secciones 01–03 a una experiencia de programación y diagnóstico ejecutable en grupos de estudio. Los participantes no leen código terminado: diseñan su propio dominio, implementan dos herramientas reales en Python, redactan sus Tool Schemas, observan los 7 hops en la terminal y descubren empíricamente por qué Agent v1 se detiene ante metas compuestas, generando la necesidad de **L03 — Agent Loop**.
 
 ---
 
-### Checkpoint 6: La Prueba de Estrés y la Limitación de Agent v1
-Ejecuta la siguiente consulta compuesta frente a los alumnos:
+### Cuándo y Cómo Lanzar el Taller
 
-```python
-print(run_agent_v1("Calcula el descuento con cupon DESC15 para ORD-300 y si el total final es menor a 200 dolares cancelalo"))
-```
+Lanza el taller inmediatamente después de concluir la Sección 03 (Frontera de Seguridad).
 
-### Resultado observado en la terminal
-El modelo calcula el descuento, obtiene un total de 178.5 dólares (que es menor a 200) y responde:
-> "El total con descuento para el pedido ORD-300 es de 178.5 dólares. Como es menor a 200 dólares, cumple la condición. ¿Deseas que proceda a cancelarlo?"
+1. **Proyecta en CASE OS la Sección 04:** Muestra la tarjeta del taller con los dos modos de ejecución y el botón de descarga de la guía.
+2. **Organización de los grupos de estudio:** Invita a los participantes a formar grupos de estudio de 2 a 3 integrantes. Permite auto-organización sin imponer un tamaño rígido.
+3. **Distribución del material:** Pide a cada grupo descargar la guía completa desde la plataforma o acceder al archivo Markdown curricular:
+   - [Guía del Participante — Taller Práctico M05 L02](../../workshops/m05-ai-agents/taller-02-agent-v1.md)
+   - Archivo público en plataforma: `public/docs/M05-L02-taller-agent-v1.md`
+4. **Duración y ritmo recomendado:** Asigna **60 a 75 minutos** de trabajo activo (hasta 90 minutos si varios participantes requieren instalar Python o configurar `.venv` desde cero). Reserva los últimos 10 minutos para la puesta en común.
 
-### Pregunta detonante para el grupo
-> "¿Por qué el agente no canceló la orden directamente si el usuario le dio la instrucción explícita de hacerlo?"
+---
 
-### Respuestas o confusiones previsibles
-- *Confusión:* "El modelo no entendió la orden de cancelar."
-- *Confusión:* "El modelo tuvo miedo de cancelar sin confirmación."
+### Qué Explicar al Abrir el Taller
 
-### Explicación técnica para resolver dudas
-> "Miren el código de `run_agent_v1`. Hay exactamente DOS llamadas al modelo: `first_response` y `second_response`. En la primera llamada, el modelo no sabía cuál sería el total con descuento, así que solo pudo pedir `calculate_discount`. Cuando recibió 178.5 en el paso intermedio, la función `run_agent_v1` ya no le da la oportunidad de solicitar otra herramienta; salta directo a redactar la respuesta final. Agent v1 tiene un diseño lineal, de un solo turno. Para que el agente pueda encadenar herramientas de forma dinámica, necesitamos que el sistema evalúe el resultado y decida autónomamente si debe volver a consultar al modelo. Necesitamos un bucle."
+> "Hasta este momento hemos inspeccionado cómo viajan los mensajes y cómo el software retiene el control de ejecución. Ahora les toca a ustedes. En sus grupos de estudio van a construir su propio Agent v1 desde cero. No les vamos a imponer el dominio de pedidos: cada grupo elegirá un problema real o simulado (soporte técnico, biblioteca, citas médicas, cloud, etc.). Implementarán dos funciones en Python, escribirán sus Tool Schemas en JSON Schema, verán cómo viajan los 7 hops en la consola y, al final, le pondrán un reto que su propio agente no podrá resolver. Ese tropiezo final es exactamente lo que nos abrirá las puertas a la siguiente lección."
 
-### Mensaje clave de cierre
-> "Hoy construyeron Agent v1: dotamos al modelo de ojos y manos mediante Tool Calling. En la próxima clase construiremos el motor de iteración: **L03 — Agent Loop**."
+---
+
+### Dos Modos de Ejecución: Claridad Metodológica
+
+Asegúrate de que todos los grupos comprendan la distinción entre los dos modos antes de empezar a programar:
+
+- **Modo A (Camino Base Obligatorio — Sin API):**
+  - Utiliza exclusivamente la biblioteca estándar de Python (`json`, `sys`, `typing`, `dataclasses`). No requiere paquetes externos, tokens ni conexión a internet.
+  - Incorpora `MockModelProvider`, el cual simula *estructuralmente* el protocolo de Tool Calling de forma determinista mediante reglas explícitas.
+  - **Aclaración docente obligatoria:** Debes enfatizar que el mock simula la estructura de mensajes y los 7 hops, pero no representa la inferencia probabilística de una red neuronal.
+  - Este modo es 100% suficiente para cumplir los objetivos y aprobar el taller.
+- **Modo B (Proveedor Real Opcional — Adapter Desacoplado):**
+  - Para grupos que cuenten con credenciales propias de un proveedor compatible con OpenAI (OpenAI, Groq, Ollama local, etc.).
+  - Requiere instalar `requirements-real-provider.txt` (`openai`, `python-dotenv`).
+  - El adapter `OpenAICompatibleProvider` demuestra cómo un LLM real interpreta las descripciones en lenguaje natural y genera los argumentos probabilísticamente.
+
+---
+
+### Qué Observar Mientras Circulas por las Mesas
+
+Como facilitador, circula activamente por los grupos de estudio prestando atención a los siguientes puntos críticos:
+
+1. **Elección ágil de dominio (primeros 10 minutos):** Si un grupo pasa más de 10 minutos debatiendo qué problema modelar, sugiéreles directamente: *"Hagan una mesa de ayuda de TI con consulta de tickets y reinicio de servidores"* o *"Hagan una biblioteca con búsqueda de libros y renovación de préstamos"*. Lo fundamental es la mecánica del protocolo, no la complejidad del negocio.
+2. **La frontera de ejecución:** Comprueba que la lógica de las herramientas esté en código Python (por ejemplo, validando si un ticket existe o si está en estado cancelable) y no escrita como instrucciones en el prompt del modelo.
+3. **Calidad del Tool Schema:** Revisa que el JSON Schema defina tipos precisos (`"type": "string"`, etc.) y que la propiedad `required` contenga los parámetros obligatorios de la función de Python.
+4. **Inspección en terminal:** Verifica que los grupos realmente lean los 7 hops en la consola:
+   $$\text{USER} \to \text{MODEL} \to \text{TOOL SELECTED} \to \text{ARGUMENTS} \to \text{PYTHON EXECUTION} \to \text{TOOL RESULT} \to \text{MODEL RESPONSE}$$
+   Evita que se limiten a mirar el texto final; deben señalar con el dedo en qué hop la respuesta del modelo termina solicitando la herramienta y en qué hop la CPU ejecuta la función local.
+5. **Frontera entre lectura y mutaciones (Side Effects):** Recordar que no es obligatorio que alguna tool produzca side effects. Si alguna produce side effects, el grupo debe identificar explícitamente sus validaciones y frontera de ejecución en Python. Si ninguna produce side effects, el grupo debe identificar una posible operación de su dominio que sí los produciría y explicar qué controles exigiría antes de exponerla como tool. El objetivo es comprender la diferencia entre lectura y mutación, no forzar artificialmente operaciones mutables.
+
+---
+
+### Preguntas Socráticas para el Docente al Circular
+
+Utiliza estas preguntas para comprobar la comprensión sin darles la solución:
+
+- *"Miren la consola en el Hop 4: ¿quién generó ese JSON con los argumentos?"* (Esperado: El modelo).
+- *"En el Hop 5, ¿el modelo sigue consumiendo tokens o ejecutando la función en segundo plano?"* (Esperado: No; la respuesta del modelo concluyó solicitando la tool con `finish_reason: tool_calls`. El modelo no mantiene procesos activos; el runtime de Python en tu CPU ejecuta la función localmente y debe realizar explícitamente la siguiente llamada al modelo).
+- *"Si modifican la descripción en el JSON Schema para que sea imprecisa o ambigua, ¿la función de Python se rompe?"* (Esperado: No, Python sigue intacto; lo que falla es que una descripción ambigua proporciona al modelo una señal insuficiente sobre cuándo y para qué debe utilizar la herramienta, alterando la probabilidad de que la seleccione o genere argumentos adecuados).
+- *"¿Por qué la consulta general respondió sin invocar ninguna función?"* (Esperado: Porque los Tool Schemas no coincidieron con la intención del usuario y el modelo decidió generar texto directo).
+
+---
+
+### Respuestas Esperadas a las Preguntas de Discusión
+
+Conserva estas respuestas como criterio de evaluación para la puesta en común:
+
+1. **¿Quién seleccionó el nombre de la herramienta?**
+   - *El modelo probabilístico*, a partir del contexto del mensaje y las descripciones declaradas en los Tool Schemas.
+2. **¿Quién generó los argumentos en formato JSON?**
+   - *El modelo*, prediciendo la secuencia de caracteres estructurados conforme a las propiedades y tipos del JSON Schema.
+3. **¿Quién ejecutó la función real en la CPU?**
+   - *El runtime de Python* en el servidor/máquina local, invocando la función registrada en `TOOL_REGISTRY`.
+4. **¿Quién tomó la decisión final de si la operación era válida según las reglas del negocio?**
+   - *El código imperativo en Python*. El LLM propone; el software valida las políticas (fechas, permisos, estados).
+5. **¿Por qué la consulta conceptual pudo responderse sin invocar herramientas?**
+   - Porque el modelo determinó que la información requerida pertenecía al conocimiento general o conversacional y no correspondía al contrato de ninguna herramienta disponible.
+6. **Si una función en Python está perfectamente programada pero su Tool Schema tiene una descripción engañosa o parámetros mal descritos, ¿qué falla?**
+   - Falla la selección del modelo. Una descripción ambigua proporciona al modelo una señal insuficiente sobre cuándo y para qué debe utilizar la herramienta, aumentando la posibilidad de que no la seleccione cuando sea requerida, seleccione otra o genere argumentos inadecuados.
+7. **Si el modelo alucina y propone una herramienta con un nombre inexistente como `eliminar_todo_el_sistema`, ¿qué componente del código evita una catástrofe?**
+   - La función `execute_tool_call` al consultar `TOOL_REGISTRY`. Si el nombre no está en el diccionario, el software rechaza la llamada y devuelve un error seguro sin ejecutar nada.
+8. **¿Puede el modelo ejecutar una mutación de base de datos si nuestro software solo le proporciona herramientas de lectura?**
+   - No. El modelo no posee acceso directo a la máquina ni puede inventar APIs fuera de las funciones registradas en el backend.
+9. **¿Qué capacidad arquitectónica concreta le falta a Agent v1 para poder resolver tareas que requieren observar un resultado intermedio y volver a decidir qué acción tomar?**
+   - En la segunda llamada, el modelo vuelve a recibir los Tool Schemas y podría responder proponiendo una nueva herramienta (`second_response.tool_calls`). Sin embargo, el código de `run_agent_v1` únicamente consume `second_response.content` y termina, careciendo de lógica general para procesar esa nueva propuesta. Le falta un **Agent Loop** (un ciclo iterativo de control) que examine si hay nuevas herramientas solicitadas, ejecute la función en CPU e invoque nuevamente al provider de forma continua hasta alcanzar una respuesta final.
+
+---
+
+### Puesta en Común y Cierre Hacia L03 (10 minutos)
+
+Cuando falten 10 minutos para concluir la sesión:
+
+1. **Detén la actividad grupal:** Pide a todos los grupos dirigir su atención a la pantalla principal.
+2. **Proyecta a un grupo voluntario:** Pide a un grupo que comparta su terminal con la prueba del reto de dos pasos dependientes (por ejemplo: *"Consulta el ticket TK-100 y si está bloqueado reinicia el servicio SRV-9"*).
+3. **Haz notar la limitación en vivo:** Muestra que Agent v1 ejecutó la primera herramienta, envió el resultado al modelo junto con los Tool Schemas en la segunda llamada, pero `run_agent_v1` únicamente consume `second_response.content`. Si el modelo propuso una segunda herramienta en `second_response.tool_calls`, nuestro código no la procesa; y si devolvió texto, simplemente se limita a redactar algo como *"El ticket está bloqueado. ¿Deseas que reinicie el servicio?"* sin poder ejecutar la acción de forma autónoma.
+4. **El gancho hacia L03:**
+   > "Miren el código de `run_agent_v1`: ejecutamos dos llamadas al provider, pero nuestro runtime no inspecciona `second_response.tool_calls` ni tiene una estructura para continuar procesando nuevas decisiones tras el primer resultado. Nuestro agente es lineal: procesa a lo sumo una tool y termina. Hoy concluimos Agent v1. En la próxima clase construiremos el corazón de la verdadera autonomía: **L03 — El Agent Loop**."
