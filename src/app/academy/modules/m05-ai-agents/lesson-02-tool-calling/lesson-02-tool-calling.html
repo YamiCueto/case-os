@@ -27,6 +27,72 @@
           </div>
 
           <div class="living-doc-section__body">
+            @if (sec.id === 'taller-practico-agent-v1') {
+              <!-- ── Workshop Activity Hero Card ── -->
+              <div class="activity-hero-card" role="region" aria-label="Descargar material del taller práctico de Agent v1">
+                <div class="activity-hero-card__glow" aria-hidden="true"></div>
+                <div class="activity-hero-card__inner">
+                  <div class="activity-hero-card__header">
+                    <div class="activity-hero-card__badge-row">
+                      <case-badge variant="accent" [mono]="true" [dot]="true">TALLER PRÁCTICO</case-badge>
+                      <span class="activity-hero-card__filename">
+                        <span class="material-symbols-outlined" aria-hidden="true">description</span>
+                        {{ workshopGuideFileName }}
+                      </span>
+                      <span class="activity-hero-card__filesize">24.5 KB</span>
+                    </div>
+                    <h3 class="activity-hero-card__title">Taller: Construye tu primer Agent v1 en Python</h3>
+                    <p class="activity-hero-card__desc">
+                      Trabajo colaborativo por grupos de estudio: diseña tu dominio, implementa 2 tools reales, inspecciona los 7 hops y experimenta el límite operacional hacia L03.
+                    </p>
+                  </div>
+
+                  <div class="activity-hero-card__pills">
+                    <case-badge variant="default" [mono]="true">Python 3.10+</case-badge>
+                    <case-badge variant="default" [mono]="true">Modo A: Sin API (Base)</case-badge>
+                    <case-badge variant="default" [mono]="true">Modo B: Proveedor Opcional</case-badge>
+                    <case-badge variant="default" [mono]="true">Grupos de estudio</case-badge>
+                    <case-badge variant="warning" [mono]="true">60–75 min</case-badge>
+                  </div>
+
+                  <div class="activity-hero-card__actions">
+                    <button
+                      type="button"
+                      class="download-action-btn primary"
+                      (click)="downloadWorkshopGuide()"
+                      id="btn-download-workshop"
+                      [attr.aria-label]="'Descargar guía ' + workshopGuideFileName"
+                    >
+                      <span class="material-symbols-outlined" aria-hidden="true">
+                        {{ downloadSuccess ? 'task_alt' : 'download' }}
+                      </span>
+                      <span class="btn-text">
+                        {{ downloadSuccess ? '¡Guía Descargada!' : 'Descargar Guía (.md)' }}
+                      </span>
+                    </button>
+
+                    <a
+                      [href]="workshopGuideFilePath"
+                      [download]="workshopGuideFileName"
+                      class="download-action-btn secondary"
+                      id="btn-direct-download-workshop"
+                      title="Descarga directa del archivo Markdown"
+                    >
+                      <span class="material-symbols-outlined" aria-hidden="true">file_download</span>
+                      <span>Descarga directa</span>
+                    </a>
+                  </div>
+
+                  @if (downloadSuccess) {
+                    <div class="activity-hero-card__alert" role="status" aria-live="polite">
+                      <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                      <span>Descarga iniciada con éxito. Abre <code>{{ workshopGuideFileName }}</code> en tu editor para comenzar el taller con tu grupo de estudio.</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
             @for (block of sec.blocks; track $index) {
               
               <!-- Paragraph Block -->

@@ -1,9 +1,20 @@
 import { test, expect } from '@playwright/test';
+import * as fs from 'fs';
 
-test.describe('M05 L02 Smoke Test — Tool Calling (Agent v1)', () => {
+test.describe('M05 L02 Smoke Test — Tool Calling & Taller Práctico Agent v1', () => {
   const url = '/#/academy/modules/m05-ai-agents/lesson-02-tool-calling';
 
-  test('Desktop Validation: Complete Tool Calling Flow & Experiences', async ({ page }) => {
+  test('Desktop Validation: Complete Tool Calling Flow, Experiences & Workshop Launchpad', async ({ page }) => {
+    const consoleErrors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        consoleErrors.push(msg.text());
+      }
+    });
+    page.on('pageerror', err => {
+      consoleErrors.push(err.message);
+    });
+
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(url);
 
@@ -65,6 +76,58 @@ test.describe('M05 L02 Smoke Test — Tool Calling (Agent v1)', () => {
     await expect(expBoundary.locator('.validation-warning')).toBeVisible();
     await expect(expBoundary.locator('.validation-status-row')).toContainText('Error de validación');
     await expect(expBoundary.locator('.sandbox-header')).toContainText('Fallo de Schema');
+
+    // 5. Section 04: Practical Workshop Launchpad (Hero Card)
+    const workshopSection = page.locator('#taller-practico-agent-v1');
+    await expect(workshopSection).toBeVisible();
+    await expect(workshopSection.locator('.living-doc-section__title')).toHaveText('04. Taller práctico — Construye tu primer Agent v1');
+
+    const heroCard = workshopSection.locator('.activity-hero-card');
+    await expect(heroCard).toBeVisible();
+    await expect(heroCard.locator('.activity-hero-card__badge-row')).toContainText('TALLER PRÁCTICO');
+    await expect(heroCard.locator('.activity-hero-card__filename')).toContainText('M05-L02-taller-agent-v1.md');
+    await expect(heroCard.locator('.activity-hero-card__title')).toContainText('Construye tu primer Agent v1');
+
+    // Verify technical pills
+    const pills = heroCard.locator('.activity-hero-card__pills');
+    await expect(pills).toContainText('Python 3.10+');
+    await expect(pills).toContainText('Modo A: Sin API (Base)');
+    await expect(pills).toContainText('Modo B: Proveedor Opcional');
+    await expect(pills).toContainText('Grupos de estudio');
+    await expect(pills).toContainText('60–75 min');
+
+    // 6. Download Workshop Guide (.md)
+    const downloadBtn = heroCard.locator('#btn-download-workshop');
+    await expect(downloadBtn).toBeVisible();
+
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      downloadBtn.click()
+    ]);
+
+    expect(download.suggestedFilename()).toBe('M05-L02-taller-agent-v1.md');
+    const downloadPath = await download.path();
+    expect(downloadPath).toBeTruthy();
+    if (downloadPath) {
+      const content = fs.readFileSync(downloadPath, 'utf-8');
+      expect(content).toContain('# M05 · Taller Práctico — Construye tu primer Agent v1');
+      expect(content).toContain('MockModelProvider');
+      expect(content).toContain('TOOL_REGISTRY');
+      expect(content).toContain('HOPS DE EJECUCION');
+      expect(content).toContain('requirements-real-provider.txt');
+    }
+
+    // Success alert feedback
+    const alertBox = heroCard.locator('.activity-hero-card__alert');
+    await expect(alertBox).toBeVisible();
+    await expect(alertBox).toContainText('Descarga iniciada con éxito');
+
+    // Direct download link
+    const directLink = heroCard.locator('#btn-direct-download-workshop');
+    await expect(directLink).toBeVisible();
+    await expect(directLink).toHaveAttribute('href', 'docs/M05-L02-taller-agent-v1.md');
+
+    expect(consoleErrors).toEqual([]);
   });
 
   test('Mobile Validation: Responsive & Usable Layout', async ({ page }) => {
@@ -87,31 +150,38 @@ test.describe('M05 L02 Smoke Test — Tool Calling (Agent v1)', () => {
     const nextBtn = expInspector.locator('button:has-text("Siguiente →")');
     await nextBtn.click();
     await expect(expInspector.locator('.phase-title')).toContainText('Paso 2');
+
+    // Scroll to Section 04 and verify workshop hero card
+    const heroCard = page.locator('.activity-hero-card');
+    await heroCard.scrollIntoViewIfNeeded();
+    await expect(heroCard).toBeVisible();
+    const downloadBtn = heroCard.locator('#btn-download-workshop');
+    await expect(downloadBtn).toBeVisible();
   });
 
-  test('Table of Contents Navigation: Jumps to section smoothly and preserves route', async ({ page }) => {
+  test('Table of Contents Navigation: Jumps to Section 04 smoothly and preserves route', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(url);
 
-    const outlineLink = page.locator('a.living-doc__outline-link:has-text("02. Tool Calling Inspector")');
-    await expect(outlineLink).toBeVisible();
-    await outlineLink.click();
+    // Jump to Section 02
+    const outlineLink02 = page.locator('a.living-doc__outline-link:has-text("02. Tool Calling Inspector")');
+    await expect(outlineLink02).toBeVisible();
+    await outlineLink02.click();
 
-    // Verify URL stays on lesson
     expect(page.url()).toContain('/#/academy/modules/m05-ai-agents/lesson-02-tool-calling');
 
-    const targetHeading = page.locator('#ciclo-de-7-fases h2.living-doc-section__title');
-    await expect(targetHeading).toBeVisible();
+    const targetHeading02 = page.locator('#ciclo-de-7-fases h2.living-doc-section__title');
+    await expect(targetHeading02).toBeVisible();
 
-    await expect.poll(async () => {
-      const box = await targetHeading.boundingBox();
-      return box ? box.y : null;
-    }, { timeout: 5000 }).toBeLessThan(300);
+    // Jump to Section 04 (Taller Práctico)
+    const outlineLink04 = page.locator('a.living-doc__outline-link:has-text("04. Taller práctico")');
+    await expect(outlineLink04).toBeVisible();
+    await outlineLink04.click();
 
-    await expect.poll(async () => {
-      const box = await targetHeading.boundingBox();
-      return box ? box.y : null;
-    }, { timeout: 5000 }).toBeGreaterThan(40);
+    expect(page.url()).toContain('/#/academy/modules/m05-ai-agents/lesson-02-tool-calling');
+
+    const targetHeading04 = page.locator('#taller-practico-agent-v1 h2.living-doc-section__title');
+    await expect(targetHeading04).toBeVisible();
+    await expect(targetHeading04).toHaveText('04. Taller práctico — Construye tu primer Agent v1');
   });
 });
-

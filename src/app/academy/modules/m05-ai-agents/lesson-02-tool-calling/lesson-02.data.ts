@@ -115,76 +115,42 @@ export const LESSON_02_DOCUMENT: LessonDocument = {
       ]
     },
     {
-      id: 'agent-v1-y-su-limitacion',
-      title: '04. Agent v1: Implementación en Python y su Límite Operacional',
-      subtitle: 'El nacimiento práctico de nuestro primer agente y el puente hacia L03',
+      id: 'taller-practico-agent-v1',
+      title: '04. Taller práctico — Construye tu primer Agent v1',
+      subtitle: 'Transferencia técnica en grupos de estudio: diseña, implementa e inspecciona tu propio Agent v1 en Python',
       blocks: [
         {
           type: 'PARAGRAPH',
           lead: true,
-          text: 'Con el mecanismo de Tool Calling construido en Python puro, hemos creado oficialmente Agent v1 — Tool Calling: un asistente capaz de enriquecer sus respuestas e interactuar con sistemas de backend.'
+          text: 'Las secciones anteriores demostraron el protocolo de Tool Calling, el flujo de los 7 hops y la soberanía del software en la frontera de ejecución. En este taller práctico, los grupos de estudio pasan de la observación a la construcción: elegirán su propio dominio operativo, implementarán dos herramientas reales en Python, redactarán sus Tool Schemas en JSON Schema, inspeccionarán la trazabilidad completa en consola y descubrirán el límite estructural que da origen a L03.'
         },
         {
-          type: 'CODE',
-          filename: 'agent_v1_tool_calling.py',
-          language: 'python',
-          code: `import json
-from openai import OpenAI
-
-client = OpenAI()
-
-def execute_agent_v1(user_message: str) -> str:
-    messages = [{"role": "user", "content": user_message}]
-
-    first_response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=messages,
-        tools=TOOLS_SCHEMAS
-    )
-
-    message = first_response.choices[0].message
-    tool_calls = message.tool_calls
-
-    if not tool_calls:
-        return message.content or ""
-
-    messages.append(message)
-
-    for tool_call in tool_calls:
-        name = tool_call.function.name
-        args = json.loads(tool_call.function.arguments)
-
-        executor = TOOL_REGISTRY[name]
-        result = executor(**args)
-
-        messages.append({
-            "role": "tool",
-            "tool_call_id": tool_call.id,
-            "content": json.dumps(result)
-        })
-
-    final_response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=messages
-    )
-
-    return final_response.choices[0].message.content or ""`
+          type: 'EXAMPLE',
+          title: 'Ficha Técnica del Taller Práctico',
+          content: [
+            'Modalidad: Trabajo colaborativo en grupos de estudio (2 a 3 personas por equipo).',
+            'Duración recomendada: 60 a 75 minutos (hasta 90 minutos con setup inicial de Python).',
+            'Modo A (Camino Base): 100% estándar en Python, sin API keys, sin dependencias externas ni costo.',
+            'Modo B (Proveedor Opcional): Adapter desacoplado compatible con OpenAI para probar inferencia probabilística real.',
+            'Entregable: Proyecto Python ejecutable en dominio propio con mínimo 2 tools, dispatcher, 3 casos probados y límite operacional documentado.'
+          ],
+          caption: 'No se requiere experiencia avanzada en Python. La guía descargable detalla la preparación del entorno desde cero.'
         },
         {
           type: 'CALLOUT',
           variant: 'rule',
-          title: 'La Limitación Deliberada de Agent v1',
-          message: 'Observa la anatomía de execute_agent_v1: ejecuta las herramientas solicitadas exactamente UNA vez y luego pide la respuesta final. ¿Qué ocurre si la herramienta consultar_inventario devuelve "Agotado en almacén central" y el modelo necesita invocar una segunda herramienta buscar_almacenes_regionales? Agent v1 se detiene porque carece de un bucle de realimentación continua. Esa limitación da origen directo a la Lección 03: El Agent Loop.'
+          title: 'El Principio Rector del Taller',
+          message: 'El grupo no debe repetir la teoría ni limitarse a leer código terminado. El LLM propone la llamada de herramientas, pero Python ejecuta la lógica en la CPU. Cada grupo debe comprobar en terminal que el modelo se detiene en finish_reason="tool_calls" y que el software backend es el único soberano de la ejecución.'
         },
         {
           type: 'KEY_INSIGHTS',
-          title: 'Key Insights de Ingeniería — Agent v1',
+          title: 'Hitos Técnicos a Completar por el Grupo de Estudio',
           items: [
-            'Un LLM nunca ejecuta código ni invoca APIs directamente: propone una llamada estructurada en JSON y el software conserva la soberanía de ejecución.',
-            'Un Tool Schema consta de name, description y parameters estructurados en JSON Schema. La descripción es prompt engineering técnico que orienta al modelo.',
-            'El ciclo completo consta de 7 fases: User -> Model -> Tool Selection -> Arguments -> Python Execution -> Tool Result -> Final Response.',
-            'Las herramientas con side effects (cancelaciones, pagos, mutaciones) requieren validación transaccional en el backend, no sugerencias en el prompt.',
-            'Agent v1 resuelve problemas de un solo turno de herramientas. Para encadenar acciones dinámicas basadas en descubrimientos en runtime, requerimos un Agent Loop (L03).'
+            '1. Setup & Baseline: Crear el entorno virtual .venv y verificar la ejecución inicial con MockModelProvider en Modo A (biblioteca estándar).',
+            '2. Dominio Propio: Modelar un propósito operativo, dos funciones en Python con sus Tool Schemas y análisis de la frontera entre lectura y mutaciones (side effects).',
+            '3. Inspección 7 Hops: Conectar las herramientas a TOOL_REGISTRY y verificar en consola la secuencia de los 7 hops operacionales.',
+            '4. Diagnóstico de Schema: Experimentar cómo una descripción ambigua degrada la selección probabilística de la herramienta.',
+            '5. Límite Hacia L03: Probar una meta compuesta de dos pasos dependientes y constatar por qué Agent v1 requiere un Agent Loop para continuar.'
           ]
         }
       ]
