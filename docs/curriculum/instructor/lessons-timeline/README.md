@@ -30,6 +30,7 @@ No es necesario respetar cada minuto de forma rígida. Ajusta el ritmo según la
 | [M02 — Prompt Engineering](m02-prompt-engineering/README.md) | L01–L03, Demo 02 y Lab 02 | Convertir instrucciones vagas en contratos claros y validables. |
 | [M03 — Ingeniería de Contexto](m03-context-engineering/README.md) | L01–L03, Demo 03 y Lab 03 | Elegir, priorizar y comprimir el contexto mínimo útil. |
 | [M04 — Recuperación y RAG](m04-retrieval-rag/README.md) | L01 Embeddings y L02 Tubería RAG | Conectar el contexto necesario con la recuperación automática de información. |
+| [M05 — Agentes de IA](m05-ai-agents/README.md) | L01 Flujos de Trabajo vs Agentes y L02 Tool Calling / Agent v1 | Introducir autonomía de forma incremental: primero decisión, luego tools, preservando la soberanía del software. |
 
 ## Convenciones de cada guía
 
