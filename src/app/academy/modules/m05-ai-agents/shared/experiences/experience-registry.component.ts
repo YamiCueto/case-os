@@ -9,6 +9,10 @@ import { ExpToolAnatomyComponent } from '../../lesson-02-tool-calling/experience
 import { ExpToolCallingInspectorComponent } from '../../lesson-02-tool-calling/experiences/exp-tool-calling-inspector/exp-tool-calling-inspector.component';
 import { ExpToolBoundaryComponent } from '../../lesson-02-tool-calling/experiences/exp-tool-boundary/exp-tool-boundary.component';
 
+import { ExpWhyAgentV1StopsComponent } from '../../lesson-03-agent-loop/experiences/exp-why-agent-v1-stops/exp-why-agent-v1-stops.component';
+import { ExpAgentLoopInspectorComponent } from '../../lesson-03-agent-loop/experiences/exp-agent-loop-inspector/exp-agent-loop-inspector.component';
+import { ExpStopConditionsComponent } from '../../lesson-03-agent-loop/experiences/exp-stop-conditions/exp-stop-conditions.component';
+
 @Component({
   selector: 'app-experience-registry-m05',
   standalone: true,
@@ -19,7 +23,10 @@ import { ExpToolBoundaryComponent } from '../../lesson-02-tool-calling/experienc
     ExpAutonomyTradeoffsComponent,
     ExpToolAnatomyComponent,
     ExpToolCallingInspectorComponent,
-    ExpToolBoundaryComponent
+    ExpToolBoundaryComponent,
+    ExpWhyAgentV1StopsComponent,
+    ExpAgentLoopInspectorComponent,
+    ExpStopConditionsComponent
   ],
   template: `
     @switch (experienceId) {
@@ -40,6 +47,15 @@ import { ExpToolBoundaryComponent } from '../../lesson-02-tool-calling/experienc
       }
       @case ('tool-boundary') {
         <app-exp-tool-boundary></app-exp-tool-boundary>
+      }
+      @case ('why-agent-v1-stops') {
+        <app-exp-why-agent-v1-stops></app-exp-why-agent-v1-stops>
+      }
+      @case ('agent-loop-inspector') {
+        <app-exp-agent-loop-inspector></app-exp-agent-loop-inspector>
+      }
+      @case ('stop-conditions') {
+        <app-exp-stop-conditions></app-exp-stop-conditions>
       }
       @default {
         <div class="case-callout case-callout--error">

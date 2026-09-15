@@ -4,20 +4,15 @@
     <app-lesson-header
       [lesson]="lesson"
       [moduleTitle]="module?.title"
-      subtitle="Action -> Observation -> State"
+      subtitle="Decision ──► Action ──► Observation ──► Next Decision"
     />
 
     <!-- ── 2. Table of Contents / Outline Navigation ── -->
-    <nav class="living-doc__outline" aria-label="Índice de la lección">
-      <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
-      <div class="living-doc__outline-items">
-        @for (sec of doc.sections; track sec.id) {
-          <a [href]="'#' + sec.id" class="living-doc__outline-link">
-            {{ sec.title }}
-          </a>
-        }
-      </div>
-    </nav>
+    <app-lesson-outline [sections]="doc.sections" />
+
+    <div style="margin-top: 32px;">
+      <app-agent-building-map stage="loop"></app-agent-building-map>
+    </div>
 
     <!-- ── 3. Flowing Sections ── -->
     <div class="living-doc__sections">
@@ -32,6 +27,72 @@
           </div>
 
           <div class="living-doc-section__body">
+            @if (sec.id === 'taller-practico-agent-v2') {
+              <!-- ── Workshop Activity Hero Card ── -->
+              <div class="activity-hero-card" role="region" aria-label="Descargar material del taller práctico de Agent v2">
+                <div class="activity-hero-card__glow" aria-hidden="true"></div>
+                <div class="activity-hero-card__inner">
+                  <div class="activity-hero-card__header">
+                    <div class="activity-hero-card__badge-row">
+                      <case-badge variant="accent" [mono]="true" [dot]="true">TALLER PRÁCTICO</case-badge>
+                      <span class="activity-hero-card__filename">
+                        <span class="material-symbols-outlined" aria-hidden="true">description</span>
+                        {{ workshopGuideFileName }}
+                      </span>
+                      <span class="activity-hero-card__filesize">22.9 KB</span>
+                    </div>
+                    <h3 class="activity-hero-card__title">Taller: Evoluciona Agent v1 a Agent v2</h3>
+                    <p class="activity-hero-card__desc">
+                      Trabajo colaborativo por grupos de estudio: no crees un proyecto nuevo. Evoluciona tu Agent v1 de L02 sustituyendo la segunda llamada fija por un Agent Loop gobernado en software con max_iterations y prueba el Caso D multi-step.
+                    </p>
+                  </div>
+
+                  <div class="activity-hero-card__pills">
+                    <case-badge variant="default" [mono]="true">Python 3.10+</case-badge>
+                    <case-badge variant="default" [mono]="true">Modo A: Sin API (Base)</case-badge>
+                    <case-badge variant="default" [mono]="true">Modo B: Proveedor Opcional</case-badge>
+                    <case-badge variant="default" [mono]="true">Grupos de estudio</case-badge>
+                    <case-badge variant="warning" [mono]="true">60–75 min</case-badge>
+                  </div>
+
+                  <div class="activity-hero-card__actions">
+                    <button
+                      type="button"
+                      class="download-action-btn primary"
+                      (click)="downloadWorkshopGuide()"
+                      id="btn-download-workshop"
+                      [attr.aria-label]="'Descargar guía ' + workshopGuideFileName"
+                    >
+                      <span class="material-symbols-outlined" aria-hidden="true">
+                        {{ downloadSuccess ? 'task_alt' : 'download' }}
+                      </span>
+                      <span class="btn-text">
+                        {{ downloadSuccess ? '¡Guía Descargada!' : 'Descargar Guía (.md)' }}
+                      </span>
+                    </button>
+
+                    <a
+                      [href]="workshopGuideFilePath"
+                      [download]="workshopGuideFileName"
+                      class="download-action-btn secondary"
+                      id="btn-direct-download-workshop"
+                      title="Descarga directa del archivo Markdown"
+                    >
+                      <span class="material-symbols-outlined" aria-hidden="true">file_download</span>
+                      <span>Descarga directa</span>
+                    </a>
+                  </div>
+
+                  @if (downloadSuccess) {
+                    <div class="activity-hero-card__alert" role="status" aria-live="polite">
+                      <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                      <span>Descarga iniciada con éxito. Abre <code>{{ workshopGuideFileName }}</code> en tu editor para evolucionar tu Agent v1 con tu grupo de estudio.</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
             @for (block of sec.blocks; track $index) {
               
               <!-- Paragraph Block -->
@@ -94,6 +155,13 @@
                 </div>
               }
 
+              <!-- Experience Block -->
+              @else if (block.type === 'EXPERIENCE') {
+                <div class="living-doc-experience">
+                  <app-experience-registry-m05 [experienceId]="block.experienceId"></app-experience-registry-m05>
+                </div>
+              }
+
               <!-- Key Insights Block -->
               @else if (block.type === 'KEY_INSIGHTS') {
                 <div class="living-doc-insights">
@@ -112,51 +180,6 @@
                 </div>
               }
 
-              <!-- In-Flow Demo Reference -->
-              @else if (block.type === 'DEMO_REF') {
-                <div class="inflow-activity inflow-activity--demo">
-                  <div class="inflow-activity__icon-box">
-                    <span class="material-symbols-outlined inflow-activity__icon" aria-hidden="true">play_arrow</span>
-                  </div>
-                  <div class="inflow-activity__body">
-                    <div class="inflow-activity__tag">EXPERIMENTACIÓN GUIADA</div>
-                    <h3 class="inflow-activity__title">{{ block.title }}</h3>
-                    <p class="inflow-activity__desc">{{ block.description }}</p>
-                  </div>
-                  <div class="inflow-activity__action">
-                    <a [routerLink]="block.path" class="inflow-activity__link">
-                      <case-button variant="primary" size="sm" iconRight="arrow_forward">
-                        {{ block.actionLabel || 'Abrir Demo' }}
-                      </case-button>
-                    </a>
-                  </div>
-                </div>
-              }
-
-              <!-- In-Flow Lab Reference -->
-              @else if (block.type === 'LAB_REF') {
-                <div class="inflow-activity inflow-activity--lab">
-                  <div class="inflow-activity__icon-box inflow-activity__icon-box--lab">
-                    <span class="material-symbols-outlined inflow-activity__icon" aria-hidden="true">science</span>
-                  </div>
-                  <div class="inflow-activity__body">
-                    <div class="inflow-activity__tag inflow-activity__tag--lab">APLICACIÓN REAL DE INGENIERÍA</div>
-                    <h3 class="inflow-activity__title">{{ block.title }}</h3>
-                    <p class="inflow-activity__desc">{{ block.description }}</p>
-                    @if (block.duration) {
-                      <span class="inflow-activity__time">⏱️ Duración estimada: {{ block.duration }}</span>
-                    }
-                  </div>
-                  <div class="inflow-activity__action">
-                    <a [routerLink]="block.path" class="inflow-activity__link">
-                      <case-button variant="secondary" size="sm" iconRight="arrow_forward">
-                        {{ block.actionLabel || 'Iniciar Laboratorio' }}
-                      </case-button>
-                    </a>
-                  </div>
-                </div>
-              }
-
             }
           </div>
 
@@ -164,13 +187,15 @@
       }
     </div>
 
+    <div style="margin-top: 32px;">
+      <app-agent-building-map stage="loop"></app-agent-building-map>
+    </div>
+
     <!-- ── 4. Technical Footer Navigation & Completion ── -->
     <app-lesson-footer
       [lessonId]="lesson.id"
       [nextLesson]="adjacentLessons.next"
       [previousLesson]="adjacentLessons.previous"
-      [relatedDemo]="relatedDemo"
-      [relatedLab]="relatedLab"
     />
   }
 </div>
