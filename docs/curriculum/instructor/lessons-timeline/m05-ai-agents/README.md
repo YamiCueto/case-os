@@ -6,6 +6,7 @@ Guías timeline para impartir en vivo las lecciones del módulo M05 usando CASE 
 |---|---|
 | L01 — Flujos de Trabajo vs Agentes | [lesson-01-workflows-vs-agents.md](lesson-01-workflows-vs-agents.md) |
 | L02 — Llamada de Herramientas y Agent v1 | [lesson-02-tool-calling-agent-v1.md](lesson-02-tool-calling-agent-v1.md) |
+| L03 — El Agent Loop y la Evolución a Agent v2 | [lesson-03-agent-loop.md](lesson-03-agent-loop.md) |
 
 Estas guías no sustituyen el material docente canónico de M05. Su función es convertir cada lección de la plataforma en una sesión conducible de aproximadamente dos horas, con preguntas, demostraciones, práctica y cierres pedagógicos.
 
