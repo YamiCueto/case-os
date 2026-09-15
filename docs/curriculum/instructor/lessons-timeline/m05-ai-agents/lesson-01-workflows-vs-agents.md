@@ -41,9 +41,10 @@ No leas la plataforma en voz alta. Úsala como apoyo visual para discusión.
 |---|---|---|
 | 0–10 min | Apertura + mapa del agente | Conectar M04 con M05 y presentar **Decision** como primera capacidad. |
 | 10–35 min | 01. La Frontera de la Autonomía | Distinguir flujo determinista, model-routed workflow y Agent Loop. |
-| 35–70 min | 02. ¿Quién controla el flujo? | Entender qué significa delegar al modelo una decisión sin entregarle toda la ejecución. |
+| 35–60 min | 02. ¿Quién controla el flujo? | Entender qué significa delegar al modelo una decisión sin entregarle toda la ejecución. |
+| 60–70 min | Pausa activa en grupos de estudio | Clasificar 3 casos y verificar quién decide el siguiente paso antes de ver trade-offs. |
 | 70–100 min | 03. ¿Cuánta autonomía necesitas? | Analizar coste, riesgo, latencia, testing y observabilidad. |
-| 100–115 min | Ejercicio de decisión arquitectónica | Aplicar Least Autonomy Necessary a casos reales. |
+| 100–115 min | Ejercicio de decisión arquitectónica | Aplicar Least Autonomy Necessary a casos de diseño en grupos de estudio. |
 | 115–120 min | Cierre hacia L02 | Dejar planteado el problema: el modelo puede decidir, pero aún no puede ejecutar acciones externas. |
 
 Si la discusión técnica se extiende, conserva el ejercicio final y recorta ejemplos secundarios.
@@ -127,6 +128,11 @@ other ────────→ fallback
 > “El modelo observa el estado actual, decide una acción, recibe el resultado y vuelve a decidir. El siguiente paso puede cambiar en tiempo de ejecución.”
 
 Todavía no expliques su implementación. L03 se encargará de eso.
+
+> [!NOTE]
+> **Nota para el instructor sobre Máquinas de Estados (State Machines):**
+>
+> Una State Machine clásica con estados y transiciones predefinidas sigue siendo control determinista; modelar estados o usar un grafo no convierte automáticamente un sistema en agente. La diferencia crucial es **quién decide la transición**: si el código conoce y evalúa las condiciones de antemano (`if/switch`), el flujo es determinista; si el modelo evalúa contexto ambiguo para elegir la transición, entramos en **Model-Routed Workflow**; y solo si el resultado de una acción vuelve al modelo y este decide iterativamente el siguiente paso, estamos ante un **Agent Loop**.
 
 ---
 
@@ -220,19 +226,22 @@ Respuesta: el software.
 
 No digas que pasar de `if/else` a un LLM elimina reglas. En realidad cambia **qué parte del problema modelamos mediante reglas y qué parte delegamos a inferencia probabilística**.
 
-## Mini ejercicio oral
+## Pausa activa: Clasificación en grupos de estudio (~5–7 min)
 
-Clasifica estos casos:
+Haz una pausa para romper la exposición pasiva antes de pasar a los costes de autonomía. Invita a los participantes a organizarse en **grupos de estudio (2 a 3 integrantes)** y presenta estos 3 casos breves:
 
-1. “Generar una factura PDF y enviarla al repositorio.”
-2. “Clasificar un ticket escrito libremente entre cinco áreas.”
-3. “Investigar por qué un despliegue falla, probar una corrección y reevaluar el resultado.”
+1. *“Generar una factura PDF con formato estricto y enviarla al repositorio.”*
+2. *“Clasificar un ticket de soporte escrito en lenguaje libre entre cinco áreas resolutoras.”*
+3. *“Investigar por qué un despliegue falla en producción: leer logs, probar un parche en memoria y reevaluar si los tests pasan.”*
 
-Respuesta esperada:
+Cada grupo debe responder en 3 minutos:
+- ¿Qué nivel corresponde: **Flujo determinista**, **Model-Routed Workflow** o **Agent Loop**?
+- **¿Quién controla el siguiente paso** en cada caso: el código o el modelo?
 
-1. Pipeline.
-2. Model-Routed Workflow.
-3. Candidato a Agent Loop.
+### Puesta en común rápida (2–3 min)
+- Caso 1: **Flujo determinista (Pipeline)** — el código conoce la secuencia completa; cero necesidad de inferencia.
+- Caso 2: **Model-Routed Workflow** — el modelo desambigua la intención semántica; luego el código enruta deterministamente a la cola correspondiente.
+- Caso 3: **Agent Loop** — el siguiente paso no se puede anticipar en código rígido; depende de la observación que devuelvan los logs y las pruebas.
 
 ---
 
@@ -280,7 +289,7 @@ Si el modelo toma decisiones dinámicas necesitas registrar qué observó, qué 
 
 # 100–115 min — Ejercicio de decisión arquitectónica
 
-Divide al grupo en equipos pequeños. Para cada caso deben elegir:
+Invita a los participantes a trabajar en sus **grupos de estudio (2 a 3 integrantes)**. Para cada caso deben elegir:
 
 - Pipeline determinista
 - Model-Routed Workflow

@@ -48,18 +48,44 @@ No adelantes la solución de L03. El límite de Agent v1 debe descubrirse al fin
 
 ---
 
-# Cronograma
+## Dos ritmos posibles para impartir L02
+
+La guía oficial del taller estipula entre 60 y 75 minutos de trabajo activo (hasta 90 minutos con preparación de entorno desde cero). Para asegurar una conducción docente realista, considera estas dos modalidades de impartición:
+
+### Opción A — Sesión única intensiva (~120 min)
+
+Diseñada para grupos que ya cuentan con Python instalado y entorno preparado:
+
+- **0–10 min:** Apertura y mapa del agente (recap de Decision).
+- **10–25 min:** 01. Desmitificando Tool Calling (experiencia: `tool-anatomy`).
+- **25–45 min:** 02. Tool Calling Inspector y los 7 hops (experiencia: `tool-calling-inspector`).
+- **45–55 min:** 03. Frontera de Seguridad: lectura vs side effects (experiencia: `tool-boundary`).
+- **55–110 min (55 min):** 04. Taller práctico Agent v1 en grupos de estudio.
+- **110–120 min (10 min):** Reto de 2 pasos dependientes, límite operacional y puente hacia L03.
+
+*Nota:* Esta modalidad requiere ejecución ágil; los grupos completan el baseline y la trazabilidad de los 7 hops en clase, dejando extensiones adicionales como trabajo posterior.
+
+### Opción B — Sesión desdoblada (Recomendada si el grupo necesita soporte con Python)
+
+CASE Academy permite flexibilizar las lecciones en dos sesiones sin forzar artificialmente todo en dos horas:
+
+- **Sesión 1 (Fundamentos y arquitectura):** Apertura, Tool Anatomy, Tool Calling Inspector, Frontera de Seguridad, preparación del entorno (`python -m venv .venv`) y definición del dominio y tools por grupo de estudio.
+- **Sesión 2 (Construcción y diagnóstico):** Programación activa del Agent v1, ejecución de los 3 casos (Tool 1, Tool 2, sin tool), inspección de 7 hops en consola, diagnóstico de Tool Schema, reto de 2 pasos dependientes y cierre conceptual hacia L03.
+
+---
+
+# Cronograma (Referencia para Sesión Única — Opción A)
 
 | Tiempo | Sección visible en CASE Academy | Objetivo real |
 |---|---|---|
 | 0–10 min | Apertura + mapa del agente | Conectar Decision con Tools y romper la idea de que el LLM ejecuta acciones. |
-| 10–35 min | 01. Desmitificando Tool Calling | Diferenciar función Python, Tool Schema y Tool Registry. |
-| 35–70 min | 02. Tool Calling Inspector | Seguir los 7 hops y ubicar la frontera exacta entre modelo y runtime. |
-| 70–90 min | 03. Frontera de Seguridad | Diferenciar lectura vs side effects y ubicar validaciones en software. |
-| 90–115 min | 04. Taller práctico — Agent v1 | Arrancar construcción en dominio propio y comprobar el flujo completo. |
-| 115–120 min | Límite de Agent v1 | Formular el problema que dará origen a L03 Agent Loop. |
+| 10–25 min | 01. Desmitificando Tool Calling | Diferenciar función Python, Tool Schema y Tool Registry. |
+| 25–45 min | 02. Tool Calling Inspector | Seguir los 7 hops y ubicar la frontera exacta entre modelo y runtime. |
+| 45–55 min | 03. Frontera de Seguridad | Diferenciar lectura vs side effects y ubicar validaciones en software. |
+| 55–110 min | 04. Taller práctico — Agent v1 | Construcción en grupos de estudio sobre dominio propio y trazabilidad en consola. |
+| 110–120 min | Límite de Agent v1 | Formular el problema de 2 pasos dependientes que da origen a L03 Agent Loop. |
 
-La guía completa del taller recomienda 60–75 minutos. Si el setup o la implementación requieren más tiempo, continúa el taller en la siguiente sesión. No sacrifiques el cierre conceptual hacia L03.
+Si el grupo requiere soporte con Python o mayor tiempo para programar su dominio, opta por la **Opción B (Sesión desdoblada)**. No sacrifiques el cierre conceptual hacia L03.
 
 ---
 
@@ -85,7 +111,7 @@ Muestra `AgentBuildingMap` y señala:
 
 ---
 
-# 10–35 min — 01. Desmitificando Tool Calling
+# 10–25 min — 01. Desmitificando Tool Calling
 
 ## Conceptos fáciles de explicar
 
@@ -105,7 +131,7 @@ Muestra `AgentBuildingMap` y señala:
 
 ## Experiencia: Tool Anatomy
 
-Usa `app-exp-tool-anatomy`.
+Proyecta la **Sección 01 — Desmitificando Tool Calling** (experiencia: `tool-anatomy`).
 
 Alterna entre:
 
@@ -182,11 +208,11 @@ Respuesta buscada: **el schema**. La función y el registry pertenecen al runtim
 
 ---
 
-# 35–70 min — 02. Tool Calling Inspector: los 7 hops
+# 25–45 min — 02. Tool Calling Inspector: los 7 hops
 
 ## En pantalla
 
-Usa `app-exp-tool-calling-inspector`.
+Proyecta la **Sección 02 — Tool Calling Inspector** (experiencia: `tool-calling-inspector`).
 
 Empieza con el escenario de consulta de pedido y avanza fase por fase.
 
@@ -250,11 +276,11 @@ La idea es separar **necesidad del usuario** de **inventario de herramientas dis
 
 ---
 
-# 70–90 min — 03. Frontera de Seguridad: lectura vs side effects
+# 45–55 min — 03. Frontera de Seguridad: lectura vs side effects
 
 ## En pantalla
 
-Usa `app-exp-tool-boundary`.
+Proyecta la **Sección 03 — Frontera de Seguridad** (experiencia: `tool-boundary`).
 
 Compara:
 
@@ -319,19 +345,29 @@ Validar como mínimo:
 
 ---
 
-# 90–115 min — 04. Taller práctico: construye tu Agent v1
+# 55–110 min — 04. Taller práctico: construye tu Agent v1
 
-Esta actividad no consiste en copiar el ejemplo de pedidos. Cada grupo diseña su propio agente.
+Esta actividad no consiste en copiar el ejemplo de pedidos. Cada grupo de estudio diseña su propio agente.
 
 ## Antes de programar
 
-Cada grupo responde:
+Cada grupo de estudio responde:
 
 1. ¿Qué problema resuelve mi Agent v1?
 2. ¿Qué información externa necesita?
 3. ¿Qué dos tools mínimas necesita?
 4. ¿Cuándo NO debería usar ninguna tool?
 5. Si una tool modifica estado, ¿qué validaciones deben permanecer en Python?
+
+> [!IMPORTANT]
+> **Side effects no obligatorios en el código:**
+>
+> No es obligatorio que las tools implementadas en el taller muten estado persistente. El requisito real es implementar mínimo **dos tools**, y ambas pueden ser de solo lectura (ej. consultar catálogo y verificar disponibilidad).
+>
+> Si ninguna tool muta estado, el grupo debe responder obligatoriamente de forma conceptual:
+> **"¿Qué operación de este dominio sí tendría side effects y qué validaciones exigiría antes de exponerla como tool?"**
+>
+> Identificando controles concretos en el software: autorización de usuario, validación de estado previo, límites de negocio, idempotencia y confirmación humana cuando aplique. (Esto se trata estrictamente como frontera de ejecución de L02; no adelantarse a los Guardrails de L05).
 
 Posibles dominios únicamente como inspiración:
 
@@ -359,9 +395,14 @@ El grupo debe producir:
 - trazabilidad de los 7 hops;
 - una explicación de la frontera de ejecución.
 
-Si utilizan **Modo A**, recuerda aclarar que `MockModelProvider` simula de forma determinista el protocolo. No demuestra inferencia semántica probabilística real.
-
-Si utilizan un proveedor real en **Modo B**, la selección y los argumentos sí provienen del modelo y pueden variar.
+> [!NOTE]
+> **Nota para el instructor sobre `MockModelProvider` (Modo A):**
+>
+> `MockModelProvider` **no realiza inferencia semántica real** ni razonamiento probabilístico sobre lenguaje natural. Es una simulación determinista basada en reglas explícitas para reproducir fielmente la estructura y los contratos de mensajes del protocolo (`finish_reason="tool_calls"`, extracción de argumentos JSON, mensaje con `role: "tool"` y nueva llamada simulada inyectando la observación).
+>
+> *Frase conceptual para el grupo:* **“En Modo A no estamos demostrando inteligencia del modelo; estamos demostrando el protocolo del software.”**
+>
+> Este modo es 100% suficiente para validar la arquitectura y el dispatcher sin costo ni credenciales externas. En Modo B (proveedor real opcional) sí se observa selección probabilística genuina a partir de las descripciones en lenguaje natural.
 
 ---
 
@@ -379,7 +420,7 @@ En Mock Mode explica que este deterioro no se observa realmente como comportamie
 
 ---
 
-# 115–120 min — El límite de Agent v1 y puente hacia L03
+# 110–120 min — El límite de Agent v1 y puente hacia L03
 
 Plantea una petición que requiera dos pasos dependientes.
 
@@ -413,7 +454,7 @@ segunda inferencia
 runtime actual no procesa otra decisión
 ```
 
-No implementes todavía `while`, recursión agéntica ni encadenamiento arbitrario.
+No implementes todavía bucles iterativos de control, recursión agéntica ni encadenamiento arbitrario.
 
 Cierra con:
 
