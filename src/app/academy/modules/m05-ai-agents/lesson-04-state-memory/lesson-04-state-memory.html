@@ -1,0 +1,206 @@
+<div class="living-doc" role="main">
+  @if (lesson) {
+    <!-- ── 1. Unified Technical Header ── -->
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      subtitle="ExecutionState ──► SessionMemory ──► PersistentMemory (Scopes & Ownership)"
+    />
+
+  <!-- ── 2. Mapa Arquitectónico del Agente (Arriba) ── -->
+  <div style="margin-bottom: 24px;">
+    <app-agent-building-map stage="state"></app-agent-building-map>
+  </div>
+
+  <!-- ── 3. Outline / Índice Dinámico ── -->
+  <app-lesson-outline [sections]="doc.sections" />
+
+  <!-- ── 4. Contenido Técnico Estructurado ── -->
+  <div class="living-doc-body">
+    @for (sec of doc.sections; track sec.id) {
+      <section [id]="sec.id" class="living-doc-section">
+        
+        <header class="living-doc-section__header">
+          <h2 class="living-doc-section__title">{{ sec.title }}</h2>
+          @if (sec.subtitle) {
+            <p class="living-doc-section__subtitle">{{ sec.subtitle }}</p>
+          }
+        </header>
+
+        <div class="living-doc-section__content">
+          <!-- Hero Card del Taller Práctico en la Sección 04 -->
+          @if (sec.id === 'taller-practico-agent-v3') {
+            <div class="activity-hero-card" id="card-taller-agent-v3">
+              <div class="activity-hero-card__glow" aria-hidden="true"></div>
+
+              <div class="activity-hero-card__body">
+                <div class="activity-hero-card__meta">
+                  <div class="activity-hero-card__badge-row">
+                    <case-badge variant="info" [mono]="true">
+                      <span class="material-symbols-outlined activity-hero-card__badge-icon" aria-hidden="true">terminal</span>
+                      TALLER PRÁCTICO
+                    </case-badge>
+                    <span class="activity-hero-card__filename">
+                      {{ workshopGuideFileName }}
+                    </span>
+                    <span class="activity-hero-card__filesize">24.5 KB</span>
+                  </div>
+                  <h3 class="activity-hero-card__title">Taller: Evoluciona Agent v2 a Agent v3</h3>
+                  <p class="activity-hero-card__desc">
+                    Trabajo colaborativo por grupos de estudio: no crees un proyecto nuevo. Evoluciona tu Agent v2 de L03 introduciendo <code>ExecutionState</code> tipado, <code>MemoryStore</code> gobernado en software con aislamiento por <code>subject_id</code>, y valida los Casos F1 (Continuidad de Sesión) y F2 (Continuidad Persistente y Aislamiento).
+                  </p>
+                </div>
+
+                <div class="activity-hero-card__pills">
+                  <case-badge variant="default" [mono]="true">Python 3.10+</case-badge>
+                  <case-badge variant="default" [mono]="true">Modo A: Sin API (Base)</case-badge>
+                  <case-badge variant="default" [mono]="true">Modo B: Proveedor Opcional</case-badge>
+                  <case-badge variant="default" [mono]="true">Grupos de estudio</case-badge>
+                  <case-badge variant="warning" [mono]="true">60–75 min</case-badge>
+                </div>
+
+                <div class="activity-hero-card__actions">
+                  <button
+                    type="button"
+                    class="download-action-btn primary"
+                    (click)="downloadWorkshopGuide()"
+                    id="btn-download-workshop"
+                    [attr.aria-label]="'Descargar guía ' + workshopGuideFileName"
+                  >
+                    <span class="material-symbols-outlined" aria-hidden="true">
+                      {{ downloadSuccess ? 'task_alt' : 'download' }}
+                    </span>
+                    <span class="btn-text">
+                      {{ downloadSuccess ? '¡Guía Descargada!' : 'Descargar Guía (.md)' }}
+                    </span>
+                  </button>
+
+                  <a
+                    [href]="workshopGuideFilePath"
+                    [download]="workshopGuideFileName"
+                    class="download-action-btn secondary"
+                    id="btn-direct-download-workshop"
+                    title="Descarga directa del archivo Markdown"
+                  >
+                    <span class="material-symbols-outlined" aria-hidden="true">file_download</span>
+                    <span>Descarga directa</span>
+                  </a>
+                </div>
+
+                @if (downloadSuccess) {
+                  <div class="activity-hero-card__alert" role="status" aria-live="polite">
+                    <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                    <span>Descarga iniciada con éxito. Abre <code>{{ workshopGuideFileName }}</code> en tu editor para evolucionar tu Agent v2 con tu grupo de estudio.</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          @for (block of sec.blocks; track $index) {
+            
+            <!-- Paragraph Block -->
+            @if (block.type === 'PARAGRAPH') {
+              <p class="living-doc-paragraph" [class.living-doc-paragraph--lead]="block.lead">
+                {{ block.text }}
+              </p>
+            }
+
+            <!-- Comparison Block -->
+            @else if (block.type === 'COMPARISON') {
+              <app-lesson-comparison [comparison]="block" />
+            }
+
+            <!-- Callout Block -->
+            @else if (block.type === 'CALLOUT') {
+              <case-callout
+                [variant]="block.variant"
+                [title]="block.title"
+                [message]="block.message"
+              />
+            }
+
+            <!-- Code Block -->
+            @else if (block.type === 'CODE') {
+              <case-code-block
+                [code]="block.code"
+                [language]="block.language"
+                [filename]="block.filename"
+                [lineNumbers]="block.lineNumbers || false"
+              />
+            }
+
+            <!-- Example / Specification Block -->
+            @else if (block.type === 'EXAMPLE') {
+              <div class="living-doc-example">
+                @if (block.title) {
+                  <div class="living-doc-example__header">
+                    <span class="material-symbols-outlined living-doc-example__icon" aria-hidden="true">data_object</span>
+                    <span class="living-doc-example__title">{{ block.title }}</span>
+                  </div>
+                }
+                <div class="living-doc-example__content">
+                  @if (block.content) {
+                    <ul class="living-doc-example__list">
+                      @for (item of (block.content); track item) {
+                        <li class="living-doc-example__item">
+                          <span class="living-doc-example__bullet">▸</span>
+                          <span>{{ item }}</span>
+                        </li>
+                      }
+                    </ul>
+                  }
+                </div>
+                @if (block.caption) {
+                  <div class="living-doc-example__caption">
+                    {{ block.caption }}
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Experience Block -->
+            @else if (block.type === 'EXPERIENCE') {
+              <div class="living-doc-experience">
+                <app-experience-registry-m05 [experienceId]="block.experienceId"></app-experience-registry-m05>
+              </div>
+            }
+
+            <!-- Key Insights Block -->
+            @else if (block.type === 'KEY_INSIGHTS') {
+              <div class="living-doc-insights">
+                <div class="living-doc-insights__header">
+                  <span class="material-symbols-outlined living-doc-insights__icon" aria-hidden="true">verified</span>
+                  <span class="living-doc-insights__title">{{ block.title || 'Key Insights de Ingeniería' }}</span>
+                </div>
+                <ul class="living-doc-insights__list">
+                  @for (item of block.items; track item) {
+                    <li class="living-doc-insights__item">
+                      <span class="material-symbols-outlined living-doc-insights__check" aria-hidden="true">check</span>
+                      <span>{{ item }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+          }
+        </div>
+
+      </section>
+    }
+  </div>
+
+  <!-- ── 5. Mapa Arquitectónico del Agente (Abajo) ── -->
+  <div style="margin-top: 32px;">
+    <app-agent-building-map stage="state"></app-agent-building-map>
+  </div>
+
+    <!-- ── 6. Technical Footer Navigation & Completion ── -->
+    <app-lesson-footer
+      [lessonId]="lesson.id"
+      [nextLesson]="adjacentLessons.next"
+      [previousLesson]="adjacentLessons.previous"
+    />
+  }
+</div>
