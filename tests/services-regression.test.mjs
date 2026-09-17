@@ -327,7 +327,7 @@ await testCase('3. SyncQueueService: Despacho tardío de A NO altera colas ni de
 // -----------------------------------------------------------------------------
 // Test 4: UserProgressService - Porcentaje dinámico contra catálogo real
 // -----------------------------------------------------------------------------
-await testCase('4. UserProgressService: Cálculo dinámico de avance sin denominador fijo de 45', async () => {
+await testCase('4. UserProgressService: Cálculo dinámico de avance contra catálogo real (sin denominador fijo)', async () => {
   const mockStorage = createMockLocalStorage();
   global.localStorage = mockStorage;
 
@@ -363,17 +363,17 @@ await testCase('4. UserProgressService: Cálculo dinámico de avance sin denomin
   const progressService = runInInjectionContext(injector, () => injector.get(UserProgressService));
   assert.ok(progressService instanceof UserProgressService, 'Debe ser instancia real de UserProgressService');
 
-  // Marcar 1 lección completada (catálogo real tiene 45 unidades en CourseService)
+  // Marcar 1 lección completada (catálogo real tiene 49 unidades en CourseService)
   progressService.markLessonAsCompleted('c1');
   let state = progressService.getProgress()();
   assert.strictEqual(state.completedLessons.length, 1);
-  assert.strictEqual(state.completionPercentage, 2); // Math.round((1/45) * 100) = 2%
+  assert.strictEqual(state.completionPercentage, 2); // Math.round((1/49) * 100) = 2%
 
-  // Marcar 9 lecciones
+  // Marcar 9 lecciones (Math.round((9/49) * 100) = 18%, demuestra que no usa denominador fijo histórico de 45)
   ['c2', 'c3', 'd1', 'l1', 'c4', 'c5', 'c6', 'd2'].forEach(id => progressService.markLessonAsCompleted(id));
   state = progressService.getProgress()();
   assert.strictEqual(state.completedLessons.length, 9);
-  assert.strictEqual(state.completionPercentage, 20); // Math.round((9/45) * 100) = 20%
+  assert.strictEqual(state.completionPercentage, 18); // Math.round((9/49) * 100) = 18%
 });
 
 // -----------------------------------------------------------------------------
@@ -441,7 +441,7 @@ await testCase('5. UserPreferencesService: Merge CRDT LWW y restauración de his
 await testCase('6. Catálogo Git: Asignación real de módulos, prerrequisitos y tipos', () => {
   const { modules, lessons } = extractCourseConfig();
   assert.strictEqual(modules.length, 9);
-  assert.strictEqual(lessons.length, 45);
+  assert.strictEqual(lessons.length, 49);
 
   const c4 = lessons.find(l => l.id === 'c4');
   assert.ok(c4);
