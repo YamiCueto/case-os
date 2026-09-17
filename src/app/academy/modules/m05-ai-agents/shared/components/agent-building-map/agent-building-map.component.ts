@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export type AgentStage = 'decision' | 'tools' | 'loop' | 'state' | 'planning' | 'guardrails' | 'observability';
+export type AgentStage = 'decision' | 'tools' | 'loop' | 'state' | 'planning' | 'guardrails' | 'observability' | 'capstone';
 
 interface MapNodeDef {
   key: AgentStage;
@@ -375,12 +375,14 @@ export class AgentBuildingMapComponent {
   ];
 
   isPassed(current: AgentStage): boolean {
+    if (this.stage === 'capstone') return true;
     const currentIndex = this.stageOrder.indexOf(current);
     const activeIndex = this.stageOrder.indexOf(this.stage);
     return currentIndex < activeIndex;
   }
 
   isFuture(current: AgentStage): boolean {
+    if (this.stage === 'capstone') return false;
     const currentIndex = this.stageOrder.indexOf(current);
     const activeIndex = this.stageOrder.indexOf(this.stage);
     return currentIndex > activeIndex;
@@ -402,6 +404,8 @@ export class AgentBuildingMapComponent {
         return 'L06 · Agent v5 (Guardrails & HITL)';
       case 'observability':
         return 'L07 · Agent v6 (Observability & Eval)';
+      case 'capstone':
+        return 'CAPSTONE · Agent Engineering Capstone';
       default:
         return 'Agent Engineering';
     }

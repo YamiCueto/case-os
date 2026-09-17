@@ -17,7 +17,7 @@ Esta lección completa la **Engineering & Control Layer** (**Agent v5 → Agent 
 | **70–90 min** | **Sanitización y RunSummary Derivado** | Modelar `_SENSITIVE_KEYS` y por qué la redacción ocurre antes de `emit()`. Presentar `RunSummary.from_events()` como única fuente de verdad: `iterations` = `len({e.iteration...})`, no `max()`. | Comprender que el `TraceCollector` nunca ve contraseñas ni tokens. |
 | **90–110 min** | **Taller Práctico: De Agent v5 a Agent v6** | Codificación colaborativa en grupos de estudio. Ejecución y validación de los Casos I1 a I5 en terminal. | 100% de los grupos ejecutan los tests I1 a I5 con aserciones verdes. |
 | **110–115 min** | **Módulo Completo: Engineering & Control Layer Cerrada** | Reconciliación del Pipeline completo L01–L07. Agent v6 encarna los 7 principios del Agent Engineering. | Visualización del mapa completo: Decision → Tools → Loop → State → Planning → Guardrails → Observability. |
-| **115–120 min** | **Cierre y Puente a Lab 05** | Puente pedagógico: el agente está construido, gobernado y observable. Ahora el estudiante lo lleva a su propio dominio de negocio. | Conexión natural con Lab 05 (Capstone: Diseñar un Flujo de Trabajo Agéntico). |
+| **115–120 min** | **Cierre y Puente a Lab 05** | Puente pedagógico: el agente está construido, gobernado y observable. Ahora el estudiante lo lleva a su propio dominio de negocio. | Conexión natural con Lab 05 (Agent Engineering Capstone). |
 
 ---
 

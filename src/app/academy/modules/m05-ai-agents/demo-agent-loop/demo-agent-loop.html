@@ -1,139 +1,335 @@
-﻿<div class="presentation-container pb-32">
+<div class="presentation-container pb-32">
   <div class="back-to-menu">
-    <a routerLink="/academy/modules/m05-ai-agents/lesson-03-agent-loop" class="back-btn">
+    <a routerLink="/academy/modules/m05-ai-agents/lesson-03-agent-loop" class="back-btn" id="back-to-lesson-link">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-      Volver a la Leccion
+      Volver a la Lección
     </a>
   </div>
 
-  <div class="slide-wrapper" style="max-width: 1000px; margin: 0 auto; padding: 32px 40px;">
-    <div class="slide-title">
+  <div class="slide-wrapper demo05-wrapper">
+    <!-- ── Header ── -->
+    <div class="slide-title" style="padding: 32px 40px 0;">
       <span class="workshop-badge">
         <span class="icon">◈</span>
         Demo 05 · AI Agents
       </span>
       <h1>El Bucle del Agente</h1>
-      <p class="subtitle">Simulación del Bucle: Intent &rarr; Action &rarr; Observation &rarr; State Update</p>
+      <p class="subtitle">STATE → DECISION → ACTION → OBSERVATION → STATE UPDATE → ↺</p>
     </div>
 
-    <!-- Alert / Definition -->
-    <div style="background:#0A0A0A; border:1px solid #1F1F1F; border-left:3px solid #6366f1; border-radius:6px; padding:20px 24px; margin-bottom:2rem;">
-      <p style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin:0 0 10px 0;">Conceptual Simulation</p>
-      <p style="font-size:14px; color:#c7c4d7; line-height:1.7; margin:0;">
-        Esta demostración <strong>no ejecuta una IA real</strong>. Es una representación técnica del flujo de decisión observable (State Update) que ocurre en un agente autónomo frente a herramientas externas.
+    <!-- ── Conceptual Simulation Notice ── -->
+    <div class="demo05-sim-notice" id="conceptual-simulation-notice">
+      <span class="demo05-sim-notice__label">CONCEPTUAL SIMULATION</span>
+      <p class="demo05-sim-notice__body">
+        Esta demostración <strong>no ejecuta un LLM real</strong>. Simula de forma determinista las
+        decisiones y observaciones de un Agent Loop para hacer <em>visible su funcionamiento interno</em>.<br>
+        <strong>El modelo propone acciones.</strong> El <strong>runtime</strong> controla qué ocurre realmente.
+        Selecciona una herramienta para simular la acción propuesta e inyectar su resultado como una nueva observación.
       </p>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem;">
-      
-      <!-- Left: Agent Trace (Terminal) -->
-      <div style="display:flex; flex-direction:column; gap:16px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h3 style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#cbd5e1; text-transform:uppercase; margin:0;">Agent Execution Trace</h3>
-          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; padding:4px 8px; border-radius:4px;"
-            [ngClass]="{
-              'bg-blue-900 text-blue-300': status() === 'RUNNING',
-              'bg-green-900 text-green-300': status() === 'SUCCESS',
-              'bg-red-900 text-red-300': status() === 'FAILED'
-            }">
-            STATUS: {{ status() }}
-          </span>
-        </div>
-
-        <div style="background:#050505; border:1px solid #1f293d; border-radius:8px; padding:24px; min-height:400px; display:flex; flex-direction:column; gap:20px;">
-          
-          <div *ngFor="let iteration of history()" style="padding-bottom:16px; border-bottom:1px solid #1F1F1F;">
-            <div style="display:flex; gap:12px; margin-bottom:12px;">
-              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#64748b; font-weight:700;">[ITERATION {{iteration.step}}/{{maxIterations}}]</span>
-            </div>
-            
-            <div style="display:flex; flex-direction:column; gap:12px;">
-              
-              <!-- Intent / State Decision -->
-              <div style="display:flex; gap:12px; align-items:flex-start;">
-                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#818cf8; width:100px; flex-shrink:0;">&gt; INTENT:</span>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#e4e1ed;">{{ iteration.intent }}</span>
-              </div>
-
-              <!-- Action -->
-              <div *ngIf="iteration.actionTaken" style="display:flex; gap:12px; align-items:flex-start;">
-                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#fbbf24; width:100px; flex-shrink:0;">&gt; ACTION:</span>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#fbbf24; background:rgba(251, 191, 36, 0.1); padding:2px 6px; border-radius:4px;">{{ iteration.actionTaken }}</span>
-              </div>
-
-              <!-- Observation -->
-              <div *ngIf="iteration.observation" style="display:flex; gap:12px; align-items:flex-start;">
-                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#22c55e; width:100px; flex-shrink:0;">&gt; OBSERVATION:</span>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#86efac; border-left:2px solid #22c55e; padding-left:10px;">{{ iteration.observation }}</span>
-              </div>
-
-              <!-- State Update -->
-              <div *ngIf="iteration.stateUpdate" style="display:flex; gap:12px; align-items:flex-start;">
-                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#c084fc; width:100px; flex-shrink:0;">&gt; STATE UPDATE:</span>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#d8b4fe; font-style:italic;">{{ iteration.stateUpdate }}</span>
-              </div>
-
-            </div>
-          </div>
-          
-          <div *ngIf="status() === 'RUNNING'" style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#64748b; animation: pulse 2s infinite;">Waiting for tool execution...</div>
-          <div *ngIf="status() !== 'RUNNING'" style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#64748b;">Execution Terminated.</div>
-        </div>
+    <!-- ── Goal + State Panel (always visible) ── -->
+    <div class="demo05-state-panel" id="state-panel">
+      <div class="demo05-state-panel__header">
+        <span class="demo05-label demo05-label--state">▸ STATE</span>
+        <span class="demo05-iteration-badge" id="iteration-counter">
+          ITERATION {{ currentStep() }}/{{ maxIterations }}
+        </span>
+        <span class="demo05-status-badge"
+          [class.demo05-status-badge--running]="status() === 'RUNNING'"
+          [class.demo05-status-badge--awaiting]="status() === 'AWAITING_SIDE_EFFECT'"
+          [class.demo05-status-badge--success]="status() === 'SUCCESS'"
+          [class.demo05-status-badge--failed]="status() === 'MAX_ITERATIONS_REACHED'"
+        >
+          {{ status() }}
+        </span>
       </div>
 
-      <!-- Right: Tool Interface Simulator -->
-      <div style="display:flex; flex-direction:column; gap:20px;">
-        <h3 style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#cbd5e1; text-transform:uppercase; margin:0;">Available Tools</h3>
-        
-        <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:20px; display:flex; flex-direction:column; gap:16px;">
-          <p style="font-size:12px; color:#94a3b8; margin:0;">Simula la decisión del agente inyectando resultados de herramientas en el contexto.</p>
+      <div class="demo05-state-panel__body">
+        <div class="demo05-state-row">
+          <span class="demo05-state-key">Goal</span>
+          <span class="demo05-state-value" id="goal-text">{{ goal }}</span>
+        </div>
 
-          <button (click)="executeSearch()" [disabled]="status() !== 'RUNNING'" class="control-btn" style="width:100%; justify-content:flex-start; padding:12px; border-color:#38bdf8;">
-            <span style="color:#38bdf8; font-size:16px; margin-right:12px;" class="material-symbols-outlined">search</span>
-            <div>
-              <div style="color:#e0f2fe; font-size:12px; font-weight:600; text-align:left;">searchKnowledge()</div>
-              <div style="color:#7dd3fc; font-size:10px; text-align:left; font-family:'JetBrains Mono',monospace;">(query: string)</div>
-            </div>
-          </button>
-
-          <button (click)="executeMath()" [disabled]="status() !== 'RUNNING'" class="control-btn" style="width:100%; justify-content:flex-start; padding:12px; border-color:#fbbf24;">
-            <span style="color:#fbbf24; font-size:16px; margin-right:12px;" class="material-symbols-outlined">calculate</span>
-            <div>
-              <div style="color:#fef3c7; font-size:12px; font-weight:600; text-align:left;">calculateMath()</div>
-              <div style="color:#fcd34d; font-size:10px; text-align:left; font-family:'JetBrains Mono',monospace;">(expression: string)</div>
-            </div>
-          </button>
-
-          <button (click)="executeEmail()" [disabled]="status() !== 'RUNNING'" class="control-btn" style="width:100%; justify-content:flex-start; padding:12px; border-color:#22c55e;">
-            <span style="color:#22c55e; font-size:16px; margin-right:12px;" class="material-symbols-outlined">mail</span>
-            <div>
-              <div style="color:#dcfce7; font-size:12px; font-weight:600; text-align:left;">sendEmail()</div>
-              <div style="color:#86efac; font-size:10px; text-align:left; font-family:'JetBrains Mono',monospace;">(to: string, body: string)</div>
-            </div>
-          </button>
-
-          <div style="border-top:1px solid #1e293b; margin-top:8px; padding-top:16px;">
-            <button (click)="finishLoop()" [disabled]="status() !== 'RUNNING'" class="control-btn primary" style="width:100%; justify-content:center;">
-              Return Final Answer
-            </button>
+        <div class="demo05-state-row">
+          <span class="demo05-state-key">Observations</span>
+          <div class="demo05-state-value">
+            @if (accumulatedObservations().length === 0) {
+              <span class="demo05-state-empty">none yet</span>
+            }
+            @for (obs of accumulatedObservations(); track obs) {
+              <div class="demo05-obs-chip" id="obs-chip-{{ $index }}">{{ obs }}</div>
+            }
           </div>
-          
-          <button *ngIf="status() !== 'RUNNING'" (click)="resetLab()" class="control-btn" style="width:100%; justify-content:center; margin-top:8px; border-color:#1e293b; color:#94a3b8;">
-            Reset Simulation
-          </button>
         </div>
       </div>
-
     </div>
 
-    <!-- Takeaway Box -->
-    <div class="warning-box" style="border-left-color:#6366f1; background:#0d0d1a; margin-top:2rem;">
+    <!-- ── External Side Effect Boundary ── -->
+    @if (status() === 'AWAITING_SIDE_EFFECT') {
+      <div class="demo05-side-effect-boundary" id="side-effect-boundary" role="alert">
+        <div class="demo05-side-effect-boundary__header">
+          <span class="material-symbols-outlined demo05-side-effect-boundary__icon" aria-hidden="true">warning</span>
+          <span class="demo05-side-effect-boundary__title">EXTERNAL SIDE EFFECT DETECTED</span>
+        </div>
+        <p class="demo05-side-effect-boundary__proposal">
+          El agente propone:<br>
+          <code>sendEmail(to="manager@empresa.com", body="Reimbursement limit $50/day, receipts required, economy class.")</code>
+        </p>
+        <p class="demo05-side-effect-boundary__question">
+          ¿Debe ejecutarse automáticamente toda acción propuesta por el modelo?
+        </p>
+        <p class="demo05-side-effect-boundary__explanation">
+          Una <strong>decisión del modelo</strong> expresa <em>intención</em>, no <em>autoridad</em>.
+          Las acciones con efectos externos (enviar emails, escribir en bases de datos, llamar APIs) pueden necesitar
+          políticas de control o aprobación antes de ejecutarse.
+          Esto se desarrolla formalmente mediante <strong>Guardrails / HITL</strong> en L06 y se integra en Lab 05.
+        </p>
+        <div class="demo05-side-effect-boundary__actions">
+          <button (click)="confirmExternalEffect()" class="control-btn primary" id="btn-confirm-side-effect">
+            <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+            Confirmar y ejecutar
+          </button>
+          <button (click)="cancelExternalEffect()" class="control-btn demo05-btn-cancel" id="btn-cancel-side-effect">
+            <span class="material-symbols-outlined" aria-hidden="true">cancel</span>
+            Cancelar acción
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- ── MAX_ITERATIONS Terminal ── -->
+    @if (status() === 'MAX_ITERATIONS_REACHED') {
+      <div class="demo05-max-iter-notice" id="max-iterations-notice" role="status">
+        <span class="material-symbols-outlined demo05-max-iter-notice__icon" aria-hidden="true">block</span>
+        <div>
+          <strong>MAX_ITERATIONS_REACHED (5/5)</strong><br>
+          El runtime detuvo el bucle al alcanzar el límite de iteraciones.
+          Un agente sin condición de parada explícita puede ejecutarse indefinidamente.
+          Esta salvaguarda evita ciclos infinitos ante objetivos inalcanzables o errores de razonamiento.
+        </div>
+      </div>
+    }
+
+    <!-- ── Main 2-column Layout ── -->
+    <div class="demo05-main-grid">
+
+      <!-- Left: Execution Trace ── -->
+      <div class="demo05-trace-col">
+        <h3 class="demo05-col-title">Agent Execution Trace</h3>
+
+        <div class="demo05-trace-terminal" id="execution-trace">
+          @for (entry of history(); track entry.step) {
+            <div class="demo05-trace-entry"
+              [class.demo05-trace-entry--final]="entry.isFinalAnswer"
+              [class.demo05-trace-entry--irrelevant]="entry.isIrrelevant"
+              id="trace-entry-{{ entry.step }}"
+            >
+              <!-- Iteration Header -->
+              <div class="demo05-trace-entry__header">
+                <span class="demo05-trace-iter-label">[ITERATION {{ entry.step }}/{{ maxIterations }}]</span>
+              </div>
+
+              <!-- DECISION (what the model proposes) -->
+              <div class="demo05-trace-row">
+                <span class="demo05-trace-label demo05-trace-label--decision">▸ DECISION</span>
+                <span class="demo05-trace-body demo05-trace-body--decision" id="decision-{{ entry.step }}">
+                  {{ entry.decision }}
+                </span>
+              </div>
+
+              <!-- ACTION (what the runtime executes) -->
+              @if (entry.actionTaken) {
+                <div class="demo05-trace-row">
+                  <span class="demo05-trace-label demo05-trace-label--action">▸ ACTION</span>
+                  <code class="demo05-trace-body demo05-trace-body--action"
+                    [class.demo05-trace-body--final-action]="entry.isFinalAnswer"
+                    id="action-{{ entry.step }}"
+                  >{{ entry.actionTaken }}</code>
+                </div>
+              }
+
+              <!-- OBSERVATION -->
+              @if (entry.observation) {
+                <div class="demo05-trace-row">
+                  <span class="demo05-trace-label demo05-trace-label--obs">▸ OBSERVATION</span>
+                  <span class="demo05-trace-body demo05-trace-body--obs"
+                    [class.demo05-trace-body--irrelevant]="entry.isIrrelevant"
+                    id="observation-{{ entry.step }}"
+                  >{{ entry.observation }}</span>
+                </div>
+              }
+
+              <!-- STATE UPDATE -->
+              @if (entry.stateUpdate) {
+                <div class="demo05-trace-row">
+                  <span class="demo05-trace-label demo05-trace-label--state">▸ STATE UPDATE</span>
+                  <span class="demo05-trace-body demo05-trace-body--state" id="state-update-{{ entry.step }}">{{ entry.stateUpdate }}</span>
+                </div>
+              }
+
+              <!-- External side effect in progress -->
+              @if (entry.isExternalEffect && !entry.observation) {
+                <div class="demo05-trace-row">
+                  <span class="demo05-trace-label demo05-trace-label--obs">▸ AWAITING</span>
+                  <span class="demo05-trace-body demo05-trace-body--awaiting">
+                    External side effect boundary — esperando confirmación…
+                  </span>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Status footer -->
+          @if (status() === 'RUNNING') {
+            <div class="demo05-trace-footer" id="awaiting-action-prompt">
+              Selecciona una herramienta en el panel de la derecha para simular la acción propuesta por el agente e inyectar su resultado como observación.
+            </div>
+          }
+          @if (status() === 'SUCCESS') {
+            <div class="demo05-trace-footer demo05-trace-footer--success" id="execution-terminated-success">
+              ✔ Execution Terminated — Goal Achieved.
+            </div>
+          }
+          @if (status() === 'MAX_ITERATIONS_REACHED') {
+            <div class="demo05-trace-footer demo05-trace-footer--failed" id="execution-terminated-max">
+              ✖ Execution Terminated — MAX_ITERATIONS_REACHED.
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Right: Tool Selector ── -->
+      <div class="demo05-tools-col" id="tools-panel">
+        <h3 class="demo05-col-title">Tool Selector</h3>
+
+        <!-- DECISION → TOOL CALL / FINAL ANSWER diagram -->
+        <div class="demo05-decision-diagram" aria-label="Diagrama DECISION a ACTION">
+          <div class="demo05-decision-diagram__node demo05-decision-diagram__node--decision">DECISION</div>
+          <div class="demo05-decision-diagram__fork" aria-hidden="true">
+            <span class="demo05-decision-diagram__branch-label">Tool call</span>
+            <span class="demo05-decision-diagram__branch-sep">·</span>
+            <span class="demo05-decision-diagram__branch-label demo05-decision-diagram__branch-label--final">Final answer</span>
+          </div>
+          <div class="demo05-decision-diagram__actions">
+            <div class="demo05-decision-diagram__node demo05-decision-diagram__node--action">ACTION / TOOL</div>
+            <div class="demo05-decision-diagram__node demo05-decision-diagram__node--final">FINAL ANSWER</div>
+          </div>
+        </div>
+
+        <p class="demo05-tools-hint">
+          Herramientas disponibles para este agente. El modelo selecciona basándose en <strong>Goal + Current State + Observations</strong>.
+          No todas las herramientas son necesarias.
+        </p>
+
+        <div class="demo05-tools-list">
+
+          <!-- searchKnowledge -->
+          <button
+            (click)="executeSearch()"
+            [disabled]="status() !== 'RUNNING'"
+            class="demo05-tool-btn demo05-tool-btn--search"
+            id="btn-search-knowledge"
+            [attr.aria-label]="'Simular searchKnowledge'"
+          >
+            <span class="material-symbols-outlined demo05-tool-btn__icon" aria-hidden="true">search</span>
+            <div class="demo05-tool-btn__info">
+              <div class="demo05-tool-btn__name">searchKnowledge()</div>
+              <div class="demo05-tool-btn__sig">(query: string)</div>
+            </div>
+            <span class="demo05-tool-tag demo05-tool-tag--allow">READ · ALLOW</span>
+          </button>
+
+          <!-- calculateMath -->
+          <button
+            (click)="executeMath()"
+            [disabled]="status() !== 'RUNNING'"
+            class="demo05-tool-btn demo05-tool-btn--math"
+            id="btn-calculate-math"
+            [attr.aria-label]="'Simular calculateMath'"
+          >
+            <span class="material-symbols-outlined demo05-tool-btn__icon" aria-hidden="true">calculate</span>
+            <div class="demo05-tool-btn__info">
+              <div class="demo05-tool-btn__name">calculateMath()</div>
+              <div class="demo05-tool-btn__sig">(expression: string)</div>
+            </div>
+            <span class="demo05-tool-tag demo05-tool-tag--allow">READ · ALLOW</span>
+          </button>
+          <p class="demo05-tool-note">
+            ⚠ Esta herramienta está disponible pero <em>no es necesaria para este objetivo</em>.
+            Úsarla demuestra que el agente puede seleccionar una acción irrelevante y perder iteraciones.
+          </p>
+
+          <!-- sendEmail -->
+          <button
+            (click)="executeEmail()"
+            [disabled]="status() !== 'RUNNING'"
+            class="demo05-tool-btn demo05-tool-btn--email"
+            id="btn-send-email"
+            [attr.aria-label]="'Simular sendEmail'"
+          >
+            <span class="material-symbols-outlined demo05-tool-btn__icon" aria-hidden="true">mail</span>
+            <div class="demo05-tool-btn__info">
+              <div class="demo05-tool-btn__name">sendEmail()</div>
+              <div class="demo05-tool-btn__sig">(to: string, body: string)</div>
+            </div>
+            <span class="demo05-tool-tag demo05-tool-tag--effect">WRITE · SIDE EFFECT</span>
+          </button>
+
+          <div class="demo05-tools-divider"></div>
+
+          <!-- Return Final Answer -->
+          <button
+            (click)="finishLoop()"
+            [disabled]="status() !== 'RUNNING'"
+            class="control-btn primary demo05-final-btn"
+            id="btn-final-answer"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">check</span>
+            Return Final Answer
+          </button>
+          <p class="demo05-tool-note">
+            <strong>Final Answer</strong> es una <em>decisión del agente</em>, no una tool externa.
+            Termina el bucle explícitamente.
+          </p>
+
+          @if (status() !== 'RUNNING' && status() !== 'AWAITING_SIDE_EFFECT') {
+            <button (click)="resetLab()" class="control-btn demo05-reset-btn" id="btn-reset-simulation">
+              <span class="material-symbols-outlined" aria-hidden="true">restart_alt</span>
+              Reset Simulation
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Takeaway ── -->
+    <div class="warning-box demo05-takeaway" style="border-left-color:#6366f1; background:#0d0d1a; margin: 0 40px 32px;">
       <h4 style="color:#818cf8; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem;">◈ Takeaway</h4>
       <p style="color:#c7c4d7; font-size:14px; line-height:1.7; margin-bottom:1rem;">
-        Un Agente no es un modelo mágico. Es un <strong>bucle determinista de evaluación de estado</strong>. El LLM se invoca repetidamente, recibe las <span style="color:#86efac;">observaciones</span> previas y genera la <span style="color:#fbbf24;">siguiente acción</span> (Tool Call) o decide terminar. El principal riesgo son los bucles infinitos y las alucinaciones de argumentos.
+        Un agente combina un <strong>modelo</strong> con un <strong>runtime</strong> que mantiene estado y controla el ciclo de ejecución.
+        En cada iteración, el modelo utiliza el objetivo y las observaciones acumuladas para
+        <span style="color:#818cf8;">proponer</span> la siguiente acción o finalizar.
+        El <strong>runtime</strong> controla la ejecución, registra la observación y actualiza el estado.
+        <br><br>
+        Por eso diseñar agentes implica controlar
+        <span style="color:#38bdf8;">herramientas</span>,
+        <span style="color:#f59e0b;">efectos externos</span> y
+        <span style="color:#f87171;">condiciones de parada</span>;
+        <strong>no solamente escribir un prompt</strong>.
       </p>
-      <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-        <a routerLink="/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow" class="control-btn" style="border-color:#6366f1; color:#818cf8; font-size:11px;">Ir al Laboratorio 05 →</a>
+      <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+        <a
+          routerLink="/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow"
+          class="control-btn"
+          style="border-color:#6366f1; color:#818cf8; font-size:11px;"
+          id="link-to-lab05"
+        >
+          Ir al Laboratorio 05 →
+        </a>
+        <span style="font-size:12px; color:#64748b;">
+          En el Capstone observarás el bucle que acabas de ver, construirás el agente tú mismo y demostrarás que sabe actuar, detenerse y respetar sus límites.
+        </span>
       </div>
     </div>
 

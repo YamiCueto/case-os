@@ -11,7 +11,7 @@ Guías timeline para impartir en vivo las lecciones del módulo M05 usando CASE 
 | L05 — Planning & Task Decomposition (Agent v4) | [lesson-05-planning-task-decomposition.md](lesson-05-planning-task-decomposition.md) |
 | L06 — Guardrails & Human-in-the-Loop (Agent v5) | [lesson-06-guardrails-hitl.md](lesson-06-guardrails-hitl.md) |
 | L07 — Observability & Evaluation (Agent v6) | [lesson-07-observability-evaluation.md](lesson-07-observability-evaluation.md) |
-| Lab 05 — Agent Engineering Capstone | *(En diseño arquitectónico)* |
+| Lab 05 — Agent Engineering Capstone | [lab-05-agent-engineering-capstone.md](lab-05-agent-engineering-capstone.md) |
 
 Estas guías no sustituyen el material docente canónico de M05. Su función es convertir cada lección de la plataforma en una sesión conducible de aproximadamente dos horas, con preguntas, demostraciones, práctica y cierres pedagógicos.
 

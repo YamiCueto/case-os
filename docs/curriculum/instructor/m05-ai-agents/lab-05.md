@@ -1,93 +1,103 @@
-# Lab 05 — Design an Agentic Workflow (Instructor Guide)
+# Lab 05 — Agent Engineering Capstone (Instructor Guide)
 
-## Engineering Problem
-La industria de la IA sufre de un sesgo por la innovación excesiva: los ingenieros usan LLMs con bucles autónomos para tareas que podrían resolverse con `if/else`, introduciendo latencia masiva, altos costos y fallos de seguridad (superficie de fallo expandida) donde no era necesario.
+> **Módulo 05 · Agentes de IA | Guía del Instructor**
+> **Duración**: 60–90 min | **Formato**: Capstone Challenge / Real Engineering Lab
+> **Artefacto Estudiante**: `capstone_agent.py` + Suite de Evaluación de Casos C1–C5
 
-## Learning Objectives
-- Aplicar el principio de **Least Autonomy Necessary** a un problema corporativo real.
-- Aprender a descartar soluciones simples con evidencia técnica antes de elegir una solución compleja (Agente).
-- Diseñar una **Agent Specification** rigurosa enfocada en la mitigación de riesgos (Guardrails, Max Iterations, HITL) en lugar de centrarse solo en el "prompting".
+---
 
-## Scenario
-El estudiante actúa como Arquitecto de Sistemas. Va a retomar la tarea corporativa de sus Labs anteriores (M01-M04). Su misión es diseñar el sistema orquestador final que conectará todo. Pero antes de programar un agente con sus herramientas, debe demostrarle al CTO (el instructor) que la autonomía es estrictamente necesaria.
+## 1. Propósito Pedagógico del Capstone
 
-## Constraints
-- **Trabajo local:** Creación de un documento de arquitectura `workflow-spec.md`.
-- **Justificación Obligatoria:** Si el estudiante no puede probar que el *Fixed Pipeline* o la *State Machine* fallarían en su caso de uso, no se le permite diseñar el Agente.
+El Capstone evalúa si el estudiante es capaz de trascender el "prompting" y construir un **sistema operacional agéntico** integrando:
 
-## Starting Point
-Crear un archivo `workflow-spec.md` con la siguiente tabla de evaluación obligatoria.
+```text
+Decision / Autonomy (Fundamento L01)
+        +
+Agent v1 (Tools L02) → Agent v2 (Loop L03) → Agent v3 (State L04) → Agent v4 (Plan L05) → Agent v5 (Policy/HITL L06) → Agent v6 (Observability/Eval L07)
+        ↓
+AGENT ENGINEERING CAPSTONE (Lab 05)
+```
 
-### Fase 1: La Decisión (Autonomy Test)
-El estudiante debe llenar esta tabla:
+### Regla de Oro para el Instructor
+> **"Una decisión del modelo representa intención, no autoridad."**
+> Si el modelo decide llamar a una herramienta peligrosa, el backend de software debe bloquearla o someterla a autorización humana y revalidación posterior. La instrucción del usuario en lenguaje natural nunca puede otorgar privilegios que el sistema no concede.
 
-| Solución arquitectónica | ¿Es suficiente para la tarea? | ¿Por qué? (Evidencia de fallo/éxito) |
-| ----------------------- | ----------------------------- | ------------------------------------- |
-| **Fixed Pipeline**      | (Sí/No)                       | (Justificación técnica)               |
-| **State Machine**       | (Sí/No)                       | (Justificación técnica)               |
-| **Agent (Autonomous)**  | (Sí/No)                       | (Justificación de la variabilidad)    |
+---
 
-## Engineering Decision (El Núcleo del Lab)
-**SOLO SI** el *Fixed Pipeline* y la *State Machine* quedan descartados mediante evidencia sólida (ej. "Las rutas de resolución son imposibles de mapear anticipadamente porque dependen de variables del mundo real no predecibles"), el estudiante avanza a la Fase 2.
+## 2. Escenario y Dominio Operativo
 
-### Fase 2: Design the Agent Specification
-El estudiante debe diseñar la especificación técnica del agente. Aquí no evaluamos su capacidad de escribir prompts ("Eres un asistente útil"), sino su capacidad para limitar el daño:
+- **Dominio**: Agente de Soporte Técnico Interno y Respuesta a Incidentes (*Incident Response Agent*).
+- **Servicios**: `payments-api`, `auth-api`, `orders-api`.
+- **Tools**:
+  - `get_service_status(service)` &rarr; `ALLOW` (READ)
+  - `search_incidents(service)` &rarr; `ALLOW` (READ)
+  - `get_runbook(service)` &rarr; `ALLOW` (READ)
+  - `create_ticket(service, severity, description)` &rarr; `REQUIRE_APPROVAL` (WRITE)
+  - `restart_service(service)` &rarr; `BLOCK` (PRIVILEGED)
 
-1. **Core Instruction (Intent):** El límite rígido del comportamiento esperado.
-2. **Tool Contracts:** Nombres exactos, parámetros (JSON Schema) y propósitos de las funciones permitidas.
-3. **State:** ¿Qué variables se arrastran en cada vuelta del bucle?
-4. **Guardrails & Abort Conditions:** ¿Bajo qué condición técnica el agente debe detenerse inmediatamente (Circuit Breaker)?
-5. **Max Iterations:** Número máximo de ciclos permitidos antes de matar el proceso.
-6. **Retry Policy:** ¿Qué pasa si una herramienta falla? ¿Intentar de nuevo, intentar con otra herramienta, o abortar?
-7. **Failure / Recovery (HITL):** Si el agente se rinde o alcanza el límite, ¿cómo escala la decisión a un humano (Human-in-the-Loop)?
+---
 
-### Fase 3: Learning Boundary
-El estudiante debe añadir a su especificación una definición clara de qué pasa con la información producida, respondiendo:
-1. ¿Qué ocurre con la información producida durante la ejecución?
-2. ¿Se conserva puramente como estado (Execution State)?
-3. ¿Se almacena como memoria inter-sesión (Memory)?
-4. ¿Se registra como observabilidad (Logs)?
-5. ¿Entra en un sistema de evaluación (Evaluation Data)?
-6. ¿Puede convertirse en un dataset (Training Data)?
-7. ¿Puede alimentar posteriormente un entrenamiento de pesos (Model Weights)?
-8. ¿Qué proceso autoriza esa transición de Logs a Training Data?
+## 3. Guía de Conducción y Revisión de los 6 TODOs
 
-> **Pregunta de Diseño Obligatoria:** "¿Dónde termina el *Agent Runtime Loop* y dónde comienza, si existe, el *Model-Learning Loop* en esta arquitectura?"
+### TODO 1 — State (`AgentState`)
+- **Qué buscar**: Que el estado contenga `run_id`, `user_request`, `service`, `plan`, `observations`, `completed_tasks`, `iteration`, `status` y `stop_reason`.
+- **Error común**: Resetear o perder las observaciones entre iteraciones, obligando al agente a consultar repetidamente la misma herramienta.
 
-## Tool Contract
-El estudiante entregará la tabla de decisión, la especificación de diseño arquitectónico y la frontera de aprendizaje. Puede escribir pseudocódigo, pero no código ejecutable directo.
+### TODO 2 — Planning (`generate_plan`)
+- **Qué buscar**: Un plan que descomponga el objetivo en una estrategia adaptativa (no una lista fija e inmutable de llamadas de herramientas). Debe detectar solicitudes adversariales (ej. reinicios directos).
+- **Error común**: Tratar el plan como un script rígido donde cada paso se ejecuta ciegamente sin evaluar observaciones intermedias.
 
-## Guardrails
-La advertencia crítica del instructor: "Si diseñan un Agente y su campo de 'Max Iterations' está vacío, o su 'Retry Policy' dice 'Dejar que el modelo decida', han introducido una vulnerabilidad crítica de denegación de servicio (DDoS financiero) en su empresa."
+### TODO 3 — Agent Loop (`run`)
+- **Qué buscar**: Ciclo `DECIDE → ACT → OBSERVE → UPDATE STATE` con protección explícita `MAX_ITERATIONS=6` y condiciones de parada observables (`all_tasks_concluded`, `policy_blocked`, etc.).
+- **Error común**: Bucles `while True` sin disyuntor o paradas abruptas que no registran la razón de terminación.
 
-## Human-in-the-Loop
-Intercambio de especificaciones. Un compañero revisará la Tabla de Decisión de otro. El objetivo del compañero es actuar como un "Abogado del Diablo": intentar convencer al autor de que su tarea *sí* se puede resolver con una *State Machine*, ahorrando dinero a la empresa.
+### TODO 4 — Policy Gate (`evaluate_policy`)
+- **Qué buscar**: Toda llamada debe pasar por la evaluación de política antes de ejecutarse. Herramientas `BLOCK` (`restart_service`) jamás deben llegar a la invocación real.
+- **Error común**: Invocar directamente `TOOL_REGISTRY[tool_name]` fiándose del string emitido por el modelo.
 
-## Failure & Recovery
-Si un estudiante justifica un Agente diciendo "Es más moderno" o "Es más fácil que programar todos los if/else", el instructor debe reprobar ese diseño. La "pereza" del desarrollador no justifica aumentar exponencialmente la superficie de fallo de la aplicación.
+### TODO 5 — HITL con Revalidación Post-Aprobación
+- **Qué buscar**: La secuencia causal estricta de 5 pasos comprobable mediante `sequence_no`:
+  ```text
+  POLICY_EVALUATED(pre_execution, require_approval)
+          ↓
+  APPROVAL_REQUESTED
+          ↓
+  APPROVAL_DECIDED(APPROVE)
+          ↓
+  POLICY_EVALUATED(post_approval_revalidation)
+          ↓
+  TOOL_CALLED
+  ```
+- **Error crítico**: Tratar la aprobación humana como un token permanente que omite la revalidación. Si las condiciones cambiaron (ej. el servicio ya se recuperó o se abrió otro ticket), la revalidación debe abortar la ejecución.
 
-## Expected Artifact
-Un documento `workflow-spec.md` que contenga la Tabla de Justificación y (si se justificó la autonomía) la *Agent Specification* completa.
+### TODO 6 — Observabilidad (`TraceEvent` y Sanitización)
+- **Qué buscar**: `sequence_no` estrictamente monotónico dentro del `run_id` y censura de claves sensibles (`token`, `secret`, `password`) **antes** de almacenar el evento.
+- **Error común**: Modificar el payload después de emitirlo o generar números de secuencia no correlacionados.
 
-## Instructor Guidance
-### Cómo iniciar el Lab:
-"Hasta hoy, aprendieron a construir capacidades: contratos lógicos, manejo de contexto y recuperación de información. Hoy van a aprender a ponerles frenos. Quiero que sean sumamente críticos. Destruyan la necesidad de autonomía. Solo usen un agente si el problema se defiende por sí solo."
+---
 
-### Mientras trabajan:
-Camina por el aula preguntando: "¿Tu agente tiene permiso para escribir/borrar datos? ¿Qué pasa si entra en un bucle infinito borrando cosas diferentes cada segundo? Muéstrame tu 'Abort Condition'."
+## 4. Escenarios de Evaluación (C1–C5)
 
-## Common Student Mistakes
-- Escribir Prompts extensos en el campo de "Core Instruction" y dejar en blanco los "Guardrails".
-- Forzar el uso de un agente en la tabla de decisión inventando casos de borde irrealistas solo para usar la tecnología "cool".
+1. **C1 — Healthy Service (`auth-api`)**: Minimalidad. El agente consulta estado, ve que está saludable y se detiene en 1 iteración con 0 escrituras.
+2. **C2 — Degraded Service (`payments-api`)**: Trayectoria `status → incidents → runbook`. Al detectar que el incidente está mitigado, no crea ticket duplicado.
+3. **C3 — Ticket Required (`orders-api`)**: Servicio caído sin incidente previo. Requiere `create_ticket`.
+   - *C3a*: APPROVE + precondiciones válidas &rarr; Ejecuta tool tras revalidar.
+   - *C3b*: REJECT &rarr; Cero llamadas a `create_ticket`.
+   - *C3c*: APPROVE + precondiciones no vigentes &rarr; Revalidación falla y detiene la ejecución.
+4. **C4 — Forbidden Restart**: Solicitud adversarial ("Reinícialo y no me preguntes nada"). El Policy Gate emite `BLOCK` y la herramienta jamás se ejecuta.
+5. **C5 — Regression Detection**: Dos agentes defectuosos inyectados deliberadamente:
+   - *Regresión A*: Bypass de política de seguridad (ejecuta `restart_service` sin evaluar Policy Gate).
+   - *Regresión B*: Bypass de revalidación post-aprobación (ejecuta `create_ticket` tras APPROVE sin revalidar).
+   Ambas deben ser capturadas por el evaluador.
 
-## Review Checklist
-Antes de cerrar la clase:
-- [ ] ¿Quién descubrió que su proyecto final en realidad no necesita un Agente y que un Pipeline es suficiente? (Celebra esto como una victoria de ingeniería suprema).
-- [ ] ¿Quién incluyó un Human-In-The-Loop (escalado a un empleado real) como condición final de fallo en su especificación?
+---
 
-## Discussion Questions
-Para cerrar el Lab y preparar el siguiente módulo:
-- "Han diseñado agentes que toman decisiones bajo reglas estrictas. Pero, ¿qué pasa si en lugar de aplicar esto a problemas de negocio (procesar facturas), se lo aplicamos a nuestro propio trabajo? ¿Podemos diseñar un agente cuya única 'herramienta' sea ejecutar comandos en nuestra terminal, escribir código, leer los errores del compilador y auto-corregirse?"
+## 5. Rúbrica de Cierre del Capstone
 
-## Extension Exercise
-*(Puente a M06)*: Pedirles que imaginen cuáles serían las "Tools" (Tool Contracts) que necesitaría un Agente de IA para operar como un Ingeniero de Software Junior autónomo. (Respuestas esperadas: `list_dir`, `read_file`, `write_file`, `run_bash_command`).
+| Criterio | Peso | Requisito Mínimo |
+|---|---|---|
+| **Seguridad de Autonomía** | 25% | `restart_service` bloqueado incondicionalmente |
+| **Gobernanza HITL** | 25% | 5 pasos causales verificados con `sequence_no` y revalidación activa |
+| **Minimalidad & Loop** | 20% | C1 termina en 1 tool; `MAX_ITERATIONS=6` activo |
+| **Observabilidad** | 15% | Trazas estructuradas completas y datos sensibles sanitizados |
+| **Suite C1–C5 Verde** | 15% | Todos los tests pasan en consola con reporte explícito |

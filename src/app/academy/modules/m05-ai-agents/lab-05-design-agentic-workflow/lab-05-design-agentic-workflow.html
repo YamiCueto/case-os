@@ -1,145 +1,612 @@
-﻿<div class="presentation-container pb-32">
+<div class="presentation-container pb-32">
 
-  <div class="slide-wrapper" style="max-width: 900px; margin: 0 auto; padding: 32px 40px;">
+  <div class="slide-wrapper capstone-wrapper">
 
-    <!-- Context Chips -->
-    <div class="lab-context-chips" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 28px;">
-      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6366f1; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); padding: 3px 10px; border-radius: 4px;">LAB 05 · REAL ENGINEERING</span>
-      <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; background: #0f172a; border: 1px solid #1e293b; padding: 3px 10px; border-radius: 4px;">Module 05 · AI Agents</span>
-      <span style="color: #334155; font-size: 10px;">·</span>
-      <span style="font-size: 12px; color: #64748b;">⏱️ 60 min</span>
-      <span style="font-size: 12px; color: #64748b;">· Advanced</span>
-      <span style="font-size: 12px; color: #64748b;">· Agent Specification</span>
+    <!-- ── Context Chips ── -->
+    <div class="lab-context-chips">
+      <span class="chip-capstone">LAB 05 · AGENT CAPSTONE</span>
+      <span class="chip-module">Module 05 · AI Agents</span>
+      <span class="chip-dot">·</span>
+      <span class="chip-meta">⏱️ 60–90 min</span>
+      <span class="chip-meta">· Advanced Engineering</span>
+      <span class="chip-meta">· Incident Response Agent</span>
     </div>
 
-    <div class="slide-content" style="display: flex; flex-direction: column; gap: 40px;">
+    <!-- ── Agent Building Map (Stage: Capstone) ── -->
+    <app-agent-building-map stage="capstone"></app-agent-building-map>
 
-      <!-- 01 — Target: Legacy Process Origination -->
-      <section>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">01 —</span>
-          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">Selección del Problema: Empezar en la Realidad Legacy</h2>
+    <!-- ── Convergence Hero Banner ── -->
+    <section class="convergence-banner" role="region" aria-label="Convergencia de Versiones de Agente">
+      <div class="convergence-banner__glow" aria-hidden="true"></div>
+      <div class="convergence-banner__inner">
+        <div class="convergence-banner__badge">
+          <span class="material-symbols-outlined" aria-hidden="true">hub</span>
+          <span>SISTEMA INTEGRADO</span>
         </div>
-        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 14px 0;">
-          No inventes un "agente para hacer X". Selecciona un <strong>proceso legacy real</strong> de tu organización. Para justificar autonomía, debes encontrar un proceso que hoy sufre cuellos de botella por requerir decisiones ambiguas, manejo de excepciones complejas o revisión de múltiples fuentes de datos.
-        </p>
-        <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 20px 24px;">
-          <p style="color: #cbd5e1; font-size: 13px; font-family: 'JetBrains Mono', monospace; margin: 0 0 8px 0; color:#818cf8;">&gt; Proceso actual:</p>
-          <p style="color: #cbd5e1; font-size: 13px; font-family: 'JetBrains Mono', monospace; margin: 0 0 8px 0; color:#818cf8;">&gt; Puntos de decisión ambigua:</p>
-          <p style="color: #cbd5e1; font-size: 13px; font-family: 'JetBrains Mono', monospace; margin: 0 0 8px 0; color:#818cf8;">&gt; Fallos frecuentes o excepciones manuales:</p>
-        </div>
-      </section>
-
-      <!-- 02 — The Autonomy Test -->
-      <section>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">02 —</span>
-          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">El "Autonomy Test": Use the least autonomy necessary</h2>
-        </div>
-        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
-          Los agentes son caros, lentos y propensos a errores. Antes de diseñar uno, justifica por qué las alternativas más simples fallarían para el problema legacy seleccionado:
+        <h1 class="convergence-banner__title">
+          Agent Engineering Capstone: De las Piezas al Sistema
+        </h1>
+        <p class="convergence-banner__subtitle">
+          Ya aprendiste cada pieza aislada. Ahora debes construir el sistema operacional:
+          interpretar solicitudes, gobernar decisiones con Policy Gates, mantener estado, planificar adaptativamente, respetar HITL y producir trazas auditables.
         </p>
 
-        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">
-          <div style="margin-bottom: 16px;">
-            <div style="color: #cbd5e1; font-weight: 700; margin-bottom: 4px;">¿Los pasos son conocidos de antemano de inicio a fin?</div>
-            <div style="display: flex; gap: 16px;">
-              <span style="color: #22c55e;">&rarr; SÍ: Fixed Pipeline (Script). Fin del diseño.</span>
-              <span style="color: #ef4444;">&rarr; NO: Pasar a la siguiente pregunta.</span>
+        <!-- Diagrama de Convergencia Visual (Ajuste Pedagógico: Decision es fundamento, no Agent v0) -->
+        <div class="convergence-diagram" aria-label="Diagrama de convergencia de piezas agénticas">
+          <div class="convergence-col convergence-col--foundations">
+            <span class="diagram-tag">FUNDAMENTO PREVIO</span>
+            <div class="diagram-pill diagram-pill--gold">
+              <span class="material-symbols-outlined" aria-hidden="true">alt_route</span>
+              <span>L01 · Decision / Autonomy</span>
             </div>
           </div>
-          <div style="margin-bottom: 16px;">
-            <div style="color: #cbd5e1; font-weight: 700; margin-bottom: 4px;">¿Hay estados y transiciones claramente definidos, aunque condicionales?</div>
-            <div style="display: flex; gap: 16px;">
-              <span style="color: #22c55e;">&rarr; SÍ: State Machine (DAG). Fin del diseño.</span>
-              <span style="color: #ef4444;">&rarr; NO: Pasar a la siguiente pregunta.</span>
+
+          <div class="convergence-plus" aria-hidden="true">+</div>
+
+          <div class="convergence-col convergence-col--versions">
+            <span class="diagram-tag">EVOLUCIÓN DIDÁCTICA (Agent v1 → v6)</span>
+            <div class="versions-chain">
+              <div class="diagram-pill"><span>v1</span> Tools</div>
+              <span class="chain-arrow">→</span>
+              <div class="diagram-pill"><span>v2</span> Loop</div>
+              <span class="chain-arrow">→</span>
+              <div class="diagram-pill"><span>v3</span> State</div>
+              <span class="chain-arrow">→</span>
+              <div class="diagram-pill"><span>v4</span> Plan</div>
+              <span class="chain-arrow">→</span>
+              <div class="diagram-pill"><span>v5</span> Policy & HITL</div>
+              <span class="chain-arrow">→</span>
+              <div class="diagram-pill"><span>v6</span> Trace & Eval</div>
             </div>
           </div>
-          <div>
-            <div style="color: #cbd5e1; font-weight: 700; margin-bottom: 4px;">¿La tarea requiere exploración, decisiones dinámicas y re-evaluación constante de resultados fallidos?</div>
-            <div style="display: flex; gap: 16px;">
-              <span style="color: #22c55e;">&rarr; SÍ: Autonomous Agent justificado. Puedes continuar con el Lab.</span>
+
+          <div class="convergence-arrow-down" aria-hidden="true">↓</div>
+
+          <div class="convergence-target">
+            <div class="target-card">
+              <span class="material-symbols-outlined target-icon" aria-hidden="true">verified_user</span>
+              <div>
+                <strong>AGENT ENGINEERING CAPSTONE</strong>
+                <span>Incident Response Agent Operacional</span>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- 03 — Progresión de Contratos (M02 -> M05 -> M07) -->
-      <section>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">03 —</span>
-          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">De Instrucciones a Herramientas: La Progresión de Contratos</h2>
-        </div>
-        <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0 0 16px 0;">
-          Diseñar herramientas no es simplemente escribir funciones. Es extender los principios de control y predictibilidad a las <strong>acciones</strong> del modelo:
-        </p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
-          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6366f1;">[M02] Instruction Contract</span>
-            <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 0; line-height: 1.5;">Cómo restringir el <strong>formato de salida</strong> y las reglas que debe seguir el modelo.</p>
-          </div>
-          <div style="background: #172033; border: 1px solid #2d3748; border-radius: 6px; padding: 16px; box-shadow: inset 0 0 0 1px rgba(99,102,241,0.3);">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #818cf8;">[M05] Tool Contract</span>
-            <p style="font-size: 12px; color: #cbd5e1; margin: 6px 0 0 0; line-height: 1.5;">Cómo restringir las <strong>acciones</strong> que el modelo puede solicitar y los argumentos que debe proveer.</p>
-          </div>
-          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; opacity: 0.7;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #64748b;">[M07] MCP Contract</span>
-            <p style="font-size: 12px; color: #64748b; margin: 6px 0 0 0; line-height: 1.5;">Cómo <strong>estandarizar y abstraer</strong> esas capacidades para conectarlas a cualquier plataforma.</p>
-          </div>
-        </div>
-      </section>
+    <!-- ── Studio Navigation Tabs ── -->
+    <nav class="studio-tabs" role="tablist" aria-label="Pestañas del Capstone Studio">
+      <button
+        type="button"
+        role="tab"
+        id="tab-architecture"
+        class="studio-tab-btn"
+        [class.studio-tab-btn--active]="activeTab === 'architecture'"
+        [attr.aria-selected]="activeTab === 'architecture'"
+        (click)="setTab('architecture')"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">schema</span>
+        <span>1. Arquitectura & Contratos</span>
+      </button>
 
-      <!-- 04 — The Deliverable: AGENT SPECIFICATION -->
-      <section>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-          <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #6366f1;">04 —</span>
-          <h2 style="font-size: 20px; font-weight: 700; color: #f8fafc; margin: 0;">El Artefacto: Agent Specification Document</h2>
-        </div>
+      <button
+        type="button"
+        role="tab"
+        id="tab-simulator"
+        class="studio-tab-btn"
+        [class.studio-tab-btn--active]="activeTab === 'simulator'"
+        [attr.aria-selected]="activeTab === 'simulator'"
+        (click)="setTab('simulator')"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">play_circle</span>
+        <span>2. Simulador de Escenarios (C1–C5)</span>
+      </button>
 
-        <div style="background: #050505; border: 1px solid #1f293d; border-radius: 8px; padding: 24px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F1F1F; padding-bottom: 12px; margin-bottom: 18px;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #6366f1; letter-spacing: 0.1em;">AGENT SPECIFICATION TEMPLATE</span>
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b;">CASE OS STANDARD</span>
+      <button
+        type="button"
+        role="tab"
+        id="tab-evaluation"
+        class="studio-tab-btn"
+        [class.studio-tab-btn--active]="activeTab === 'evaluation'"
+        [attr.aria-selected]="activeTab === 'evaluation'"
+        (click)="setTab('evaluation')"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">fact_check</span>
+        <span>3. Evaluación & Taller Práctico</span>
+      </button>
+    </nav>
+
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 1: ARQUITECTURA & CONTRATOS                                   -->
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    @if (activeTab === 'architecture') {
+      <div class="tab-content" role="tabpanel" aria-labelledby="tab-architecture">
+
+        <!-- 1.1 Principio Rector: Intención vs Autoridad -->
+        <section class="card-panel">
+          <div class="panel-header">
+            <span class="material-symbols-outlined panel-header__icon" aria-hidden="true">gavel</span>
+            <h2 class="panel-header__title">Contrato de Autonomía: Intención vs Autoridad</h2>
           </div>
+          <p class="panel-desc">
+            El modelo probabilístico es un generador de propuestas, no una entidad con privilegios de ejecución.
+            Toda llamada propuesta atraviesa un <strong>Policy Gate determinista</strong> antes de acceder al entorno.
+          </p>
 
-          <div style="display: grid; grid-template-columns: 1fr; gap: 16px; font-size: 12px; color: #cbd5e1;">
-            <div>
-              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">1. Core Instruction (System Prompt):</span> Definición estricta del rol, el objetivo y las restricciones de razonamiento.
-            </div>
-            <div>
-              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">2. Tool Contracts:</span> Firmas JSON/OpenAPI de cada herramienta (nombre, descripción detallada, argumentos requeridos).
-            </div>
-            <div>
-              <span style="font-family: 'JetBrains Mono', monospace; color: #818cf8; font-weight: 700;">3. Guardrails & Limits:</span> Límite máximo de iteraciones (ej. max_steps=5), bloqueo de argumentos prohibidos.
-            </div>
-            <div>
-              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">4. Human-in-the-Loop (HITL) - Análisis de Riesgo:</span> 
-              <ul style="margin: 4px 0 0 20px; color: #94a3b8;">
-                <li><strong style="color: #22c55e;">READ Actions:</strong> Automáticas.</li>
-                <li><strong style="color: #eab308;">WRITE Actions:</strong> Auditoría diferida o control condicional.</li>
-                <li><strong style="color: #ef4444;">DELETE / FINANCIAL / PRODUCTION Actions:</strong> Requieren autorización explícita del humano.</li>
+          <div class="policy-matrix-grid">
+            <div class="policy-card policy-card--allow">
+              <div class="policy-card__badge">
+                <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                <span>READ &rarr; ALLOW</span>
+              </div>
+              <p class="policy-card__desc">Herramientas de consulta de métricas e historial. Seguras para ejecución automática.</p>
+              <ul class="policy-card__tools">
+                <li><code>get_service_status(service)</code></li>
+                <li><code>search_incidents(service)</code></li>
+                <li><code>get_runbook(service)</code></li>
               </ul>
             </div>
-            <div>
-              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">5. Failure & Recovery:</span> ¿Qué ocurre si la herramienta falla? (Timeout, Retry, Fallback al usuario, Abortar el bucle).
+
+            <div class="policy-card policy-card--approval">
+              <div class="policy-card__badge">
+                <span class="material-symbols-outlined" aria-hidden="true">human_safety</span>
+                <span>WRITE &rarr; REQUIRE_APPROVAL</span>
+              </div>
+              <p class="policy-card__desc">Acciones con efectos secundarios que alteran el sistema o generan compromisos.</p>
+              <ul class="policy-card__tools">
+                <li><code>create_ticket(service, severity, desc)</code></li>
+              </ul>
+              <span class="policy-subnote">Requiere revalidación post-aprobación obligatoria.</span>
             </div>
-            <div>
-              <span style="font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-weight: 700;">6. State Management:</span> ¿Qué información debe retener el agente entre iteraciones?
+
+            <div class="policy-card policy-card--block">
+              <div class="policy-card__badge">
+                <span class="material-symbols-outlined" aria-hidden="true">block</span>
+                <span>PRIVILEGED &rarr; BLOCK</span>
+              </div>
+              <p class="policy-card__desc">Acciones críticas de infraestructura. Ningún prompt del usuario puede otorgar esta autoridad.</p>
+              <ul class="policy-card__tools">
+                <li><code>restart_service(service)</code></li>
+              </ul>
+              <span class="policy-subnote">Bloqueo absoluto e inmutable en Policy Gate.</span>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Navigation & Closure -->
-      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid #1e293b; margin-top: 12px;">
-        <a routerLink="/academy/modules/m05-ai-agents/demo-agent-loop" class="control-btn" style="border-color: #1e293b; color: #94a3b8; font-size: 12px;">
-          ← Volver a Demo 05
-        </a>
-        <a routerLink="/labs" class="control-btn primary" style="font-size: 12px;">
-          Ver Real Engineering Labs →
-        </a>
+        <!-- 1.2 Pipeline Causal -->
+        <section class="card-panel">
+          <div class="panel-header">
+            <span class="material-symbols-outlined panel-header__icon" aria-hidden="true">account_tree</span>
+            <h2 class="panel-header__title">Flujo Causal del Runtime Agéntico</h2>
+          </div>
+          <div class="causal-pipeline-box">
+            <div class="causal-step">
+              <span class="causal-num">01</span>
+              <span class="causal-name">USER REQUEST</span>
+              <span class="causal-desc">Objetivo en lenguaje natural</span>
+            </div>
+            <span class="causal-arrow">&rarr;</span>
+            <div class="causal-step">
+              <span class="causal-num">02</span>
+              <span class="causal-name">PLAN (TODO 2)</span>
+              <span class="causal-desc">Estrategia orientativa</span>
+            </div>
+            <span class="causal-arrow">&rarr;</span>
+            <div class="causal-step">
+              <span class="causal-num">03</span>
+              <span class="causal-name">POLICY GATE (TODO 4)</span>
+              <span class="causal-desc">ALLOW / APPROVAL / BLOCK</span>
+            </div>
+            <span class="causal-arrow">&rarr;</span>
+            <div class="causal-step">
+              <span class="causal-num">04</span>
+              <span class="causal-name">HITL GATE (TODO 5)</span>
+              <span class="causal-desc">Approve + Revalidate</span>
+            </div>
+            <span class="causal-arrow">&rarr;</span>
+            <div class="causal-step">
+              <span class="causal-num">05</span>
+              <span class="causal-name">EXEC & TRACE (TODO 6)</span>
+              <span class="causal-desc">seq_no monotónico</span>
+            </div>
+          </div>
+        </section>
+
       </div>
+    }
 
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 2: SIMULADOR DE ESCENARIOS (C1–C5)                            -->
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    @if (activeTab === 'simulator') {
+      <div class="tab-content" role="tabpanel" aria-labelledby="tab-simulator">
+
+        <!-- Selector de Escenarios C1–C5 -->
+        <div class="scenario-selector-bar" role="region" aria-label="Selector de Escenarios de Prueba">
+          <div class="scenario-buttons">
+            <button
+              type="button"
+              id="scenario-c1"
+              class="scenario-btn"
+              [class.scenario-btn--active]="selectedScenario === 'c1'"
+              (click)="selectScenario('c1')"
+            >
+              <span class="sc-badge">C1</span>
+              <span class="sc-title">Healthy (auth-api)</span>
+            </button>
+
+            <button
+              type="button"
+              id="scenario-c2"
+              class="scenario-btn"
+              [class.scenario-btn--active]="selectedScenario === 'c2'"
+              (click)="selectScenario('c2')"
+            >
+              <span class="sc-badge">C2</span>
+              <span class="sc-title">Degraded (payments-api)</span>
+            </button>
+
+            <button
+              type="button"
+              id="scenario-c3"
+              class="scenario-btn"
+              [class.scenario-btn--active]="selectedScenario === 'c3'"
+              (click)="selectScenario('c3')"
+            >
+              <span class="sc-badge">C3</span>
+              <span class="sc-title">Ticket & HITL (orders-api)</span>
+            </button>
+
+            <button
+              type="button"
+              id="scenario-c4"
+              class="scenario-btn"
+              [class.scenario-btn--active]="selectedScenario === 'c4'"
+              (click)="selectScenario('c4')"
+            >
+              <span class="sc-badge">C4</span>
+              <span class="sc-title">Forbidden Restart (Block)</span>
+            </button>
+
+            <button
+              type="button"
+              id="scenario-c5"
+              class="scenario-btn"
+              [class.scenario-btn--active]="selectedScenario === 'c5'"
+              (click)="selectScenario('c5')"
+            >
+              <span class="sc-badge">C5</span>
+              <span class="sc-title">Regression Suite</span>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            id="btn-run-sim"
+            class="control-btn primary run-sim-btn"
+            (click)="runSimulation()"
+            [disabled]="isSimulating"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">
+              {{ isSimulating ? 'sync' : 'replay' }}
+            </span>
+            <span>{{ isSimulating ? 'Simulando...' : 'Re-ejecutar Corrida' }}</span>
+          </button>
+        </div>
+
+        <!-- Controles Interactivos HITL para C3 -->
+        @if (selectedScenario === 'c3') {
+          <div class="hitl-interactive-panel" role="region" aria-label="Controles interactivos de Human in the Loop">
+            <div class="hitl-panel-header">
+              <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
+              <strong>Compuerta HITL Interactiva — Simula la Decisión del Operador:</strong>
+            </div>
+            <div class="hitl-options">
+              <button
+                type="button"
+                id="hitl-approve"
+                class="hitl-opt-btn"
+                [class.hitl-opt-btn--active]="hitlChoice === 'APPROVE'"
+                (click)="setHitlChoice('APPROVE')"
+              >
+                <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                <span>Subcaso C3a: APPROVE + Precondiciones Válidas</span>
+              </button>
+
+              <button
+                type="button"
+                id="hitl-reject"
+                class="hitl-opt-btn"
+                [class.hitl-opt-btn--active]="hitlChoice === 'REJECT'"
+                (click)="setHitlChoice('REJECT')"
+              >
+                <span class="material-symbols-outlined" aria-hidden="true">cancel</span>
+                <span>Subcaso C3b: REJECT (Zero Write Calls)</span>
+              </button>
+
+              <button
+                type="button"
+                id="hitl-reval-fail"
+                class="hitl-opt-btn"
+                [class.hitl-opt-btn--active]="hitlChoice === 'REVAL_FAIL'"
+                (click)="setHitlChoice('REVAL_FAIL')"
+              >
+                <span class="material-symbols-outlined" aria-hidden="true">warning</span>
+                <span>Subcaso C3c: APPROVE + Fallo de Revalidación Post-Aprobación</span>
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Panel de Simulación (2 Columnas: Estado vs Trazas) -->
+        <div class="simulator-layout">
+
+          <!-- Columna Izquierda: Inspector de Estado (TODO 1) -->
+          <div class="sim-column">
+            <div class="panel-header">
+              <span class="material-symbols-outlined panel-header__icon" aria-hidden="true">memory</span>
+              <h3 class="panel-header__title">Estado de Ejecución (AgentState)</h3>
+              @if (activeState) {
+                <case-badge [variant]="activeState.status === 'completed' ? 'success' : (activeState.status === 'blocked' ? 'error' : 'warning')" [mono]="true">
+                  {{ activeState.status | uppercase }}
+                </case-badge>
+              }
+            </div>
+
+            @if (activeState) {
+              <div class="state-inspector-card">
+                <div class="state-meta-row">
+                  <span><strong>Run ID:</strong> <code>{{ activeState.runId }}</code></span>
+                  <span><strong>Iteración:</strong> {{ activeState.iteration }} / 6</span>
+                </div>
+
+                <div class="state-field">
+                  <span class="field-label">SOLICITUD:</span>
+                  <p class="field-value user-req-text">{{ activeState.userRequest }}</p>
+                </div>
+
+                <div class="state-field">
+                  <span class="field-label">PLAN ADAPTATIVO:</span>
+                  <div class="plan-tasks-list">
+                    @for (task of activeState.plan; track task.id) {
+                      <div class="plan-task-item" [attr.data-status]="task.status">
+                        <span class="material-symbols-outlined task-icon" aria-hidden="true">
+                          {{ task.status === 'completed' ? 'check_circle' : (task.status === 'skipped' ? 'cancel' : 'pending') }}
+                        </span>
+                        <span class="task-desc">{{ task.desc }}</span>
+                        <code class="task-tool">({{ task.tool }})</code>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="state-field">
+                  <span class="field-label">OBSERVACIONES REGISTRADAS:</span>
+                  <div class="observations-list">
+                    @for (obs of activeState.observations; track $index) {
+                      <div class="obs-item">
+                        <span class="obs-tool">[{{ obs.tool }}]</span>
+                        @if (obs.output) {
+                          <pre class="obs-json">{{ obs.output | json }}</pre>
+                        } @else if (obs.error) {
+                          <span class="obs-error">{{ obs.error }}</span>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                @if (activeState.stopReason) {
+                  <div class="state-field">
+                    <span class="field-label">CONDICIÓN DE PARADA:</span>
+                    <code class="stop-reason-tag">{{ activeState.stopReason }}</code>
+                  </div>
+                }
+
+                @if (activeState.finalAnswer) {
+                  <div class="final-answer-box">
+                    <span class="field-label">RESPUESTA FINAL:</span>
+                    <p class="answer-text">{{ activeState.finalAnswer }}</p>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Columna Derecha: Trazas Estructuradas con sequence_no (TODO 6) -->
+          <div class="sim-column">
+            <div class="panel-header">
+              <span class="material-symbols-outlined panel-header__icon" aria-hidden="true">query_stats</span>
+              <h3 class="panel-header__title">Línea de Trazas Causal (Structured Trace)</h3>
+              <span class="seq-info-badge">sequence_no monotónico 1..N</span>
+            </div>
+
+            <div class="timeline-container" id="trace-timeline" role="region" aria-label="Eventos de traza estructurada">
+              @for (ev of activeTrace; track ev.seq) {
+                <div
+                  class="timeline-entry"
+                  [class.timeline-entry--selected]="selectedTraceEvent?.seq === ev.seq"
+                  (click)="selectTraceEvent(ev)"
+                >
+                  <div class="timeline-seq">#{{ ev.seq }}</div>
+                  <div class="timeline-body">
+                    <div class="timeline-head">
+                      <case-badge [variant]="ev.badgeVariant" [mono]="true">{{ ev.type }}</case-badge>
+                    </div>
+                    <p class="timeline-summary">{{ ev.summary }}</p>
+                  </div>
+                </div>
+              }
+            </div>
+
+            @if (selectedTraceEvent) {
+              <div class="inspector-detail-panel" id="event-inspector-panel">
+                <div class="inspector-detail-header">
+                  <span>Detalle de Evento #{{ selectedTraceEvent.seq }} — {{ selectedTraceEvent.type }}</span>
+                </div>
+                <pre class="inspector-detail-json">{{ selectedTraceEvent.payload | json }}</pre>
+              </div>
+            }
+          </div>
+
+        </div>
+
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 3: EVALUACIÓN BENCHMARK & TALLER PRÁCTICO                     -->
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    @if (activeTab === 'evaluation') {
+      <div class="tab-content" role="tabpanel" aria-labelledby="tab-evaluation">
+
+        <!-- 3.1 Benchmark Golden Cases -->
+        <section class="card-panel">
+          <div class="panel-header">
+            <span class="material-symbols-outlined panel-header__icon" aria-hidden="true">fact_check</span>
+            <h2 class="panel-header__title">Matriz de Evaluación de Ingeniería (Casos C1–C5)</h2>
+          </div>
+          <p class="panel-desc">
+            No evaluamos texto superficial. Verificamos propiedades operacionales: selección mínima de tools, preservación de política, causalidad HITL y detección de regresiones.
+          </p>
+
+          <div class="table-scroll-wrapper">
+            <table class="benchmark-table">
+              <thead>
+                <tr>
+                  <th>Caso</th>
+                  <th>Escenario</th>
+                  <th>Trayectoria Esperada</th>
+                  <th>Propiedad de Ingeniería</th>
+                  <th>Veredicto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>C1</strong></td>
+                  <td>Servicio Saludable (auth-api)</td>
+                  <td><code>get_service_status &rarr; STOP</code></td>
+                  <td>Minimalidad de tools (0 writes)</td>
+                  <td><span class="verdict-pass">PASS</span></td>
+                </tr>
+                <tr>
+                  <td><strong>C2</strong></td>
+                  <td>Servicio Degradado (payments-api)</td>
+                  <td><code>status &rarr; incidents &rarr; runbook</code></td>
+                  <td>Uso de observaciones y estado</td>
+                  <td><span class="verdict-pass">PASS</span></td>
+                </tr>
+                <tr>
+                  <td><strong>C3</strong></td>
+                  <td>Ticket e Incidente (orders-api)</td>
+                  <td><code>5 pasos causales &rarr; create_ticket</code></td>
+                  <td>HITL + Revalidación posterior</td>
+                  <td><span class="verdict-pass">PASS</span></td>
+                </tr>
+                <tr>
+                  <td><strong>C4</strong></td>
+                  <td>Reinicio Prohibido (Adversarial)</td>
+                  <td><code>restart_service &rarr; BLOCK</code></td>
+                  <td>Policy enforcement inmutable</td>
+                  <td><span class="verdict-pass">PASS</span></td>
+                </tr>
+                <tr>
+                  <td><strong>C5</strong></td>
+                  <td>Detección de Regresiones (A y B)</td>
+                  <td><code>FlawedAgent A & B &rarr; CAUGHT</code></td>
+                  <td>Detección de bypass de seguridad y HITL</td>
+                  <td><span class="verdict-pass">PASS</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 3.2 Downloadable Activity Hero Card (Patrón Canónico de Laboratorio) -->
+        <div class="activity-hero-card" role="region" aria-label="Descargar material del taller práctico Capstone">
+          <div class="activity-hero-card__glow" aria-hidden="true"></div>
+          <div class="activity-hero-card__inner">
+            <div class="activity-hero-card__header">
+              <div class="activity-hero-card__badge-row">
+                <case-badge variant="accent" [mono]="true" [dot]="true">GUÍA DE LABORATORIO CAPSTONE</case-badge>
+                <span class="activity-hero-card__filename">
+                  <span class="material-symbols-outlined" aria-hidden="true">description</span>
+                  {{ guideFileName }}
+                </span>
+                <span class="activity-hero-card__filesize">28.4 KB</span>
+              </div>
+              <h2 class="activity-hero-card__title">LAB 05: Agent Engineering Capstone en Python</h2>
+              <p class="activity-hero-card__desc">
+                Construye el Incident Response Agent completando los 6 TODOs de arquitectura sobre un entorno simulado determinista:
+                <code>State &rarr; Planning &rarr; Loop &rarr; Policy Gate &rarr; HITL &rarr; Observability</code>
+              </p>
+            </div>
+
+            <div class="activity-hero-card__pills">
+              <case-badge variant="default" [mono]="true">Python 3.10+</case-badge>
+              <case-badge variant="default" [mono]="true">Sin Dependencias</case-badge>
+              <case-badge variant="default" [mono]="true">Entorno Determinista</case-badge>
+              <case-badge variant="default" [mono]="true">6 TODOs Clave</case-badge>
+              <case-badge variant="warning" [mono]="true">60–90 min</case-badge>
+            </div>
+
+            <div class="activity-hero-card__actions">
+              <button
+                type="button"
+                class="download-action-btn primary"
+                (click)="downloadActivityGuide()"
+                id="btn-download-lab"
+                [attr.aria-label]="'Descargar guía ' + guideFileName"
+              >
+                <span class="material-symbols-outlined" aria-hidden="true">
+                  {{ downloadSuccess ? 'task_alt' : 'download' }}
+                </span>
+                <span class="btn-text">
+                  {{ downloadSuccess ? '¡Guía Descargada!' : 'Descargar Guía (.md)' }}
+                </span>
+              </button>
+
+              <a
+                href="https://colab.research.google.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="download-action-btn secondary"
+                id="btn-open-colab"
+                title="Abrir Google Colab en una nueva pestaña"
+              >
+                <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                <span>Abrir Google Colab</span>
+              </a>
+
+              <a [href]="guideFilePath" [download]="guideFileName" class="direct-link" title="Enlace directo de respaldo">
+                <span class="material-symbols-outlined" aria-hidden="true">link</span>
+                Descarga directa
+              </a>
+            </div>
+
+            @if (downloadSuccess) {
+              <div class="activity-hero-card__alert" role="status" aria-live="polite">
+                <span class="material-symbols-outlined activity-hero-card__alert-icon" aria-hidden="true">check_circle</span>
+                <span class="activity-hero-card__alert-text">
+                  <strong>Descarga iniciada con éxito.</strong> Abre <code>{{ guideFileName }}</code> para comenzar la implementación en Google Colab o tu entorno local.
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+
+      </div>
+    }
+
+    <!-- ── Navigation & Closure ── -->
+    <div class="capstone-footer-nav">
+      <a routerLink="/academy/modules/m05-ai-agents/lesson-07-observability-evaluation" class="control-btn" style="border-color: #1e293b; color: #94a3b8; font-size: 12px;">
+        ← Volver a Lección 07
+      </a>
+      <a routerLink="/labs" class="control-btn primary" style="font-size: 12px;">
+        Ver Todos los Labs →
+      </a>
     </div>
 
   </div>

@@ -430,16 +430,16 @@ export const COURSE_CONFIG: CourseConfig = {
         },
         {
           id: 'l5',
-          title: 'Laboratorio 05 — Diseñar un Flujo de Trabajo Agéntico',
+          title: 'Laboratorio 05 — Agent Engineering Capstone',
           order: 9,
-          duration: '60 min',
+          duration: '60–90 min',
           difficulty: 'ADVANCED',
           icon: '🔬',
-          tags: ['Lab', 'Real Engineering'],
+          tags: ['Lab', 'Capstone', 'Real Engineering'],
           type: 'LAB',
           prerequisites: ['d5'],
           path: '/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow',
-          objectives: ['Justificar el grado de autonomía necesario para un problema legacy real y definir el Agent Specification'],
+          objectives: ['Construir un agente operacional integrando decisión, herramientas, bucle, estado, planificación adaptativa, compuerta de políticas, HITL con revalidación y trazabilidad estructurada'],
           resources: []
         }
       ]
