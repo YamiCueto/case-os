@@ -17,13 +17,15 @@ import { LessonSection } from '../../models/lesson-document.models';
   template: `
     <nav class="living-doc__outline" aria-label="Índice de la lección">
       <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
-      <div class="living-doc__outline-items" role="list">
+      <div class="living-doc__outline-items">
         @for (sec of sections; track sec.id) {
           <a
-            [href]="'#' + sec.id"
             class="living-doc__outline-link"
-            (click)="scrollToSection(sec.id, $event)"
-            role="listitem">
+            role="button"
+            tabindex="0"
+            (click)="scrollToSection(sec.id)"
+            (keydown.enter)="scrollToSection(sec.id)"
+            (keydown.space)="scrollToSection(sec.id); $event.preventDefault()">
             {{ sec.title }}
           </a>
         }
@@ -71,18 +73,27 @@ import { LessonSection } from '../../models/lesson-document.models';
       background-color: var(--case-surface-2);
       border: var(--case-border-width) solid var(--case-border);
       cursor: pointer;
+      line-height: inherit;
+      text-align: left;
+      font-weight: inherit;
       transition:
         color var(--case-transition-fast),
         border-color var(--case-transition-fast),
         background-color var(--case-transition-fast);
     }
 
-    .living-doc__outline-link:hover,
+    .living-doc__outline-link:hover {
+      color: var(--case-text-primary);
+      border-color: var(--case-border-strong);
+      background-color: var(--case-surface-3);
+    }
+
     .living-doc__outline-link:focus-visible {
       color: var(--case-text-primary);
       border-color: var(--case-border-strong);
       background-color: var(--case-surface-3);
-      outline: none;
+      outline: 2px solid var(--case-primary, #6366f1);
+      outline-offset: 1px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -95,8 +106,7 @@ import { LessonSection } from '../../models/lesson-document.models';
 export class LessonOutlineComponent {
   @Input({ required: true }) sections!: LessonSection[];
 
-  scrollToSection(sectionId: string, event: Event): void {
-    event.preventDefault();
+  scrollToSection(sectionId: string): void {
     const element = document.getElementById(sectionId);
     if (element) {
       const prefersReducedMotion = typeof window !== 'undefined' &&

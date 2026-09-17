@@ -5,6 +5,7 @@ import { UserProgressService } from '../../../../core/services/user-progress.ser
 import { Lesson, AcademyModule } from '../../../../core/models/course.models';
 import { LESSON_02_DOCUMENT } from './lesson-02.data';
 import { LessonHeaderComponent } from '../../../components/lesson-header/lesson-header.component';
+import { LessonOutlineComponent } from '../../../components/lesson-outline/lesson-outline.component';
 import { LessonComparisonComponent } from '../../../components/lesson-comparison/lesson-comparison.component';
 import { LessonFooterComponent } from '../../../components/lesson-footer/lesson-footer.component';
 import {
@@ -25,6 +26,7 @@ import { ExperienceRegistryComponent } from '../shared/experiences/experience-re
   imports: [
     CommonModule,
     LessonHeaderComponent,
+    LessonOutlineComponent,
     LessonComparisonComponent,
     LessonFooterComponent,
     CaseCalloutComponent,

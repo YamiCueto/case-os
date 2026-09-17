@@ -8,16 +8,7 @@
     />
 
     <!-- ── 2. Table of Contents / Outline Navigation ── -->
-    <nav class="living-doc__outline" aria-label="Índice de la lección">
-      <span class="living-doc__outline-label">ÍNDICE DE LA LECCIÓN:</span>
-      <div class="living-doc__outline-items">
-        @for (sec of doc.sections; track sec.id) {
-          <a [href]="'#' + sec.id" class="living-doc__outline-link">
-            {{ sec.title }}
-          </a>
-        }
-      </div>
-    </nav>
+    <app-lesson-outline [sections]="doc.sections" />
 
     <!-- ── 3. Flowing Sections ── -->
     <div class="living-doc__sections">
