@@ -280,6 +280,7 @@
 }
 
 .policy-card {
+  min-width: 0;
   background: #0f172a;
   border: 1px solid #1e293b;
   border-radius: 8px;
@@ -300,12 +301,27 @@
 
 .policy-card__badge {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  align-items: flex-start;
+  gap: 8px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
+  line-height: 1.4;
   margin-bottom: 8px;
+  min-width: 0;
+}
+
+.policy-card__badge .material-symbols-outlined {
+  font-size: 20px;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.policy-card__badge span:not(.material-symbols-outlined) {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .policy-card--allow .policy-card__badge { color: #10b981; }
