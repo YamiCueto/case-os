@@ -332,7 +332,7 @@ export class WorkspaceRegistryService {
                 },
                 {
                   id: 'lab-05',
-                  label: 'Laboratorio 05 — Diseñar un Flujo de Trabajo Agéntico',
+                  label: 'Laboratorio 05 — Agent Engineering Capstone',
                   path: '/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow',
                   icon: 'terminal',
                   depth: 1,
@@ -395,7 +395,7 @@ export class WorkspaceRegistryService {
         } else if (isLab04) {
           crumbs.push({ label: 'Laboratorio 04 — Diseñar una Estrategia de Recuperación', path: url });
         } else if (isLab05) {
-          crumbs.push({ label: 'Laboratorio 05 — Diseñar un Flujo de Trabajo Agéntico', path: url });
+          crumbs.push({ label: 'Laboratorio 05 — Agent Engineering Capstone', path: url });
         } else if (isLab06) {
           crumbs.push({ label: 'Laboratorio 06 — Diseñar un Protocolo de Ingeniería de Software Agéntica', path: url });
         } else if (isLab07) {

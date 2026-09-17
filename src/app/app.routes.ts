@@ -209,6 +209,22 @@ export const routes: Routes = [
             loadComponent: () => import('./academy/modules/m05-ai-agents/lesson-03-agent-loop/lesson-03-agent-loop').then(m => m.Lesson03AgentLoop)
           },
           {
+            path: 'academy/modules/m05-ai-agents/lesson-04-state-memory',
+            loadComponent: () => import('./academy/modules/m05-ai-agents/lesson-04-state-memory/lesson-04-state-memory').then(m => m.Lesson04StateMemory)
+          },
+          {
+            path: 'academy/modules/m05-ai-agents/lesson-05-planning-task-decomposition',
+            loadComponent: () => import('./academy/modules/m05-ai-agents/lesson-05-planning-task-decomposition/lesson-05-planning-task-decomposition').then(m => m.Lesson05PlanningTaskDecomposition)
+          },
+          {
+            path: 'academy/modules/m05-ai-agents/lesson-06-guardrails-hitl',
+            loadComponent: () => import('./academy/modules/m05-ai-agents/lesson-06-guardrails-hitl/lesson-06-guardrails-hitl').then(m => m.Lesson06GuardrailsHitl)
+          },
+          {
+            path: 'academy/modules/m05-ai-agents/lesson-07-observability-evaluation',
+            loadComponent: () => import('./academy/modules/m05-ai-agents/lesson-07-observability-evaluation/lesson-07-observability-evaluation').then(m => m.Lesson07ObservabilityEvaluation)
+          },
+          {
             path: 'academy/modules/m05-ai-agents/demo-agent-loop',
             loadComponent: () => import('./academy/modules/m05-ai-agents/demo-agent-loop/demo-agent-loop').then(m => m.DemoAgentLoop)
           },

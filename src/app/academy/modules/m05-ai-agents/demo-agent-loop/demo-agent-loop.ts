@@ -1,13 +1,26 @@
-﻿import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-interface Iteration {
+export type IterationStatus = 'pending' | 'acting' | 'done';
+export type SimStatus = 'RUNNING' | 'AWAITING_SIDE_EFFECT' | 'SUCCESS' | 'MAX_ITERATIONS_REACHED';
+
+export interface TraceEntry {
   step: number;
-  intent: string;
+  // LLM proposes a DECISION (intent only — not execution)
+  decision: string;
+  // Runtime executes an ACTION (only after decision is accepted)
   actionTaken?: string;
+  // What the environment returned
   observation?: string;
+  // How state changed after the observation
   stateUpdate?: string;
+  // Whether this is a final-answer decision (no tool call)
+  isFinalAnswer?: boolean;
+  // Whether this action has an external side effect
+  isExternalEffect?: boolean;
+  // Whether this tool call was irrelevant to goal
+  isIrrelevant?: boolean;
 }
 
 @Component({
@@ -15,128 +28,223 @@ interface Iteration {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './demo-agent-loop.html',
-  styleUrls: ['../../../../shared-presentation.css']
+  styleUrls: [
+    './demo-agent-loop.css',
+    '../../../../shared-presentation.css'
+  ]
 })
 export class DemoAgentLoop {
-  maxIterations = 5;
+  readonly maxIterations = 5;
+  readonly goal = 'Encontrar la política de reembolso de viajes y enviarla por correo a manager@empresa.com.';
+
   currentStep = signal(1);
-  status = signal<'RUNNING' | 'SUCCESS' | 'FAILED'>('RUNNING');
-  
-  history = signal<Iteration[]>([
+  status = signal<SimStatus>('RUNNING');
+
+  // Accumulated observations visible in the state panel
+  accumulatedObservations = signal<string[]>([]);
+
+  // Controls whether the "External Side Effect" pause screen is shown
+  pendingExternalEffect = signal(false);
+
+  // Full execution trace shown in the terminal panel
+  history = signal<TraceEntry[]>([
     {
       step: 1,
-      intent: 'Goal: Find the travel reimbursement policy and email it to manager@empresa.com. Status: Initializing.',
+      decision: 'Necesito encontrar la política de reembolso de viajes. Propondré searchKnowledge().',
     }
   ]);
 
   hasSearched = signal(false);
-  hasEmailed = signal(false);
+  hasEmailConfirmed = signal(false);
+
+  // ── Tool executions ───────────────────────────────────────────────────────
 
   executeSearch() {
     if (this.status() !== 'RUNNING') return;
-    
-    this.addObservation(
-      'call tool: searchKnowledge(query="política reembolso viajes")',
-      'Found Document: "Los reembolsos de viaje tienen un límite de $50 diarios para comidas y requieren factura obligatoria. Los vuelos deben ser en clase turista."',
-      'Context loaded. Next step: format and send email.'
+
+    const obs = 'Documento encontrado: "El reembolso de viáticos tiene un límite de $50/día para comidas (factura obligatoria). Los vuelos deben ser en clase turista."';
+    const stateUpd = 'reimbursement_policy añadida al contexto de observaciones.';
+
+    this._completeCurrentEntry(
+      'searchKnowledge(query="travel reimbursement policy")',
+      obs,
+      stateUpd,
+      false, false, false
     );
     this.hasSearched.set(true);
-    this.prepareNextStep();
+    this.accumulatedObservations.update(o => [...o, '📄 reimbursement_policy: encontrada']);
+    this._prepareNextStep();
   }
 
   executeMath() {
     if (this.status() !== 'RUNNING') return;
-    
-    this.addObservation(
-      'call tool: calculateMath(expression="50 * 5")',
-      'Result: 250',
-      'Calculation stored in context.'
+
+    const obs = 'Result: 250 — Cálculo completado. Esta observación no avanza el objetivo actual (encontrar y enviar la política).';
+    const stateUpd = 'Cálculo almacenado. Sin progreso hacia el objetivo. Esta iteración consumió 1 de 5 permitidas.';
+
+    this._completeCurrentEntry(
+      'calculateMath(expression="50 * 5")',
+      obs,
+      stateUpd,
+      false, false, true
     );
-    this.prepareNextStep();
+    this.accumulatedObservations.update(o => [...o, '🔢 math_result: 250 (irrelevante para el objetivo)']);
+    this._prepareNextStep();
   }
 
   executeEmail() {
     if (this.status() !== 'RUNNING') return;
-    
+
     if (!this.hasSearched()) {
-      this.addObservation(
-        'call tool: sendEmail(to="manager@empresa.com", body="Aquí está la política.")',
-        'Error: Message body lacks details. Guardrail activated (Missing required context).',
-        'Email failed. Must retrieve policy first.'
+      // No policy retrieved yet → email body lacks context
+      const obs = 'Error: El cuerpo del correo no contiene los detalles de la política. El agente debe recuperar la política antes de redactar el mensaje.';
+      const stateUpd = 'sendEmail bloqueado por el runtime: contexto requerido ausente. Recuperación de la política pendiente.';
+      this._completeCurrentEntry(
+        'sendEmail(to="manager@empresa.com", body="Here is the policy.")',
+        obs,
+        stateUpd,
+        false, false, false
       );
+      this.accumulatedObservations.update(o => [...o, '✉️ email: fallido (contexto ausente)']);
+      this._prepareNextStep();
     } else {
-      this.addObservation(
-        'call tool: sendEmail(to="manager@empresa.com", body="Límite $50 diarios, requiere factura, clase turista.")',
-        'Success: Email sent to manager@empresa.com',
-        'Goal achieved. Ready to terminate loop.'
+      // Policy is available → trigger external side effect boundary
+      this._completeCurrentEntry(
+        'sendEmail(to="manager@empresa.com", body="Reimbursement limit $50/day, receipts required, economy class.")',
+        undefined, undefined,
+        false, true, false
       );
-      this.hasEmailed.set(true);
+      this.pendingExternalEffect.set(true);
+      this.status.set('AWAITING_SIDE_EFFECT');
     }
-    this.prepareNextStep();
+  }
+
+  confirmExternalEffect() {
+    // Instructor/student acknowledges the side effect and allows execution
+    const obs = 'Correo enviado correctamente a manager@empresa.com.';
+    const stateUpd = 'Goal state updated: email_sent=true. Todas las tareas requeridas completadas.';
+
+    this.history.update(h => {
+      const last = h[h.length - 1];
+      last.observation = obs;
+      last.stateUpdate = stateUpd;
+      return [...h];
+    });
+
+    this.hasEmailConfirmed.set(true);
+    this.pendingExternalEffect.set(false);
+    this.status.set('RUNNING');
+    this.accumulatedObservations.update(o => [...o, '✉️ email: enviado a manager@empresa.com']);
+    this._prepareNextStep();
+  }
+
+  cancelExternalEffect() {
+    // Student decides NOT to confirm — good teaching moment
+    const obs = 'Ejecución cancelada por el operador. El agente propuso esta acción; el runtime requirió confirmación explícita antes de proceder.';
+    const stateUpd = 'email_sent=false. El agente deberá razonar sobre la cancelación en la siguiente iteración.';
+
+    this.history.update(h => {
+      const last = h[h.length - 1];
+      last.observation = obs;
+      last.stateUpdate = stateUpd;
+      return [...h];
+    });
+
+    this.pendingExternalEffect.set(false);
+    this.status.set('RUNNING');
+    this.accumulatedObservations.update(o => [...o, '🚫 email: cancelado por el operador']);
+    this._prepareNextStep();
   }
 
   finishLoop() {
     if (this.status() !== 'RUNNING') return;
-    
-    if (this.hasSearched() && this.hasEmailed()) {
-      this.addObservation('Final Answer (Return)', 'He buscado la política y enviado el resumen al manager.', 'Terminal state reached successfully.');
+
+    if (this.hasSearched() && this.hasEmailConfirmed()) {
+      this._completeCurrentEntry(
+        '— Final Answer —',
+        'Encontré la política de reembolso de viajes y la envié exitosamente a manager@empresa.com.',
+        'Terminal state: goal achieved. Loop finalizado por decisión del agente.',
+        true, false, false
+      );
       this.status.set('SUCCESS');
     } else {
-      this.addObservation('Final Answer (Return)', 'SYSTEM ERROR: Agent attempted to terminate before completing required sub-tasks.', 'Terminal state reached with failure.');
-      this.status.set('FAILED');
+      // Premature termination
+      this._completeCurrentEntry(
+        '— Final Answer (Premature) —',
+        'ERROR: El agente intentó terminar antes de completar todas las sub-tareas requeridas.',
+        'Terminal state: goal NOT achieved. Esto demuestra la ausencia de una condición de parada correcta.',
+        true, false, false
+      );
+      this.status.set('SUCCESS');
     }
   }
 
-  private addObservation(action: string, obs: string, state: string) {
+  // ── Private helpers ───────────────────────────────────────────────────────
+
+  private _completeCurrentEntry(
+    action: string,
+    obs: string | undefined,
+    stateUpd: string | undefined,
+    isFinalAnswer: boolean,
+    isExternalEffect: boolean,
+    isIrrelevant: boolean
+  ) {
     this.history.update(h => {
-      const current = h[h.length - 1];
-      current.actionTaken = action;
-      current.observation = obs;
-      current.stateUpdate = state;
+      const last = h[h.length - 1];
+      last.actionTaken = action;
+      last.observation = obs;
+      last.stateUpdate = stateUpd;
+      last.isFinalAnswer = isFinalAnswer;
+      last.isExternalEffect = isExternalEffect;
+      last.isIrrelevant = isIrrelevant;
       return [...h];
     });
   }
 
-  private prepareNextStep() {
+  private _prepareNextStep() {
     if (this.status() !== 'RUNNING') return;
 
-    if (this.currentStep() >= this.maxIterations && !this.hasEmailed()) {
+    // Check MAX_ITERATIONS
+    if (this.currentStep() >= this.maxIterations) {
       this.history.update(h => [
         ...h,
-        { step: this.currentStep() + 1, intent: 'SYSTEM HALTED: Max iterations reached (5/5). Loop terminated to prevent runaway execution.' }
+        {
+          step: this.currentStep() + 1,
+          decision: 'MAX_ITERATIONS_REACHED — El runtime detuvo el bucle. No se evaluarán más decisiones.',
+        }
       ]);
-      this.status.set('FAILED');
+      this.status.set('MAX_ITERATIONS_REACHED');
       return;
     }
 
-    if (this.status() === 'RUNNING') {
-      this.currentStep.update(s => s + 1);
-      
-      let nextIntent = '';
-      if (!this.hasSearched()) {
-        nextIntent = 'Decision: Must search for travel reimbursement policy.';
-      } else if (this.hasSearched() && !this.hasEmailed()) {
-        nextIntent = 'Decision: Must compose and send email to manager@empresa.com with policy details.';
-      } else if (this.hasEmailed()) {
-        nextIntent = 'Decision: Send final response to user and terminate loop.';
-      }
+    this.currentStep.update(s => s + 1);
 
-      this.history.update(h => [
-        ...h,
-        { step: this.currentStep(), intent: nextIntent }
-      ]);
+    let nextDecision = '';
+    if (!this.hasSearched()) {
+      nextDecision = 'Todavía necesito encontrar la política de reembolso de viajes. Propondré searchKnowledge().';
+    } else if (!this.hasEmailConfirmed()) {
+      nextDecision = 'La política está disponible en el contexto. Siguiente paso: redactar y enviar el correo a manager@empresa.com. Propondré sendEmail().';
+    } else {
+      nextDecision = 'El correo fue enviado correctamente. Todas las tareas completadas. Propondré Final Answer para terminar el bucle.';
     }
+
+    this.history.update(h => [
+      ...h,
+      { step: this.currentStep(), decision: nextDecision }
+    ]);
   }
 
   resetLab() {
     this.currentStep.set(1);
     this.status.set('RUNNING');
     this.hasSearched.set(false);
-    this.hasEmailed.set(false);
+    this.hasEmailConfirmed.set(false);
+    this.pendingExternalEffect.set(false);
+    this.accumulatedObservations.set([]);
     this.history.set([
       {
         step: 1,
-        intent: 'Goal: Find the travel reimbursement policy and email it to manager@empresa.com. Status: Initializing.',
+        decision: 'Necesito encontrar la política de reembolso de viajes y enviarla a manager@empresa.com. Propondré searchKnowledge().',
       }
     ]);
   }

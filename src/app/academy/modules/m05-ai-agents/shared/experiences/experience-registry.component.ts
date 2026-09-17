@@ -13,6 +13,22 @@ import { ExpWhyAgentV1StopsComponent } from '../../lesson-03-agent-loop/experien
 import { ExpAgentLoopInspectorComponent } from '../../lesson-03-agent-loop/experiences/exp-agent-loop-inspector/exp-agent-loop-inspector.component';
 import { ExpStopConditionsComponent } from '../../lesson-03-agent-loop/experiences/exp-stop-conditions/exp-stop-conditions.component';
 
+import { ExpExecutionStateInspectorComponent } from '../../lesson-04-state-memory/experiences/exp-execution-state-inspector/exp-execution-state-inspector.component';
+import { ExpContextVsMemoryComponent } from '../../lesson-04-state-memory/experiences/exp-context-vs-memory/exp-context-vs-memory.component';
+import { ExpMemoryPolicyMatrixComponent } from '../../lesson-04-state-memory/experiences/exp-memory-policy-matrix/exp-memory-policy-matrix.component';
+
+import { ExpReactiveVsPlannedComponent } from '../../lesson-05-planning-task-decomposition/experiences/exp-reactive-vs-planned/exp-reactive-vs-planned.component';
+import { ExpPlanInspectorComponent } from '../../lesson-05-planning-task-decomposition/experiences/exp-plan-inspector/exp-plan-inspector.component';
+import { ExpReplanningSimulatorComponent } from '../../lesson-05-planning-task-decomposition/experiences/exp-replanning-simulator/exp-replanning-simulator.component';
+
+import { ExpPermissionBoundaryComponent } from '../../lesson-06-guardrails-hitl/experiences/exp-permission-boundary/exp-permission-boundary.component';
+import { ExpHumanApprovalGateComponent } from '../../lesson-06-guardrails-hitl/experiences/exp-human-approval-gate/exp-human-approval-gate.component';
+import { ExpBudgetCircuitBreakerComponent } from '../../lesson-06-guardrails-hitl/experiences/exp-budget-circuit-breaker/exp-budget-circuit-breaker.component';
+
+import { ExpTraceExplorerComponent } from '../../lesson-07-observability-evaluation/experiences/exp-trace-explorer/exp-trace-explorer.component';
+import { ExpRunComparisonComponent } from '../../lesson-07-observability-evaluation/experiences/exp-run-comparison/exp-run-comparison.component';
+import { ExpEvaluationLabComponent } from '../../lesson-07-observability-evaluation/experiences/exp-evaluation-lab/exp-evaluation-lab.component';
+
 @Component({
   selector: 'app-experience-registry-m05',
   standalone: true,
@@ -26,7 +42,19 @@ import { ExpStopConditionsComponent } from '../../lesson-03-agent-loop/experienc
     ExpToolBoundaryComponent,
     ExpWhyAgentV1StopsComponent,
     ExpAgentLoopInspectorComponent,
-    ExpStopConditionsComponent
+    ExpStopConditionsComponent,
+    ExpExecutionStateInspectorComponent,
+    ExpContextVsMemoryComponent,
+    ExpMemoryPolicyMatrixComponent,
+    ExpReactiveVsPlannedComponent,
+    ExpPlanInspectorComponent,
+    ExpReplanningSimulatorComponent,
+    ExpPermissionBoundaryComponent,
+    ExpHumanApprovalGateComponent,
+    ExpBudgetCircuitBreakerComponent,
+    ExpTraceExplorerComponent,
+    ExpRunComparisonComponent,
+    ExpEvaluationLabComponent
   ],
   template: `
     @switch (experienceId) {
@@ -56,6 +84,42 @@ import { ExpStopConditionsComponent } from '../../lesson-03-agent-loop/experienc
       }
       @case ('stop-conditions') {
         <app-exp-stop-conditions></app-exp-stop-conditions>
+      }
+      @case ('execution-state-inspector') {
+        <app-exp-execution-state-inspector></app-exp-execution-state-inspector>
+      }
+      @case ('context-vs-memory') {
+        <app-exp-context-vs-memory></app-exp-context-vs-memory>
+      }
+      @case ('memory-policy-matrix') {
+        <app-exp-memory-policy-matrix></app-exp-memory-policy-matrix>
+      }
+      @case ('reactive-vs-planned') {
+        <app-exp-reactive-vs-planned></app-exp-reactive-vs-planned>
+      }
+      @case ('plan-inspector') {
+        <app-exp-plan-inspector></app-exp-plan-inspector>
+      }
+      @case ('replanning-simulator') {
+        <app-exp-replanning-simulator></app-exp-replanning-simulator>
+      }
+      @case ('permission-boundary') {
+        <app-exp-permission-boundary></app-exp-permission-boundary>
+      }
+      @case ('human-approval-gate') {
+        <app-exp-human-approval-gate></app-exp-human-approval-gate>
+      }
+      @case ('budget-circuit-breaker') {
+        <app-exp-budget-circuit-breaker></app-exp-budget-circuit-breaker>
+      }
+      @case ('trace-explorer') {
+        <app-exp-trace-explorer></app-exp-trace-explorer>
+      }
+      @case ('run-comparison') {
+        <app-exp-run-comparison></app-exp-run-comparison>
+      }
+      @case ('evaluation-lab') {
+        <app-exp-evaluation-lab></app-exp-evaluation-lab>
       }
       @default {
         <div class="case-callout case-callout--error">

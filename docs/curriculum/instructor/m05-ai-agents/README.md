@@ -25,12 +25,17 @@ Evita el antropomorfismo. Un agente no "piensa y decide" como un empleado; ejecu
 - **Instruction Contracts (M02)**: El Agente opera bajo reglas estrictas.
 - **Context Manifest (M03)**: Las observaciones de las herramientas alteran dinámicamente el contexto disponible.
 
-**Curriculum Components**
-- [Lesson 01: Workflows vs Agents](./lesson-01.md)
-- [Lesson 02: Tool Calling](./lesson-02.md)
-- [Lesson 03: The Agent Loop](./lesson-03.md)
-- [Demo 05: The Agent Loop](./demo-05.md)
-- [Lab 05: Design an Agentic Workflow](./lab-05.md)
+**Curriculum Components & Architecture**
+- [Master Architecture: Agent Engineering](./module-architecture.md) *(Documento rector de calibración L01–L07)*
+- [Lesson 01: Workflows vs Agents](./lesson-01.md) *(L01 — Decision)*
+- [Lesson 02: Tool Calling](./lesson-02.md) *(L02 — Tools & Agent v1)*
+- [Lesson 03: The Agent Loop](./lesson-03.md) *(L03 — Loop & Agent v2)*
+- [Demo 05: The Agent Loop](./demo-05.md) *(Visual Demo)*
+- [Lesson 04: State & Memory](./lesson-04.md) *(L04 — State, Memory & Agent v3)*
+- [Lesson 05: Planning & Task Decomposition](./lesson-05.md) *(L05 — Planning & Agent v4)*
+- [Lesson 06: Guardrails & Human-in-the-Loop](./lesson-06.md) *(L06 — Guardrails, HITL & Agent v5)*
+- [Lesson 07: Observability & Evaluation](./lesson-07.md) *(L07 — Observability, Eval & Agent v6)*
+- [Lab 05: Agent Engineering Capstone](./lab-05.md) *(Integración y defensa final)*
 
 ---
 

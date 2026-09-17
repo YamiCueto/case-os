@@ -89,9 +89,9 @@ test.describe('CASE OS — Service Integration & Storage Isolation Tests', () =>
       return { prog, totalUnits };
     });
 
-    expect(progressData.totalUnits).toBe(45);
+    expect(progressData.totalUnits).toBe(49);
     expect(progressData.prog.completedLessons).toContain('c1');
-    // 1 de 45 = 2%
+    // 1 de 49 = Math.round((1/49) * 100) = 2%
     expect(progressData.prog.completionPercentage).toBe(2);
   });
 
