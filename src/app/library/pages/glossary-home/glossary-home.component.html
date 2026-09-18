@@ -1,0 +1,233 @@
+<div class="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto">
+
+  <!-- Topbar & Volver -->
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <button 
+      id="btn-back-to-library"
+      (click)="navigateToLibrary()"
+      class="inline-flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors cursor-pointer">
+      <span>←</span> Volver a CASE Library
+    </button>
+
+    <div class="flex items-center gap-2 flex-wrap">
+      <span class="px-2.5 py-1 text-xs font-bold uppercase rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+        One Knowledge Source
+      </span>
+      <span class="px-2.5 py-1 text-xs font-bold uppercase rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+        M01 – M05
+      </span>
+    </div>
+  </div>
+
+  <!-- Header Principal -->
+  <header class="space-y-4">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-3">
+          <span>📖</span>
+          <span>Glosario Canónico de IA</span>
+        </h1>
+        <p class="text-slate-400 text-base sm:text-lg max-w-3xl mt-2">
+          Definiciones rigurosas, contratos de software y vocabulario técnico canónico extraído del currículo de CASE Academy. Términos técnicos en inglés con explicación pedagógica en español.
+        </p>
+      </div>
+
+      <!-- Métricas rápidas -->
+      <div class="flex items-center gap-4 bg-slate-900 border border-slate-800 rounded-2xl px-5 py-3 shrink-0">
+        <div class="text-center">
+          <div class="text-2xl font-black text-white">{{ filteredTerms().length }}</div>
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Conceptos</div>
+        </div>
+        <div class="h-8 w-px bg-slate-800"></div>
+        <div class="text-center">
+          <div class="text-2xl font-black text-cyan-400">5</div>
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Módulos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buscador Reactivo -->
+    <div class="relative w-full">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <input 
+        id="glossary-search-input"
+        type="text"
+        [value]="searchTerm()"
+        (input)="onSearchInput($any($event.target).value)"
+        placeholder="Buscar por término en inglés, español, alias o palabras clave (ej. Retrieval, HITL, alucinación, Agent Loop)..."
+        class="w-full bg-slate-900 border border-slate-800 rounded-2xl pl-12 pr-12 py-3.5 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all shadow-inner">
+      <button 
+        *ngIf="searchTerm().length > 0"
+        id="btn-clear-glossary-search"
+        (click)="clearSearch()"
+        class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-white transition-colors"
+        title="Limpiar búsqueda">
+        <span class="text-sm font-bold bg-slate-800 hover:bg-slate-700 w-6 h-6 rounded-full flex items-center justify-center">✕</span>
+      </button>
+    </div>
+
+    <!-- Filtros de Módulo (Pills) -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
+      <button 
+        *ngFor="let mod of moduleOptions"
+        [id]="'filter-module-' + mod.id"
+        (click)="selectModule(mod.id)"
+        type="button"
+        class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all border cursor-pointer"
+        [ngClass]="selectedModule() === mod.id 
+          ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50 shadow-sm' 
+          : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-slate-200'">
+        {{ mod.label }}
+      </button>
+    </div>
+
+    <!-- Índice Alfabético A–Z (Hash-Safe Navigation) -->
+    <nav aria-label="Índice alfabético" class="flex flex-wrap items-center gap-1 bg-slate-900/60 border border-slate-800/80 rounded-2xl p-2 sm:p-2.5">
+      <span class="text-[11px] font-bold text-slate-500 uppercase px-2 mr-1">A–Z:</span>
+      <button 
+        *ngFor="let letter of alphabet"
+        type="button"
+        [id]="'btn-letter-' + letter"
+        (click)="scrollToLetter(letter)"
+        [disabled]="!activeLetters().has(letter)"
+        class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-xs sm:text-sm font-bold transition-all"
+        [ngClass]="activeLetters().has(letter) 
+          ? 'bg-slate-800/80 text-white hover:bg-cyan-500 hover:text-slate-950 cursor-pointer shadow-sm' 
+          : 'text-slate-600 opacity-40 cursor-not-allowed'">
+        {{ letter }}
+      </button>
+    </nav>
+  </header>
+
+  <!-- Estado Vacío -->
+  <div 
+    *ngIf="filteredTerms().length === 0" 
+    class="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center flex flex-col items-center max-w-xl mx-auto my-8">
+    <span class="text-5xl mb-4">🔍</span>
+    <h3 class="text-xl font-bold text-white mb-2">No se encontraron conceptos</h3>
+    <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+      No hay términos canónicos que coincidan con "{{ searchTerm() }}" en el módulo seleccionado.
+    </p>
+    <button 
+      (click)="clearSearch()"
+      class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm rounded-xl transition-all shadow-md">
+      Restablecer filtros
+    </button>
+  </div>
+
+  <!-- Contenedor Principal de Términos Agrupados -->
+  <main *ngIf="filteredTerms().length > 0" class="space-y-12">
+    
+    <ng-container *ngFor="let letter of alphabet">
+      <section 
+        *ngIf="groupedTerms().has(letter)" 
+        [id]="'letter-' + letter"
+        class="space-y-4 scroll-mt-24">
+        
+        <!-- Encabezado de Letra -->
+        <div class="flex items-center gap-3 border-b border-slate-800 pb-2">
+          <span class="text-2xl sm:text-3xl font-black text-cyan-400">{{ letter }}</span>
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">
+            ({{ groupedTerms().get(letter)!.length }} {{ groupedTerms().get(letter)!.length === 1 ? 'término' : 'términos' }})
+          </span>
+          <div class="flex-1 h-px bg-slate-800/60"></div>
+        </div>
+
+        <!-- Grid de Tarjetas del Glosario -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <article 
+            *ngFor="let term of groupedTerms().get(letter)"
+            [id]="'term-' + term.slug"
+            class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 sm:p-6 transition-all flex flex-col justify-between group shadow-lg">
+            
+            <div class="space-y-3">
+              <!-- Metadatos superiores: Módulo y Dificultad -->
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase bg-slate-800 text-cyan-300 border border-slate-700">
+                  {{ term.metadata?.['moduleTitle'] || term.tags[0] || 'CASE Academy' }}
+                </span>
+                <span class="text-[11px] font-bold uppercase tracking-wider"
+                  [ngClass]="{
+                    'text-green-400': term.difficulty === 'BEGINNER',
+                    'text-yellow-400': term.difficulty === 'INTERMEDIATE',
+                    'text-orange-400': term.difficulty === 'ADVANCED',
+                    'text-red-400': term.difficulty === 'EXPERT'
+                  }">
+                  {{ term.difficulty }}
+                </span>
+              </div>
+
+              <!-- Título Canónico -->
+              <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-cyan-400 transition-colors leading-snug">
+                {{ term.title }}
+              </h3>
+
+              <!-- Aliases en Español / Variantes -->
+              <div *ngIf="term.aliases && term.aliases.length > 0" class="flex flex-wrap items-center gap-1.5">
+                <span class="text-[11px] font-semibold text-slate-500 uppercase">Alias:</span>
+                <span 
+                  *ngFor="let alias of term.aliases" 
+                  class="text-xs bg-slate-800/80 text-slate-300 border border-slate-700/60 px-2 py-0.5 rounded-md">
+                  {{ alias }}
+                </span>
+              </div>
+
+              <!-- Definición Pedagógica en Español -->
+              <p class="text-sm text-slate-300 leading-relaxed pt-1">
+                {{ term.description }}
+              </p>
+
+              <!-- Sección Desplegable de Contenido Profundo -->
+              <div *ngIf="expandedTermId() === term.id" class="mt-4 pt-4 border-t border-slate-800 text-xs sm:text-sm text-slate-300 bg-slate-950/60 p-4 rounded-xl space-y-3">
+                <app-markdown-viewer [markdown]="term.content"></app-markdown-viewer>
+
+                <!-- Términos Relacionados -->
+                <div *ngIf="term.relatedIds && term.relatedIds.length > 0" class="pt-3 border-t border-slate-800/80">
+                  <span class="text-[11px] font-bold uppercase text-slate-400 tracking-wider block mb-2">Conceptos Relacionados:</span>
+                  <div class="flex flex-wrap gap-1.5">
+                    <button 
+                      *ngFor="let rel of getRelatedTerms(term.relatedIds)"
+                      (click)="selectRelatedTerm(rel)"
+                      type="button"
+                      class="text-xs bg-indigo-950/40 text-indigo-300 border border-indigo-800/50 hover:bg-indigo-900/50 px-2.5 py-1 rounded-lg transition-colors cursor-pointer">
+                      {{ rel.title }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botonera de Acción y Enlace a la Academia -->
+            <div class="mt-5 pt-4 border-t border-slate-800/80 flex items-center justify-between gap-3 flex-wrap">
+              <button 
+                type="button"
+                [id]="'btn-expand-' + term.slug"
+                (click)="toggleExpand(term.id)"
+                class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1 cursor-pointer">
+                <span>{{ expandedTermId() === term.id ? 'Ocultar detalles' : 'Ver explicación profunda' }}</span>
+                <span>{{ expandedTermId() === term.id ? '▲' : '▼' }}</span>
+              </button>
+
+              <button 
+                *ngIf="term.metadata?.['academyRoute']"
+                type="button"
+                [id]="'btn-academy-' + term.slug"
+                (click)="navigateToAcademy(term.metadata?.['academyRoute'])"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold rounded-lg border border-slate-700 transition-all cursor-pointer shadow-sm">
+                <span>Aprender en Lección</span>
+                <span>→</span>
+              </button>
+            </div>
+
+          </article>
+        </div>
+
+      </section>
+    </ng-container>
+
+  </main>
+</div>

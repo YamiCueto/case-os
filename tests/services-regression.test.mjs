@@ -59,6 +59,9 @@ const { SyncQueueService } = loadAngularService('src/app/core/services/sync-queu
 const { UserProgressService } = loadAngularService('src/app/core/services/user-progress.service.ts');
 const { UserPreferencesService } = loadAngularService('src/app/core/services/user-preferences.service.ts');
 const { SupabaseService } = loadAngularService('src/app/core/services/supabase.service.ts');
+const { StaticKnowledgeRepository } = loadAngularService('src/app/core/repositories/static-knowledge.repository.ts');
+const { StaticSearchEngine } = loadAngularService('src/app/core/engines/static-search.engine.ts');
+const { LIBRARY_CONFIG } = loadAngularService('src/app/library/config/library.config.ts');
 
 // Mock in-memory LocalStorage
 function createMockLocalStorage() {
@@ -959,6 +962,97 @@ await testCase('13. SupabaseService: Validación estricta de pre_auth_route y re
   // 5. Intentar guardar ruta inválida no debe persistirse
   supabaseService.savePreAuthRoute('https://malicious.com');
   assert.strictEqual(supabaseService.consumePreAuthRoute(), null, 'Rutas maliciosas no deben guardarse');
+});
+
+// -----------------------------------------------------------------------------
+// Test 14: Knowledge Engine - Unicidad de IDs y Slugs e Integridad Referencial
+// -----------------------------------------------------------------------------
+await testCase('14. Knowledge Engine: Unicidad de IDs y Slugs e Integridad Referencial en LIBRARY_CONFIG', async () => {
+  assert(Array.isArray(LIBRARY_CONFIG), 'LIBRARY_CONFIG debe ser un array');
+  assert(LIBRARY_CONFIG.length >= 50, `Se esperaban al menos 50 recursos entre catálogo y glosario, encontrados: ${LIBRARY_CONFIG.length}`);
+
+  const idSet = new Set();
+  const slugSet = new Set();
+
+  for (const res of LIBRARY_CONFIG) {
+    // 1. Unicidad de ID
+    assert(!idSet.has(res.id), `ID duplicado detectado: "${res.id}"`);
+    idSet.add(res.id);
+
+    // 2. Unicidad de Slug
+    assert(!slugSet.has(res.slug), `Slug duplicado detectado: "${res.slug}"`);
+    slugSet.add(res.slug);
+
+    // 3. Estructura mínima válida
+    assert(res.title && res.title.trim().length > 0, `Recurso ${res.id} no tiene título válido`);
+    assert(res.description && res.description.trim().length > 0, `Recurso ${res.id} no tiene descripción válida`);
+    assert(res.type, `Recurso ${res.id} no tiene tipo definido`);
+    assert(res.difficulty, `Recurso ${res.id} no tiene dificultad definida`);
+  }
+
+  // 4. Integridad Referencial de relatedIds (no huérfanos)
+  const missingRefs = [];
+  for (const res of LIBRARY_CONFIG) {
+    if (res.relatedIds && res.relatedIds.length > 0) {
+      for (const relId of res.relatedIds) {
+        if (!idSet.has(relId)) {
+          missingRefs.push({ resource: res.id, missingRelatedId: relId });
+        }
+      }
+    }
+  }
+
+  assert.strictEqual(missingRefs.length, 0, `Se encontraron referencias huérfanas en relatedIds: ${JSON.stringify(missingRefs)}`);
+});
+
+// -----------------------------------------------------------------------------
+// Test 15: StaticSearchEngine - Búsqueda Canónica, Acentos y Descubrimiento por Alias
+// -----------------------------------------------------------------------------
+await testCase('15. StaticSearchEngine: Búsqueda canónica, normalización de acentos y descubrimiento por alias', async () => {
+  const searchEngine = new StaticSearchEngine();
+
+  // 1. Búsqueda por término en español con acento que descubre término canónico en inglés mediante alias
+  const resultsRetrieval = searchEngine.search(LIBRARY_CONFIG, { searchTerm: 'recuperación' });
+  assert(resultsRetrieval.length > 0, 'La búsqueda por "recuperación" debe retornar al menos un resultado');
+  const hasRetrieval = resultsRetrieval.some(r => r.id === 'term-retrieval' || r.title.includes('Retrieval'));
+  assert(hasRetrieval, 'Debe descubrir "Retrieval" mediante su alias en español');
+
+  // 2. Búsqueda insensible a mayúsculas/minúsculas y acentos
+  const resultsHitl = searchEngine.search(LIBRARY_CONFIG, { searchTerm: 'hitl' });
+  assert(resultsHitl.length > 0, 'La búsqueda por "hitl" debe retornar resultados');
+  const hasHitl = resultsHitl.some(r => r.id === 'term-human-in-the-loop' || r.id === 'res-policy-gate-contract');
+  assert(hasHitl, 'Debe encontrar Human-in-the-Loop o Policy Gate');
+
+  // 3. Filtrado por tipo 'CONCEPT'
+  const concepts = searchEngine.search(LIBRARY_CONFIG, { type: ['CONCEPT'] });
+  assert(concepts.length >= 40, `Se esperaban al menos 40 conceptos en el glosario, encontrados: ${concepts.length}`);
+  assert(concepts.every(c => c.type === 'CONCEPT'), 'Todos los resultados deben ser de tipo CONCEPT');
+
+  // 4. Filtrado por tipo de recurso de ingeniería (excluyendo CONCEPT)
+  const prompts = searchEngine.search(LIBRARY_CONFIG, { type: ['PROMPT'] });
+  assert(prompts.length >= 4, 'Deben existir al menos 4 prompts');
+  assert(prompts.every(p => p.type === 'PROMPT'), 'Todos deben ser PROMPT');
+});
+
+// -----------------------------------------------------------------------------
+// Test 16: StaticKnowledgeRepository - Inyección y Proyección de Datos
+// -----------------------------------------------------------------------------
+await testCase('16. StaticKnowledgeRepository: Acceso y proyecciones de repositorio', async () => {
+  const repo = new StaticKnowledgeRepository();
+  const allSignal = repo.getAll();
+  const all = allSignal();
+
+  assert.strictEqual(all.length, LIBRARY_CONFIG.length, 'El repositorio debe contener todos los recursos de LIBRARY_CONFIG');
+
+  // Búsqueda por ID
+  const policyRes = repo.getById('res-policy-gate-contract');
+  assert(policyRes !== undefined, 'Debe encontrar res-policy-gate-contract por ID');
+  assert.strictEqual(policyRes.slug, 'contrato-gobernanza-policy-gate-hitl');
+
+  // Búsqueda por Slug
+  const retrievalConcept = repo.getBySlug('retrieval');
+  assert(retrievalConcept !== undefined, 'Debe encontrar el concepto retrieval por Slug');
+  assert.strictEqual(retrievalConcept.id, 'term-retrieval');
 });
 
 console.log(`\n=== Resumen de Pruebas Reales: ${passedTests}/${totalTests} pruebas superadas ===`);

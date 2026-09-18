@@ -25,8 +25,12 @@ export class LibraryHomeComponent {
   private currentFilter = signal<KnowledgeFilter>({});
 
   resources = computed(() => {
-    return this.libraryService.filter(this.currentFilter());
+    return this.libraryService.getEngineeringResources(this.currentFilter());
   });
+
+  goToGlossary() {
+    this.router.navigate(['/library/glossary']);
+  }
 
   onSearch(term: string) {
     this.currentFilter.update(f => ({ ...f, searchTerm: term }));

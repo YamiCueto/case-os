@@ -44,8 +44,30 @@ export class ResourceDetailComponent implements OnInit {
       'CHECKLIST': '✅',
       'TEMPLATE': '📄',
       'AGENT': '🤖',
-      'CONTEXT': '🧠'
+      'CONTEXT': '🧠',
+      'CONCEPT': '📖'
     };
     return icons[type] || '📄';
+  }
+
+  getRelatedResources(relatedIds?: string[]): KnowledgeResource[] {
+    if (!relatedIds || relatedIds.length === 0) return [];
+    return relatedIds
+      .map(id => this.libraryService.getById(id))
+      .filter((r): r is KnowledgeResource => r !== undefined);
+  }
+
+  navigateToResource(res: KnowledgeResource) {
+    if (res.type === 'CONCEPT') {
+      this.router.navigate(['/library/glossary'], { queryParams: { term: res.slug } });
+    } else {
+      this.router.navigate(['/library', res.slug]);
+    }
+  }
+
+  navigateToAcademy(route?: string) {
+    if (route) {
+      this.router.navigateByUrl(route);
+    }
   }
 }

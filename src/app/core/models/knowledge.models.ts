@@ -8,6 +8,7 @@ export type KnowledgeType =
   | 'TEMPLATE' 
   | 'AGENT' 
   | 'CONTEXT'
+  | 'CONCEPT'
   | 'LAB'
   | 'COURSE';
 
@@ -18,6 +19,18 @@ export type KnowledgeStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | 'DEPRECATED';
  * Soporte para Internacionalización (i18n).
  */
 export type LocalizedString = string | Record<string, string>;
+
+/**
+ * Metadatos extendidos para recursos de conocimiento y glosario canónico.
+ */
+export interface ResourceMetadata {
+  moduleId?: string;
+  moduleTitle?: string;
+  lessonId?: string;
+  lessonTitle?: string;
+  academyRoute?: string;
+  [key: string]: any;
+}
 
 /**
  * Modelo base genérico para el Knowledge Engine.
@@ -54,13 +67,14 @@ export interface KnowledgeResource {
   
   // Grafos y Relaciones (Para el SearchEngine y UI)
   relatedIds?: string[];
-  
+
   // Preparación para IA (Vector Search / RAG)
   embeddingId?: string;
   
   // Extensibilidad sin romper el contrato
-  metadata?: Record<string, any>;
+  metadata?: ResourceMetadata;
 }
+
 
 /**
  * Criterios de filtrado genéricos para el Knowledge Engine.
