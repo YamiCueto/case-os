@@ -10,15 +10,16 @@ export class StaticSearchEngine implements SearchEngine {
   search(resources: KnowledgeResource[], criteria: KnowledgeFilter): KnowledgeResource[] {
     let results = [...resources];
 
-    // 1. Full-Text Search Básico
+    // 1. Full-Text Search con soporte de aliases y normalización
     if (criteria.searchTerm) {
-      const term = criteria.searchTerm.toLowerCase();
-      results = results.filter(r => 
-        this.getLocalizedString(r.title).toLowerCase().includes(term) || 
-        this.getLocalizedString(r.description).toLowerCase().includes(term) ||
-        r.tags.some(t => t.toLowerCase().includes(term)) ||
-        r.technologies.some(t => t.toLowerCase().includes(term)) ||
-        (r.keywords && r.keywords.some(k => k.toLowerCase().includes(term)))
+      const term = this.normalize(criteria.searchTerm);
+      results = results.filter(r =>
+        this.normalize(this.getLocalizedString(r.title)).includes(term) ||
+        this.normalize(this.getLocalizedString(r.description)).includes(term) ||
+        r.tags.some(t => this.normalize(t).includes(term)) ||
+        r.technologies.some(t => this.normalize(t).includes(term)) ||
+        (r.keywords && r.keywords.some(k => this.normalize(k).includes(term))) ||
+        (r.aliases && r.aliases.some(a => this.normalize(a).includes(term)))
       );
     }
 
@@ -79,5 +80,13 @@ export class StaticSearchEngine implements SearchEngine {
     if (typeof value === 'string') return value;
     // Asumimos 'es' como idioma por defecto
     return value['es'] || Object.values(value)[0] || '';
+  }
+
+  private normalize(value: string): string {
+    return (value || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
   }
 }

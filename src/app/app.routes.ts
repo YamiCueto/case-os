@@ -19,6 +19,10 @@ export const routes: Routes = [
         loadComponent: () => import('./library/pages/library-home/library-home.component').then(m => m.LibraryHomeComponent)
       },
       {
+        path: 'library/glossary',
+        loadComponent: () => import('./library/pages/glossary-home/glossary-home.component').then(m => m.GlossaryHomeComponent)
+      },
+      {
         path: 'library/:slug',
         loadComponent: () => import('./library/pages/resource-detail/resource-detail.component').then(m => m.ResourceDetailComponent)
       },

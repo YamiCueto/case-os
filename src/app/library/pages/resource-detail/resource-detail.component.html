@@ -26,16 +26,51 @@
       <h1 class="text-3xl font-extrabold text-white mb-3">{{ res.title }}</h1>
       <p class="text-slate-400 text-lg leading-relaxed">{{ res.description }}</p>
       
-      <div class="mt-6 flex flex-wrap gap-2">
-        <span *ngFor="let tech of res.technologies" class="px-3 py-1 bg-slate-800 text-slate-300 rounded-md text-sm font-medium">
-          {{ tech }}
-        </span>
+      <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let tech of res.technologies" class="px-3 py-1 bg-slate-800 text-slate-300 rounded-md text-sm font-medium">
+            {{ tech }}
+          </span>
+        </div>
+
+        <button
+          *ngIf="res.metadata?.['academyRoute']"
+          (click)="navigateToAcademy(res.metadata?.['academyRoute'])"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 font-semibold text-sm rounded-xl border border-indigo-500/30 transition-all cursor-pointer">
+          <span>Aprender en Lección de la Academia</span>
+          <span>→</span>
+        </button>
       </div>
     </header>
 
     <!-- Contenido Principal -->
     <main class="p-8 bg-slate-950">
       <app-markdown-viewer [markdown]="res.content"></app-markdown-viewer>
+
+      <!-- Recursos Relacionados -->
+      <div *ngIf="getRelatedResources(res.relatedIds).length > 0" class="mt-12 pt-8 border-t border-slate-800">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+          <span>🔗</span>
+          <span>Recursos y Conceptos Relacionados</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div
+            *ngFor="let rel of getRelatedResources(res.relatedIds)"
+            (click)="navigateToResource(rel)"
+            class="bg-slate-900 border border-slate-800 hover:border-indigo-500/50 p-4 rounded-xl cursor-pointer transition-all flex items-center justify-between group">
+            <div class="space-y-1 min-w-0 flex-1 mr-2">
+              <div class="flex items-center gap-2">
+                <span class="text-sm">{{ getIconForType(rel.type) }}</span>
+                <span class="text-[10px] font-bold uppercase text-slate-400">{{ rel.type }}</span>
+              </div>
+              <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors truncate">
+                {{ rel.title }}
+              </h4>
+            </div>
+            <span class="text-slate-500 group-hover:text-white transition-colors text-sm shrink-0">→</span>
+          </div>
+        </div>
+      </div>
     </main>
 
   </div>
