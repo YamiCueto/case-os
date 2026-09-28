@@ -36,10 +36,10 @@
     "@angular/cli": "^22.1.8",
     "@angular/compiler-cli": "^22.1.6",
     "@playwright/test": "^1.63.0",
-    "@types/node": "^26.5.1",
+    "@types/node": "^26.6.2",
     "@types/pg": "^8.23.1",
     "pg": "^8.23.0",
-    "prettier": "^3.8.1",
+    "prettier": "^3.9.9",
     "typescript": "~6.0.2"
   }
 }
