@@ -120,12 +120,12 @@ export const LESSON_04_DOCUMENT: LessonDocument = {
     {
       id: 'taller-practico-agent-v3',
       title: '04. Taller práctico — Evoluciona Agent v2 a Agent v3',
-      subtitle: 'Implementación colaborativa en Python de ExecutionState, MemoryStore y Casos F1/F2',
+      subtitle: 'Implementación colaborativa en Python de ExecutionState, MemoryStore y Casos F1/F2/F3',
       blocks: [
         {
           type: 'PARAGRAPH',
           lead: true,
-          text: 'En este taller no empezarás un proyecto nuevo. Tomarás el repositorio de tu grupo de estudio con Agent v2 (L03) y lo evolucionarás a Agent v3: introduciendo ExecutionState tipado, MemoryStore con almacenamiento en memoria/JSON, y validando los Casos F1 (Continuidad de Sesión) y F2 (Continuidad Persistente y Aislamiento).'
+          text: 'En este taller no empezarás un proyecto nuevo. Tomarás el repositorio de tu grupo de estudio con Agent v2 (L03) y lo evolucionarás a Agent v3: introduciendo ExecutionState tipado, MemoryStore con almacenamiento en memoria/JSON, y validando los Casos F1 (Continuidad de Sesión), F2 (Continuidad Persistente y Aislamiento) y F3 (Decisión Pendiente y Reanudación).'
         },
         {
           type: 'KEY_INSIGHTS',
@@ -137,7 +137,8 @@ export const LESSON_04_DOCUMENT: LessonDocument = {
             'Sustituye variables locales desestructuradas en run_agent_v3() por el objeto tipado exec_state.',
             'Implementa hydrate() antes del while y write_back() después de obtener la respuesta final.',
             'Verifica que el Caso F1 recuerde el pedido en el segundo turno sin repetir el código ORD-4091.',
-            'Verifica que el Caso F2 valide la frontera de memoria en search() y hydrate_context() para comprobar que Laura no hereda la memoria de Carlos.'
+            'Verifica que el Caso F2 valide la frontera de memoria en search() y hydrate_context() para comprobar que Laura no hereda la memoria de Carlos.',
+            'Desarrolla el Caso F3: guarda una decisión pendiente en SessionMemory, ofrece opciones numeradas y texto libre, y reanuda la solicitud sin convertir la selección en preferencia persistente.'
           ]
         }
       ]

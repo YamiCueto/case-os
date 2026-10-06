@@ -2,10 +2,10 @@
 
 ## Guía de implementación para grupos de estudio · CASE Academy
 
-- **Duración recomendada:** 60–75 minutos
+- **Duración recomendada:** 75–90 minutos
 - **Modalidad:** Trabajo colaborativo en grupos de estudio
 - **Punto de partida obligatorio:** El proyecto funcional de **Agent v2** construido en L03
-- **Entregable técnico:** Código Python ejecutable de **Agent v3** con `ExecutionState`, `MemoryStore` gobernado por software, aislamiento estricto por `subject_id`, inyección controlada (`hydrate`), persistencia autorizada (`write_back`) y validación de los **Casos F1** (continuidad de sesión) y **Caso F2** (persistencia y aislamiento de sujetos).
+- **Entregable técnico:** Código Python ejecutable de **Agent v3** con `ExecutionState`, `MemoryStore` gobernado por software, aislamiento estricto por `subject_id`, inyección controlada (`hydrate`), persistencia autorizada (`write_back`) y validación de los **Casos F1** (continuidad de sesión), **F2** (persistencia y aislamiento de sujetos) y **F3** (decisión pendiente y reanudación).
 
 ---
 
@@ -51,6 +51,7 @@ En este taller no utilizaremos librerías externas opacas ni volcaremos ciegamen
 │  write_back() (persistencia explícita)🆕 NUEVO         │
 │  Caso F1 (Continuidad de Sesión)      🆕 NUEVO         │
 │  Caso F2 (Persistencia & Aislamiento) 🆕 NUEVO         │
+│  Caso F3 (Decisión pendiente)         🆕 NUEVO         │
 │  run_agent_v3()                       🆕 NUEVO         │
 └────────────────────────────────────────────────────────┘
 ```
@@ -88,9 +89,10 @@ En este taller no utilizaremos librerías externas opacas ni volcaremos ciegamen
 5. **`hydrate()`:** Función que lee las memorias relevantes y genera un bloque de contexto compacto para el prompt inicial.
 6. **`write_back()`:** Función que extrae y almacena los hechos nuevos al finalizar el bucle con éxito.
 7. **`run_agent_v3()`:** Función principal que orquesta Hydration → Loop de Agent v2 → Write-back.
-8. **Validación de Casos F1 y F2:**
+8. **Validación de Casos F1, F2 y F3:**
    - **Caso F1:** Turno 1 crea contexto de sesión; Turno 2 consulta sin repetir la entidad explícita.
    - **Caso F2:** Usuario Carlos fija preferencia; en nueva sesión se recuerda. Usuario Laura entra y no recibe la preferencia de Carlos.
+   - **Caso F3:** El agente detecta una decisión faltante, ofrece opciones numeradas y una alternativa libre, pausa la tarea y la reanuda cuando el mismo sujeto responde dentro de la misma sesión.
 
 ---
 
@@ -103,6 +105,7 @@ En este taller no utilizaremos librerías externas opacas ni volcaremos ciegamen
 | **Hito 3** | Construcción de `run_agent_v3()` orquestando el ciclo completo | 15 min |
 | **Hito 4** | Configuración de `MockModelProviderV3` y pruebas de regresión (A–E) | 15 min |
 | **Hito 5** | Ejecución y verificación de los Casos F1 y F2 en consola | 15 min |
+| **Hito 6** | Decisión pendiente, entrada libre y validación del Caso F3 | 15 min |
 
 ---
 
@@ -562,8 +565,146 @@ if __name__ == "__main__":
 
 ---
 
-## 8. Preguntas de Reflexión Técnica para el Grupo
+## 8. Reto Guiado: Caso F3 — Decisión Pendiente y Reanudación
+
+Hasta ahora, Agent v3 recuerda hechos y preferencias. En este reto también debe recordar que dejó una tarea **en espera de una decisión del usuario**.
+
+Ejemplo esperado:
+
+```text
+Usuario: Organiza el envío del pedido ORD-4091.
+
+Agente:
+Necesito que elijas la prioridad:
+1. Menor costo
+2. Entrega más rápida
+3. Otra opción
+
+Usuario: Necesito que llegue antes del viernes.
+Agente: Continúa la solicitud original aplicando la condición escrita.
+```
+
+### 8.1 Regla arquitectónica
+
+Una decisión pendiente **no es todavía una preferencia persistente**:
+
+- La solicitud original, la pregunta, las opciones y la respuesta viven en `SessionMemory` y se aíslan mediante `subject_id` + `session_id`.
+- Elegir `2` solo resuelve la tarea actual.
+- Solo una frase explícita como *"para todos mis pedidos futuros"* puede pasar por `MemoryPolicy` y convertirse en memoria persistente.
+- El agente no ejecuta la acción dependiente mientras la decisión siga en estado `pending`.
+
+No presentes este ejercicio como HITL formal: en L04 estamos practicando continuidad conversacional. Los permisos, aprobaciones sensibles y escalamiento humano se desarrollan en L06.
+
+### 8.2 Contrato mínimo a implementar
+
+Agrega una estructura tipada para representar la pausa:
+
+```python
+@dataclass
+class PendingDecision:
+    decision_id: str
+    subject_id: str
+    session_id: str
+    original_request: str
+    question: str
+    options: List[str]
+    allow_custom_answer: bool = True
+    status: str = "pending"
+    selected_value: Optional[str] = None
+```
+
+Guárdala como un `MemoryItem` de alcance `session` con la clave `pending_decision`. El valor puede ser la instancia serializada o un diccionario equivalente.
+
+### 8.3 Flujo que deben construir
+
+```text
+Petición incompleta
+      ↓
+El modelo propone opciones estructuradas
+      ↓
+El runtime valida y guarda pending_decision
+      ↓
+La terminal muestra 1, 2, 3 y solicita texto
+      ↓
+El usuario elige un número o escribe otra condición
+      ↓
+El runtime recupera la decisión por subject_id + session_id
+      ↓
+Valida, marca resolved y reanuda original_request
+```
+
+En la versión de terminal, el campo de texto se representa con `input()`:
+
+```python
+def ask_user_decision(pending: PendingDecision) -> str:
+    print(pending.question)
+    for index, option in enumerate(pending.options, start=1):
+        print(f"{index}. {option}")
+    if pending.allow_custom_answer:
+        custom_index = len(pending.options) + 1
+        print(f"{custom_index}. Otra opción")
+
+    answer = input("¿Cuál eliges? > ").strip()
+    if pending.allow_custom_answer and answer == str(len(pending.options) + 1):
+        return input("Describe tu condición > ").strip()
+    return answer
+```
+
+Implementa la resolución con software determinista:
+
+```python
+def resolve_decision(answer: str, pending: PendingDecision) -> str:
+    normalized = answer.strip()
+
+    if normalized.isdigit():
+        option_index = int(normalized) - 1
+        if 0 <= option_index < len(pending.options):
+            return pending.options[option_index]
+
+    if pending.allow_custom_answer and normalized:
+        return normalized
+
+    raise ValueError("La decisión no contiene una selección válida.")
+```
+
+Después de resolverla, actualiza `status="resolved"`, asigna `selected_value` y reanuda la solicitud original. No envíes una respuesta vacía o inválida al modelo como si fuera una decisión válida.
+
+### 8.4 Prueba de aceptación del Caso F3
+
+Construye una demostración reproducible que compruebe:
+
+1. Carlos pide organizar `ORD-4091` sin indicar prioridad.
+2. El agente genera dos opciones concretas y una tercera opción `Otra`, que abre la entrada de texto libre.
+3. La decisión se guarda con `scope="session"`, `subject_id=carlos_id` y la sesión activa.
+4. La respuesta `2` se resuelve como `"Entrega más rápida"`.
+5. La respuesta `3` solicita un texto adicional; una condición como `"Debe llegar antes del viernes"` es válida.
+6. Laura u otra sesión no pueden consultar ni resolver la decisión de Carlos.
+7. Al resolverse, el estado cambia de `pending` a `resolved` y el agente retoma `original_request`.
+8. La selección no aparece como preferencia persistente salvo que el usuario lo ordene explícitamente.
+
+Incluye aserciones sobre la frontera de memoria, no solo sobre el texto final del modelo:
+
+```python
+carlos_pending = memory_store.search(
+    subject_id=carlos_id,
+    session_id=session_alpha
+)
+assert any(m.key == "pending_decision" for m in carlos_pending)
+
+laura_pending = memory_store.search(
+    subject_id=laura_id,
+    session_id=session_laura
+)
+assert not any(m.key == "pending_decision" for m in laura_pending)
+```
+
+> **Criterio de éxito:** Agent v3 puede pausar una solicitud incompleta, recordar exactamente qué decisión falta, aceptar una opción numerada o texto libre y continuar sin mezclar sesiones ni inventar una preferencia permanente.
+
+---
+
+## 9. Preguntas de Reflexión Técnica para el Grupo
 
 1. **Sobre el costo de tokens:** Si en lugar de inyectar únicamente `preferred_carrier: Servientrega` hubiéramos inyectado los 50 mensajes de chat anteriores, ¿qué habría ocurrido con los tokens de entrada y el tiempo de respuesta del proveedor?
 2. **Sobre el aislamiento multitenant:** ¿Por qué un error de diseño donde se omite `subject_id` en `search()` puede ser una vulnerabilidad de seguridad grave según estándares como OWASP Top 10 for LLMs?
 3. **El puente hacia L05:** Ya tenemos un agente que usa herramientas, itera en bucle y recuerda hechos del usuario. Si ahora le pedimos que resuelva una tarea compuesta por 8 pasos secuenciales e interdependientes, ¿el agente sabrá estructurar un plan antes de empezar o simplemente improvisará paso a paso? ¿Qué desventajas tiene no contar con una fase previa de **Planning**?
+4. **Sobre decisiones pendientes:** ¿Por qué responder `2` en una tarea concreta no autoriza al sistema a guardar esa opción como preferencia permanente para futuras sesiones?

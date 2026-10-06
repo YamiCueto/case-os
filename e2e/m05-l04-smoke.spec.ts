@@ -115,7 +115,7 @@ test.describe('M05 L04 Smoke Test — State & Memory & Taller Práctico Agent v3
     await expect(pills).toContainText('Modo A: Sin API (Base)');
     await expect(pills).toContainText('Modo B: Proveedor Opcional');
     await expect(pills).toContainText('Grupos de estudio');
-    await expect(pills).toContainText('60–75 min');
+    await expect(pills).toContainText('75–90 min');
 
     // 6. Download Workshop Guide (.md)
     const downloadBtn = heroCard.locator('#btn-download-workshop');
@@ -143,6 +143,8 @@ test.describe('M05 L04 Smoke Test — State & Memory & Taller Práctico Agent v3
     expect(content).toContain('run_agent_v3');
     expect(content).toContain('DEMOSTRACIÓN CASO F1');
     expect(content).toContain('DEMOSTRACIÓN CASO F2');
+    expect(content).toContain('Caso F3 — Decisión Pendiente y Reanudación');
+    expect(content).toContain('PendingDecision');
 
     // 8. Verify No Console Errors
     const criticalErrors = consoleErrors.filter(
