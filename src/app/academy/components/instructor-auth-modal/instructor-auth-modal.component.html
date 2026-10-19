@@ -1,0 +1,79 @@
+<div class="auth-modal-backdrop" (click)="onCancel()" aria-hidden="true"></div>
+
+<div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+  <div class="auth-modal__header">
+    <div class="auth-modal__icon-wrap">
+      <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+    </div>
+    <div class="auth-modal__header-text">
+      <h3 id="auth-modal-title" class="auth-modal__title">Acceso a la Guía del Instructor</h3>
+      <p class="auth-modal__subtitle">Contenido reservado para la conducción pedagógica de CASE OS.</p>
+    </div>
+    <button
+      type="button"
+      class="auth-modal__close-btn"
+      (click)="onCancel()"
+      aria-label="Cerrar modal"
+      id="btn-close-instructor-auth-modal"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+  </div>
+
+  <form class="auth-modal__body" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label for="instructor-password-input" class="form-label">
+        Contraseña del Docente
+      </label>
+      <div class="input-wrap">
+        <input
+          [type]="showPassword() ? 'text' : 'password'"
+          id="instructor-password-input"
+          class="form-input"
+          [ngModel]="password()"
+          (ngModelChange)="password.set($event)"
+          name="password"
+          placeholder="Ingresa la contraseña del instructor..."
+          autocomplete="off"
+          autofocus
+        />
+        <button
+          type="button"
+          class="toggle-pwd-btn"
+          (click)="toggleShowPassword()"
+          [title]="showPassword() ? 'Ocultar contraseña' : 'Ver contraseña'"
+          tabindex="-1"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">
+            {{ showPassword() ? 'visibility_off' : 'visibility' }}
+          </span>
+        </button>
+      </div>
+      @if (errorMessage()) {
+        <p class="form-error" id="instructor-auth-error" role="alert">
+          <span class="material-symbols-outlined" aria-hidden="true">error</span>
+          <span>{{ errorMessage() }}</span>
+        </p>
+      }
+    </div>
+
+    <div class="auth-modal__footer">
+      <button
+        type="button"
+        class="btn-cancel"
+        (click)="onCancel()"
+        id="btn-cancel-instructor-auth"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="btn-submit"
+        id="btn-submit-instructor-password"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+        <span>Desbloquear y Abrir</span>
+      </button>
+    </div>
+  </form>
+</div>

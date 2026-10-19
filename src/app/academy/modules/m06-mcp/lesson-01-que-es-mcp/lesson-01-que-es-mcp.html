@@ -1,0 +1,466 @@
+<div class="living-doc" role="main">
+  <!-- ── Topbar de Navegación del Instructor & Meta de Sesión ── -->
+  <div class="living-doc__topbar">
+    <div class="living-doc__session-badge">
+      <span class="material-symbols-outlined">schedule</span>
+      <span>Sesión 1 · Lección 01 · 55 minutos</span>
+    </div>
+    <app-instructor-guide-drawer [guide]="instructorGuide" />
+  </div>
+
+  <!-- ── Lesson Header ── -->
+  @if (lesson) {
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      [subtitle]="doc.subtitle"
+    />
+  }
+
+  <div class="living-doc__layout">
+    <!-- ── Main Content Column ── -->
+    <div class="living-doc__content">
+
+      <!-- 1. Objetivos de Aprendizaje -->
+      @if (doc.learningObjectives && doc.learningObjectives.length > 0) {
+        <section id="learning-objectives" class="living-doc-section">
+          <div class="learning-objectives-card">
+            <div class="learning-objectives-card__header">
+              <span class="material-symbols-outlined">flag</span>
+              <h3 class="learning-objectives-card__title">Objetivos de Aprendizaje de la Lección</h3>
+            </div>
+            <ul class="learning-objectives-card__list">
+              @for (obj of doc.learningObjectives; track $index) {
+                <li>
+                  <span class="material-symbols-outlined check-icon">{{ obj.icon || 'check_circle' }}</span>
+                  <span>{{ obj.text }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </section>
+      }
+
+      <!-- 2. Conceptos Fundamentales -->
+      @if (doc.fundamentalConcepts && doc.fundamentalConcepts.length > 0) {
+        <section id="fundamental-concepts" class="living-doc-section">
+          <span class="living-doc-section__eyebrow">Marco Teórico Esencial</span>
+          <h2 class="living-doc-section__title">Conceptos Fundamentales</h2>
+          <div class="concepts-grid">
+            @for (concept of doc.fundamentalConcepts; track concept.title) {
+              <div class="concept-card">
+                <div class="concept-card__term">
+                  <span class="material-symbols-outlined">{{ concept.icon || 'token' }}</span>
+                  <span>{{ concept.title }}</span>
+                </div>
+                <p class="concept-card__definition">{{ concept.description }}</p>
+              </div>
+            }
+          </div>
+        </section>
+      }
+      
+      <!-- Comparativa Conceptual (N×M vs MCP) -->
+      @if (doc.comparison) {
+        <app-lesson-comparison
+          [comparison]="comparisonBlock"
+        />
+      }
+
+      <!-- Secciones Teóricas Estructuradas -->
+      @for (section of doc.sections; track section.id) {
+        <section [id]="section.id" class="living-doc-section">
+          @if (section.eyebrow) {
+            <span class="living-doc-section__eyebrow">{{ section.eyebrow }}</span>
+          }
+          <h2 class="living-doc-section__title">{{ section.title }}</h2>
+          
+          @if (section.lead) {
+            <p class="living-doc-section__lead">{{ section.lead }}</p>
+          }
+
+          @for (paragraph of section.paragraphs; track $index) {
+            <p class="living-doc-section__paragraph">{{ paragraph }}</p>
+          }
+
+          @if (section.callout) {
+            <case-callout
+              [variant]="section.callout.type === 'danger' ? 'caution' : (section.callout.type === 'warning' ? 'warning' : 'info')"
+              [title]="section.callout.title"
+              [message]="section.callout.message"
+            />
+          }
+
+          @if (section.codeBlock) {
+            <case-code-block
+              [code]="section.codeBlock.code"
+              [language]="section.codeBlock.language"
+              [filename]="section.codeBlock.caption"
+            />
+          }
+
+          @if (section.keyTakeaways && section.keyTakeaways.length > 0) {
+            <div class="living-doc-takeaways">
+              <h3 class="living-doc-takeaways__title">Puntos Clave de la Arquitectura</h3>
+              <ul class="living-doc-takeaways__list">
+                @for (item of section.keyTakeaways; track $index) {
+                  <li>{{ item }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- ── PLAYGROUND OBLIGATORIO: Simulador Visual de Arquitectura MCP ── -->
+      <section id="architecture-simulator" class="living-doc-section playground-section">
+        <div class="playground-header">
+          <div class="playground-badge">
+            <span class="material-symbols-outlined" aria-hidden="true">science</span>
+            <span>PLAYGROUND OBLIGATORIO · LECCIÓN 01</span>
+          </div>
+          <h2 class="playground-title">Simulador Visual de Arquitectura MCP</h2>
+          <p class="playground-description">
+            Experimenta interactivamente cómo viaja una petición desde la intención humana hasta el sistema externo,
+            comprendiendo la separación de responsabilidades entre Host, LLM, MCP Client y MCP Server.
+          </p>
+        </div>
+
+        <!-- Controles de Configuración del Escenario -->
+        <div class="playground-controls-grid">
+          <!-- 1. Selección de Host -->
+          <div class="control-card">
+            <label class="control-label" for="host-select">
+              <span class="material-symbols-outlined" aria-hidden="true">desktop_windows</span>
+              1. Selecciona el Host
+            </label>
+            <select
+              id="host-select"
+              class="case-select"
+              [ngModel]="selectedHostId()"
+              (ngModelChange)="selectedHostId.set($event); resetSimulation()"
+            >
+              @for (h of hosts; track h.id) {
+                <option [value]="h.id">{{ h.name }}</option>
+              }
+            </select>
+            <p class="control-hint">{{ selectedHost().description }}</p>
+          </div>
+
+          <!-- 2. Selección de Servidor MCP -->
+          <div class="control-card">
+            <label class="control-label" for="server-select">
+              <span class="material-symbols-outlined" aria-hidden="true">dns</span>
+              2. Selecciona el MCP Server
+            </label>
+            <select
+              id="server-select"
+              class="case-select"
+              [ngModel]="selectedServerId()"
+              (ngModelChange)="onServerChange($event)"
+            >
+              @for (s of servers; track s.id) {
+                <option [value]="s.id">{{ s.name }}</option>
+              }
+            </select>
+            <p class="control-hint">Transporte nativo: <code>{{ selectedServer().transport.split(' ')[0] }}</code></p>
+          </div>
+
+          <!-- 3. Selección de Operación -->
+          <div class="control-card">
+            <label class="control-label" for="op-select">
+              <span class="material-symbols-outlined" aria-hidden="true">play_circle</span>
+              3. Operación a Ejecutar
+            </label>
+            <select
+              id="op-select"
+              class="case-select"
+              [ngModel]="selectedOperationId()"
+              (ngModelChange)="onOperationChange($event)"
+            >
+              @for (op of availableOperations(); track op.id) {
+                <option [value]="op.id">{{ op.name }} ({{ op.tool }})</option>
+              }
+            </select>
+            <p class="control-hint">Destino: <strong>{{ selectedOperation().externalSystem }}</strong></p>
+          </div>
+
+          <!-- 4. Transporte y Frontera de Seguridad -->
+          <div class="control-card control-card--transport">
+            <div class="control-label">
+              <span class="material-symbols-outlined" aria-hidden="true">cable</span>
+              <span>4. Canal de Transporte Activo</span>
+            </div>
+            <div class="transport-pill-row">
+              <span class="transport-badge" [class.transport-badge--http]="selectedTransportInfo().type === 'Streamable HTTP'">
+                {{ selectedTransportInfo().type }}
+              </span>
+              <span class="transport-channel-text">{{ selectedTransportInfo().channel }}</span>
+            </div>
+            <p class="control-hint security-hint">
+              <span class="material-symbols-outlined sec-icon" aria-hidden="true">security</span>
+              {{ selectedTransportInfo().security }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Diagrama Visual de Nodos de la Arquitectura con Fronteras -->
+        <div class="architecture-diagram" aria-label="Diagrama interactivo de arquitectura MCP">
+          <!-- Nodo 1: Usuario -->
+          <button
+            type="button"
+            class="diagram-node"
+            [class.diagram-node--active]="activeNode().id === 'USER'"
+            (click)="inspectNode('USER')"
+            id="node-btn-USER"
+            title="Haz clic para inspeccionar responsabilidades y fronteras de seguridad"
+          >
+            <span class="material-symbols-outlined">person</span>
+            <span class="node-label">Usuario</span>
+            <span class="node-sub">Intención</span>
+            <span class="node-boundary">Entorno Usuario</span>
+          </button>
+
+          <div class="diagram-arrow" [class.diagram-arrow--active]="currentStep().stepNumber >= 1">→</div>
+
+          <!-- Nodo 2: MCP Host -->
+          <button
+            type="button"
+            class="diagram-node"
+            [class.diagram-node--active]="activeNode().id === 'HOST'"
+            (click)="inspectNode('HOST')"
+            id="node-btn-HOST"
+            title="Haz clic para inspeccionar responsabilidades y fronteras de seguridad"
+          >
+            <span class="material-symbols-outlined">{{ selectedHost().icon }}</span>
+            <span class="node-label">MCP Host</span>
+            <span class="node-sub">{{ selectedHost().name.split(' ')[0] }}</span>
+            <span class="node-boundary node-boundary--host">Frontera App</span>
+          </button>
+
+          <div class="diagram-arrow" [class.diagram-arrow--active]="currentStep().stepNumber >= 2">⇄</div>
+
+          <!-- Nodo 3: LLM Core -->
+          <button
+            type="button"
+            class="diagram-node"
+            [class.diagram-node--active]="activeNode().id === 'LLM'"
+            (click)="inspectNode('LLM')"
+            id="node-btn-LLM"
+            title="Haz clic para inspeccionar responsabilidades y fronteras de seguridad"
+          >
+            <span class="material-symbols-outlined">psychology</span>
+            <span class="node-label">LLM Core</span>
+            <span class="node-sub">Reasoning</span>
+            <span class="node-boundary node-boundary--llm">Capa Cognitiva</span>
+          </button>
+
+          <div class="diagram-arrow" [class.diagram-arrow--active]="currentStep().stepNumber >= 3">→</div>
+
+          <!-- Nodo 4: MCP Client -->
+          <button
+            type="button"
+            class="diagram-node"
+            [class.diagram-node--active]="activeNode().id === 'CLIENT'"
+            (click)="inspectNode('CLIENT')"
+            id="node-btn-CLIENT"
+            title="Haz clic para inspeccionar responsabilidades y fronteras de seguridad"
+          >
+            <span class="material-symbols-outlined">sync_alt</span>
+            <span class="node-label">MCP Client</span>
+            <span class="node-sub">JSON-RPC 2.0</span>
+            <span class="node-boundary node-boundary--client">Protocolo 1:1</span>
+          </button>
+
+          <div class="diagram-arrow" [class.diagram-arrow--active]="currentStep().stepNumber >= 4">→</div>
+
+          <!-- Nodo 5: MCP Server -->
+          <button
+            type="button"
+            class="diagram-node"
+            [class.diagram-node--active]="activeNode().id === 'SERVER'"
+            (click)="inspectNode('SERVER')"
+            id="node-btn-SERVER"
+            title="Haz clic para inspeccionar responsabilidades y fronteras de seguridad"
+          >
+            <span class="material-symbols-outlined">{{ selectedServer().icon }}</span>
+            <span class="node-label">MCP Server</span>
+            <span class="node-sub">{{ selectedServer().name.split(' ')[0] }}</span>
+            <span class="node-boundary node-boundary--server">Sandbox Aislado</span>
+          </button>
+
+          <div class="diagram-arrow" [class.diagram-arrow--active]="currentStep().stepNumber >= 5">⇄</div>
+
+          <!-- Nodo 6: Sistema Externo -->
+          <button
+            type="button"
+            class="diagram-node"
+            [class.diagram-node--active]="activeNode().id === 'EXTERNAL'"
+            (click)="inspectNode('EXTERNAL')"
+            id="node-btn-EXTERNAL"
+            title="Haz clic para inspeccionar responsabilidades y fronteras de seguridad"
+          >
+            <span class="material-symbols-outlined">cloud</span>
+            <span class="node-label">Sistema Externo</span>
+            <span class="node-sub">{{ selectedOperation().externalSystem.split(' ')[0] }}</span>
+            <span class="node-boundary node-boundary--external">Infraestructura</span>
+          </button>
+        </div>
+
+        <!-- Panel de Inspección de Nodo: Fronteras de Seguridad y Responsabilidades -->
+        <div class="node-inspector-panel" id="panel-node-inspector">
+          <div class="inspector-header">
+            <div class="inspector-identity">
+              <span class="material-symbols-outlined inspector-icon" [style.color]="activeNode().colorHex">
+                {{ activeNode().icon }}
+              </span>
+              <div>
+                <div class="inspector-badges">
+                  <span class="inspector-role-badge">{{ activeNode().role }}</span>
+                  <span class="inspector-boundary-badge">{{ activeNode().boundary }}</span>
+                </div>
+                <h4 class="inspector-name">{{ activeNode().name }}</h4>
+              </div>
+            </div>
+
+            @if (inspectedNodeId()) {
+              <button
+                type="button"
+                class="inspector-reset-btn"
+                (click)="clearInspectedNode()"
+                id="btn-reset-node-focus"
+              >
+                <span class="material-symbols-outlined">restart_alt</span>
+                <span>Seguir Paso Activo</span>
+              </button>
+            }
+          </div>
+
+          <div class="inspector-grid">
+            <div class="inspector-col">
+              <span class="inspector-subhead">Responsabilidades Clave:</span>
+              <ul class="inspector-list">
+                @for (resp of activeNode().responsibilities; track resp) {
+                  <li>{{ resp }}</li>
+                }
+              </ul>
+            </div>
+
+            <div class="inspector-col inspector-col--security">
+              <span class="inspector-subhead">Frontera de Seguridad y Aislamiento:</span>
+              <div class="security-callout-box">
+                <span class="material-symbols-outlined sec-box-icon">gavel</span>
+                <p class="sec-box-text">{{ activeNode().securityNotice }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visor del Paso Actual de Simulación -->
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__title-wrap">
+              <span class="step-indicator">Paso {{ currentStep().stepNumber }} de {{ simulationSteps().length }}</span>
+              <h3 class="step-title">{{ currentStep().title }}</h3>
+            </div>
+            <div class="step-card__actions">
+              <button
+                type="button"
+                class="sim-btn sim-btn--secondary"
+                (click)="prevStep()"
+                [disabled]="currentStepIndex() === 0"
+                id="btn-sim-prev"
+              >
+                ← Anterior
+              </button>
+              <button
+                type="button"
+                class="sim-btn sim-btn--primary"
+                (click)="nextStep()"
+                [disabled]="currentStepIndex() >= simulationSteps().length - 1"
+                id="btn-sim-next"
+              >
+                Siguiente Paso →
+              </button>
+              <button
+                type="button"
+                class="sim-btn sim-btn--ghost"
+                (click)="toggleAutoPlay()"
+                id="btn-sim-autoplay"
+              >
+                {{ isAutoPlaying() ? '⏸ Pausar' : '▶ Auto-Play' }}
+              </button>
+              <button
+                type="button"
+                class="sim-btn sim-btn--ghost"
+                (click)="resetSimulation()"
+                id="btn-sim-reset"
+              >
+                ↺ Reiniciar
+              </button>
+            </div>
+          </div>
+
+          <div class="step-card__body">
+            <p class="step-desc">{{ currentStep().description }}</p>
+
+            <div class="step-meta">
+              <div class="meta-block">
+                <span class="meta-label">Responsabilidad del Componente:</span>
+                <p class="meta-text">{{ currentStep().responsibility }}</p>
+              </div>
+            </div>
+
+            @if (currentStep().payload) {
+              <div class="payload-block">
+                <div class="payload-header">
+                  <span class="material-symbols-outlined">data_object</span>
+                  <span>Mensaje / Payload en Tránsito</span>
+                </div>
+                <pre class="payload-code"><code>{{ currentStep().payload }}</code></pre>
+              </div>
+            }
+          </div>
+
+          <!-- Stepper de navegación directa -->
+          <div class="step-stepper">
+            @for (step of simulationSteps(); track step.stepNumber) {
+              <button
+                type="button"
+                class="stepper-dot"
+                [class.stepper-dot--active]="currentStepIndex() === $index"
+                [class.stepper-dot--completed]="currentStepIndex() > $index"
+                (click)="goToStep($index)"
+                [attr.aria-label]="step.title"
+              >
+                {{ step.stepNumber }}
+              </button>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- 7, 8, 9. Cierre Pedagógico: Antipatrones, Comprobación Socrática y Síntesis -->
+      <app-m06-lesson-closing
+        [pitfalls]="doc.commonPitfalls || []"
+        [questions]="doc.groupQuestions || []"
+        [synthesis]="doc.synthesis"
+        [nextLesson]="adjacentLessons.next"
+      />
+
+      <!-- ── Lesson Footer / Navigation ── -->
+      @if (lesson) {
+        <app-lesson-footer
+          [lessonId]="lesson.id"
+          [previousLesson]="adjacentLessons.previous"
+          [nextLesson]="adjacentLessons.next"
+        />
+      }
+    </div>
+
+    <!-- ── Outline Sidebar ── -->
+    <aside class="living-doc__aside">
+      <app-lesson-outline [sections]="outlineSections" />
+    </aside>
+  </div>
+</div>

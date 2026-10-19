@@ -48,16 +48,76 @@ export class UserProgressService {
     });
   }
 
+  private readonly LEGACY_MIGRATION_MAP: Record<string, string> = {
+    'c19': 'c-m6-l01',
+    'c20': 'c-m6-l02',
+    'c21': 'c-m6-l03',
+    'd7': 'c-m6-l04',
+    'l7': 'l-m6-lab'
+  };
+
+  private readonly DEPRECATED_IDS = new Set([
+    'c16', 'c17', 'c18', 'd6', 'l6',
+    'c22', 'c23', 'c24', 'd8', 'l8',
+    'c25', 'c26', 'c27', 'd9', 'l9'
+  ]);
+
+  private migrateLessons(lessonIds: string[]): string[] {
+    const valid = new Set<string>();
+    for (const id of lessonIds) {
+      if (this.DEPRECATED_IDS.has(id)) {
+        continue;
+      }
+      if (this.LEGACY_MIGRATION_MAP[id]) {
+        valid.add(this.LEGACY_MIGRATION_MAP[id]);
+      } else {
+        valid.add(id);
+      }
+    }
+    return Array.from(valid);
+  }
+
+  private migratePath(path?: string): string | undefined {
+    if (!path) return undefined;
+    if (path.includes('m07-mcp/lesson-01') || path.includes('m06-agentic-swe')) {
+      return '/academy/modules/m06-mcp/lesson-01-que-es-mcp';
+    }
+    if (path.includes('m07-mcp/lesson-02')) {
+      return '/academy/modules/m06-mcp/lesson-02-servidores-utiles';
+    }
+    if (path.includes('m07-mcp/lesson-03')) {
+      return '/academy/modules/m06-mcp/lesson-03-configuracion-practica';
+    }
+    if (path.includes('m07-mcp/demo-mcp') || path.includes('m07-mcp/lab-07')) {
+      return '/academy/modules/m06-mcp/lab-06-integracion-mcp';
+    }
+    if (path.includes('m08-production') || path.includes('m09-architecture')) {
+      return '/academy/modules/m06-mcp/lab-06-integracion-mcp';
+    }
+    return path;
+  }
+
   reloadProgress(): void {
-    const savedLessons = this.storage.get<string[]>(PROGRESS_KEY) || [];
+    const rawLessons = this.storage.get<string[]>(PROGRESS_KEY) || [];
+    const savedLessons = this.migrateLessons(rawLessons);
+    if (rawLessons.length !== savedLessons.length || rawLessons.some((v, i) => v !== savedLessons[i])) {
+      this.storage.set(PROGRESS_KEY, savedLessons);
+    }
+
     const savedState = this.storage.get<{ id?: string; title?: string; path?: string }>(STATE_KEY);
+    const migratedPath = this.migratePath(savedState?.path);
+    const migratedId = savedState?.id && this.LEGACY_MIGRATION_MAP[savedState.id] ? this.LEGACY_MIGRATION_MAP[savedState.id] : savedState?.id;
+    if (savedState && (savedState.path !== migratedPath || savedState.id !== migratedId)) {
+      this.storage.set(STATE_KEY, { ...savedState, id: migratedId, path: migratedPath });
+    }
+
     const total = this.totalUnits() > 0 ? this.totalUnits() : this.courseService.getTotalUnitsCount();
 
     this.progress.set({
       completionPercentage: savedLessons.length > 0 ? Math.min(100, Math.round((savedLessons.length / total) * 100)) : 0,
-      lastVisitedLessonId: savedState?.id,
+      lastVisitedLessonId: migratedId,
       lastVisitedLessonTitle: savedState?.title,
-      lastVisitedLessonPath: savedState?.path,
+      lastVisitedLessonPath: migratedPath,
       completedLessons: savedLessons
     });
 

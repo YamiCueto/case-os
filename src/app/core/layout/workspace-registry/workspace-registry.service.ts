@@ -339,29 +339,8 @@ export class WorkspaceRegistryService {
                 },
                 {
                   id: 'lab-06',
-                  label: 'Laboratorio 06 — Diseñar un Protocolo de Ingeniería de Software Agéntica',
-                  path: '/academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol',
-                  icon: 'terminal',
-                  depth: 1,
-                },
-                {
-                  id: 'lab-07',
-                  label: 'Laboratorio 07 — Mapear una Integración Legacy a MCP',
-                  path: '/academy/modules/m07-mcp/lab-07-map-integration-to-mcp',
-                  icon: 'terminal',
-                  depth: 1,
-                },
-                {
-                  id: 'lab-08',
-                  label: 'Laboratorio 08 — Diseñar un Protocolo de IA en Producción',
-                  path: '/academy/modules/m08-production/lab-08-production-ai-protocol',
-                  icon: 'terminal',
-                  depth: 1,
-                },
-                {
-                  id: 'lab-09',
-                  label: 'Laboratorio 09 — Plano de Arquitectura de Modernización con IA',
-                  path: '/academy/modules/m09-architecture/lab-09-architecture-blueprint',
+                  label: 'Laboratorio 06 — Construcción de una Integración MCP',
+                  path: '/academy/modules/m06-mcp/lab-06-integracion-mcp',
                   icon: 'terminal',
                   depth: 1,
                 },
@@ -377,10 +356,7 @@ export class WorkspaceRegistryService {
         const isLab03 = url.startsWith('/academy/modules/m03-context-engineering/lab-03-build-minimum-useful-context');
         const isLab04 = url.startsWith('/academy/modules/m04-retrieval-rag/lab-04-build-retrieval-strategy');
         const isLab05 = url.startsWith('/academy/modules/m05-ai-agents/lab-05-design-agentic-workflow');
-        const isLab06 = url.startsWith('/academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol');
-        const isLab07 = url.startsWith('/academy/modules/m07-mcp/lab-07-map-integration-to-mcp');
-        const isLab08 = url.startsWith('/academy/modules/m08-production/lab-08-production-ai-protocol');
-        const isLab09 = url.startsWith('/academy/modules/m09-architecture/lab-09-architecture-blueprint');
+        const isLab06 = url.startsWith('/academy/modules/m06-mcp/lab-06-integracion-mcp');
 
         const crumbs: BreadcrumbItem[] = [
           { label: 'Labs', path: '/labs', icon: 'science' }
@@ -397,13 +373,7 @@ export class WorkspaceRegistryService {
         } else if (isLab05) {
           crumbs.push({ label: 'Laboratorio 05 — Agent Engineering Capstone', path: url });
         } else if (isLab06) {
-          crumbs.push({ label: 'Laboratorio 06 — Diseñar un Protocolo de Ingeniería de Software Agéntica', path: url });
-        } else if (isLab07) {
-          crumbs.push({ label: 'Laboratorio 07 — Mapear una Integración Legacy a MCP', path: url });
-        } else if (isLab08) {
-          crumbs.push({ label: 'Laboratorio 08 — Diseñar un Protocolo de IA en Producción', path: url });
-        } else if (isLab09) {
-          crumbs.push({ label: 'Laboratorio 09 — Plano de Arquitectura de Modernización con IA', path: url });
+          crumbs.push({ label: 'Laboratorio 06 — Construcción de una Integración MCP', path: url });
         }
         return crumbs;
       }

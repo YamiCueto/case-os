@@ -1,0 +1,270 @@
+.scenario-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.scenario-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.scenario-chip:hover {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.scenario-chip--active {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+.sc-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.sc-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.inspector-card {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.pipeline-flow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  overflow-x: auto;
+  background: #050811;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 14px 10px;
+  margin-bottom: 24px;
+}
+
+.flow-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 95px;
+  padding: 8px 6px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.flow-step {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0284c7;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.flow-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.flow-desc {
+  font-size: 9px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.flow-stage--warning {
+  border-color: #f59e0b;
+}
+
+.flow-stage--warning .flow-step {
+  background: #f59e0b;
+}
+
+.flow-stage--error {
+  border-color: #ef4444;
+}
+
+.flow-stage--error .flow-step {
+  background: #ef4444;
+}
+
+.flow-arrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  color: #38bdf8;
+}
+
+.inspector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.inspector-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 8px;
+}
+
+.transport-tag,
+.status-tag {
+  font-size: 10px;
+  background: #050811;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+}
+
+.json-box {
+  margin: 0;
+  background: #050811;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #7dd3fc;
+  max-height: 240px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+
+.validation-box,
+.server-diag-box {
+  background: #050811;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.validation-box {
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #a7f3d0;
+}
+
+.validation-box--invalid {
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.val-title,
+.diag-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.server-diag-box {
+  border: 1px solid #334155;
+  color: #cbd5e1;
+}
+
+.hitl-banner {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.hitl-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #fde68a;
+  margin-bottom: 6px;
+}
+
+.hitl-desc {
+  font-size: 12px;
+  color: #fcd34d;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.hitl-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.hitl-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.hitl-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hitl-btn--approve {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.hitl-btn--approve:hover:not(:disabled) {
+  background: #059669;
+}
+
+.hitl-btn--reject {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.hitl-btn--reject:hover:not(:disabled) {
+  background: #dc2626;
+}

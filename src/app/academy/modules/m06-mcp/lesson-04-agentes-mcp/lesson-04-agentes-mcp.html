@@ -1,0 +1,307 @@
+<div class="living-doc" role="main">
+  <!-- ── Topbar de Navegación del Instructor & Meta de Sesión ── -->
+  <div class="living-doc__topbar">
+    <div class="living-doc__session-badge">
+      <span class="material-symbols-outlined">calendar_today</span>
+      <span>Sesión: Jueves 22 Octubre · 60 minutos (20:00 - 21:00)</span>
+    </div>
+    <app-instructor-guide-drawer [guide]="instructorGuide" />
+  </div>
+
+  <!-- ── Lesson Header ── -->
+  @if (lesson) {
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      [subtitle]="doc.subtitle"
+    />
+  }
+
+  <div class="living-doc__layout">
+    <div class="living-doc__content">
+
+      <!-- 1. Objetivos de Aprendizaje -->
+      @if (doc.learningObjectives && doc.learningObjectives.length > 0) {
+        <section id="learning-objectives" class="living-doc-section">
+          <div class="learning-objectives-card">
+            <div class="learning-objectives-card__header">
+              <span class="material-symbols-outlined">flag</span>
+              <h3 class="learning-objectives-card__title">Objetivos de Aprendizaje de la Lección</h3>
+            </div>
+            <ul class="learning-objectives-card__list">
+              @for (obj of doc.learningObjectives; track $index) {
+                <li>
+                  <span class="material-symbols-outlined check-icon">{{ obj.icon || 'check_circle' }}</span>
+                  <span>{{ obj.text }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </section>
+      }
+
+      <!-- 2. Conceptos Fundamentales -->
+      @if (doc.fundamentalConcepts && doc.fundamentalConcepts.length > 0) {
+        <section id="fundamental-concepts" class="living-doc-section">
+          <span class="living-doc-section__eyebrow">Orquestación de IA</span>
+          <h2 class="living-doc-section__title">Fundamentos del Agent Loop con MCP</h2>
+          <div class="concepts-grid">
+            @for (concept of doc.fundamentalConcepts; track concept.title) {
+              <div class="concept-card">
+                <div class="concept-card__term">
+                  <span class="material-symbols-outlined">{{ concept.icon || 'hub' }}</span>
+                  <span>{{ concept.title }}</span>
+                </div>
+                <p class="concept-card__definition">{{ concept.description }}</p>
+              </div>
+            }
+          </div>
+        </section>
+      }
+      
+      <!-- Comparativa Conceptual -->
+      @if (doc.comparison) {
+        <app-lesson-comparison
+          [comparison]="comparisonBlock"
+        />
+      }
+
+      <!-- Secciones Teóricas -->
+      @for (section of doc.sections; track section.id) {
+        <section [id]="section.id" class="living-doc-section">
+          @if (section.eyebrow) {
+            <span class="living-doc-section__eyebrow">{{ section.eyebrow }}</span>
+          }
+          <h2 class="living-doc-section__title">{{ section.title }}</h2>
+          
+          @if (section.lead) {
+            <p class="living-doc-section__lead">{{ section.lead }}</p>
+          }
+
+          @for (paragraph of section.paragraphs; track $index) {
+            <p class="living-doc-section__paragraph">{{ paragraph }}</p>
+          }
+
+          @if (section.callout) {
+            <case-callout
+              [variant]="section.callout.type === 'danger' ? 'caution' : (section.callout.type === 'warning' ? 'warning' : 'info')"
+              [title]="section.callout.title"
+              [message]="section.callout.message"
+            />
+          }
+
+          @if (section.codeBlock) {
+            <case-code-block
+              [code]="section.codeBlock.code"
+              [language]="section.codeBlock.language"
+              [filename]="section.codeBlock.caption"
+            />
+          }
+
+          @if (section.keyTakeaways && section.keyTakeaways.length > 0) {
+            <div class="living-doc-takeaways">
+              <h3 class="living-doc-takeaways__title">Principios Agénticos Multi-MCP</h3>
+              <ul class="living-doc-takeaways__list">
+                @for (item of section.keyTakeaways; track $index) {
+                  <li>{{ item }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- ── PLAYGROUND OBLIGATORIO: Orquestador Visual Multi-MCP ── -->
+      <section id="multi-mcp-orchestrator" class="living-doc-section playground-section">
+        <div class="playground-header">
+          <div class="playground-badge">
+            <span class="material-symbols-outlined" aria-hidden="true">lan</span>
+            <span>PLAYGROUND OBLIGATORIO · LECCIÓN 04</span>
+          </div>
+          <h2 class="playground-title">Orquestador Visual de Agente + Múltiples Servidores MCP</h2>
+          <p class="playground-description">
+            Observa cómo un agente de IA resuelve un ticket de fallo en software coordinando en vivo cuatro servidores MCP distintos
+            (Linear, Filesystem, GitHub y Playwright), diferenciando el razonamiento simulado, las llamadas y la compuerta humana.
+          </p>
+        </div>
+
+        <!-- Panel de Servidores MCP Conectados en Paralelo -->
+        <div class="servers-grid">
+          <div class="server-status-card" [class.server-status-card--active]="currentStep().activeServer === 'LINEAR'">
+            <div class="status-card-header">
+              <span class="material-symbols-outlined icon-linear">task_alt</span>
+              <span class="srv-label">Linear MCP</span>
+            </div>
+            <span class="srv-state">{{ currentStep().activeServer === 'LINEAR' ? 'PROCESANDO' : 'CONECTADO' }}</span>
+          </div>
+
+          <div class="server-status-card" [class.server-status-card--active]="currentStep().activeServer === 'FILESYSTEM'">
+            <div class="status-card-header">
+              <span class="material-symbols-outlined icon-fs">folder</span>
+              <span class="srv-label">Filesystem MCP</span>
+            </div>
+            <span class="srv-state">{{ currentStep().activeServer === 'FILESYSTEM' ? 'PROCESANDO' : 'CONECTADO' }}</span>
+          </div>
+
+          <div class="server-status-card" [class.server-status-card--active]="currentStep().activeServer === 'GITHUB'">
+            <div class="status-card-header">
+              <span class="material-symbols-outlined icon-gh">hub</span>
+              <span class="srv-label">GitHub MCP</span>
+            </div>
+            <span class="srv-state">{{ currentStep().activeServer === 'GITHUB' ? 'PROCESANDO' : 'CONECTADO' }}</span>
+          </div>
+
+          <div class="server-status-card" [class.server-status-card--active]="currentStep().activeServer === 'PLAYWRIGHT'">
+            <div class="status-card-header">
+              <span class="material-symbols-outlined icon-pw">open_in_browser</span>
+              <span class="srv-label">Playwright MCP</span>
+            </div>
+            <span class="srv-state">{{ currentStep().activeServer === 'PLAYWRIGHT' ? 'PROCESANDO' : 'CONECTADO' }}</span>
+          </div>
+        </div>
+
+        <!-- Consola Agéntica Interactiva -->
+        <div class="orchestrator-console">
+          <!-- Header de Navegación del Bucle -->
+          <div class="console-header">
+            <div class="console-title">
+              <span class="phase-chip phase-chip--{{ currentStep().phase.toLowerCase() }}">{{ currentStep().phase }}</span>
+              <h3 class="step-head-text">{{ currentStep().title }}</h3>
+            </div>
+
+            <div class="console-actions">
+              <button
+                type="button"
+                class="ctrl-btn"
+                (click)="prevAgentStep()"
+                [disabled]="currentAgentStepIndex() === 0"
+                id="btn-agent-prev"
+              >
+                ← Anterior
+              </button>
+              <button
+                type="button"
+                class="ctrl-btn ctrl-btn--primary"
+                (click)="nextAgentStep()"
+                [disabled]="currentAgentStepIndex() >= agentSteps.length - 1 || (currentStep().phase === 'HITL_GATE' && !isHumanApproved())"
+                id="btn-agent-next"
+              >
+                Avanzar Bucle →
+              </button>
+              <button
+                type="button"
+                class="ctrl-btn ctrl-btn--ghost"
+                (click)="resetOrchestrator()"
+                id="btn-agent-reset"
+              >
+                ↺ Reiniciar
+              </button>
+            </div>
+          </div>
+
+          <div class="console-body">
+            <!-- 1. Pensamiento Simulado (Thought) -->
+            <div class="console-section">
+              <div class="section-label">
+                <span class="material-symbols-outlined">psychology</span>
+                <span>Pensamiento del Agente (Reasoning Trace)</span>
+              </div>
+              <p class="thought-bubble">{{ currentStep().thought }}</p>
+            </div>
+
+            <!-- 2. Compuerta Human-in-the-Loop si el paso lo requiere -->
+            @if (currentStep().phase === 'HITL_GATE') {
+              <div class="hitl-gate-panel">
+                <div class="hitl-gate-header">
+                  <span class="material-symbols-outlined">gavel</span>
+                  <strong>Compuerta Formal Human-in-the-Loop (M05 Guardrail)</strong>
+                </div>
+                <p class="hitl-gate-text">
+                  El agente ha preparado un parche de código y solicita autorización para crear la rama y el Pull Request en GitHub.
+                  Capacidad no implica autoridad: el runtime detiene la ejecución hasta tu confirmación.
+                </p>
+                <div class="hitl-gate-status">
+                  @if (!isHumanApproved()) {
+                    <button
+                      type="button"
+                      class="approve-gate-btn"
+                      (click)="approveHitl()"
+                      id="btn-gate-approve"
+                    >
+                      ✓ Aprobar Creación de Pull Request
+                    </button>
+                  } @else {
+                    <span class="approved-badge">✓ Aprobado por el Ingeniero Humano. Continuando bucle...</span>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- 3. Tool Call Despachado (Action) -->
+            @if (currentStep().toolCall) {
+              <div class="console-section">
+                <div class="section-label">
+                  <span class="material-symbols-outlined">terminal</span>
+                  <span>Acción Despachada (MCP Tool Call: {{ currentStep().toolCall?.tool }})</span>
+                  <span class="server-badge">{{ currentStep().toolCall?.server }}</span>
+                </div>
+                <pre class="code-box"><code>{{ currentStep().toolCall?.arguments | json }}</code></pre>
+              </div>
+            }
+
+            <!-- 4. Observación Recibida (Observation) -->
+            @if (currentStep().observation) {
+              <div class="console-section">
+                <div class="section-label">
+                  <span class="material-symbols-outlined">visibility</span>
+                  <span>Observación Incorporada al Contexto</span>
+                </div>
+                <div class="observation-box">
+                  <p>{{ currentStep().observation }}</p>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Stepper de Pasos -->
+          <div class="console-stepper">
+            @for (step of agentSteps; track step.stepIndex) {
+              <div
+                class="stepper-step"
+                [class.stepper-step--active]="currentAgentStepIndex() === $index"
+                [class.stepper-step--done]="currentAgentStepIndex() > $index"
+              >
+                <span class="step-num">{{ step.stepIndex }}</span>
+                <span class="step-name">{{ step.title.split(':')[1] }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- 7, 8, 9. Cierre Pedagógico: Antipatrones, Comprobación Socrática y Síntesis -->
+      <app-m06-lesson-closing
+        [pitfalls]="doc.commonPitfalls || []"
+        [questions]="doc.groupQuestions || []"
+        [synthesis]="doc.synthesis"
+        [nextLesson]="adjacentLessons.next"
+        sectionTitlePitfalls="Riesgos y Errores en Agentes Multi-MCP"
+        sectionTitleSynthesis="Síntesis y Preparación del Laboratorio Final"
+      />
+
+      <!-- ── Lesson Footer ── -->
+      @if (lesson) {
+        <app-lesson-footer
+          [lessonId]="lesson.id"
+          [previousLesson]="adjacentLessons.previous"
+          [nextLesson]="adjacentLessons.next"
+        />
+      }
+    </div>
+
+    <!-- ── Outline Sidebar ── -->
+    <aside class="living-doc__aside">
+      <app-lesson-outline [sections]="outlineSections" />
+    </aside>
+  </div>
+</div>

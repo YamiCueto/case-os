@@ -41,7 +41,17 @@
 }
 
 .comparison-card__icon {
+  font-family: 'Material Symbols Outlined' !important;
   font-size: 20px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--case-text-secondary);
+}
+
+.comparison-card--active .comparison-card__icon {
+  color: var(--case-accent);
 }
 
 .comparison-card__title {

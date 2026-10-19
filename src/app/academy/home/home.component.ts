@@ -35,17 +35,14 @@ const MODULE_ICONS: Record<string, string> = {
   m3: 'account_tree',
   m4: 'database',
   m5: 'smart_toy',
-  m6: 'code',
-  m7: 'integration_instructions',
-  m8: 'shield',
-  m9: 'architecture'
+  m6: 'integration_instructions'
 };
 
 /**
  * HomeComponent — CASE Academy
  * Phase 2 — Visual Evolution of Academy Home
  *
- * Provides a high-density, engineering-first overview of the curriculum M01–M09,
+ * Provides a high-density, engineering-first overview of the curriculum M01–M06,
  * active learning session, and overall progress.
  * Consumes strictly CASE Design System primitives and tokens.
  */

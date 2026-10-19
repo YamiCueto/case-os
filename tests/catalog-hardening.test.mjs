@@ -76,7 +76,7 @@ console.log('[PASS] 2. Validación de credencial administrativa completada (tant
 // Preparación de datos base para pruebas de reconciliación
 // ---------------------------------------------------------------------------
 const { lessons } = extractCourseConfig();
-assert.equal(lessons.length, 45, 'Deben existir exactamente 45 lecciones en Git');
+assert.equal(lessons.length, 34, 'Deben existir exactamente 34 lecciones en Git');
 
 function createMockRemoteUnits(lessonsList) {
   return lessonsList.map(l => ({

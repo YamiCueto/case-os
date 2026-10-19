@@ -1,0 +1,196 @@
+<div class="presentation-container pb-32" role="main">
+  <!-- ── Topbar de Navegación del Instructor & Meta de Sesión ── -->
+  <div class="living-doc__topbar" style="margin-bottom: 1.5rem;">
+    <div class="living-doc__session-badge">
+      <span class="material-symbols-outlined">calendar_today</span>
+      <span>Sesión Final: Sábado 24 Octubre · 180 minutos (09:00 - 12:00)</span>
+    </div>
+    <app-instructor-guide-drawer [guide]="instructorGuide" />
+  </div>
+
+  <div class="slide-wrapper">
+
+    <!-- Context Chips -->
+    <div class="lab-context-chips">
+      <span class="chip-badge">LAB 06 · REAL ENGINEERING CAPSTONE</span>
+      <span class="chip-module">Módulo 06 · Model Context Protocol</span>
+      <span class="chip-sep">·</span>
+      <span class="chip-meta">⏱️ 180 min</span>
+      <span class="chip-meta">· Advanced</span>
+      <span class="chip-meta">· Cierre Definitivo de Capacitaciones</span>
+    </div>
+
+    <!-- Título y Hero del Laboratorio -->
+    <header class="lab-hero">
+      <h1 class="lab-title">Laboratorio 06 — Construcción de una Integración MCP</h1>
+      <p class="lab-subtitle">
+        Conecta tus agentes agénticos desarrollados en el Módulo M05 con herramientas y datos del mundo real
+        mediante Model Context Protocol. Elige una de las cuatro alternativas prácticas y presenta tus evidencias.
+      </p>
+    </header>
+
+    <!-- ── 1. Alternativas de Laboratorio ── -->
+    <section class="lab-section">
+      <div class="section-title-wrap">
+        <span class="step-num">01</span>
+        <h2 class="section-heading">Selecciona tu Alternativa de Integración</h2>
+      </div>
+      <p class="section-desc">
+        Reutiliza los agentes V2–V6 construidos en las lecciones previas. No empieces otro proyecto complejo desde cero.
+        Selecciona la alternativa que mejor se adapte a tu entorno y objetivos de ingeniería:
+      </p>
+
+      <div class="alternatives-grid">
+        @for (alt of alternatives; track alt.id) {
+          <div
+            class="alt-card"
+            [class.alt-card--selected]="selectedAlternativeId() === alt.id"
+            (click)="selectedAlternativeId.set(alt.id)"
+            [id]="'card-' + alt.id"
+          >
+            <div class="alt-card-header">
+              <span class="material-symbols-outlined alt-icon">{{ alt.icon }}</span>
+              <span class="alt-badge">{{ alt.badge }}</span>
+            </div>
+            <h3 class="alt-title">{{ alt.title }}</h3>
+            <p class="alt-desc">{{ alt.description }}</p>
+            <span class="alt-mcp-pkg">Paquete: <code>{{ alt.targetMcp }}</code></span>
+          </div>
+        }
+      </div>
+
+      <!-- Detalle de la Alternativa Seleccionada -->
+      <div class="alt-detail-box">
+        <h3 class="detail-title">
+          <span class="material-symbols-outlined">{{ selectedAlternative().icon }}</span>
+          Configuración Recomendada para: {{ selectedAlternative().title }}
+        </h3>
+        <div class="detail-grid">
+          <div>
+            <span class="detail-label">1. Configuración de Entrada (mcp_config.json):</span>
+            <case-code-block
+              [code]="selectedAlternative().sampleConfig"
+              language="json"
+              filename="mcp_config.json"
+            />
+          </div>
+          <div>
+            <span class="detail-label">2. Petición de Verificación (tools/call):</span>
+            <case-code-block
+              [code]="selectedAlternative().sampleVerification"
+              language="json"
+              filename="tools-call-payload.json"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 2. Lista de Entregables Obligatorios ── -->
+    <section class="lab-section">
+      <div class="section-title-wrap">
+        <span class="step-num">02</span>
+        <h2 class="section-heading">Checklist de Entregables Obligatorios</h2>
+      </div>
+      <p class="section-desc">
+        Para acreditar la integración MCP, cada participante o equipo debe completar y documentar los siguientes 7 puntos:
+      </p>
+
+      <div class="deliverables-panel">
+        <div class="panel-progress-bar">
+          <div class="progress-info">
+            <span class="progress-label">Avance de Entregables</span>
+            <span class="progress-val">{{ completedCount() }} / {{ deliverables().length }} Completados</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" [style.width.%]="(completedCount() / deliverables().length) * 100"></div>
+          </div>
+        </div>
+
+        <div class="checklist">
+          @for (d of deliverables(); track d.id) {
+            <label class="check-item" [class.check-item--done]="d.completed">
+              <input
+                type="checkbox"
+                class="check-input"
+                [checked]="d.completed"
+                (change)="toggleDeliverable(d.id)"
+                [id]="'check-' + d.id"
+              />
+              <div class="check-content">
+                <span class="check-title">{{ d.label }}</span>
+                <span class="check-desc">{{ d.description }}</span>
+              </div>
+            </label>
+          }
+        </div>
+
+        <div class="checklist-actions">
+          <button
+            type="button"
+            class="complete-all-btn"
+            (click)="markAllComplete()"
+            id="btn-mark-lab-complete"
+          >
+            ✓ Marcar Todos los Entregables Completados
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 3. Cierre Definitivo de las Capacitaciones ── -->
+    <section class="lab-section closure-section">
+      <div class="closure-badge">
+        <span class="material-symbols-outlined">verified</span>
+        <span>CIERRE DEFINITIVO DEL PROGRAMA · 24 DE OCTUBRE DE 2026</span>
+      </div>
+
+      <h2 class="closure-title">¡Felicitaciones! Has culminado el programa formativo de CASE OS</h2>
+      <p class="closure-text">
+        A lo largo de los módulos <strong>M01 al M06</strong>, has transformado tu enfoque de desarrollo de software:
+        desde los fundamentos probabilísticos de la inferencia, pasando por contratos de prompts, ensamblaje de contexto,
+        recuperación RAG, bucles agénticos autónomos con Human-in-the-Loop, hasta la interoperabilidad universal
+        con <strong>Model Context Protocol (MCP)</strong>.
+      </p>
+
+      <div class="curriculum-summary-grid">
+        <div class="summary-pill">
+          <span class="pill-num">M01</span>
+          <span class="pill-text">Fundamentos de IA</span>
+        </div>
+        <div class="summary-pill">
+          <span class="pill-num">M02</span>
+          <span class="pill-text">Prompt Engineering</span>
+        </div>
+        <div class="summary-pill">
+          <span class="pill-num">M03</span>
+          <span class="pill-text">Context Engineering</span>
+        </div>
+        <div class="summary-pill">
+          <span class="pill-num">M04</span>
+          <span class="pill-text">Retrieval y RAG</span>
+        </div>
+        <div class="summary-pill">
+          <span class="pill-num">M05</span>
+          <span class="pill-text">AI Agents</span>
+        </div>
+        <div class="summary-pill summary-pill--final">
+          <span class="pill-num">M06</span>
+          <span class="pill-text">Model Context Protocol (Cierre)</span>
+        </div>
+      </div>
+
+      <div class="closure-quote">
+        <em>"La IA no sustituye la arquitectura de software; la hace más crítica y exigente que nunca. Diseña contratos limpios, desacopla interfaces y mantén siempre al ser humano en el control de las decisiones críticas."</em>
+      </div>
+
+      <div class="closure-nav">
+        <a routerLink="/academy/home" class="return-home-btn" id="btn-return-academy-home">
+          <span class="material-symbols-outlined">school</span>
+          <span>Volver al Dashboard de CASE Academy</span>
+        </a>
+      </div>
+    </section>
+
+  </div>
+</div>

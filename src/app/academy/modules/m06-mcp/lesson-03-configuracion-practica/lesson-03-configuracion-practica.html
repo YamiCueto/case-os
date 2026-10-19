@@ -1,0 +1,282 @@
+<div class="living-doc" role="main">
+  <!-- ── Topbar de Navegación del Instructor & Meta de Sesión ── -->
+  <div class="living-doc__topbar">
+    <div class="living-doc__session-badge">
+      <span class="material-symbols-outlined">calendar_today</span>
+      <span>Sesión: Jueves 22 Octubre · 60 minutos (19:00 - 20:00)</span>
+    </div>
+    <app-instructor-guide-drawer [guide]="instructorGuide" />
+  </div>
+
+  <!-- ── Lesson Header ── -->
+  @if (lesson) {
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      [subtitle]="doc.subtitle"
+    />
+  }
+
+  <div class="living-doc__layout">
+    <div class="living-doc__content">
+
+      <!-- 1. Objetivos de Aprendizaje -->
+      @if (doc.learningObjectives && doc.learningObjectives.length > 0) {
+        <section id="learning-objectives" class="living-doc-section">
+          <div class="learning-objectives-card">
+            <div class="learning-objectives-card__header">
+              <span class="material-symbols-outlined">flag</span>
+              <h3 class="learning-objectives-card__title">Objetivos de Aprendizaje de la Lección</h3>
+            </div>
+            <ul class="learning-objectives-card__list">
+              @for (obj of doc.learningObjectives; track $index) {
+                <li>
+                  <span class="material-symbols-outlined check-icon">{{ obj.icon || 'check_circle' }}</span>
+                  <span>{{ obj.text }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </section>
+      }
+
+      <!-- 2. Conceptos Fundamentales -->
+      @if (doc.fundamentalConcepts && doc.fundamentalConcepts.length > 0) {
+        <section id="fundamental-concepts" class="living-doc-section">
+          <span class="living-doc-section__eyebrow">Protocolo y Seguridad</span>
+          <h2 class="living-doc-section__title">Fundamentos de Configuración y Seguridad MCP</h2>
+          <div class="concepts-grid">
+            @for (concept of doc.fundamentalConcepts; track concept.title) {
+              <div class="concept-card">
+                <div class="concept-card__term">
+                  <span class="material-symbols-outlined">{{ concept.icon || 'security' }}</span>
+                  <span>{{ concept.title }}</span>
+                </div>
+                <p class="concept-card__definition">{{ concept.description }}</p>
+              </div>
+            }
+          </div>
+        </section>
+      }
+      
+      <!-- Comparativa Conceptual: stdio vs HTTP -->
+      @if (doc.comparison) {
+        <app-lesson-comparison
+          [comparison]="comparisonBlock"
+        />
+      }
+
+      <!-- Secciones Teóricas -->
+      @for (section of doc.sections; track section.id) {
+        <section [id]="section.id" class="living-doc-section">
+          @if (section.eyebrow) {
+            <span class="living-doc-section__eyebrow">{{ section.eyebrow }}</span>
+          }
+          <h2 class="living-doc-section__title">{{ section.title }}</h2>
+          
+          @if (section.lead) {
+            <p class="living-doc-section__lead">{{ section.lead }}</p>
+          }
+
+          @for (paragraph of section.paragraphs; track $index) {
+            <p class="living-doc-section__paragraph">{{ paragraph }}</p>
+          }
+
+          @if (section.callout) {
+            <case-callout
+              [variant]="section.callout.type === 'danger' ? 'caution' : (section.callout.type === 'warning' ? 'warning' : 'info')"
+              [title]="section.callout.title"
+              [message]="section.callout.message"
+            />
+          }
+
+          @if (section.codeBlock) {
+            <case-code-block
+              [code]="section.codeBlock.code"
+              [language]="section.codeBlock.language"
+              [filename]="section.codeBlock.caption"
+            />
+          }
+
+          @if (section.keyTakeaways && section.keyTakeaways.length > 0) {
+            <div class="living-doc-takeaways">
+              <h3 class="living-doc-takeaways__title">Reglas de Operación</h3>
+              <ul class="living-doc-takeaways__list">
+                @for (item of section.keyTakeaways; track $index) {
+                  <li>{{ item }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- ── PLAYGROUND OBLIGATORIO: MCP Tool Calling Inspector ── -->
+      <section id="tool-calling-inspector" class="living-doc-section playground-section">
+        <div class="playground-header">
+          <div class="playground-badge">
+            <span class="material-symbols-outlined" aria-hidden="true">troubleshoot</span>
+            <span>PLAYGROUND OBLIGATORIO · LECCIÓN 03</span>
+          </div>
+          <h2 class="playground-title">MCP Tool Calling Inspector</h2>
+          <p class="playground-description">
+            Inspecciona en tiempo real el pipeline de invocación:
+            <code>Usuario → Host → MCP Client → MCP Server → Sistema externo → Respuesta</code>.
+            Observa cómo se forman los paquetes JSON-RPC 2.0, las validaciones de esquemas, los errores de runtime y las compuertas Human-in-the-Loop.
+          </p>
+        </div>
+
+        <!-- Selector de Escenarios de Prueba -->
+        <div class="scenario-chips">
+          @for (sc of scenarios; track sc.id) {
+            <button
+              type="button"
+              class="scenario-chip"
+              [class.scenario-chip--active]="selectedScenarioId() === sc.id"
+              (click)="selectScenario(sc.id)"
+              [id]="'btn-scenario-' + sc.id"
+            >
+              <span class="sc-badge" [style.background]="sc.badgeColor">{{ sc.badge }}</span>
+              <span class="sc-title">{{ sc.title.split('(')[0] }}</span>
+            </button>
+          }
+        </div>
+
+        <div class="inspector-card">
+          <!-- Pipeline Visual Flow -->
+          <div class="pipeline-flow" aria-label="Pipeline de llamada MCP">
+            <div class="flow-stage flow-stage--active">
+              <span class="flow-step">1</span>
+              <span class="flow-title">Usuario</span>
+              <span class="flow-desc">Intención</span>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-stage flow-stage--active">
+              <span class="flow-step">2</span>
+              <span class="flow-title">Host</span>
+              <span class="flow-desc">CASE OS / Runtime</span>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-stage flow-stage--active">
+              <span class="flow-step">3</span>
+              <span class="flow-title">MCP Client</span>
+              <span class="flow-desc">JSON-RPC 2.0</span>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-stage flow-stage--active" [class.flow-stage--warning]="selectedScenario().serverExecution.requiresHitl">
+              <span class="flow-step">4</span>
+              <span class="flow-title">MCP Server</span>
+              <span class="flow-desc">{{ selectedScenario().server }}</span>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-stage flow-stage--active">
+              <span class="flow-step">5</span>
+              <span class="flow-title">Sistema Ext.</span>
+              <span class="flow-desc">{{ selectedScenario().serverExecution.externalSystem.split(' ')[0] }}</span>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-stage flow-stage--active" [class.flow-stage--error]="!selectedScenario().validationResult.valid || selectedScenario().responseRpc.result?.isError">
+              <span class="flow-step">6</span>
+              <span class="flow-title">Respuesta</span>
+              <span class="flow-desc">Resultado / Error</span>
+            </div>
+          </div>
+
+          <!-- Inspector Details Grid -->
+          <div class="inspector-grid">
+            <!-- Columna 1: Solicitud JSON-RPC 2.0 -->
+            <div class="inspector-col">
+              <div class="col-header">
+                <span class="material-symbols-outlined">output</span>
+                <span>Petición JSON-RPC: tools/call</span>
+                <span class="transport-tag">Transporte: {{ selectedScenario().transport }}</span>
+              </div>
+              <pre class="json-box"><code>{{ selectedScenario().requestRpc | json }}</code></pre>
+
+              <div class="validation-box" [class.validation-box--invalid]="!selectedScenario().validationResult.valid">
+                <span class="val-title">
+                  <span class="material-symbols-outlined">{{ selectedScenario().validationResult.valid ? 'check_circle' : 'error' }}</span>
+                  Validación de Argumentos
+                </span>
+                <p>{{ selectedScenario().validationResult.reason }}</p>
+              </div>
+            </div>
+
+            <!-- Columna 2: Ejecución y Respuesta del Servidor -->
+            <div class="inspector-col">
+              <div class="col-header">
+                <span class="material-symbols-outlined">input</span>
+                <span>Respuesta del Servidor (Response)</span>
+                <span class="status-tag" [style.color]="selectedScenario().badgeColor">{{ selectedScenario().badge }}</span>
+              </div>
+
+              <!-- Compuerta Human-in-the-Loop si aplica -->
+              @if (selectedScenario().serverExecution.requiresHitl) {
+                <div class="hitl-banner">
+                  <div class="hitl-header">
+                    <span class="material-symbols-outlined">gavel</span>
+                    <strong>Compuerta de Aprobación Humana Requerida</strong>
+                  </div>
+                  <p class="hitl-desc">
+                    La herramienta <code>{{ selectedScenario().tool }}</code> ejecutará una mutación destructiva en {{ selectedScenario().serverExecution.externalSystem }}.
+                    Estado actual: <strong>{{ hitlDecision() }}</strong>
+                  </p>
+                  <div class="hitl-actions">
+                    <button
+                      type="button"
+                      class="hitl-btn hitl-btn--approve"
+                      (click)="approveHitl()"
+                      [disabled]="hitlDecision() === 'APPROVED'"
+                      id="btn-hitl-approve"
+                    >
+                      ✓ Aprobar Ejecución
+                    </button>
+                    <button
+                      type="button"
+                      class="hitl-btn hitl-btn--reject"
+                      (click)="rejectHitl()"
+                      [disabled]="hitlDecision() === 'REJECTED'"
+                      id="btn-hitl-reject"
+                    >
+                      ✕ Rechazar Operación
+                    </button>
+                  </div>
+                </div>
+              }
+
+              <pre class="json-box"><code>{{ selectedScenario().responseRpc | json }}</code></pre>
+
+              <div class="server-diag-box">
+                <span class="diag-title">Diagnóstico de Ejecución</span>
+                <p>{{ selectedScenario().serverExecution.details }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7, 8, 9. Cierre Pedagógico: Antipatrones, Comprobación Socrática y Síntesis -->
+      <app-m06-lesson-closing
+        [pitfalls]="doc.commonPitfalls || []"
+        [questions]="doc.groupQuestions || []"
+        [synthesis]="doc.synthesis"
+        [nextLesson]="adjacentLessons.next"
+        sectionTitlePitfalls="Errores Críticos en Configuración y Seguridad MCP"
+      />
+
+      <!-- ── Lesson Footer ── -->
+      @if (lesson) {
+        <app-lesson-footer
+          [lessonId]="lesson.id"
+          [previousLesson]="adjacentLessons.previous"
+          [nextLesson]="adjacentLessons.next"
+        />
+      }
+    </div>
+
+    <!-- ── Outline Sidebar ── -->
+    <aside class="living-doc__aside">
+      <app-lesson-outline [sections]="outlineSections" />
+    </aside>
+  </div>
+</div>

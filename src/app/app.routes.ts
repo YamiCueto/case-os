@@ -237,86 +237,35 @@ export const routes: Routes = [
             loadComponent: () => import('./academy/modules/m05-ai-agents/lab-05-design-agentic-workflow/lab-05-design-agentic-workflow').then(m => m.Lab05DesignAgenticWorkflow)
           },
           {
-            path: 'academy/modules/m06-agentic-swe/lesson-01-agentic-coding',
-            loadComponent: () => import('./academy/modules/m06-agentic-swe/lesson-01-agentic-coding/lesson-01-agentic-coding').then(m => m.Lesson01AgenticCoding)
+            path: 'academy/modules/m06-mcp/lesson-01-que-es-mcp',
+            loadComponent: () => import('./academy/modules/m06-mcp/lesson-01-que-es-mcp/lesson-01-que-es-mcp').then(m => m.Lesson01QueEsMcp)
           },
           {
-            path: 'academy/modules/m06-agentic-swe/lesson-02-human-collaboration',
-            loadComponent: () => import('./academy/modules/m06-agentic-swe/lesson-02-human-collaboration/lesson-02-human-collaboration').then(m => m.Lesson02HumanCollaboration)
+            path: 'academy/modules/m06-mcp/lesson-02-servidores-utiles',
+            loadComponent: () => import('./academy/modules/m06-mcp/lesson-02-servidores-utiles/lesson-02-servidores-utiles').then(m => m.Lesson02ServidoresUtiles)
           },
           {
-            path: 'academy/modules/m06-agentic-swe/lesson-03-repository-context',
-            loadComponent: () => import('./academy/modules/m06-agentic-swe/lesson-03-repository-context/lesson-03-repository-context').then(m => m.Lesson03RepositoryContext)
+            path: 'academy/modules/m06-mcp/lesson-03-configuracion-practica',
+            loadComponent: () => import('./academy/modules/m06-mcp/lesson-03-configuracion-practica/lesson-03-configuracion-practica').then(m => m.Lesson03ConfiguracionPractica)
           },
           {
-            path: 'academy/modules/m06-agentic-swe/demo-ai-coder',
-            loadComponent: () => import('./academy/modules/m06-agentic-swe/demo-ai-coder/demo-ai-coder').then(m => m.DemoAiCoder)
+            path: 'academy/modules/m06-mcp/lesson-04-agentes-mcp',
+            loadComponent: () => import('./academy/modules/m06-mcp/lesson-04-agentes-mcp/lesson-04-agentes-mcp').then(m => m.Lesson04AgentesMcp)
           },
           {
-            path: 'academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol',
-            loadComponent: () => import('./academy/modules/m06-agentic-swe/lab-06-agentic-swe-protocol/lab-06-agentic-swe-protocol').then(m => m.Lab06AgenticSweProtocol)
-          },
-          {
-            path: 'academy/modules/m07-mcp/lesson-01-nxm-problem',
-            loadComponent: () => import('./academy/modules/m07-mcp/lesson-01-nxm-problem/lesson-01-nxm-problem').then(m => m.Lesson01NxMProblem)
-          },
-          {
-            path: 'academy/modules/m07-mcp/lesson-02-architecture',
-            loadComponent: () => import('./academy/modules/m07-mcp/lesson-02-architecture/lesson-02-architecture').then(m => m.Lesson02Architecture)
-          },
-          {
-            path: 'academy/modules/m07-mcp/lesson-03-primitives',
-            loadComponent: () => import('./academy/modules/m07-mcp/lesson-03-primitives/lesson-03-primitives').then(m => m.Lesson03Primitives)
-          },
-          {
-            path: 'academy/modules/m07-mcp/demo-mcp-connector',
-            loadComponent: () => import('./academy/modules/m07-mcp/demo-mcp-connector/demo-mcp-connector').then(m => m.DemoMcpConnector)
-          },
-          {
-            path: 'academy/modules/m07-mcp/lab-07-map-integration-to-mcp',
-            loadComponent: () => import('./academy/modules/m07-mcp/lab-07-map-integration-to-mcp/lab-07-map-integration-to-mcp').then(m => m.Lab07MapIntegrationToMcp)
-          },
-          {
-            path: 'academy/modules/m08-production/lesson-01-production-gap',
-            loadComponent: () => import('./academy/modules/m08-production/lesson-01-production-gap/lesson-01-production-gap').then(m => m.Lesson01ProductionGap)
-          },
-          {
-            path: 'academy/modules/m08-production/lesson-02-evaluation',
-            loadComponent: () => import('./academy/modules/m08-production/lesson-02-evaluation/lesson-02-evaluation').then(m => m.Lesson02Evaluation)
-          },
-          {
-            path: 'academy/modules/m08-production/lesson-03-security',
-            loadComponent: () => import('./academy/modules/m08-production/lesson-03-security/lesson-03-security').then(m => m.Lesson03Security)
-          },
-          {
-            path: 'academy/modules/m08-production/demo-eval-pipeline',
-            loadComponent: () => import('./academy/modules/m08-production/demo-eval-pipeline/demo-eval-pipeline').then(m => m.DemoEvalPipeline)
-          },
-          {
-            path: 'academy/modules/m08-production/lab-08-production-ai-protocol',
-            loadComponent: () => import('./academy/modules/m08-production/lab-08-production-ai-protocol/lab-08-production-ai-protocol').then(m => m.Lab08ProductionAiProtocol)
-          },
-          {
-            path: 'academy/modules/m09-architecture/lesson-01-monolith',
-            loadComponent: () => import('./academy/modules/m09-architecture/lesson-01-monolith/lesson-01-monolith').then(m => m.Lesson01Monolith)
-          },
-          {
-            path: 'academy/modules/m09-architecture/lesson-02-capabilities',
-            loadComponent: () => import('./academy/modules/m09-architecture/lesson-02-capabilities/lesson-02-capabilities').then(m => m.Lesson02Capabilities)
-          },
-          {
-            path: 'academy/modules/m09-architecture/lesson-03-case-study',
-            loadComponent: () => import('./academy/modules/m09-architecture/lesson-03-case-study/lesson-03-case-study').then(m => m.Lesson03CaseStudy)
-          },
-          {
-            path: 'academy/modules/m09-architecture/demo-architecture-builder',
-            loadComponent: () => import('./academy/modules/m09-architecture/demo-architecture-builder/demo-architecture-builder').then(m => m.DemoArchitectureBuilder)
-          },
-      {
-        path: 'academy/modules/m09-architecture/lab-09-architecture-blueprint',
-        loadComponent: () => import('./academy/modules/m09-architecture/lab-09-architecture-blueprint/lab-09-architecture-blueprint').then(m => m.Lab09ArchitectureBlueprint)
-      }
-    ]
+            path: 'academy/modules/m06-mcp/lab-06-integracion-mcp',
+            loadComponent: () => import('./academy/modules/m06-mcp/lab-06-integracion-mcp/lab-06-integracion-mcp').then(m => m.Lab06IntegracionMcp)
+          }
+        ]
+      },
+  {
+    path: 'academy/instructor-view',
+    redirectTo: 'academy/instructor-view/c-m6-l01',
+    pathMatch: 'full'
+  },
+  {
+    path: 'academy/instructor-view/:lessonId',
+    loadComponent: () => import('./academy/pages/instructor-view/instructor-view.component').then(m => m.InstructorViewComponent)
   },
   {
     path: '**',

@@ -1,0 +1,229 @@
+@if (!isUnlocked()) {
+  <!-- Pantalla de Bloqueo / Modal de Contraseña para Monitor Secundario -->
+  <div class="popout-lock-screen">
+    <app-instructor-auth-modal
+      (unlocked)="true"
+      (cancelled)="true"
+    />
+  </div>
+} @else {
+  <div class="instructor-standalone-view" role="main">
+    <!-- ── Topbar de Control para Segundo Monitor ── -->
+    <header class="popout-header">
+      <div class="popout-header__brand">
+        <div class="badge-role">
+          <span class="material-symbols-outlined" aria-hidden="true">co_present</span>
+          <span>MODO INSTRUCTOR · MONITOR DEDICADO</span>
+        </div>
+        <h1 class="popout-header__title">{{ guide().lessonTitle }}</h1>
+        <div class="popout-header__meta">
+          <span class="meta-item">⏱️ {{ guide().sessionTimeTotal }} min</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-item">{{ guide().sessionNumber }}</span>
+        </div>
+      </div>
+
+      <div class="popout-header__controls">
+        <!-- Selector rápido de Unidad -->
+        <div class="unit-selector">
+          <label for="select-unit-popout" class="sr-only">Seleccionar Lección:</label>
+          <select
+            id="select-unit-popout"
+            class="unit-dropdown"
+            [value]="selectedLessonId()"
+            (change)="selectLesson($any($event.target).value)"
+          >
+            <option value="c-m6-l01">L01 — ¿Qué es MCP? (55 min)</option>
+            <option value="c-m6-l02">L02 — Servidores Útiles (65 min)</option>
+            <option value="c-m6-l03">L03 — Configuración Práctica (60 min)</option>
+            <option value="c-m6-l04">L04 — Agentes con MCP (60 min)</option>
+            <option value="c-m6-lab">LAB 06 — Capstone MCP (180 min)</option>
+          </select>
+        </div>
+
+        <!-- Botón Bloquear Sesión -->
+        <button
+          type="button"
+          class="ctrl-btn"
+          (click)="lockSession()"
+          title="Bloquear acceso de instructor"
+          id="btn-lock-instructor-popout"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+        </button>
+
+        <!-- Botón Fullscreen -->
+        <button
+          type="button"
+          class="ctrl-btn"
+          (click)="toggleFullscreen()"
+          [title]="isFullscreen() ? 'Salir de Pantalla Completa' : 'Pantalla Completa en Monitor Secundario'"
+          id="btn-popout-fullscreen"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">
+            {{ isFullscreen() ? 'fullscreen_exit' : 'fullscreen' }}
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Timeline Stepper Fijo ── -->
+    <nav class="popout-stepper" aria-label="Timeline de la sesión">
+      <div class="stepper-label">
+        <span class="material-symbols-outlined" aria-hidden="true">timer</span>
+        <span>TIMELINE REAL ({{ guide().blocks.length }} BLOQUES):</span>
+      </div>
+      <div class="stepper-track">
+        @for (block of guide().blocks; track block.id) {
+          <button
+            type="button"
+            class="stepper-pill"
+            [class.stepper-pill--active]="currentBlockIndex() === $index"
+            [class.stepper-pill--completed]="currentBlockIndex() > $index"
+            (click)="goToBlock($index)"
+          >
+            <span class="pill-range">{{ block.startMinute }}–{{ block.endMinute }}m</span>
+            <span class="pill-title">{{ block.topic }}</span>
+          </button>
+        }
+      </div>
+    </nav>
+
+    <!-- ── Contenido Principal Scrollable con Tipografía Aumentada ── -->
+    <main class="popout-body">
+      <!-- Bloque Hero -->
+      <div class="block-hero">
+        <div class="block-hero__time">
+          <span class="time-tag">BLOQUE {{ currentBlockIndex() + 1 }} DE {{ guide().blocks.length }}</span>
+          <span class="time-range">⏱️ Minuto {{ currentBlock().startMinute }} a {{ currentBlock().endMinute }} ({{ currentBlock().durationMinutes }} min)</span>
+        </div>
+        <h2 class="block-topic">{{ currentBlock().topic }}</h2>
+        <p class="block-objective">
+          <strong>Objetivo Pedagógico:</strong> {{ currentBlock().objective }}
+        </p>
+      </div>
+
+      <!-- 1. Explicación al grupo -->
+      <section class="guide-card">
+        <div class="guide-card__header">
+          <span class="material-symbols-outlined guide-icon guide-icon--info" aria-hidden="true">lightbulb</span>
+          <h3 class="guide-card__title">1. Qué debe explicar el instructor al grupo</h3>
+        </div>
+        <ul class="guide-list">
+          @for (point of currentBlock().explanationGuide; track point) {
+            <li class="guide-list__item">
+              <span class="bullet" aria-hidden="true">•</span>
+              <span>{{ point }}</span>
+            </li>
+          }
+        </ul>
+      </section>
+
+      <!-- 2. Guion sugerido palabra por palabra (16.5px, 1.68 line-height) -->
+      <section class="guide-card guide-card--script">
+        <div class="guide-card__header">
+          <span class="material-symbols-outlined guide-icon guide-icon--voice" aria-hidden="true">record_voice_over</span>
+          <h3 class="guide-card__title">2. Guion Sugerido (Qué decir palabra por palabra)</h3>
+        </div>
+        <blockquote class="script-quote">
+          "{{ currentBlock().suggestedScript }}"
+        </blockquote>
+      </section>
+
+      <!-- 3. Qué mostrar en pantalla principal -->
+      <section class="guide-card">
+        <div class="guide-card__header">
+          <span class="material-symbols-outlined guide-icon guide-icon--locate" aria-hidden="true">visibility</span>
+          <h3 class="guide-card__title">3. Qué parte de la plataforma mostrar en pantalla principal</h3>
+        </div>
+        <div class="nav-action-row">
+          <span class="section-badge">Sección ancla en monitor 1: <code>#{{ currentBlock().platformSectionRef }}</code></span>
+        </div>
+      </section>
+
+      <!-- 4. Instrucción del Playground -->
+      @if (currentBlock().playgroundRef) {
+        <section class="guide-card">
+          <div class="guide-card__header">
+            <span class="material-symbols-outlined guide-icon guide-icon--play" aria-hidden="true">play_circle</span>
+            <h3 class="guide-card__title">4. Demostración en el Playground: {{ currentBlock().playgroundRef?.name }}</h3>
+          </div>
+          <ol class="action-steps-list">
+            @for (step of currentBlock().playgroundRef?.actionSteps; track step) {
+              <li class="action-step-item">
+                <span class="step-num">{{ $index + 1 }}</span>
+                <span>{{ step }}</span>
+              </li>
+            }
+          </ol>
+        </section>
+      }
+
+      <!-- 5. Pregunta Socrática -->
+      <section class="guide-card">
+        <div class="guide-card__header">
+          <span class="material-symbols-outlined guide-icon guide-icon--ask" aria-hidden="true">help_outline</span>
+          <h3 class="guide-card__title">5. Pregunta Socrática de Comprobación</h3>
+        </div>
+        <p class="question-text">"{{ currentBlock().checkQuestion.question }}"</p>
+        <div class="answer-toggle-wrap">
+          <button
+            type="button"
+            class="answer-toggle-btn"
+            (click)="toggleAnswer()"
+            id="btn-popout-toggle-answer"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">
+              {{ showExpectedAnswer() ? 'visibility_off' : 'visibility' }}
+            </span>
+            <span>{{ showExpectedAnswer() ? 'Ocultar Respuesta Esperada' : 'Revelar Respuesta Esperada del Alumno' }}</span>
+          </button>
+          @if (showExpectedAnswer()) {
+            <div class="answer-box">
+              <span class="answer-label">Respuesta Técnica Esperada:</span>
+              <p class="answer-text">{{ currentBlock().checkQuestion.expectedAnswer }}</p>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- 6. Frase de Transición -->
+      <section class="guide-card">
+        <div class="guide-card__header">
+          <span class="material-symbols-outlined guide-icon guide-icon--next" aria-hidden="true">forward</span>
+          <h3 class="guide-card__title">6. Frase de Transición hacia el siguiente tema</h3>
+        </div>
+        <p class="transition-text"><em>"{{ currentBlock().transition }}"</em></p>
+      </section>
+    </main>
+
+    <!-- ── Footer de Navegación Fijo ── -->
+    <footer class="popout-footer">
+      <button
+        type="button"
+        class="footer-nav-btn"
+        (click)="prevBlock()"
+        [disabled]="currentBlockIndex() === 0"
+        id="btn-popout-prev-block"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+        <span>Bloque Anterior</span>
+      </button>
+
+      <div class="footer-step-counter">
+        <span>Bloque {{ currentBlockIndex() + 1 }} de {{ guide().blocks.length }}</span>
+      </div>
+
+      <button
+        type="button"
+        class="footer-nav-btn footer-nav-btn--primary"
+        (click)="nextBlock()"
+        [disabled]="currentBlockIndex() === guide().blocks.length - 1"
+        id="btn-popout-next-block"
+      >
+        <span>Siguiente Bloque</span>
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+      </button>
+    </footer>
+  </div>
+}

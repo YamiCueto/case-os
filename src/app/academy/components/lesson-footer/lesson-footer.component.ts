@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Lesson } from '../../../core/models/course.models';
 import { UserProgressService } from '../../../core/services/user-progress.service';
-import { CaseButtonComponent, CaseBadgeComponent } from '../../../core/ui/components';
+import { CaseButtonComponent } from '../../../core/ui/components';
 
 /**
  * LessonFooterComponent — CASE Academy
@@ -16,7 +16,7 @@ import { CaseButtonComponent, CaseBadgeComponent } from '../../../core/ui/compon
 @Component({
   selector: 'app-lesson-footer',
   standalone: true,
-  imports: [CommonModule, RouterLink, CaseButtonComponent, CaseBadgeComponent],
+  imports: [CommonModule, RouterLink, CaseButtonComponent],
   templateUrl: './lesson-footer.component.html',
   styleUrl: './lesson-footer.component.css'
 })

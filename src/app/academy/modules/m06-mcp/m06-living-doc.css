@@ -1,0 +1,583 @@
+/**
+ * CASE OS — M06 Model Context Protocol (MCP)
+ * Living Technical Documentation Style System (UI-UX Pro Max)
+ * Resuelve jerarquía tipográfica, espaciado, componentes pedagógicos y adaptabilidad responsive.
+ */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* ── Living Doc Shell ── */
+.living-doc {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: var(--case-space-8, 32px) var(--case-space-6, 24px) var(--case-space-16, 64px);
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.25s ease both;
+  box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Top Bar con Toggle de Instructor ── */
+.living-doc__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: var(--case-space-4, 16px);
+}
+
+/* ── Layout & Content ── */
+.living-doc__layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-8, 32px);
+  width: 100%;
+}
+
+.living-doc__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-10, 40px);
+  width: 100%;
+}
+
+/* ── Secciones Técnicas Estructuradas ── */
+.living-doc-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-space-4, 16px);
+  scroll-margin-top: 80px;
+  padding-bottom: var(--case-space-8, 32px);
+  border-bottom: 1px solid var(--case-border, #1f1f1f);
+}
+
+.living-doc-section:last-of-type {
+  border-bottom: none;
+}
+
+.living-doc-section__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--case-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--case-accent, #007aff);
+}
+
+.living-doc-section__title {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--case-text-primary, #ededed);
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.living-doc-section__lead {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--case-text-secondary, #a3a3a3);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.living-doc-section__paragraph {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 15px;
+  font-weight: 400;
+  color: #d1d5db;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.living-doc-section__paragraph strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.living-doc-section__paragraph code {
+  font-family: var(--case-font-mono, monospace);
+  font-size: 13px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+/* ── 2. Tarjeta de Objetivos de Aprendizaje (Pedagógica) ── */
+.learning-objectives-card {
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(10, 10, 10, 0.95) 100%), var(--case-surface-1, #0a0a0a);
+  border: 1px solid rgba(0, 122, 255, 0.25);
+  border-radius: var(--case-radius, 8px);
+  padding: 22px 24px;
+  margin: 12px 0 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.learning-objectives-card__header,
+.card-header-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.learning-objectives-card__header .material-symbols-outlined,
+.card-header-icon {
+  font-size: 20px;
+  color: #38bdf8;
+}
+
+.learning-objectives-card__title,
+.card-header-title {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.learning-objectives-card__list,
+.objectives-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.learning-objectives-card__list li,
+.objective-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 14px;
+  color: #e2e8f0;
+  line-height: 1.55;
+}
+
+.learning-objectives-card__list .check-icon,
+.objective-icon {
+  font-size: 18px;
+  color: var(--case-color-success, #22c55e);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── 3. Grid de Conceptos Fundamentales (Tarjetas) ── */
+.concepts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 14px 0 24px;
+}
+
+.concept-card {
+  background: var(--case-surface-1, #0a0a0a);
+  border: 1px solid var(--case-border, #1f1f1f);
+  border-radius: var(--case-radius, 8px);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all var(--case-transition-fast, 0.15s ease);
+}
+
+.concept-card:hover {
+  border-color: rgba(0, 122, 255, 0.35);
+  background: var(--case-surface-2, #111111);
+  transform: translateY(-1px);
+}
+
+.concept-card__term {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.concept-card__term .material-symbols-outlined {
+  font-size: 20px;
+  color: #38bdf8;
+}
+
+.concept-card__definition {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.concept-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.concept-card__icon {
+  font-size: 20px;
+  color: #a855f7;
+}
+
+.concept-card__title {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.concept-card__desc {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 13.5px;
+  color: var(--case-text-secondary, #a3a3a3);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ── Key Takeaways / Puntos Clave ── */
+.living-doc-takeaways {
+  background: var(--case-surface-1, #0a0a0a);
+  border: 1px solid var(--case-border, #1f1f1f);
+  border-radius: var(--case-radius, 8px);
+  padding: 18px 20px;
+  margin: 12px 0;
+}
+
+.living-doc-takeaways__title {
+  font-family: var(--case-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--case-color-success, #22c55e);
+  margin: 0 0 10px 0;
+}
+
+.living-doc-takeaways__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.living-doc-takeaways__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #d1d5db;
+  line-height: 1.5;
+}
+
+.living-doc-takeaways__list li::before {
+  content: '✓';
+  font-weight: 700;
+  color: var(--case-color-success, #22c55e);
+  flex-shrink: 0;
+}
+
+/* ── 7. Tarjeta de Errores Comunes (Pitfalls) ── */
+.common-errors-card {
+  background: rgba(245, 158, 11, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: var(--case-radius, 8px);
+  padding: 20px 24px;
+  margin: 16px 0;
+}
+
+.errors-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.errors-header-icon {
+  font-size: 20px;
+  color: #f59e0b;
+}
+
+.errors-header-title {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #fef3c7;
+  margin: 0;
+}
+
+.errors-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.error-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.1);
+}
+
+.error-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.error-item__title {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.error-item__fix {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 13.5px;
+  color: #d1d5db;
+  line-height: 1.5;
+}
+
+.error-item__fix strong {
+  color: #ffffff;
+}
+
+/* ── 8. Preguntas al Grupo (Activación) ── */
+.group-questions-card {
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: var(--case-radius, 8px);
+  padding: 20px 24px;
+  margin: 16px 0;
+}
+
+.questions-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.questions-header-icon {
+  font-size: 20px;
+  color: #c084fc;
+}
+
+.questions-header-title {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #f3e8ff;
+  margin: 0;
+}
+
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.question-box {
+  background: var(--case-surface-1, #0a0a0a);
+  border: 1px solid var(--case-border, #1f1f1f);
+  border-radius: var(--case-radius-sm, 6px);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.question-prompt {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.question-reveal {
+  font-size: 13px;
+  color: var(--case-text-secondary, #a3a3a3);
+  line-height: 1.5;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 3px solid #c084fc;
+}
+
+.question-reveal strong {
+  color: #d8b4fe;
+}
+
+/* ── 9. Síntesis y Transición ── */
+.synthesis-card {
+  background: var(--case-surface-1, #0a0a0a);
+  border: 1px solid var(--case-border-strong, #2a2a2a);
+  border-left: 4px solid var(--case-accent, #007aff);
+  border-radius: var(--case-radius, 8px);
+  padding: 18px 24px;
+  margin: 20px 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.synthesis-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.synthesis-icon {
+  font-size: 18px;
+  color: var(--case-accent, #007aff);
+}
+
+.synthesis-title {
+  font-family: var(--case-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--case-text-primary, #ededed);
+  margin: 0;
+}
+
+.synthesis-text {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 14px;
+  color: #d1d5db;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.transition-callout {
+  margin-top: 6px;
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── 6. Playground Section (Estilizado y sin desbordamientos) ── */
+.playground-section {
+  background: var(--case-surface-1, #0a0a0a);
+  border: 1px solid var(--case-border-strong, #2a2a2a);
+  border-radius: var(--case-radius, 8px);
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.playground-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--case-border, #1f1f1f);
+}
+
+.playground-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--case-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  width: fit-content;
+}
+
+.playground-badge .material-symbols-outlined {
+  font-size: 15px;
+}
+
+.playground-title {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.playground-description {
+  font-family: var(--case-font-sans, sans-serif);
+  font-size: 14.5px;
+  color: var(--case-text-secondary, #a3a3a3);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Aside & Outline ── */
+.living-doc__aside {
+  width: 100%;
+}
+
+/* ── Media Queries Responsive ── */
+@media (max-width: 768px) {
+  .living-doc {
+    padding: var(--case-space-4, 16px) var(--case-space-3, 12px) var(--case-space-12, 48px);
+  }
+
+  .living-doc-section__title {
+    font-size: 20px;
+  }
+
+  .living-doc-section__lead {
+    font-size: 14.5px;
+  }
+
+  .living-doc-section__paragraph {
+    font-size: 14px;
+  }
+
+  .playground-section {
+    padding: 16px;
+  }
+
+  .objectives-list,
+  .concepts-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,253 @@
+<!-- Botón de apertura flotante discreto -->
+<button
+  type="button"
+  class="instructor-trigger-btn"
+  (click)="onTriggerClick()"
+  [attr.aria-expanded]="isOpen()"
+  id="btn-open-instructor-drawer"
+  title="Abrir Guía del Instructor (Requiere clave)"
+>
+  <span class="material-symbols-outlined trigger-icon" aria-hidden="true">co_present</span>
+  <span class="trigger-label">Guía del Instructor</span>
+  <span class="trigger-badge">{{ guide.sessionTimeTotal }}m</span>
+</button>
+
+<!-- Modal de Contraseña de Acceso -->
+@if (isAuthModalOpen()) {
+  <app-instructor-auth-modal
+    (unlocked)="onAuthSuccess()"
+    (cancelled)="onAuthCancelled()"
+  />
+}
+
+<!-- Backdrop cuando el drawer está abierto -->
+@if (isOpen()) {
+  <div class="instructor-backdrop" (click)="closeDrawer()" aria-hidden="true"></div>
+}
+
+<!-- Panel Lateral / Drawer -->
+<aside
+  class="instructor-drawer"
+  [class.instructor-drawer--open]="isOpen()"
+  role="dialog"
+  aria-label="Guía y Timeline del Instructor"
+  [attr.aria-hidden]="!isOpen()"
+>
+  <!-- Header del Drawer -->
+  <div class="drawer-header">
+    <div class="drawer-header__info">
+      <div class="drawer-badge">
+        <span class="material-symbols-outlined" aria-hidden="true">school</span>
+        <span>MODO INSTRUCTOR · CASE OS</span>
+      </div>
+      <h2 class="drawer-title">{{ guide.lessonTitle }}</h2>
+      <div class="drawer-meta">
+        <span class="meta-time">⏱️ {{ guide.sessionTimeTotal }} min</span>
+        <span class="meta-sep">·</span>
+        <span class="meta-session">{{ guide.sessionNumber }}</span>
+      </div>
+    </div>
+    <div class="drawer-header__actions">
+      <button
+        type="button"
+        class="drawer-action-btn"
+        (click)="openPopoutWindow()"
+        title="Abrir guía en ventana independiente (para segundo monitor)"
+        aria-label="Abrir guía en ventana independiente para segundo monitor"
+        id="btn-popout-instructor-guide"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+        <span class="action-btn-text">Doble Monitor</span>
+      </button>
+      <button
+        type="button"
+        class="drawer-close-btn"
+        (click)="lockAccess()"
+        title="Bloquear acceso docente"
+        aria-label="Bloquear acceso docente"
+        id="btn-lock-instructor-drawer"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+      </button>
+      <button
+        type="button"
+        class="drawer-close-btn"
+        (click)="closeDrawer()"
+        aria-label="Cerrar Guía del Instructor"
+        id="btn-close-instructor-drawer"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Stepper Visual del Timeline -->
+  <div class="timeline-stepper" role="navigation" aria-label="Línea de tiempo de la sesión">
+    <div class="stepper-label">
+      <span class="material-symbols-outlined" aria-hidden="true">timer</span>
+      <span>TIMELINE REAL ({{ guide.blocks.length }} BLOQUES):</span>
+    </div>
+    <div class="stepper-track">
+      @for (block of guide.blocks; track block.id) {
+        <button
+          type="button"
+          class="stepper-pill"
+          [class.stepper-pill--active]="currentBlockIndex() === $index"
+          [class.stepper-pill--completed]="currentBlockIndex() > $index"
+          (click)="goToBlock($index)"
+          [attr.aria-current]="currentBlockIndex() === $index ? 'step' : null"
+          [id]="'btn-block-' + block.id"
+        >
+          <span class="pill-range">{{ block.startMinute }}–{{ block.endMinute }}m</span>
+          <span class="pill-title">{{ block.topic }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Cuerpo del Bloque Activo -->
+  <div class="drawer-body">
+    <!-- Encabezado del Bloque -->
+    <div class="block-hero">
+      <div class="block-hero__time">
+        <span class="time-tag">BLOQUE {{ currentBlockIndex() + 1 }} DE {{ guide.blocks.length }}</span>
+        <span class="time-range">⏱️ Minuto {{ currentBlock().startMinute }} a {{ currentBlock().endMinute }} ({{ currentBlock().durationMinutes }} min)</span>
+      </div>
+      <h3 class="block-topic">{{ currentBlock().topic }}</h3>
+      <p class="block-objective"><strong>Objetivo Pedagógico:</strong> {{ currentBlock().objective }}</p>
+    </div>
+
+    <!-- 1. Qué debe explicar el instructor -->
+    <div class="guide-card">
+      <div class="guide-card__header">
+        <span class="material-symbols-outlined guide-icon guide-icon--info" aria-hidden="true">lightbulb</span>
+        <h4 class="guide-card__title">1. Qué debe explicar el instructor</h4>
+      </div>
+      <ul class="guide-list">
+        @for (item of currentBlock().explanationGuide; track $index) {
+          <li class="guide-list__item">
+            <span class="bullet material-symbols-outlined" aria-hidden="true">check_circle</span>
+            <span>{{ item }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- 2. Guion sugerido (Qué decir) -->
+    <div class="guide-card guide-card--script">
+      <div class="guide-card__header">
+        <span class="material-symbols-outlined guide-icon guide-icon--voice" aria-hidden="true">record_voice_over</span>
+        <h4 class="guide-card__title">2. Guion Sugerido (Qué decir al grupo)</h4>
+      </div>
+      <blockquote class="script-quote">
+        {{ currentBlock().suggestedScript }}
+      </blockquote>
+    </div>
+
+    <!-- 3. Qué parte de la plataforma mostrar -->
+    <div class="guide-card guide-card--nav">
+      <div class="guide-card__header">
+        <span class="material-symbols-outlined guide-icon guide-icon--locate" aria-hidden="true">visibility</span>
+        <h4 class="guide-card__title">3. Qué parte de la plataforma mostrar</h4>
+      </div>
+      <div class="nav-action-row">
+        <span class="section-badge">Ancla: <code>#{{ currentBlock().platformSectionRef }}</code></span>
+        <button
+          type="button"
+          class="jump-to-section-btn"
+          (click)="scrollToSection(currentBlock().platformSectionRef)"
+          id="btn-jump-to-section"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_downward</span>
+          <span>Desplazar plataforma aquí</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 4. Instrucción del Playground (si aplica) -->
+    @if (currentBlock().playgroundRef) {
+      <div class="guide-card guide-card--playground">
+        <div class="guide-card__header">
+          <span class="material-symbols-outlined guide-icon guide-icon--play" aria-hidden="true">science</span>
+          <h4 class="guide-card__title">4. Demostración en el Playground: {{ currentBlock().playgroundRef?.name }}</h4>
+        </div>
+        <ol class="action-steps-list">
+          @for (step of currentBlock().playgroundRef?.actionSteps; track $index) {
+            <li class="action-step-item">
+              <span class="step-num">{{ $index + 1 }}</span>
+              <span class="step-desc">{{ step }}</span>
+            </li>
+          }
+        </ol>
+      </div>
+    }
+
+    <!-- 5. Pregunta de comprobación y respuesta esperada -->
+    <div class="guide-card guide-card--question">
+      <div class="guide-card__header">
+        <span class="material-symbols-outlined guide-icon guide-icon--ask" aria-hidden="true">quiz</span>
+        <h4 class="guide-card__title">5. Pregunta de Comprobación al Grupo</h4>
+      </div>
+      <p class="question-text">"{{ currentBlock().checkQuestion.question }}"</p>
+      
+      <div class="answer-toggle-wrap">
+        <button
+          type="button"
+          class="answer-toggle-btn"
+          (click)="toggleAnswer()"
+          id="btn-toggle-answer"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">
+            {{ showExpectedAnswer() ? 'visibility_off' : 'visibility' }}
+          </span>
+          <span>{{ showExpectedAnswer() ? 'Ocultar Respuesta Esperada' : 'Revelar Respuesta Esperada del Alumno' }}</span>
+        </button>
+        
+        @if (showExpectedAnswer()) {
+          <div class="answer-box">
+            <span class="answer-label">Respuesta esperada clave:</span>
+            <p class="answer-text">{{ currentBlock().checkQuestion.expectedAnswer }}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- 6. Transición hacia el siguiente tema -->
+    <div class="guide-card guide-card--transition">
+      <div class="guide-card__header">
+        <span class="material-symbols-outlined guide-icon guide-icon--next" aria-hidden="true">forward</span>
+        <h4 class="guide-card__title">6. Frase de Transición</h4>
+      </div>
+      <p class="transition-text"><em>"{{ currentBlock().transition }}"</em></p>
+    </div>
+  </div>
+
+  <!-- Footer de Navegación del Drawer -->
+  <div class="drawer-footer">
+    <button
+      type="button"
+      class="footer-nav-btn"
+      (click)="prevBlock()"
+      [disabled]="currentBlockIndex() === 0"
+      id="btn-drawer-prev-block"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+      <span>Anterior</span>
+    </button>
+
+    <div class="footer-step-counter">
+      <span>{{ currentBlockIndex() + 1 }} / {{ guide.blocks.length }}</span>
+    </div>
+
+    <button
+      type="button"
+      class="footer-nav-btn footer-nav-btn--primary"
+      (click)="nextBlock()"
+      [disabled]="currentBlockIndex() === guide.blocks.length - 1"
+      id="btn-drawer-next-block"
+    >
+      <span>Siguiente Bloque</span>
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+    </button>
+  </div>
+</aside>

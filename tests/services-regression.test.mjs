@@ -366,17 +366,17 @@ await testCase('4. UserProgressService: Cálculo dinámico de avance contra cat�
   const progressService = runInInjectionContext(injector, () => injector.get(UserProgressService));
   assert.ok(progressService instanceof UserProgressService, 'Debe ser instancia real de UserProgressService');
 
-  // Marcar 1 lección completada (catálogo real tiene 49 unidades en CourseService)
+  // Marcar 1 lección completada (catálogo real tiene 34 unidades en CourseService)
   progressService.markLessonAsCompleted('c1');
   let state = progressService.getProgress()();
   assert.strictEqual(state.completedLessons.length, 1);
-  assert.strictEqual(state.completionPercentage, 2); // Math.round((1/49) * 100) = 2%
+  assert.strictEqual(state.completionPercentage, 3); // Math.round((1/34) * 100) = 3%
 
-  // Marcar 9 lecciones (Math.round((9/49) * 100) = 18%, demuestra que no usa denominador fijo histórico de 45)
+  // Marcar 9 lecciones (Math.round((9/34) * 100) = 26%, demuestra cálculo dinámico contra catálogo)
   ['c2', 'c3', 'd1', 'l1', 'c4', 'c5', 'c6', 'd2'].forEach(id => progressService.markLessonAsCompleted(id));
   state = progressService.getProgress()();
   assert.strictEqual(state.completedLessons.length, 9);
-  assert.strictEqual(state.completionPercentage, 18); // Math.round((9/49) * 100) = 18%
+  assert.strictEqual(state.completionPercentage, 26); // Math.round((9/34) * 100) = 26%
 });
 
 // -----------------------------------------------------------------------------
@@ -443,8 +443,8 @@ await testCase('5. UserPreferencesService: Merge CRDT LWW y restauración de his
 // -----------------------------------------------------------------------------
 await testCase('6. Catálogo Git: Asignación real de módulos, prerrequisitos y tipos', () => {
   const { modules, lessons } = extractCourseConfig();
-  assert.strictEqual(modules.length, 9);
-  assert.strictEqual(lessons.length, 49);
+  assert.strictEqual(modules.length, 6);
+  assert.strictEqual(lessons.length, 34);
 
   const c4 = lessons.find(l => l.id === 'c4');
   assert.ok(c4);

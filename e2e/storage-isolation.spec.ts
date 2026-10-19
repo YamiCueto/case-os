@@ -89,10 +89,10 @@ test.describe('CASE OS — Service Integration & Storage Isolation Tests', () =>
       return { prog, totalUnits };
     });
 
-    expect(progressData.totalUnits).toBe(49);
+    expect(progressData.totalUnits).toBe(34);
     expect(progressData.prog.completedLessons).toContain('c1');
-    // 1 de 49 = Math.round((1/49) * 100) = 2%
-    expect(progressData.prog.completionPercentage).toBe(2);
+    // 1 de 34 = Math.round((1/34) * 100) = 3%
+    expect(progressData.prog.completionPercentage).toBe(3);
   });
 
   test('SyncQueueService enqueues and stores offline tasks cleanly', async ({ page }) => {

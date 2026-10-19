@@ -1,0 +1,303 @@
+<div class="living-doc" role="main">
+  <!-- ── Topbar de Navegación del Instructor & Meta de Sesión ── -->
+  <div class="living-doc__topbar">
+    <div class="living-doc__session-badge">
+      <span class="material-symbols-outlined">schedule</span>
+      <span>Sesión 1 · Lección 02 · 65 minutos</span>
+    </div>
+    <app-instructor-guide-drawer [guide]="instructorGuide" />
+  </div>
+
+  <!-- ── Lesson Header ── -->
+  @if (lesson) {
+    <app-lesson-header
+      [lesson]="lesson"
+      [moduleTitle]="module?.title"
+      [subtitle]="doc.subtitle"
+    />
+  }
+
+  <div class="living-doc__layout">
+    <div class="living-doc__content">
+      
+      <!-- 1. Objetivos de Aprendizaje -->
+      @if (doc.learningObjectives && doc.learningObjectives.length > 0) {
+        <section id="learning-objectives" class="living-doc-section">
+          <div class="learning-objectives-card">
+            <div class="learning-objectives-card__header">
+              <span class="material-symbols-outlined">flag</span>
+              <h3 class="learning-objectives-card__title">Objetivos de Aprendizaje de la Lección</h3>
+            </div>
+            <ul class="learning-objectives-card__list">
+              @for (obj of doc.learningObjectives; track $index) {
+                <li>
+                  <span class="material-symbols-outlined check-icon">{{ obj.icon || 'check_circle' }}</span>
+                  <span>{{ obj.text }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </section>
+      }
+
+      <!-- 2. Conceptos Fundamentales: Criterios de Selección -->
+      @if (doc.fundamentalConcepts && doc.fundamentalConcepts.length > 0) {
+        <section id="fundamental-concepts" class="living-doc-section">
+          <span class="living-doc-section__eyebrow">Criterios de Arquitectura</span>
+          <h2 class="living-doc-section__title">Criterios de Evaluación y Selección de Servidores MCP</h2>
+          <div class="concepts-grid">
+            @for (concept of doc.fundamentalConcepts; track concept.title) {
+              <div class="concept-card">
+                <div class="concept-card__term">
+                  <span class="material-symbols-outlined">{{ concept.icon || 'rule' }}</span>
+                  <span>{{ concept.title }}</span>
+                </div>
+                <p class="concept-card__definition">{{ concept.description }}</p>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Introducción al Catálogo -->
+      <section class="living-doc-section">
+        <span class="living-doc-section__eyebrow">PANORAMA DEL ECOSISTEMA</span>
+        <h2 class="living-doc-section__title">Los Pilares del Ecosistema MCP en Ingeniería</h2>
+        <p class="living-doc-section__lead">
+          Para que un agente de IA colabore eficazmente en un equipo de software, no basta con dotarlo de un modelo potente:
+          necesita sentidos y manos para interactuar con el código, el sistema operativo, el navegador y las bases de datos.
+        </p>
+        <p class="living-doc-section__paragraph">
+          Examinamos a continuación los 6 servidores MCP fundamentales que todo arquitecto de software e ingeniero agéntico
+          debe dominar, priorizando en esta lección <strong>GitHub MCP</strong>, <strong>Filesystem MCP</strong> y <strong>Playwright MCP</strong>.
+        </p>
+      </section>
+
+      <!-- ── Catálogo de Servidores (Tarjetas Detalladas) ── -->
+      @for (srv of servers; track srv.id) {
+        <section [id]="'server-' + srv.id" class="living-doc-section server-detail-card">
+          <div class="server-detail-header">
+            <div class="server-title-wrap">
+              <span class="material-symbols-outlined server-icon" [style.color]="srv.badgeColor">{{ srv.icon }}</span>
+              <div>
+                <h3 class="server-name">{{ srv.name }}</h3>
+                <span class="server-cat">{{ srv.category }}</span>
+              </div>
+            </div>
+            <a [href]="srv.docsUrl" target="_blank" rel="noopener noreferrer" class="docs-link-btn">
+              <span>Docs Oficiales</span>
+              <span class="material-symbols-outlined">open_in_new</span>
+            </a>
+          </div>
+
+          <div class="server-meta-grid">
+            <div class="meta-item">
+              <span class="meta-title">¿Qué problema resuelve?</span>
+              <p class="meta-desc">{{ srv.problemSolved }}</p>
+            </div>
+            <div class="meta-item">
+              <span class="meta-title">¿Cuándo conviene utilizarlo?</span>
+              <p class="meta-desc">{{ srv.whenToUse }}</p>
+            </div>
+          </div>
+
+          <!-- Operaciones Permitidas -->
+          <div class="server-block">
+            <span class="meta-title">Operaciones y Capacidades Clave</span>
+            <ul class="operations-list">
+              @for (op of srv.allowedOperations; track $index) {
+                <li><code>{{ op.split(':')[0] }}</code>: {{ op.split(':')[1] }}</li>
+              }
+            </ul>
+          </div>
+
+          <!-- Ejemplo Real de Utilización -->
+          <case-callout variant="info" title="Caso de Uso Real en Producción">
+            {{ srv.realWorldExample }}
+          </case-callout>
+
+          <!-- Configuración de Instalación -->
+          <div class="server-block">
+            <span class="meta-title">Configuración e Instalación</span>
+            <case-code-block
+              [code]="srv.installConfig"
+              language="json"
+              filename="claude_desktop_config.json / mcp_config.json"
+            />
+          </div>
+
+          <!-- Permisos y Seguridad -->
+          <div class="security-grid">
+            <div class="security-box security-box--perm">
+              <span class="security-box__title">
+                <span class="material-symbols-outlined">vpn_key</span>
+                Permisos Necesarios (Least Privilege)
+              </span>
+              <p>{{ srv.requiredPermissions }}</p>
+            </div>
+            <div class="security-box security-box--risk">
+              <span class="security-box__title">
+                <span class="material-symbols-outlined">warning</span>
+                Riesgos y Restricciones Operativas
+              </span>
+              <p>{{ srv.risksAndLimits }}</p>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- ── PLAYGROUND OBLIGATORIO: Explorador Interactivo de Servidores MCP ── -->
+      <section id="servers-explorer" class="living-doc-section playground-section">
+        <div class="playground-header">
+          <div class="playground-badge">
+            <span class="material-symbols-outlined" aria-hidden="true">explore</span>
+            <span>PLAYGROUND OBLIGATORIO · LECCIÓN 02</span>
+          </div>
+          <h2 class="playground-title">Explorador Interactivo de Servidores MCP</h2>
+          <p class="playground-description">
+            Inspecciona las herramientas y esquemas expuestos por cada servidor MCP y ejecuta simulaciones educativas
+            identificadas para comprender el contrato de datos JSON-Schema.
+          </p>
+        </div>
+
+        <!-- Pestañas de Servidores -->
+        <div class="server-tabs">
+          @for (s of servers; track s.id) {
+            <button
+              type="button"
+              class="tab-btn"
+              [class.tab-btn--active]="selectedServerId() === s.id"
+              (click)="selectServer(s.id)"
+              [id]="'tab-server-' + s.id"
+            >
+              <span class="material-symbols-outlined">{{ s.icon }}</span>
+              <span>{{ s.name.split(' ')[0] }}</span>
+            </button>
+          }
+        </div>
+
+        <div class="explorer-card">
+          <div class="explorer-top">
+            <div>
+              <span class="explorer-eyebrow">{{ selectedServer().category }}</span>
+              <h3 class="explorer-name">{{ selectedServer().name }}</h3>
+            </div>
+            <span class="sim-watermark">MODO SIMULACIÓN EDUCATIVA</span>
+          </div>
+
+          <!-- Selector de Tool del Servidor -->
+          <div class="tool-selector-block">
+            <label class="control-label" for="tool-select">Herramienta a Inspeccionar:</label>
+            <div class="tool-chips">
+              @for (tool of selectedServer().sampleTools; track tool.name) {
+                <button
+                  type="button"
+                  class="tool-chip"
+                  [class.tool-chip--active]="selectedTool().name === tool.name"
+                  (click)="selectTool(tool.name)"
+                  [id]="'chip-tool-' + tool.name"
+                >
+                  <span class="material-symbols-outlined">terminal</span>
+                  <span>{{ tool.name }}()</span>
+                </button>
+              }
+            </div>
+            <p class="tool-desc">{{ selectedTool().description }}</p>
+          </div>
+
+          <!-- Grid: Esquema de Entrada vs Editor de Parámetros -->
+          <div class="explorer-split">
+            <!-- Columna Izquierda: Esquema JSON-Schema Oficial -->
+            <div class="schema-pane">
+              <div class="pane-header">
+                <span class="material-symbols-outlined">schema</span>
+                <span>Esquema de Entrada (JSON-Schema)</span>
+              </div>
+              <pre class="pane-code"><code>{{ selectedTool().inputSchema | json }}</code></pre>
+            </div>
+
+            <!-- Columna Derecha: Parámetros a Enviar -->
+            <div class="args-pane">
+              <div class="pane-header">
+                <span class="material-symbols-outlined">edit_note</span>
+                <span>Argumentos de la Petición</span>
+              </div>
+              <textarea
+                class="args-editor"
+                [(ngModel)]="customArguments"
+                rows="6"
+                aria-label="Editor de argumentos JSON"
+              ></textarea>
+              <button
+                type="button"
+                class="sim-run-btn"
+                (click)="runSimulation()"
+                [disabled]="simulationOutput().status === 'running'"
+                id="btn-run-mcp-sim"
+              >
+                <span class="material-symbols-outlined">send</span>
+                <span>{{ simulationOutput().status === 'running' ? 'Ejecutando en Sandbox...' : 'Ejecutar Simulación Educativa' }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Panel de Resultados de Simulación -->
+          @if (simulationOutput().status !== 'idle') {
+            <div class="sim-result-panel" [class.sim-result-panel--error]="simulationOutput().status === 'error'">
+              <div class="sim-result-header">
+                <div class="status-indicator">
+                  <span class="status-dot"></span>
+                  <span>{{ simulationOutput().status === 'success' ? 'Llamada JSON-RPC Exitosa' : 'Error en Validación de Petición' }}</span>
+                </div>
+                @if (simulationOutput().executionTimeMs) {
+                  <span class="exec-time">⏱️ {{ simulationOutput().executionTimeMs }} ms</span>
+                }
+              </div>
+
+              <div class="result-grid">
+                <div>
+                  <span class="result-label">Solicitud JSON-RPC (tools/call):</span>
+                  <pre class="result-code"><code>{{ simulationOutput().rpcRequest | json }}</code></pre>
+                </div>
+                <div>
+                  <span class="result-label">Respuesta del MCP Server:</span>
+                  <pre class="result-code"><code>{{ simulationOutput().rpcResponse | json }}</code></pre>
+                </div>
+              </div>
+
+              @if (simulationOutput().securityNote) {
+                <div class="sim-note">
+                  <span class="material-symbols-outlined">verified_user</span>
+                  <span>{{ simulationOutput().securityNote }}</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- 7, 8, 9. Cierre Pedagógico: Antipatrones, Comprobación Socrática y Síntesis -->
+      <app-m06-lesson-closing
+        [pitfalls]="doc.commonPitfalls || []"
+        [questions]="doc.groupQuestions || []"
+        [synthesis]="doc.synthesis"
+        [nextLesson]="adjacentLessons.next"
+        sectionTitlePitfalls="Antipatrones y Errores al Seleccionar Servidores MCP"
+      />
+
+      <!-- ── Lesson Footer ── -->
+      @if (lesson) {
+        <app-lesson-footer
+          [lessonId]="lesson.id"
+          [previousLesson]="adjacentLessons.previous"
+          [nextLesson]="adjacentLessons.next"
+        />
+      }
+    </div>
+
+    <!-- ── Outline Sidebar ── -->
+    <aside class="living-doc__aside">
+      <app-lesson-outline [sections]="outlineSections" />
+    </aside>
+  </div>
+</div>

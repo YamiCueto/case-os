@@ -47,11 +47,8 @@ CASE Academy es el programa maestro que transforma ingenieros de software tradic
 - **M02 Prompt Engineering:** Controlar el comportamiento mediante *Instruction Contracts* y esquemas de salida estrictos.
 - **M03 Context Engineering:** Ensamblar el contexto mínimo útil (*Context Manifest*). Relevante ≠ Necesario.
 - **M04 Retrieval (RAG):** Construir pipelines de recuperación de candidatos y evaluar métricas de recall/precisión.
-- **M05 AI Agents:** Implementar el principio de *Least Autonomy Necessary* mediante *Tool Calling* y ciclos de decisión.
-- **M06 Agentic SWE:** Protocolos de colaboración humano-agente. El ingeniero diseña el qué; el agente tipea; el ingeniero verifica.
-- **M07 Model Context Protocol (MCP):** Estandarización de capacidades corporativas. Exponer BDs asumiendo *Assume Breach* y *Never Trust the Client*.
-- **M08 Production:** Cruzar la brecha a Producción. Jerarquía de Evaluación (`Determinista → LLM-as-a-Judge → Human Review`) sobre un *Golden Dataset*.
-- **M09 Architecture:** Transición de arquitecturas monolíticas hacia sistemas distribuidos basados en capacidades.
+- **M05 AI Agents:** Implementar el principio de *Least Autonomy Necessary* mediante *Tool Calling*, memoria y ciclos ReAct.
+- **M06 Model Context Protocol (MCP):** Estandarización de interoperabilidad y conexión de agentes con herramientas reales (GitHub, Filesystem, Playwright, DBs). *Módulo Final de Cierre Definitivo.*
 
 > **Regla de Oro del Currículum:** *La IA puede producir el cambio; la responsabilidad de evaluar, auditar y aceptar el cambio pertenece al proceso de ingeniería (Deployment Gate).*
 

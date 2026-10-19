@@ -47,54 +47,64 @@
   }
 
   <!-- 2. Completion Action Box -->
-  <div class="lesson-footer__complete-box">
+  <div class="lesson-footer__complete-box" id="lesson-completion-box">
     <div class="lesson-footer__complete-status">
       @if (isCompleted()) {
-        <case-badge variant="success" [mono]="true">
-          <span class="material-symbols-outlined" style="font-size: 13px; margin-right: 2px;">check</span>
-          LECCIÓN COMPLETADA
-        </case-badge>
+        <div class="completed-badge-wrap">
+          <span class="material-symbols-outlined completed-check-icon" aria-hidden="true">verified</span>
+          <span class="completed-badge-text">LECCIÓN COMPLETADA</span>
+        </div>
       } @else {
-        <span class="lesson-footer__complete-hint">
-          ¿Has completado la lectura y asimilado los conceptos?
-        </span>
+        <div class="complete-prompt">
+          <span class="material-symbols-outlined prompt-icon" aria-hidden="true">task_alt</span>
+          <span class="lesson-footer__complete-hint">
+            ¿Has completado la lectura y asimilado los conceptos técnicos?
+          </span>
+        </div>
       }
     </div>
 
     @if (!isCompleted()) {
-      <case-button
-        variant="primary"
-        size="md"
-        iconRight="check"
+      <button
+        type="button"
+        class="complete-action-btn"
         (click)="markCompleted()"
+        id="btn-mark-completed"
       >
-        Marcar como Completada
-      </case-button>
+        <span class="material-symbols-outlined" aria-hidden="true">check</span>
+        <span>Marcar como Completada</span>
+      </button>
     }
   </div>
 
-  <!-- 3. Navigation Controls (Prev / Next) -->
+  <!-- 3. Navigation Controls (Prev / Index / Next) -->
   <nav class="lesson-footer__nav" aria-label="Navegación entre lecciones">
-    <div class="lesson-footer__nav-col">
+    <div class="lesson-footer__nav-col lesson-footer__nav-col--prev">
       @if (previousLesson) {
-        <a [routerLink]="previousLesson.path" class="lesson-nav-btn lesson-nav-btn--prev">
-          <span class="lesson-nav-btn__eyebrow">← Lección Anterior</span>
+        <a [routerLink]="previousLesson.path" class="lesson-nav-btn lesson-nav-btn--prev" id="btn-prev-lesson">
+          <span class="lesson-nav-btn__eyebrow">
+            <span class="material-symbols-outlined icon-dir" aria-hidden="true">arrow_back</span>
+            <span>Lección Anterior</span>
+          </span>
           <span class="lesson-nav-btn__title">{{ previousLesson.title }}</span>
         </a>
       }
     </div>
 
     <div class="lesson-footer__nav-col lesson-footer__nav-col--center">
-      <a routerLink="/academy/home" class="lesson-nav-home-btn">
-        <span class="material-symbols-outlined" style="font-size: 16px;">apps</span>
-        Volver a Academy Home
+      <a routerLink="/academy/home" class="lesson-nav-home-btn" id="btn-course-index" title="Índice del programa CASE OS">
+        <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">apps</span>
+        <span>Índice de la Lección</span>
       </a>
     </div>
 
     <div class="lesson-footer__nav-col lesson-footer__nav-col--next">
       @if (nextLesson) {
-        <a [routerLink]="nextLesson.path" class="lesson-nav-btn lesson-nav-btn--next">
-          <span class="lesson-nav-btn__eyebrow">Siguiente Lección →</span>
+        <a [routerLink]="nextLesson.path" class="lesson-nav-btn lesson-nav-btn--next" id="btn-next-lesson">
+          <span class="lesson-nav-btn__eyebrow">
+            <span>Siguiente Lección</span>
+            <span class="material-symbols-outlined icon-dir" aria-hidden="true">arrow_forward</span>
+          </span>
           <span class="lesson-nav-btn__title">{{ nextLesson.title }}</span>
         </a>
       }

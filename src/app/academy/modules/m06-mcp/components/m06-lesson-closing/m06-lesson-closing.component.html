@@ -1,0 +1,197 @@
+<!-- ── 1. Errores Comunes y Malas Prácticas ── -->
+@if (pitfalls && pitfalls.length > 0) {
+  <section id="common-pitfalls" class="closing-section" aria-labelledby="pitfalls-heading">
+    <div class="closing-header">
+      <div class="closing-header__badge closing-header__badge--danger">
+        <span class="material-symbols-outlined" aria-hidden="true">warning</span>
+        <span>ANTIPATRONES Y PREVENCIÓN DE ERRORES</span>
+      </div>
+      <div class="closing-header__row">
+        <div>
+          <h3 id="pitfalls-heading" class="closing-header__title">{{ sectionTitlePitfalls }}</h3>
+          <p class="closing-header__desc">
+            Identifica los fallos más recurrentes en integraciones MCP y aprende la arquitectura correcta para mitigarlos.
+          </p>
+        </div>
+        <div class="closing-header__actions">
+          <button
+            type="button"
+            class="action-text-btn"
+            (click)="expandAllSolutions()"
+            id="btn-expand-all-solutions"
+          >
+            Expandir todas
+          </button>
+          <span class="action-sep">·</span>
+          <button
+            type="button"
+            class="action-text-btn"
+            (click)="collapseAllSolutions()"
+            id="btn-collapse-all-solutions"
+          >
+            Colapsar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pitfalls-grid">
+      @for (item of pitfalls; track item.title; let idx = $index) {
+        <article class="pitfall-card" [class.pitfall-card--open]="isSolutionRevealed(idx)">
+          <!-- Cabecera del Error -->
+          <div class="pitfall-card__header">
+            <div class="pitfall-card__tag">
+              <span class="material-symbols-outlined icon-alert" aria-hidden="true">cancel</span>
+              <span>ANTIPATRÓN {{ idx + 1 }}</span>
+            </div>
+            <h4 class="pitfall-card__title">{{ item.title }}</h4>
+            <button
+              type="button"
+              class="pitfall-toggle-btn"
+              (click)="toggleSolution(idx)"
+              [attr.aria-expanded]="isSolutionRevealed(idx)"
+              [id]="'btn-toggle-pitfall-' + idx"
+            >
+              <span>{{ isSolutionRevealed(idx) ? 'Ocultar Solución' : 'Ver Solución Recomendada' }}</span>
+              <span class="material-symbols-outlined toggle-chevron" aria-hidden="true">
+                {{ isSolutionRevealed(idx) ? 'expand_less' : 'expand_more' }}
+              </span>
+            </button>
+          </div>
+
+          <!-- Contenido de Solución Desplegable -->
+          @if (isSolutionRevealed(idx)) {
+            <div class="pitfall-card__solution" [id]="'pitfall-solution-' + idx">
+              <div class="solution-badge">
+                <span class="material-symbols-outlined" aria-hidden="true">verified</span>
+                <span>BUENA PRÁCTICA (CASE OS)</span>
+              </div>
+              <p class="solution-text">{{ item.solution }}</p>
+            </div>
+          }
+        </article>
+      }
+    </div>
+  </section>
+}
+
+<!-- ── 2. Comprobación: Preguntas de Activación al Grupo ── -->
+@if (questions && questions.length > 0) {
+  <section id="group-questions" class="closing-section" aria-labelledby="questions-heading">
+    <div class="closing-header">
+      <div class="closing-header__badge closing-header__badge--info">
+        <span class="material-symbols-outlined" aria-hidden="true">forum</span>
+        <span>COMPROBACIÓN SOCRÁTICA EN SALA</span>
+      </div>
+      <div class="closing-header__row">
+        <div>
+          <h3 id="questions-heading" class="closing-header__title">{{ sectionTitleQuestions }}</h3>
+          <p class="closing-header__desc">
+            Espacio de diálogo técnico guiado por el docente para contrastar conceptos clave antes de continuar.
+          </p>
+        </div>
+        <div class="closing-header__actions">
+          <button
+            type="button"
+            class="action-text-btn"
+            (click)="showAllAnswers()"
+            id="btn-show-all-answers"
+          >
+            Mostrar todas
+          </button>
+          <span class="action-sep">·</span>
+          <button
+            type="button"
+            class="action-text-btn"
+            (click)="hideAllAnswers()"
+            id="btn-hide-all-answers"
+          >
+            Ocultar todas
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="questions-list">
+      @for (q of questions; track q.question; let idx = $index) {
+        <article class="question-card" [class.question-card--open]="isAnswerRevealed(idx)">
+          <div class="question-card__header">
+            <div class="question-card__meta">
+              <span class="q-number">PREGUNTA {{ idx + 1 }} DE {{ questions.length }}</span>
+              <span class="q-format">Discusión Técnica</span>
+            </div>
+            <p class="question-card__text">"{{ q.question }}"</p>
+          </div>
+
+          <div class="question-card__footer">
+            <button
+              type="button"
+              class="reveal-answer-btn"
+              [class.reveal-answer-btn--active]="isAnswerRevealed(idx)"
+              (click)="toggleAnswer(idx)"
+              [attr.aria-expanded]="isAnswerRevealed(idx)"
+              [id]="'btn-reveal-answer-' + idx"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">
+                {{ isAnswerRevealed(idx) ? 'visibility_off' : 'visibility' }}
+              </span>
+              <span>{{ isAnswerRevealed(idx) ? 'Ocultar Respuesta Técnica' : 'Mostrar Respuesta Técnica Esperada' }}</span>
+            </button>
+          </div>
+
+          <!-- Respuesta Oculta / Revelada -->
+          @if (isAnswerRevealed(idx)) {
+            <div class="question-card__answer" [id]="'answer-box-' + idx">
+              <div class="answer-badge">
+                <span class="material-symbols-outlined" aria-hidden="true">psychology_alt</span>
+                <span>RESPUESTA TÉCNICA ESPERADA (INSTRUCTOR)</span>
+              </div>
+              <p class="answer-text">{{ q.expectedAnswer }}</p>
+            </div>
+          }
+        </article>
+      }
+    </div>
+  </section>
+}
+
+<!-- ── 3. Síntesis y Próximo Paso ── -->
+@if (synthesis) {
+  <section id="synthesis" class="closing-section" aria-labelledby="synthesis-heading">
+    <div class="closing-header">
+      <div class="closing-header__badge closing-header__badge--purple">
+        <span class="material-symbols-outlined" aria-hidden="true">auto_stories</span>
+        <span>CONSOLIDACIÓN Y CONTINUIDAD</span>
+      </div>
+      <h3 id="synthesis-heading" class="closing-header__title">{{ sectionTitleSynthesis }}</h3>
+    </div>
+
+    <div class="synthesis-wrapper">
+      <div class="synthesis-card">
+        <h4 class="synthesis-card__title">Aprendizaje Esencial</h4>
+        <p class="synthesis-card__summary">{{ synthesis.summary }}</p>
+      </div>
+
+      <!-- Banner Conexión con la Siguiente Lección -->
+      @if (synthesis.transitionText || nextLesson) {
+        <div class="next-step-bridge">
+          <div class="bridge-indicator">
+            <span class="material-symbols-outlined" aria-hidden="true">trending_flat</span>
+            <span>CONTINUIDAD PEDAGÓGICA</span>
+          </div>
+
+          @if (synthesis.transitionText) {
+            <p class="bridge-text">{{ synthesis.transitionText }}</p>
+          }
+
+          @if (nextLesson) {
+            <div class="bridge-target">
+              <span class="bridge-target__tag">Siguiente Objetivo:</span>
+              <span class="bridge-target__title">{{ nextLesson.title }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+}
