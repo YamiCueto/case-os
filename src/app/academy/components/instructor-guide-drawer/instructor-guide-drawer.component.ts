@@ -93,7 +93,9 @@ export class InstructorGuideDrawerComponent {
   }
 
   openPopoutWindow(): void {
-    const popoutUrl = `${window.location.origin}/#/academy/instructor-view/${this.guide.lessonId}`;
+    const base = new URL(document.baseURI || window.location.href);
+    const basePath = base.pathname.endsWith('/') ? base.pathname : `${base.pathname}/`;
+    const popoutUrl = `${base.origin}${basePath}#/academy/instructor-view/${this.guide.lessonId}`;
     const windowFeatures = 'width=760,height=960,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes';
     window.open(popoutUrl, `InstructorGuide_${this.guide.lessonId}`, windowFeatures);
   }
